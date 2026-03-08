@@ -4,19 +4,20 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useCreateRealmRole } from "./hooks/use-create-realm-role";
+import { toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
 import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
-import { toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
 
-export default function CreateRealmRole() {
-    const { adminClient } = useAdminClient();
+export function CreateRealmRole() {
 
     const { t } = useTranslation();
     const form = useForm<AttributeForm>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: createRole } = useCreateRealmRole();
+
     const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
@@ -25,15 +26,7 @@ export default function CreateRealmRole() {
         };
 
         try {
-            await adminClient.roles.create(role);
-
-            const createdRole = await adminClient.roles.findOneByName({
-                name: formValues.name!
-            });
-
-            if (!createdRole) {
-                throw new Error(t("notFound"));
-            }
+            const createdRole = await createRole(role);
 
             toast.success(t("roleCreated"));
             navigate({

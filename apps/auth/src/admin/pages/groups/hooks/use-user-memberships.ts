@@ -2,19 +2,16 @@ import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/g
 import { useQuery } from "@tanstack/react-query";
 import { sortBy, uniqBy } from "lodash-es";
 import { fetchUserGroups } from "../../../api/groups";
-import { useAdminClient } from "../../../app/admin-client";
 import { groupKeys } from "./keys";
 
 /**
  * Fetch user group memberships (for the memberships modal).
  */
 export function useUserMemberships(userId: string, isDirectMembership: boolean) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: groupKeys.memberships(userId, { isDirectMembership }),
         queryFn: async () => {
             const joinedUserGroups = await fetchUserGroups(
-                adminClient,
                 userId,
                 0,
                 500

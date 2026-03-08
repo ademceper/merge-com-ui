@@ -19,19 +19,18 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import useLocaleSort, { mapByKey } from "../../shared/lib/useLocaleSort";
+import { useLocaleSort, mapByKey } from "../../shared/lib/use-locale-sort";
+import { useDeleteClientScope } from "./hooks/use-delete-client-scope";
 import {
     type AllClientScopeType,
     CellDropdown,
     type ClientScopeDefaultOptionalType,
-    changeScope,
-    removeScope
+    changeScope
 } from "../../shared/ui/client-scope/client-scope-types";
 import type { Row } from "../clients/scopes/client-scopes";
 import { getProtocolName } from "../clients/utils";
 import { AddClientScopeDialog } from "./add-client-scope-dialog";
-import { useClientScopes } from "./api/use-client-scopes";
+import { useClientScopes } from "./hooks/use-client-scopes";
 import { EditClientScopeDialog } from "./edit-client-scope-dialog";
 
 type TypeSelectorProps = ClientScopeDefaultOptionalType & {
@@ -40,7 +39,6 @@ type TypeSelectorProps = ClientScopeDefaultOptionalType & {
 };
 
 function TypeSelector(scope: TypeSelectorProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     return (
         <CellDropdown
@@ -50,7 +48,7 @@ function TypeSelector(scope: TypeSelectorProps) {
             className={scope.className}
             onSelect={async value => {
                 try {
-                    await changeScope(adminClient, scope, value as AllClientScopeType);
+                    await changeScope(scope, value as AllClientScopeType);
                     toast.success(t("clientScopeSuccess"));
                     scope.refresh();
                 } catch (error) {
@@ -66,8 +64,7 @@ function TypeSelector(scope: TypeSelectorProps) {
     );
 }
 
-export default function ClientScopesSection() {
-    const { adminClient } = useAdminClient();
+export function ClientScopesSection() {
     const { t } = useTranslation();
     const localeSort = useLocaleSort();
 
@@ -79,6 +76,8 @@ export default function ClientScopesSection() {
     const [selectedScope, setSelectedScope] = useState<ClientScopeDefaultOptionalType>();
     const [editScopeId, setEditScopeId] = useState<string | null>(null);
 
+    const { mutateAsync: deleteScope } = useDeleteClientScope();
+
     const onDeleteConfirm = async () => {
         if (!selectedScope?.id) return;
         const currentCount = clientScopes.length;
@@ -88,8 +87,7 @@ export default function ClientScopesSection() {
             return;
         }
         try {
-            await removeScope(adminClient, selectedScope);
-            await adminClient.clientScopes.del({ id: selectedScope.id });
+            await deleteScope(selectedScope);
             toast.success(t("deletedSuccessClientScope"));
             setSelectedScope(undefined);
             refresh();

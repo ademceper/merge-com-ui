@@ -14,8 +14,8 @@ import { saveAs } from "file-saver";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useExportRealm } from "./hooks/use-export-realm";
 import { prettyPrintJSON } from "../../shared/lib/util";
 
 type PartialExportDialogProps = {
@@ -24,10 +24,10 @@ type PartialExportDialogProps = {
 };
 
 export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: exportRealmMut } = useExportRealm();
     const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
     const [exportClients, setExportClients] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
@@ -38,8 +38,7 @@ export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProp
         setIsExporting(true);
 
         try {
-            const realmExport = await adminClient.realms.export({
-                realm,
+            const realmExport = await exportRealmMut({
                 exportClients,
                 exportGroupsAndRoles
             });

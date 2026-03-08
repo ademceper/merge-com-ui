@@ -22,9 +22,14 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
-import { useParams } from "../../../shared/lib/useParams";
+import { useUpdateResource, useCreateResource, useDeleteResource } from "./hooks/use-authorization-mutations";
+import {
+    type ResourceDetailsParams,
+    toAuthorizationTab,
+    toResourceDetails
+} from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -32,17 +37,14 @@ import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-c
 import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
-import { type ResourceDetailsParams, toResourceDetails } from "../../../shared/lib/routes/clients";
-import { useResourceDetails as useResourceDetailsQuery } from "./api/use-resource-details";
+import { useResourceDetails as useResourceDetailsQuery } from "./hooks/use-resource-details";
 import { ScopePicker } from "./scope-picker";
 
 type SubmittedResource = Omit<ResourceRepresentation, "attributes" | "scopes"> & {
     attributes: KeyValueType[];
 };
 
-export default function ResourceDetails() {
-    const { adminClient } = useAdminClient();
+export function ResourceDetails() {
 
     const { t } = useTranslation();
     const [client, setClient] = useState<ClientRepresentation>();
@@ -56,6 +58,9 @@ export default function ResourceDetails() {
 
     const { id, resourceId, realm } = useParams<ResourceDetailsParams>();
     const navigate = useNavigate();
+    const { mutateAsync: updateResourceMutation } = useUpdateResource();
+    const { mutateAsync: createResourceMutation } = useCreateResource();
+    const { mutateAsync: deleteResourceMutation } = useDeleteResource();
 
     const setupForm = (resource: ResourceRepresentation = {}) => {
         convertToFormValues(resource, setValue);
@@ -89,9 +94,9 @@ export default function ResourceDetails() {
 
         try {
             if (resourceId) {
-                await adminClient.clients.updateResource({ id, resourceId }, resource);
+                await updateResourceMutation({ clientId: id, resourceId, resource });
             } else {
-                const result = await adminClient.clients.createResource({ id }, resource);
+                const result = await createResourceMutation({ clientId: id, resource });
                 setResource(resource);
                 navigate({
                     to: toResourceDetails({
@@ -133,8 +138,8 @@ export default function ResourceDetails() {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delResource({
-                    id,
+                await deleteResourceMutation({
+                    clientId: id,
                     resourceId: resourceId!
                 });
                 toast.success(t("resourceDeletedSuccess"));

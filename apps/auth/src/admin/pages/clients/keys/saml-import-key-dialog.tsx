@@ -5,7 +5,6 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
@@ -24,7 +23,6 @@ export const SamlImportKeyDialog = ({
     onClose,
     onImported
 }: SamlImportKeyDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<SamlKeysDialogForm>();
@@ -33,7 +31,7 @@ export const SamlImportKeyDialog = ({
         formState: { isValid }
     } = form;
     const submit = async (form: SamlKeysDialogForm) => {
-        await submitForm(adminClient, form, id, attr, error => {
+        await submitForm(form, id, attr, error => {
             if (error) {
                 toast.error(t("importError", { error: getErrorMessage(error) }), {
                     description: getErrorDescription(error)

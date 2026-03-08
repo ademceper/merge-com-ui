@@ -25,16 +25,16 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
+import { useDeleteRealmRole } from "./hooks/use-delete-realm-role";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { toRealmSettings } from "../../shared/lib/route-helpers";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { toRealmRole } from "../../shared/lib/routes/realm-roles";
+import { translationFormatter } from "../../shared/lib/translation-formatter";
 import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
 import { AddRealmRoleDialog } from "./add-realm-role-dialog";
-import { useRealmRoles } from "./api/use-realm-roles";
+import { useRealmRoles } from "./hooks/use-realm-roles";
 import { EditRealmRoleDialog } from "./edit-realm-role-dialog";
-import { toRealmRole } from "../../shared/lib/routes/realm-roles";
 
 type RoleDetailLinkProps = RoleRepresentation & {
     defaultRoleName?: string;
@@ -74,8 +74,7 @@ function RoleDetailLink({ defaultRoleName, toDetail, ...role }: RoleDetailLinkPr
     );
 }
 
-export default function RealmRolesSection() {
-    const { adminClient } = useAdminClient();
+export function RealmRolesSection() {
     const { t } = useTranslation();
     const { realm, realmRepresentation } = useRealm();
     const { hasAccess } = useAccess();
@@ -85,6 +84,7 @@ export default function RealmRolesSection() {
     const refresh = () => refreshRoles();
     const [selectedRole, setSelectedRole] = useState<RoleRepresentation | undefined>();
     const [editRoleId, setEditRoleId] = useState<string | null>(null);
+    const { mutateAsync: deleteRole } = useDeleteRealmRole();
 
     const onDeleteClick = (role: RoleRepresentation) => {
         if (
@@ -100,7 +100,7 @@ export default function RealmRolesSection() {
     const onDeleteConfirm = async () => {
         if (!selectedRole?.id) return;
         try {
-            await adminClient.roles.delById({ id: selectedRole.id });
+            await deleteRole(selectedRole.id);
             toast.success(t("roleDeletedSuccess"));
             setSelectedRole(undefined);
             refresh();

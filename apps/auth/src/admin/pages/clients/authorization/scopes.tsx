@@ -34,16 +34,17 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useToggle from "../../../shared/lib/useToggle";
-import { toNewPermission } from "../../../shared/lib/routes/clients";
-import { toNewScope } from "../../../shared/lib/routes/clients";
-import { toPermissionDetails } from "../../../shared/lib/routes/clients";
-import { toResourceDetails } from "../../../shared/lib/routes/clients";
-import { toScopeDetails } from "../../../shared/lib/routes/clients";
-import { useScopePermissions } from "./api/use-scope-permissions";
-import { useScopes as useScopesQuery } from "./api/use-scopes";
+import {
+    toNewPermission,
+    toNewScope,
+    toPermissionDetails,
+    toResourceDetails,
+    toScopeDetails
+} from "../../../shared/lib/routes/clients";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useScopePermissions } from "./hooks/use-scope-permissions";
+import { useScopes as useScopesQuery } from "./hooks/use-scopes";
 import { DeleteScopeDialog } from "./delete-scope-dialog";
 import { DetailDescriptionLink } from "./detail-description";
 
@@ -63,7 +64,6 @@ type ExpandableRow = {
 };
 
 export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();

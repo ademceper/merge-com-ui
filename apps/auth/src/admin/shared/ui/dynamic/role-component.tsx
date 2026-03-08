@@ -4,7 +4,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import useToggle from "../../lib/useToggle";
+import { useToggle } from "../../lib/use-toggle";
 import {
     AddRoleButton,
     AddRoleMappingModal,

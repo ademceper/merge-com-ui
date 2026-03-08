@@ -19,8 +19,8 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreateInitialAccessToken } from "../hooks/use-create-initial-access-token";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
@@ -35,9 +35,9 @@ export function AddInitialAccessTokenDialog({
     trigger,
     onSuccess
 }: AddInitialAccessTokenDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: createInitialAccessToken } = useCreateInitialAccessToken();
     const [open, setOpen] = useState(false);
     const [token, setToken] = useState("");
 
@@ -49,10 +49,7 @@ export function AddInitialAccessTokenDialog({
 
     const save = async (clientToken: ClientInitialAccessPresentation) => {
         try {
-            const access = await adminClient.realms.createClientsInitialAccess(
-                { realm },
-                clientToken
-            );
+            const access = await createInitialAccessToken(clientToken);
             setOpen(false);
             setToken(access.token!);
         } catch (error) {

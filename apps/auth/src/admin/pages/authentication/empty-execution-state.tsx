@@ -9,7 +9,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { AddStepModal } from "./components/modals/add-step-modal";
 import { AddSubFlowModal, type Flow } from "./components/modals/add-sub-flow-modal";
 
@@ -22,71 +22,73 @@ type EmptyExecutionStateProps = {
     onAddFlow: (flow: Flow) => void;
 };
 
-export const EmptyExecutionState = ({
-    flow,
-    onAddExecution,
-    onAddFlow
-}: EmptyExecutionStateProps) => {
-    const { t } = useTranslation();
-    const [show, setShow] = useState<SectionType>();
+export const EmptyExecutionState = memo(
+    ({ flow, onAddExecution, onAddFlow }: EmptyExecutionStateProps) => {
+        const { t } = useTranslation();
+        const [show, setShow] = useState<SectionType>();
 
-    return (
-        <>
-            {show === "addExecution" && (
-                <AddStepModal
-                    name={flow.alias!}
-                    type={flow.providerId === "client-flow" ? "client" : "basic"}
-                    onSelect={type => {
-                        if (type) {
-                            onAddExecution(type);
-                        }
-                        setShow(undefined);
-                    }}
-                />
-            )}
-            {show === "addSubFlow" && (
-                <AddSubFlowModal
-                    name={flow.alias!}
-                    onCancel={() => setShow(undefined)}
-                    onConfirm={newFlow => {
-                        onAddFlow(newFlow);
-                        setShow(undefined);
-                    }}
-                />
-            )}
-            <Empty data-testid="empty-state" className="py-12">
-                <EmptyHeader>
-                    <EmptyTitle className="text-base font-medium">
-                        {t("emptyExecution")}
-                    </EmptyTitle>
-                </EmptyHeader>
-                <EmptyContent>
-                    <EmptyDescription>{t("emptyExecutionInstructions")}</EmptyDescription>
-                </EmptyContent>
-            </Empty>
+        return (
+            <>
+                {show === "addExecution" && (
+                    <AddStepModal
+                        name={flow.alias!}
+                        type={flow.providerId === "client-flow" ? "client" : "basic"}
+                        onSelect={type => {
+                            if (type) {
+                                onAddExecution(type);
+                            }
+                            setShow(undefined);
+                        }}
+                    />
+                )}
+                {show === "addSubFlow" && (
+                    <AddSubFlowModal
+                        name={flow.alias!}
+                        onCancel={() => setShow(undefined)}
+                        onConfirm={newFlow => {
+                            onAddFlow(newFlow);
+                            setShow(undefined);
+                        }}
+                    />
+                )}
+                <Empty data-testid="empty-state" className="py-12">
+                    <EmptyHeader>
+                        <EmptyTitle className="text-base font-medium">
+                            {t("emptyExecution")}
+                        </EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("emptyExecutionInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
+                </Empty>
 
-            <div className="keycloak__empty-execution-state__block">
-                {SECTIONS.map(section => (
-                    <div
-                        key={section}
-                        className="keycloak__empty-execution-state__help flex flex-1 items-center justify-between gap-4"
-                    >
-                        <div className="flex-1">
-                            <h2 className="text-base font-medium">
-                                {t(`${section}Title`)}
-                            </h2>
-                            <p className="text-sm text-muted-foreground">{t(section)}</p>
-                        </div>
-                        <Button
-                            data-testid={section}
-                            variant="outline"
-                            onClick={() => setShow(section)}
+                <div className="keycloak__empty-execution-state__block">
+                    {SECTIONS.map(section => (
+                        <div
+                            key={section}
+                            className="keycloak__empty-execution-state__help flex flex-1 items-center justify-between gap-4"
                         >
-                            {t(section)}
-                        </Button>
-                    </div>
-                ))}
-            </div>
-        </>
-    );
-};
+                            <div className="flex-1">
+                                <h2 className="text-base font-medium">
+                                    {t(`${section}Title`)}
+                                </h2>
+                                <p className="text-sm text-muted-foreground">
+                                    {t(section)}
+                                </p>
+                            </div>
+                            <Button
+                                data-testid={section}
+                                variant="outline"
+                                onClick={() => setShow(section)}
+                            >
+                                {t(section)}
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            </>
+        );
+    }
+);

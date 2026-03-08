@@ -19,21 +19,19 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../../shared/lib/useParams";
+import type { MapperParams } from "../../../shared/lib/routes/client-scopes";
+import { toClientScope } from "../../../shared/lib/routes/client-scopes";
+import { toDedicatedScope } from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toDedicatedScope } from "../../../shared/lib/routes/clients";
-import { useProtocolMapper } from "../api/use-protocol-mapper";
-import { toClientScope } from "../../../shared/lib/routes/client-scopes";
-import type { MapperParams } from "../../../shared/lib/routes/client-scopes";
+import { useProtocolMapper } from "../hooks/use-protocol-mapper";
 
-export default function MappingDetails() {
-    const { adminClient } = useAdminClient();
+export function MappingDetails() {
 
     const { t } = useTranslation();
     const { id, mapperId, viewMode } = useParams<MapperParams>();
@@ -57,7 +55,7 @@ export default function MappingDetails() {
             ? toClientScope({ realm, id, tab: "mappers" })
             : toDedicatedScope({ realm, clientId: id, tab: "mappers" });
 
-    const { query: mapperQuery } = useProtocolMapper(
+    const { query: mapperQuery, saveMutation, deleteMutation } = useProtocolMapper(
         id,
         mapperId,
         isUpdating,
@@ -95,17 +93,7 @@ export default function MappingDetails() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                if (isOnClientScope) {
-                    await adminClient.clientScopes.delProtocolMapper({
-                        id,
-                        mapperId
-                    });
-                } else {
-                    await adminClient.clients.delProtocolMapper({
-                        id,
-                        mapperId
-                    });
-                }
+                await deleteMutation.mutateAsync();
                 toast.success(t("mappingDeletedSuccess"));
                 navigate({ to: toDetails() as string });
             } catch (error) {
@@ -120,25 +108,10 @@ export default function MappingDetails() {
         const key = isUpdating ? "Updated" : "Created";
         try {
             const mapping = { ...config, ...convertFormValuesToObject(formMapping) };
-            if (isUpdating) {
-                if (isOnClientScope) {
-                    await adminClient.clientScopes.updateProtocolMapper(
-                        { id, mapperId },
-                        { id: mapperId, ...mapping }
-                    );
-                } else {
-                    await adminClient.clients.updateProtocolMapper(
-                        { id, mapperId },
-                        { id: mapperId, ...mapping }
-                    );
-                }
-            } else {
-                if (isOnClientScope) {
-                    await adminClient.clientScopes.addProtocolMapper({ id }, mapping);
-                } else {
-                    await adminClient.clients.addProtocolMapper({ id }, mapping);
-                }
-            }
+            await saveMutation.mutateAsync({
+                mapping,
+                isUpdate: isUpdating
+            });
             toast.success(t(`mapping${key}Success`));
             if (!isUpdating) {
                 navigate({ to: toDetails() as string });

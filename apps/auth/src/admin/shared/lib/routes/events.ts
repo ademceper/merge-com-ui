@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 export type EventsTab = "user-events" | "admin-events";
 
@@ -8,6 +8,11 @@ type EventsParams = {
 };
 
 export const toEvents = (params: EventsParams): string => {
-    const path = params.tab ? "/:realm/events/:tab" : "/:realm/events";
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath("/:realm/events/:tab", {
+            realm: params.realm,
+            tab: params.tab
+        });
+    }
+    return generateEncodedPath("/:realm/events", { realm: params.realm });
 };

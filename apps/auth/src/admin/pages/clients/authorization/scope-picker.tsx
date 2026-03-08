@@ -10,8 +10,8 @@ import {
     HelpItem,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
-import { useScopePickerScopes } from "./api/use-scope-picker-scopes";
+import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
+import { useScopePickerScopes } from "./hooks/use-scope-picker-scopes";
 
 type Scope = {
     id: string;

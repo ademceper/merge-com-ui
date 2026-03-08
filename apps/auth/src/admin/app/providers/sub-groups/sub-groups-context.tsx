@@ -3,7 +3,7 @@ import { type PropsWithChildren, useCallback, useMemo, useState } from "react";
 import {
     createNamedContext,
     useRequiredContext
-} from "../../../shared/keycloak-ui-shared";
+} from "../../../../shared/keycloak-ui-shared";
 
 type SubGroupsProps = {
     subGroups: GroupRepresentation[];

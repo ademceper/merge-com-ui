@@ -1,19 +1,18 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { adminClient } from "../app/admin-client";
 import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
 
 // ── Find / list ─────────────────────────────────────────────────────────
 
-export async function findGroups(adminClient: KeycloakAdminClient) {
+export async function findGroups() {
     return adminClient.groups.find({ first: 0, max: 1000 });
 }
 
-export async function findGroup(adminClient: KeycloakAdminClient, id: string) {
+export async function findGroup(id: string) {
     return adminClient.groups.findOne({ id });
 }
 
 export async function findSubGroups(
-    adminClient: KeycloakAdminClient,
     parentId: string,
     first = 0,
     max = 1000
@@ -24,7 +23,6 @@ export async function findSubGroups(
 // ── Tree (admin-ui endpoint) ────────────────────────────────────────────
 
 export async function fetchGroupTree(
-    adminClient: KeycloakAdminClient,
     params: {
         first: number;
         max: number;
@@ -33,7 +31,6 @@ export async function fetchGroupTree(
 ) {
     const { first, max, search } = params;
     return fetchAdminUI<GroupRepresentation[]>(
-        adminClient,
         "groups",
         Object.assign(
             {
@@ -48,13 +45,11 @@ export async function fetchGroupTree(
 }
 
 export async function fetchGroupChildren(
-    adminClient: KeycloakAdminClient,
     activeItemId: string,
     firstSub: number,
     subGroupCount: number
 ) {
     return fetchAdminUI<GroupRepresentation[]>(
-        adminClient,
         `groups/${activeItemId}/children`,
         {
             first: `${firstSub}`,
@@ -66,7 +61,6 @@ export async function fetchGroupChildren(
 // ── Members ─────────────────────────────────────────────────────────────
 
 export async function fetchGroupMembers(
-    adminClient: KeycloakAdminClient,
     id: string,
     briefRepresentation = true,
     first = 0,
@@ -77,22 +71,95 @@ export async function fetchGroupMembers(
 
 // ── Mutations ───────────────────────────────────────────────────────────
 
-export async function deleteGroup(adminClient: KeycloakAdminClient, id: string) {
+export async function deleteGroup(id: string) {
     return adminClient.groups.del({ id });
 }
 
+export async function createGroup(group: GroupRepresentation) {
+    return adminClient.groups.create(group);
+}
+
 export async function updateGroup(
-    adminClient: KeycloakAdminClient,
     id: string,
     group: GroupRepresentation
 ) {
     return adminClient.groups.update({ id }, group);
 }
 
+export async function createChildGroup(
+    parentId: string,
+    group: GroupRepresentation
+) {
+    return adminClient.groups.createChildGroup({ id: parentId }, group);
+}
+
+export async function updateChildGroup(
+    parentId: string,
+    group: GroupRepresentation
+) {
+    return adminClient.groups.updateChildGroup({ id: parentId }, group);
+}
+
+export async function updateRoot(group: GroupRepresentation) {
+    return adminClient.groups.updateRoot(group);
+}
+
+// ── Role mappings ───────────────────────────────────────────────────────
+
+export async function listRealmRoleMappings(groupId: string) {
+    return adminClient.groups.listRealmRoleMappings({ id: groupId });
+}
+
+export async function addRealmRoleMappings(
+    groupId: string,
+    roles: { id: string; name: string }[]
+) {
+    return adminClient.groups.addRealmRoleMappings({ id: groupId, roles });
+}
+
+export async function listClientRoleMappings(
+    groupId: string,
+    clientUniqueId: string
+) {
+    return adminClient.groups.listClientRoleMappings({ id: groupId, clientUniqueId });
+}
+
+export async function addClientRoleMappings(
+    groupId: string,
+    clientUniqueId: string,
+    roles: { id: string; name: string }[]
+) {
+    return adminClient.groups.addClientRoleMappings({ id: groupId, clientUniqueId, roles });
+}
+
+// ── Permissions ─────────────────────────────────────────────────────────
+
+export async function listGroupPermissions(groupId: string) {
+    return adminClient.groups.listPermissions({ id: groupId });
+}
+
+export async function updateGroupPermission(
+    groupId: string,
+    permissions: Record<string, unknown>
+) {
+    return adminClient.groups.updatePermission({ id: groupId }, permissions);
+}
+
+// ── Clients (for duplication) ───────────────────────────────────────────
+
+export async function findAllClients() {
+    return adminClient.clients.find();
+}
+
+// ── Users ───────────────────────────────────────────────────────────────
+
+export async function findUsers(params: { first?: number; max?: number; search?: string }) {
+    return adminClient.users.find(params);
+}
+
 // ── User-group membership ───────────────────────────────────────────────
 
 export async function fetchUserGroups(
-    adminClient: KeycloakAdminClient,
     id: string,
     first = 0,
     max = 500
@@ -101,7 +168,6 @@ export async function fetchUserGroups(
 }
 
 export async function addUserToGroup(
-    adminClient: KeycloakAdminClient,
     id: string,
     groupId: string
 ) {
@@ -109,7 +175,6 @@ export async function addUserToGroup(
 }
 
 export async function removeUserFromGroup(
-    adminClient: KeycloakAdminClient,
     id: string,
     groupId: string
 ) {

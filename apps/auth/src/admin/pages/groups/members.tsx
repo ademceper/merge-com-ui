@@ -26,15 +26,16 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useToggle from "../../shared/lib/useToggle";
-import { emptyFormatter } from "../../shared/lib/util";
 import { toUser } from "../../shared/lib/routes/user";
-import { useGroup } from "./api/use-group";
-import { useGroupMembers } from "./api/use-group-members";
-import { getLastId } from "./groupIdUtils";
+import { useToggle } from "../../shared/lib/use-toggle";
+import { emptyFormatter } from "../../shared/lib/util";
+import { useAddGroupMembers } from "./hooks/use-add-group-members";
+import { useGroup } from "./hooks/use-group";
+import { useGroupMembers } from "./hooks/use-group-members";
+import { useRemoveGroupMembers } from "./hooks/use-remove-group-members";
+import { getLastId } from "./group-id-utils";
 import { MemberModal } from "./members-modal";
 import { MembershipsModal } from "./memberships-modal";
 import { useSubGroups } from "./sub-groups-context";
@@ -59,7 +60,6 @@ const UserDetailLink = (user: UserRepresentation) => {
 };
 
 export const Members = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const location = useLocation();
     const id = getLastId(location.pathname);
@@ -82,6 +82,9 @@ export const Members = () => {
     });
     const refresh = () => refreshMembers();
 
+    const { mutateAsync: addMembersMutation } = useAddGroupMembers(id!);
+    const { mutateAsync: removeMembersMutation } = useRemoveGroupMembers(id!);
+
     if (!currentGroup) {
         return <KeycloakSpinner />;
     }
@@ -90,19 +93,15 @@ export const Members = () => {
         <>
             {addMembers && (
                 <MemberModal
-                    membersQuery={(first, max) =>
-                        adminClient.groups.listMembers({ id: id!, first, max })
+                    membersQueryKey={`group-${id}`}
+                    fetchCurrentMembers={() =>
+                        import("../../api/groups").then(m =>
+                            m.fetchGroupMembers(id!, true, 0, 100)
+                        )
                     }
                     onAdd={async selectedRows => {
                         try {
-                            await Promise.all(
-                                selectedRows.map(user =>
-                                    adminClient.users.addToGroup({
-                                        id: user.id!,
-                                        groupId: id!
-                                    })
-                                )
-                            );
+                            await addMembersMutation(selectedRows.map(u => u.id!));
                             toast.success(
                                 t("usersAdded", { count: selectedRows.length })
                             );
@@ -176,10 +175,7 @@ export const Members = () => {
                                     <DropdownMenuItem
                                         onClick={async () => {
                                             try {
-                                                await adminClient.users.delFromGroup({
-                                                    id: row.original.id!,
-                                                    groupId: id!
-                                                });
+                                                await removeMembersMutation([row.original.id!]);
                                                 toast.success(
                                                     t("usersLeft", { count: 1 })
                                                 );
@@ -281,13 +277,8 @@ export const Members = () => {
                                     <DropdownMenuItem
                                         onClick={async () => {
                                             try {
-                                                await Promise.all(
-                                                    selectedRows.map(user =>
-                                                        adminClient.users.delFromGroup({
-                                                            id: user.id!,
-                                                            groupId: id!
-                                                        })
-                                                    )
+                                                await removeMembersMutation(
+                                                    selectedRows.map(u => u.id!)
                                                 );
                                                 toast.success(
                                                     t("usersLeft", {

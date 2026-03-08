@@ -9,8 +9,10 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useParams } from "../../../shared/lib/useParams";
+import { useParams } from "../../../shared/lib/use-params";
+import { useRemoveImportedUsers } from "../hooks/use-remove-imported-users";
+import { useSyncUsers } from "../hooks/use-sync-users";
+import { useUnlinkUsers } from "../hooks/use-unlink-users";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { Header } from "./header";
 
@@ -27,7 +29,6 @@ export const ExtendedHeader = ({
     save,
     noDivider = false
 }: ExtendedHeaderProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
@@ -38,11 +39,15 @@ export const ExtendedHeader = ({
         defaultValue: ["true"]
     })[0];
 
+    const { mutateAsync: removeImportedUsersMut } = useRemoveImportedUsers();
+    const { mutateAsync: syncUsersMut } = useSyncUsers();
+    const { mutateAsync: unlinkUsersMut } = useUnlinkUsers();
+
     const [toggleUnlinkUsersDialog, UnlinkUsersDialog] = useConfirmDialog({
         titleKey: "userFedUnlinkUsersConfirmTitle",
         messageKey: "userFedUnlinkUsersConfirm",
         continueButtonLabel: "unlinkUsers",
-        onConfirm: () => unlinkUsers()
+        onConfirm: () => handleUnlinkUsers()
     });
 
     const [toggleRemoveUsersDialog, RemoveUsersConfirm] = useConfirmDialog({
@@ -50,14 +55,14 @@ export const ExtendedHeader = ({
         messageKey: t("removeImportedUsersMessage"),
         continueButtonLabel: "remove",
         onConfirm: async () => {
-            await removeImportedUsers();
+            await handleRemoveImportedUsers();
         }
     });
 
-    const removeImportedUsers = async () => {
+    const handleRemoveImportedUsers = async () => {
         try {
             if (id) {
-                await adminClient.userStorageProvider.removeImportedUsers({ id });
+                await removeImportedUsersMut(id);
                 toast.success(t("removeImportedUsersSuccess"));
             }
         } catch (error) {
@@ -72,8 +77,8 @@ export const ExtendedHeader = ({
         try {
             if (id) {
                 toast.info(t("syncUsersStarted"));
-                const response = await adminClient.userStorageProvider.sync({
-                    id: id,
+                const response = await syncUsersMut({
+                    id,
                     action: "triggerChangedUsersSync"
                 });
                 if (response.ignored) {
@@ -96,8 +101,8 @@ export const ExtendedHeader = ({
         try {
             if (id) {
                 toast.info(t("syncUsersStarted"));
-                const response = await adminClient.userStorageProvider.sync({
-                    id: id,
+                const response = await syncUsersMut({
+                    id,
                     action: "triggerFullSync"
                 });
                 if (response.ignored) {
@@ -116,10 +121,10 @@ export const ExtendedHeader = ({
         }
     };
 
-    const unlinkUsers = async () => {
+    const handleUnlinkUsers = async () => {
         try {
             if (id) {
-                await adminClient.userStorageProvider.unlinkUsers({ id });
+                await unlinkUsersMut(id);
             }
             toast.success(t("unlinkUsersSuccess"));
         } catch (error) {

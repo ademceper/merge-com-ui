@@ -15,12 +15,11 @@ import {
     SelectField,
     SwitchControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useLocaleSort from "../../../shared/lib/useLocaleSort";
+import { useLocaleSort } from "../../../shared/lib/use-locale-sort";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
+import { useUpdateRealmPolicyWithRefetch } from "../hooks/use-update-realm-policy-with-refetch";
 
 const POLICY_TYPES = ["totp", "hotp"] as const;
 const OTP_HASH_ALGORITHMS = ["SHA1", "SHA256", "SHA512"] as const;
@@ -37,7 +36,6 @@ type FormFields = Omit<
 >;
 
 export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<FormFields>({
@@ -59,8 +57,8 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
         handleSubmit,
         formState: { isValid, isDirty }
     } = form;
-    const { realm: realmName } = useRealm();
     const localeSort = useLocaleSort();
+    const { mutateAsync: updateRealmPolicy } = useUpdateRealmPolicyWithRefetch();
 
     const otpType = useWatch({ name: "otpPolicyType", control });
 
@@ -76,10 +74,7 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
 
     const onSubmit = async (formValues: FormFields) => {
         try {
-            await adminClient.realms.update({ realm: realmName }, formValues);
-            const updatedRealm = await adminClient.realms.findOne({
-                realm: realmName
-            });
+            const updatedRealm = await updateRealmPolicy(formValues);
             realmUpdated(updatedRealm!);
             setupForm(updatedRealm!);
             toast.success(t("updateOtpSuccess"));

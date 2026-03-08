@@ -14,14 +14,20 @@ import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { HelpItem, SelectVariant, useHelp } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    evaluatePermission,
+    evaluateListProtocolMapper,
+    evaluateGenerateAccessToken,
+    evaluateGenerateUserInfo,
+    evaluateGenerateIdToken
+} from "../../../api/clients";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { prettyPrintJSON } from "../../../shared/lib/util";
 import { ClientSelect } from "../../../shared/ui/client/client-select";
 import { UserSelect } from "../../../shared/ui/users/user-select";
-import { useClientAssignedScopes } from "../api/use-client-assigned-scopes";
+import { useClientAssignedScopes } from "../hooks/use-client-assigned-scopes";
 import { GeneratedCodeTab } from "./generated-code-tab";
 
 type EvaluateScopesProps = {
@@ -59,12 +65,22 @@ const ProtocolMappers = ({
             {
                 id: "category",
                 header: t("category"),
-                cell: ({ row }) => (row.original as any).type?.category || "-"
+                cell: ({ row }) =>
+                    (
+                        row.original as Record<string, unknown> & {
+                            type?: { category?: string };
+                        }
+                    ).type?.category || "-"
             },
             {
                 id: "priority",
                 header: t("priority"),
-                cell: ({ row }) => (row.original as any).type?.priority || "-"
+                cell: ({ row }) =>
+                    (
+                        row.original as Record<string, unknown> & {
+                            type?: { priority?: string };
+                        }
+                    ).type?.priority || "-"
             }
         ],
         [t]
@@ -118,7 +134,6 @@ const EffectiveRoles = ({ effectiveRoles }: { effectiveRoles: RoleRepresentation
 };
 
 export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
-    const { adminClient } = useAdminClient();
 
     const prefix = "openid";
     const { t } = useTranslation();
@@ -159,16 +174,15 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
     const { data: evalData } = useQuery({
         queryKey: ["clientEvaluate", clientId, scopeStr],
         queryFn: async () => {
-            const effectiveRoles = await adminClient.clients.evaluatePermission({
-                id: clientId,
-                roleContainer: realm,
-                scope: scopeStr,
-                type: "granted"
-            });
-            const mapperList = (await adminClient.clients.evaluateListProtocolMapper({
-                id: clientId,
-                scope: scopeStr
-            })) as ({
+            const effectiveRoles = await evaluatePermission(
+                clientId,
+                realm,
+                scopeStr
+            );
+            const mapperList = (await evaluateListProtocolMapper(
+                clientId,
+                scopeStr
+            )) as ({
                 type: ProtocolMapperTypeRepresentation;
             } & ProtocolMapperRepresentation)[];
             return { mapperList, effectiveRoles };
@@ -192,22 +206,22 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
         queryFn: async () => {
             if (!userValue || userValue.length === 0) return null;
             const [at, ui, it] = await Promise.all([
-                adminClient.clients.evaluateGenerateAccessToken({
-                    id: clientId,
-                    userId: userValue[0],
-                    scope: scopeStr,
-                    audience: audienceStr
-                }),
-                adminClient.clients.evaluateGenerateUserInfo({
-                    id: clientId,
-                    userId: userValue[0],
-                    scope: scopeStr
-                }),
-                adminClient.clients.evaluateGenerateIdToken({
-                    id: clientId,
-                    userId: userValue[0],
-                    scope: scopeStr
-                })
+                evaluateGenerateAccessToken(
+                    clientId,
+                    userValue[0],
+                    scopeStr,
+                    audienceStr
+                ),
+                evaluateGenerateUserInfo(
+                    clientId,
+                    userValue[0],
+                    scopeStr
+                ),
+                evaluateGenerateIdToken(
+                    clientId,
+                    userValue[0],
+                    scopeStr
+                )
             ]);
             return { accessToken: at, userInfo: ui, idToken: it };
         },

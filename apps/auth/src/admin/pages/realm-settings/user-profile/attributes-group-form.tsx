@@ -12,13 +12,15 @@ import {
     HelpItem,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useParams } from "../../../shared/lib/useParams";
+import {
+    type EditAttributesGroupParams,
+    toUserProfile
+} from "../../../shared/lib/routes/realm-settings";
+import { useParams } from "../../../shared/lib/use-params";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
 import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
-import { type EditAttributesGroupParams, toUserProfile } from "../../../shared/lib/routes/realm-settings";
 import {
     saveTranslations,
     TranslatableField,
@@ -57,8 +59,7 @@ const defaultValues: FormFields = {
     translation: { key: [] }
 };
 
-export default function AttributesGroupForm() {
-    const { adminClient } = useAdminClient();
+export function AttributesGroupForm() {
     const { t } = useTranslation();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     const { config, save } = useUserProfile();
@@ -109,7 +110,6 @@ export default function AttributesGroupForm() {
             if (realm?.internationalizationEnabled) {
                 try {
                     await saveTranslations({
-                        adminClient,
                         realmName,
                         translationsData: { translation }
                     });

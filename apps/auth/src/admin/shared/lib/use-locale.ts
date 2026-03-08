@@ -2,7 +2,7 @@ import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { useMemo } from "react";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 
-export default function useLocale() {
+export function useLocale() {
     const { realmRepresentation: realm } = useRealm();
 
     const defaultSupportedLocales = useMemo(() => {

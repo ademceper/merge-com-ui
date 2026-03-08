@@ -25,8 +25,8 @@ import {
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import useToggle from "../../../shared/lib/useToggle";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import {
     type ClientScopeType,
     clientScopeTypesDropdown

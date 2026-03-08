@@ -6,7 +6,7 @@ type UseSortedResourceTypesProps = {
     clientId: string;
 };
 
-export default function useSortedResourceTypes({
+export function useSortedResourceTypes({
     clientId
 }: UseSortedResourceTypesProps) {
     const { data: resourceServer } = useResourceServer(clientId);

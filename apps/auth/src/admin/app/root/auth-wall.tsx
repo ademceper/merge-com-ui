@@ -1,5 +1,6 @@
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
 import { useMatches } from "@tanstack/react-router";
+import type React from "react";
 import { useMemo } from "react";
 
 import { ForbiddenSection } from "../../pages/forbidden-section";
@@ -12,13 +13,18 @@ function hasProp<K extends PropertyKey>(
     return prop in data;
 }
 
-export const AuthWall = ({ children }: any) => {
+interface RouteMatchContext {
+    context?: Record<string, unknown>;
+    routeContext?: Record<string, unknown>;
+}
+
+export const AuthWall = ({ children }: React.PropsWithChildren) => {
     const matches = useMatches();
     const { hasAccess } = useAccess();
 
     const permissionNeeded = useMemo(
         () =>
-            matches.flatMap((match: any) => {
+            matches.flatMap((match: RouteMatchContext) => {
                 const ctx = match.context || match.routeContext || {};
                 if (typeof ctx !== "object" || ctx === null || !hasProp(ctx, "access")) {
                     return [];

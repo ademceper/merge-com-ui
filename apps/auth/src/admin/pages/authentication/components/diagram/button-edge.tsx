@@ -18,6 +18,7 @@ export type ButtonEdgeProps = EdgeProps & {
 };
 
 const foreignObjectSize = 33;
+const edgeLabelStyle = { fontSize: "11px" } as const;
 
 export const ButtonEdge = ({
     id,
@@ -57,7 +58,7 @@ export const ButtonEdge = ({
                 <text>
                     <textPath
                         href={`#${id}`}
-                        style={{ fontSize: "11px" }}
+                        style={edgeLabelStyle}
                         startOffset="50%"
                         textAnchor="middle"
                     >

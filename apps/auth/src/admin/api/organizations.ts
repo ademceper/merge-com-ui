@@ -1,23 +1,19 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { sortBy } from "lodash-es";
+import { adminClient } from "../app/admin-client";
 
 // --- Query functions ---
 
-export async function findOrganizations(adminClient: KeycloakAdminClient) {
+export async function findOrganizations() {
     return adminClient.organizations.find({ first: 0, max: 1000 });
 }
 
-export async function findOrganization(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findOrganization(id: string) {
     return adminClient.organizations.findOne({ id });
 }
 
 export async function fetchOrganizationMembers(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     filters?: { search?: string; membershipType?: string }
 ) {
@@ -31,7 +27,6 @@ export async function fetchOrganizationMembers(
 }
 
 export async function fetchOrganizationInvitations(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     filters?: { search?: string; status?: string }
 ) {
@@ -45,7 +40,6 @@ export async function fetchOrganizationInvitations(
 }
 
 export async function fetchOrganizationIdentityProviders(
-    adminClient: KeycloakAdminClient,
     orgId: string
 ) {
     return sortBy(
@@ -54,9 +48,7 @@ export async function fetchOrganizationIdentityProviders(
     );
 }
 
-export async function hasIdentityProviders(
-    adminClient: KeycloakAdminClient
-) {
+export async function hasIdentityProviders() {
     const providers = await adminClient.identityProviders.find({ max: 1 });
     return providers.length === 1;
 }
@@ -64,29 +56,23 @@ export async function hasIdentityProviders(
 // --- Mutation functions ---
 
 export async function createOrganization(
-    adminClient: KeycloakAdminClient,
     org: OrganizationRepresentation
 ) {
     return adminClient.organizations.create(org);
 }
 
 export async function updateOrganization(
-    adminClient: KeycloakAdminClient,
     id: string,
     org: OrganizationRepresentation
 ) {
     return adminClient.organizations.updateById({ id }, org);
 }
 
-export async function deleteOrganization(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function deleteOrganization(id: string) {
     return adminClient.organizations.delById({ id });
 }
 
 export async function addOrganizationMember(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     userIds: string[]
 ) {
@@ -101,19 +87,15 @@ export async function addOrganizationMember(
 }
 
 export async function removeOrganizationMember(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     userIds: string[]
 ) {
     return Promise.all(
-        userIds.map(userId =>
-            adminClient.organizations.delMember({ orgId, userId })
-        )
+        userIds.map(userId => adminClient.organizations.delMember({ orgId, userId }))
     );
 }
 
 export async function resendInvitation(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     invitationId: string
 ) {
@@ -121,7 +103,6 @@ export async function resendInvitation(
 }
 
 export async function deleteInvitation(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     invitationIds: string[]
 ) {
@@ -136,7 +117,6 @@ export async function deleteInvitation(
 }
 
 export async function unlinkOrganizationIdp(
-    adminClient: KeycloakAdminClient,
     orgId: string,
     alias: string
 ) {
@@ -144,11 +124,32 @@ export async function unlinkOrganizationIdp(
 }
 
 export async function updateIdentityProviderForOrg(
-    adminClient: KeycloakAdminClient,
     provider: IdentityProviderRepresentation
 ) {
-    return adminClient.identityProviders.update(
-        { alias: provider.alias! },
-        provider
-    );
+    return adminClient.identityProviders.update({ alias: provider.alias! }, provider);
+}
+
+export async function inviteOrganizationMember(
+    orgId: string,
+    formData: FormData
+) {
+    return adminClient.organizations.invite({ orgId }, formData);
+}
+
+export async function linkOrganizationIdp(
+    orgId: string,
+    alias: string
+) {
+    return adminClient.organizations.linkIdp({ orgId, alias });
+}
+
+export async function findIdentityProviderByAlias(alias: string) {
+    return adminClient.identityProviders.findOne({ alias });
+}
+
+export async function updateIdentityProviderByAlias(
+    alias: string,
+    provider: IdentityProviderRepresentation
+) {
+    return adminClient.identityProviders.update({ alias }, provider);
 }

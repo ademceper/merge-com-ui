@@ -4,7 +4,6 @@ import {
     fetchMemberOrganizations,
     fetchOrganizationMembers
 } from "../../../api/users";
-import { useAdminClient } from "../../../app/admin-client";
 import { userKeys } from "./keys";
 
 export function useUserOrganizations(
@@ -12,19 +11,16 @@ export function useUserOrganizations(
     username: string | undefined,
     filters?: { membershipTypes?: string[]; search?: string }
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: userKeys.organizations(userId, filters),
         queryFn: async () => {
             const userOrganizations = await fetchMemberOrganizations(
-                adminClient,
                 userId
             );
 
             const userOrganizationsWithMembershipTypes = await Promise.all(
                 userOrganizations.map(async org => {
                     const memberships = await fetchOrganizationMembers(
-                        adminClient,
                         org.id!
                     );
 

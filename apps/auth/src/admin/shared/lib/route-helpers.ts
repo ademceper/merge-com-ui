@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "./generateEncodedPath";
+import { generateEncodedPath } from "./generate-encoded-path";
 
 // Permission Details (canonical source: ./routes/clients.ts)
 export type { PermissionDetailsParams } from "./routes/clients";
@@ -26,13 +26,17 @@ type RealmSettingsParams = {
 };
 
 export const toRealmSettings = (params: RealmSettingsParams): string => {
-    const path = params.tab ? "/:realm/realm-settings/:tab" : "/:realm/realm-settings";
-
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath("/:realm/realm-settings/:tab", {
+            realm: params.realm,
+            tab: params.tab
+        });
+    }
+    return generateEncodedPath("/:realm/realm-settings", { realm: params.realm });
 };
 
 // User - moved to ./routes/user.ts
-export type { UserTab, UserParams } from "./routes/user";
+export type { UserParams, UserTab } from "./routes/user";
 export { toUser } from "./routes/user";
 
 // Add User
@@ -60,7 +64,14 @@ type DashboardTab = "info" | "providers" | "welcome";
 type DashboardParams = { realm?: string; tab?: DashboardTab };
 
 export const toDashboard = (params: DashboardParams): string => {
-    const pathname = params.realm ? (params.tab ? "/:realm/:tab" : "/:realm") : "/";
-
-    return generateEncodedPath(pathname, params as any);
+    if (params.realm && params.tab) {
+        return generateEncodedPath("/:realm/:tab", {
+            realm: params.realm,
+            tab: params.tab
+        });
+    }
+    if (params.realm) {
+        return generateEncodedPath("/:realm", { realm: params.realm });
+    }
+    return "/";
 };

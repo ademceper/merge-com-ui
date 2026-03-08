@@ -17,11 +17,11 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useUpdateRealmPolicy } from "../hooks/use-update-realm-policy";
 import { PolicyRow } from "./policy-row";
 import { parsePolicy, type SubmittedValues, serializePolicy } from "./util";
 
@@ -78,11 +78,11 @@ type PasswordPolicyProps = {
 };
 
 export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { passwordPolicies } = useServerInfo();
-    const { realm: realmName, refresh } = useRealm();
+    const { refresh } = useRealm();
+    const { mutateAsync: updateRealmPolicy } = useUpdateRealmPolicy();
 
     const [rows, setRows] = useState<PasswordPolicyTypeRepresentation[]>([]);
     const onSelect = (row: PasswordPolicyTypeRepresentation) => {
@@ -117,7 +117,7 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
             passwordPolicy: serializePolicy(rows, values)
         };
         try {
-            await adminClient.realms.update({ realm: realmName }, updatedRealm);
+            await updateRealmPolicy(updatedRealm);
             realmUpdated(updatedRealm);
             setupForm(updatedRealm);
             refresh();

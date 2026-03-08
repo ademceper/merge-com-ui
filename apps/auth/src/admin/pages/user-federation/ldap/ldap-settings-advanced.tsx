@@ -9,8 +9,8 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useLdapServerCapabilities } from "../hooks/use-ldap-server-capabilities";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 import { convertFormToSettings } from "./ldap-settings-connection";
@@ -30,22 +30,22 @@ export const LdapSettingsAdvanced = ({
     showSectionHeading = false,
     showSectionDescription = false
 }: LdapSettingsAdvancedProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
 
     const { realm } = useRealm();
+    const { mutateAsync: ldapServerCapabilitiesMut } = useLdapServerCapabilities();
     const testLdap = async () => {
         if (!(await form.trigger())) return;
         try {
             const settings = convertFormToSettings(form);
-            const ldapOids = await adminClient.realms.ldapServerCapabilities(
-                { realm },
-                { ...settings, componentId: id }
-            );
+            const ldapOids = await ldapServerCapabilitiesMut({
+                realm,
+                settings: { ...settings, componentId: id }
+            });
             toast.success(t("testSuccess"));
             const passwordModifyOid = ldapOids.filter(
-                (id: { oid: string }) => id.oid === PASSWORD_MODIFY_OID
+                (oidItem: { oid: string }) => oidItem.oid === PASSWORD_MODIFY_OID
             );
             form.setValue("config.usePasswordModifyExtendedOp", [
                 (passwordModifyOid.length > 0).toString()

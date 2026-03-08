@@ -1,7 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useQuery } from "@tanstack/react-query";
 import { findGroup } from "../../../api/groups";
-import { useAdminClient } from "../../../app/admin-client";
 import { groupKeys } from "./keys";
 
 /**
@@ -9,7 +8,6 @@ import { groupKeys } from "./keys";
  * fetch each group to rebuild breadcrumb state.
  */
 export function useNavigationPath(ids: string[] | undefined) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: groupKeys.navigationPath(ids ?? []),
         queryFn: async () => {
@@ -18,7 +16,7 @@ export function useNavigationPath(ids: string[] | undefined) {
             for (const i of ids) {
                 let group: GroupRepresentation | undefined;
                 if (i !== "search") {
-                    group = await findGroup(adminClient, i);
+                    group = await findGroup(i);
                 } else {
                     group = { name: "searchGroups", id: "search" };
                 }

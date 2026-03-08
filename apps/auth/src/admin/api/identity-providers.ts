@@ -1,13 +1,12 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
+import { adminClient } from "../app/admin-client";
 
 // --- Query functions ---
 
 export async function findIdentityProviders(
-    adminClient: KeycloakAdminClient,
     params?: { realmOnly?: boolean }
 ) {
     return adminClient.identityProviders.find({
@@ -17,9 +16,7 @@ export async function findIdentityProviders(
     } as IdentityProvidersQuery);
 }
 
-export async function findIdentityProviderExists(
-    adminClient: KeycloakAdminClient
-) {
+export async function findIdentityProviderExists() {
     const firstPage = await adminClient.identityProviders.find({
         max: 1
     });
@@ -27,28 +24,24 @@ export async function findIdentityProviderExists(
 }
 
 export async function findIdentityProvider(
-    adminClient: KeycloakAdminClient,
     alias: string
 ) {
     return adminClient.identityProviders.findOne({ alias });
 }
 
 export async function findIdentityProviderMappers(
-    adminClient: KeycloakAdminClient,
     alias: string
 ) {
     return adminClient.identityProviders.findMappers({ alias });
 }
 
 export async function findIdentityProviderMapperTypes(
-    adminClient: KeycloakAdminClient,
     alias: string
 ) {
     return adminClient.identityProviders.findMapperTypes({ alias });
 }
 
 export async function findIdentityProviderMapper(
-    adminClient: KeycloakAdminClient,
     alias: string,
     id: string
 ) {
@@ -56,31 +49,27 @@ export async function findIdentityProviderMapper(
 }
 
 export async function findOrgIdentityProviders(
-    adminClient: KeycloakAdminClient,
     orgId: string
 ) {
     return adminClient.organizations.listIdentityProviders({ orgId });
 }
 
-export async function fetchBasicFlows(adminClient: KeycloakAdminClient) {
+export async function fetchBasicFlows() {
     const flows = await adminClient.authenticationManagement.getFlows();
     return flows.filter(
-        (flow: AuthenticationFlowRepresentation) =>
-            flow.providerId === "basic-flow"
+        (flow: AuthenticationFlowRepresentation) => flow.providerId === "basic-flow"
     );
 }
 
 // --- Mutation functions ---
 
 export async function createIdentityProvider(
-    adminClient: KeycloakAdminClient,
     provider: IdentityProviderRepresentation
 ) {
     return adminClient.identityProviders.create(provider);
 }
 
 export async function updateIdentityProvider(
-    adminClient: KeycloakAdminClient,
     alias: string,
     provider: IdentityProviderRepresentation
 ) {
@@ -88,14 +77,12 @@ export async function updateIdentityProvider(
 }
 
 export async function deleteIdentityProvider(
-    adminClient: KeycloakAdminClient,
     alias: string
 ) {
     return adminClient.identityProviders.del({ alias });
 }
 
 export async function updateIdentityProviderOrder(
-    adminClient: KeycloakAdminClient,
     providers: { alias: string; provider: IdentityProviderRepresentation }[]
 ) {
     return Promise.all(
@@ -106,7 +93,6 @@ export async function updateIdentityProviderOrder(
 }
 
 export async function createIdentityProviderMapper(
-    adminClient: KeycloakAdminClient,
     alias: string,
     mapper: IdentityProviderMapperRepresentation
 ) {
@@ -120,18 +106,13 @@ export async function createIdentityProviderMapper(
 }
 
 export async function updateIdentityProviderMapper(
-    adminClient: KeycloakAdminClient,
     alias: string,
     mapper: IdentityProviderMapperRepresentation
 ) {
-    return adminClient.identityProviders.updateMapper(
-        { id: mapper.id!, alias },
-        mapper
-    );
+    return adminClient.identityProviders.updateMapper({ id: mapper.id!, alias }, mapper);
 }
 
 export async function deleteIdentityProviderMapper(
-    adminClient: KeycloakAdminClient,
     alias: string,
     id: string
 ) {
@@ -139,15 +120,33 @@ export async function deleteIdentityProviderMapper(
 }
 
 export async function importFromUrl(
-    adminClient: KeycloakAdminClient,
     params: { providerId: string; fromUrl: string }
 ) {
     return adminClient.identityProviders.importFromUrl(params);
 }
 
-export async function reloadKeys(
-    adminClient: KeycloakAdminClient,
-    alias: string
-) {
+export async function reloadKeys(alias: string) {
     return adminClient.identityProviders.reloadKeys({ alias });
+}
+
+export async function uploadCertificate(formData: FormData) {
+    return adminClient.identityProviders.uploadCertificate({}, formData);
+}
+
+export async function importFromUrlFormData(formData: FormData) {
+    return adminClient.identityProviders.importFromUrl(formData);
+}
+
+export async function searchIdentityProviders(
+    params: IdentityProvidersQuery
+) {
+    return adminClient.identityProviders.find(params);
+}
+
+export function getAdminClientBaseUrl() {
+    return adminClient.baseUrl;
+}
+
+export async function getAdminClientAccessToken() {
+    return adminClient.getAccessToken();
 }

@@ -17,12 +17,11 @@ import { DotsThreeVertical, ProhibitInset, SignOut } from "@phosphor-icons/react
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useLogoutAllSessions } from "./hooks/use-logout-all-sessions";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { useSessions as useSessionsQuery } from "./api/use-sessions";
+import { useSessions as useSessionsQuery } from "./hooks/use-sessions";
 import { RevocationModal } from "./revocation-modal";
-import SessionsTable from "./sessions-table";
+import { SessionsTable } from "./sessions-table";
 
 type FilterType = "ALL" | "REGULAR" | "OFFLINE";
 
@@ -58,10 +57,8 @@ const SessionFilter = ({ filterType, onChange }: SessionFilterProps) => {
     );
 };
 
-export default function SessionsSection() {
-    const { adminClient } = useAdminClient();
+export function SessionsSection() {
     const { t } = useTranslation();
-    const { realm } = useRealm();
 
     const [revocationModalOpen, setRevocationModalOpen] = useState(false);
     const [filterType, setFilterType] = useState<FilterType>("ALL");
@@ -70,6 +67,7 @@ export default function SessionsSection() {
         useSessionsQuery(filterType);
     const refresh = () => refreshSessions();
     const noSessions = sessions.length === 0;
+    const { mutateAsync: logoutAll } = useLogoutAllSessions();
 
     const handleRevocationModalToggle = () => {
         setRevocationModalOpen(!revocationModalOpen);
@@ -81,7 +79,7 @@ export default function SessionsSection() {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.realms.logoutAll({ realm });
+                await logoutAll();
                 refresh();
             } catch (error) {
                 toast.error(

@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { type UseControllerProps, useController } from "react-hook-form";
 import type { SelectControlOption } from "../../../shared/keycloak-ui-shared";
-import useToggle from "../lib/useToggle";
+import { useToggle } from "../lib/use-toggle";
 
 type KeySelectProp = UseControllerProps & {
     selectItems: SelectControlOption[];

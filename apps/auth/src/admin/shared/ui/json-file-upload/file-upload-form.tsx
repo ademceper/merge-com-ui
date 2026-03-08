@@ -28,7 +28,7 @@ import {
     type MouseEvent as ReactMouseEvent,
     useState
 } from "react";
-import CodeEditor from "../form/code-editor";
+import { CodeEditor } from "../form/code-editor";
 
 type FileUploadType = {
     value: string;

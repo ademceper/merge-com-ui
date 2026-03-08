@@ -19,22 +19,24 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
-import { useParams } from "../../../shared/lib/useParams";
+import {
+    type IdentityProviderEditMapperParams,
+    toIdentityProvider,
+    toIdentityProviderEditMapper
+} from "../../../shared/lib/routes/identity-providers";
+import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
+import { useParams } from "../../../shared/lib/use-params";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import type { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
-import { useIdentityProviderMapper } from "../api/use-identity-provider-mapper";
-import { useIdentityProviderMapperTypes } from "../api/use-identity-provider-mapper-types";
-import {
-    type IdentityProviderEditMapperParams,
-    toIdentityProviderEditMapper,
-    toIdentityProvider
-} from "../../../shared/lib/routes/identity-providers";
+import { useCreateIdentityProviderMapper } from "../hooks/use-create-identity-provider-mapper";
+import { useDeleteIdentityProviderMapper } from "../hooks/use-delete-identity-provider-mapper";
+import { useIdentityProviderMapper } from "../hooks/use-identity-provider-mapper";
+import { useIdentityProviderMapperTypes } from "../hooks/use-identity-provider-mapper-types";
+import { useUpdateIdentityProviderMapper } from "../hooks/use-update-identity-provider-mapper";
 import { AddMapperForm } from "./add-mapper-form";
 
 export type IdPMapperRepresentationWithAttributes = IdentityProviderMapperRepresentation &
@@ -44,8 +46,7 @@ export type Role = RoleRepresentation & {
     clientId?: string;
 };
 
-export default function AddMapper() {
-    const { adminClient } = useAdminClient();
+export function AddMapper() {
 
     const { t } = useTranslation();
 
@@ -66,6 +67,10 @@ export default function AddMapper() {
     const [currentMapper, setCurrentMapper] =
         useState<IdentityProviderMapperTypeRepresentation>();
 
+    const { mutateAsync: updateMapper } = useUpdateIdentityProviderMapper(alias!);
+    const { mutateAsync: createMapper } = useCreateIdentityProviderMapper(alias!);
+    const { mutateAsync: deleteMapper } = useDeleteIdentityProviderMapper(alias!);
+
     const save = async (idpMapper: IdentityProviderMapperRepresentation) => {
         const mapper = convertFormValuesToObject(idpMapper);
 
@@ -79,13 +84,7 @@ export default function AddMapper() {
 
         if (id) {
             try {
-                await adminClient.identityProviders.updateMapper(
-                    {
-                        id: id!,
-                        alias: alias!
-                    },
-                    { ...identityProviderMapper, id }
-                );
+                await updateMapper({ ...identityProviderMapper, id });
                 toast.success(t("mapperSaveSuccess"));
             } catch (error) {
                 toast.error(t("mapperSaveError", { error: getErrorMessage(error) }), {
@@ -94,10 +93,7 @@ export default function AddMapper() {
             }
         } else {
             try {
-                const createdMapper = await adminClient.identityProviders.createMapper({
-                    identityProviderMapper,
-                    alias: alias!
-                });
+                const createdMapper = await createMapper(identityProviderMapper);
 
                 toast.success(t("mapperCreateSuccess"));
                 navigate({
@@ -125,10 +121,7 @@ export default function AddMapper() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.identityProviders.delMapper({
-                    alias: alias,
-                    id: id!
-                });
+                await deleteMapper(id!);
                 toast.success(t("deleteMapperSuccess"));
                 navigate({
                     to: toIdentityProvider({

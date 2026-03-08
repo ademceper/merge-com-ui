@@ -5,16 +5,19 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import {
+    toEditOrganization,
+    toOrganizations
+} from "../../shared/lib/routes/organizations";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useCreateOrganization } from "./api/use-create-organization";
+import { useCreateOrganization } from "./hooks/use-create-organization";
 import {
     convertToOrg,
     OrganizationForm,
     type OrganizationFormType
 } from "./organization-form";
-import { toEditOrganization, toOrganizations } from "../../shared/lib/routes/organizations";
 
-export default function NewOrganization() {
+export function NewOrganization() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();

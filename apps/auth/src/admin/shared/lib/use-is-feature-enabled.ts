@@ -21,7 +21,7 @@ export enum Feature {
     Workflows = "WORKFLOWS"
 }
 
-export default function useIsFeatureEnabled() {
+export function useIsFeatureEnabled() {
     const { features } = useServerInfo();
     const { hasAccess } = useAccess();
 

@@ -14,9 +14,11 @@ const { shouldLoadApp } = oidcEarlyInit({
     }
 });
 
-const KcAdminUi = lazy(() => import("./kc-admin-ui"));
+const KcAdminUi = lazy(() =>
+    import("./kc-admin-ui").then((m) => ({ default: m.KcAdminUi }))
+);
 
-export default function KcPage(props: { kcContext: KcContext }) {
+export function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
 
     if (!shouldLoadApp) {

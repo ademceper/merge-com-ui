@@ -22,10 +22,11 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { useExecutionConfig } from "../api/use-execution-config";
+import { useDeleteExecutionConfig } from "../hooks/use-delete-execution-config";
+import { useExecutionConfig } from "../hooks/use-execution-config";
+import { useSaveExecutionConfig } from "../hooks/use-save-execution-config";
 import type { ExpandableExecution } from "../execution-model";
 
 type ExecutionConfigModalForm = {
@@ -38,11 +39,12 @@ type ExecutionConfigModalProps = {
 };
 
 export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const [show, setShow] = useState(false);
     const [config, setConfig] = useState<AuthenticatorConfigRepresentation>();
+    const { mutateAsync: saveConfig } = useSaveExecutionConfig();
+    const { mutateAsync: deleteConfig } = useDeleteExecutionConfig();
 
     const form = useForm<ExecutionConfigModalForm>();
     const { setValue, handleSubmit } = form;
@@ -99,24 +101,12 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
     const save = async (saved: ExecutionConfigModalForm) => {
         const changedConfig = convertFormValuesToObject(saved);
         try {
-            if (config) {
-                const newConfig = {
-                    id: config.id,
-                    alias: config.alias,
-                    config: changedConfig.config
-                };
-                await adminClient.authenticationManagement.updateConfig(newConfig);
-                setConfig({ ...newConfig });
-            } else {
-                const newConfig = {
-                    id: execution.id!,
-                    alias: changedConfig.alias,
-                    config: changedConfig.config
-                };
-                const { id } =
-                    await adminClient.authenticationManagement.createConfig(newConfig);
-                setConfig({ ...newConfig.config, id, alias: newConfig.alias });
-            }
+            const result = await saveConfig({
+                config,
+                executionId: execution.id!,
+                changedConfig
+            });
+            setConfig(result as AuthenticatorConfigRepresentation);
             toast.success(t("configSaveSuccess"));
             setShow(false);
         } catch (error) {
@@ -189,11 +179,7 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
                                         data-testid="clear"
                                         variant="link"
                                         onClick={async () => {
-                                            await adminClient.authenticationManagement.delConfig(
-                                                {
-                                                    id: config.id!
-                                                }
-                                            );
+                                            await deleteConfig(config.id!);
                                             setConfig(undefined);
                                             setShow(false);
                                         }}

@@ -12,10 +12,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { NameDescription } from "./form/name-description";
 import { toFlow } from "../../shared/lib/routes/authentication";
+import { useDuplicateFlow } from "./hooks/use-duplicate-flow";
+import { NameDescription } from "./form/name-description";
 
 type DuplicateFlowModalProps = {
     name: string;
@@ -30,7 +30,6 @@ export const DuplicateFlowModal = ({
     toggleDialog,
     onComplete
 }: DuplicateFlowModalProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<AuthenticationFlowRepresentation>({
@@ -43,25 +42,17 @@ export const DuplicateFlowModal = ({
     const { getValues, handleSubmit } = form;
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: duplicateFlow } = useDuplicateFlow();
 
     const onSubmit = async () => {
-        const form = getValues();
+        const formData = getValues();
         try {
-            await adminClient.authenticationManagement.copyFlow({
+            const newFlow = await duplicateFlow({
                 flow: name,
-                newName: form.alias!
+                newName: formData.alias!,
+                description: formData.description,
+                originalDescription: description
             });
-            const newFlow = (await adminClient.authenticationManagement.getFlows()).find(
-                flow => flow.alias === form.alias
-            )!;
-
-            if (form.description !== description) {
-                newFlow.description = form.description;
-                await adminClient.authenticationManagement.updateFlow(
-                    { flowId: newFlow.id! },
-                    newFlow
-                );
-            }
             toast.success(t("copyFlowSuccess"));
             navigate({
                 to: toFlow({

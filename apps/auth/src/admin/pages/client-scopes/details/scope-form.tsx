@@ -22,7 +22,8 @@ import {
     useLoginProviders,
     useServerInfo
 } from "../../../app/providers/server-info/server-info-provider";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { toClientScopes } from "../../../shared/lib/routes/client-scopes";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
 import {
     convertAttributeNameToForm,
     convertToFormValues
@@ -34,8 +35,7 @@ import {
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { getProtocolName } from "../../clients/utils";
-import { useRealmKeys } from "../api/use-realm-keys";
-import { toClientScopes } from "../../../shared/lib/routes/client-scopes";
+import { useRealmKeys } from "../hooks/use-realm-keys";
 
 const OID4VC_PROTOCOL = "oid4vc";
 const VC_FORMAT_JWT_VC = "jwt_vc";

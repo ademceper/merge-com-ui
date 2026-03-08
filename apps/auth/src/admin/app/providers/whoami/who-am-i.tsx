@@ -78,31 +78,22 @@ export const WhoAmIContextProvider = ({ children }: PropsWithChildren) => {
     });
 
     useEffect(() => {
-        if (whoAmI?.locale) {
-            i18n.changeLanguage(whoAmI.locale);
-        }
-    }, [whoAmI?.locale]);
+        if (!whoAmI?.locale) return;
 
-    useEffect(() => {
-        if (whoAmI?.locale && RTL_LOCALES.includes(whoAmI.locale)) {
+        i18n.changeLanguage(whoAmI.locale);
+
+        if (RTL_LOCALES.includes(whoAmI.locale)) {
             document.documentElement.setAttribute("dir", "rtl");
         } else {
             document.documentElement.removeAttribute("dir");
         }
     }, [whoAmI?.locale]);
 
-    const value = useMemo(
-        () => ({ refresh, whoAmI: whoAmI! }),
-        [refresh, whoAmI]
-    );
+    const value = useMemo(() => ({ refresh, whoAmI: whoAmI! }), [refresh, whoAmI]);
 
     if (!whoAmI) {
         return <KeycloakSpinner />;
     }
 
-    return (
-        <WhoAmIContext.Provider value={value}>
-            {children}
-        </WhoAmIContext.Provider>
-    );
+    return <WhoAmIContext.Provider value={value}>{children}</WhoAmIContext.Provider>;
 };

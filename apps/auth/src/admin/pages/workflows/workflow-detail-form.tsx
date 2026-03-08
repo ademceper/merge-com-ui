@@ -12,20 +12,24 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import CodeEditor from "../../shared/ui/form/code-editor";
+import { useCreateWorkflow } from "./hooks/use-create-workflow";
+import { useUpdateWorkflow } from "./hooks/use-update-workflow";
+import {
+    toWorkflowDetail,
+    toWorkflows,
+    type WorkflowDetailParams
+} from "../../shared/lib/routes/workflows";
+import { useParams } from "../../shared/lib/use-params";
+import { CodeEditor } from "../../shared/ui/form/code-editor";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useWorkflow } from "./api/use-workflow";
-import { toWorkflowDetail, type WorkflowDetailParams, toWorkflows } from "../../shared/lib/routes/workflows";
+import { useWorkflow } from "./hooks/use-workflow";
 
 type AttributeForm = {
     workflowYAML: string;
 };
 
-export default function WorkflowDetailForm() {
-    const { adminClient } = useAdminClient();
+export function WorkflowDetailForm() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -39,6 +43,8 @@ export default function WorkflowDetailForm() {
     });
     const { control, handleSubmit, setValue } = form;
 
+    const { mutateAsync: updateWorkflowMut } = useUpdateWorkflow();
+    const { mutateAsync: createWorkflowMut } = useCreateWorkflow();
     const { data: workflowData } = useWorkflow(id!, mode !== "create");
 
     useEffect(() => {
@@ -64,7 +70,7 @@ export default function WorkflowDetailForm() {
     const onUpdate: SubmitHandler<AttributeForm> = async data => {
         try {
             const json = validateworkflowYAML(data.workflowYAML);
-            await adminClient.workflows.update({ id }, json);
+            await updateWorkflowMut({ id, workflow: json });
             toast.success(t("workflowUpdated"));
         } catch (error) {
             toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), {
@@ -75,10 +81,7 @@ export default function WorkflowDetailForm() {
 
     const onCreate: SubmitHandler<AttributeForm> = async data => {
         try {
-            await adminClient.workflows.createAsYaml({
-                realm,
-                yaml: data.workflowYAML
-            });
+            await createWorkflowMut(data.workflowYAML);
             toast.success(t("workflowCreated"));
             navigate({ to: toWorkflows({ realm }) as string });
         } catch (error) {

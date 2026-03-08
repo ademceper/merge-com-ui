@@ -1,4 +1,3 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { type TFunction, Trans, useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
@@ -10,8 +9,9 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { FormErrorText } from "../../../../../shared/keycloak-ui-shared";
 import { i18n } from "../../../../app/i18n";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import useToggle from "../../../../shared/lib/useToggle";
+import { useToggle } from "../../../../shared/lib/use-toggle";
 import { beerify, debeerify } from "../../../../shared/lib/util";
+import { addLocalization } from "../../../../api/realm-settings";
 import { AddTranslationsDialog } from "./add-translations-dialog";
 
 export type TranslationForm = {
@@ -26,13 +26,11 @@ export type Translations = {
 };
 
 type SaveTranslationsProps = {
-    adminClient: KeycloakAdminClient;
     realmName: string;
     translationsData: Translations;
 };
 
 export const saveTranslations = async ({
-    adminClient,
     realmName,
     translationsData
 }: SaveTranslationsProps) => {
@@ -41,12 +39,10 @@ export const saveTranslations = async ({
             translation
                 .filter(translation => translation.value.trim() !== "")
                 .map(translation =>
-                    adminClient.realms.addLocalization(
-                        {
-                            realm: realmName,
-                            selectedLocale: translation.locale,
-                            key: debeerify(key)
-                        },
+                    addLocalization(
+                        realmName,
+                        translation.locale,
+                        debeerify(key),
                         translation.value
                     )
                 )

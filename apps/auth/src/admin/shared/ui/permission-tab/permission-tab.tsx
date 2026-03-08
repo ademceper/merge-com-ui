@@ -22,11 +22,11 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { HelpItem, KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { usePermissions } from "../../api/use-permissions";
+import { useTogglePermission } from "../../api/use-toggle-permission";
 import { toPermissionDetails } from "../../lib/route-helpers";
-import useLocaleSort from "../../lib/useLocaleSort";
+import { useLocaleSort } from "../../lib/use-locale-sort";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
 type PermissionScreenType =
@@ -42,7 +42,6 @@ type PermissionsTabProps = {
 };
 
 export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -52,41 +51,18 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
 
     const { data: permissionsData } = usePermissions(id, type);
     const realmId = permissionsData?.realmId ?? "";
+    const { mutateAsync: togglePermissionMut } = useTogglePermission(id, type, realm);
     useEffect(() => {
         if (permissionsData) setPermission(permissionsData.permission);
     }, [permissionsData]);
-
-    const togglePermissionEnabled = (enabled: boolean) => {
-        switch (type) {
-            case "clients":
-                return adminClient.clients.updateFineGrainPermission(
-                    { id: id! },
-                    { enabled }
-                );
-            case "users":
-                return adminClient.realms.updateUsersManagementPermissions({
-                    realm,
-                    enabled
-                });
-            case "groups":
-                return adminClient.groups.updatePermission({ id: id! }, { enabled });
-            case "roles":
-                return adminClient.roles.updatePermission({ id: id! }, { enabled });
-            case "identityProviders":
-                return adminClient.identityProviders.updatePermission(
-                    { alias: id! },
-                    { enabled }
-                );
-        }
-    };
 
     const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
         titleKey: "permissionsDisable",
         messageKey: "permissionsDisableConfirm",
         continueButtonLabel: "confirm",
         onConfirm: async () => {
-            const permission = await togglePermissionEnabled(false);
-            setPermission(permission);
+            const result = await togglePermissionMut({ enabled: false });
+            setPermission(result);
         }
     });
 
@@ -122,7 +98,7 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                 onCheckedChange={async enabled => {
                                     if (enabled) {
                                         const perm =
-                                            await togglePermissionEnabled(enabled);
+                                            await togglePermissionMut({ enabled });
                                         setPermission(perm);
                                     } else {
                                         toggleDisableDialog();

@@ -2,9 +2,8 @@ import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/l
 import { useEffect, useState } from "react";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toPermissionDetails } from "../../../shared/lib/routes/clients";
-import { toScopeDetails } from "../../../shared/lib/routes/clients";
-import { useDetailCell } from "./api/use-detail-cell";
+import { toPermissionDetails, toScopeDetails } from "../../../shared/lib/routes/clients";
+import { useDetailCell } from "./hooks/use-detail-cell";
 import { DetailDescription, DetailDescriptionLink } from "./detail-description";
 
 type Scope = { id: string; name: string }[];

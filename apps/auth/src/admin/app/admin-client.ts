@@ -3,6 +3,9 @@ import type { Keycloak } from "oidc-spa/keycloak-js";
 import { createNamedContext, useRequiredContext } from "../../shared/keycloak-ui-shared";
 import type { Environment } from "./environment";
 
+// Module-level singleton – set once by initAdminClient, imported directly by API layer.
+export let adminClient: KeycloakAdminClient;
+
 type AdminClientProps = {
     keycloak: Keycloak;
     adminClient: KeycloakAdminClient;
@@ -16,11 +19,11 @@ export const AdminClientContext = createNamedContext<AdminClientProps | undefine
 export const useAdminClient = () => useRequiredContext(AdminClientContext);
 
 export async function initAdminClient(keycloak: Keycloak, environment: Environment) {
-    const adminClient = new KeycloakAdminClient();
+    const client = new KeycloakAdminClient();
 
-    adminClient.setConfig({ realmName: environment.realm });
-    adminClient.baseUrl = environment.adminBaseUrl;
-    adminClient.registerTokenProvider({
+    client.setConfig({ realmName: environment.realm });
+    client.baseUrl = environment.adminBaseUrl;
+    client.registerTokenProvider({
         async getAccessToken() {
             try {
                 await keycloak.updateToken(5);
@@ -32,5 +35,6 @@ export async function initAdminClient(keycloak: Keycloak, environment: Environme
         }
     });
 
-    return adminClient;
+    adminClient = client;
+    return client;
 }

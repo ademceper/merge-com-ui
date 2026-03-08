@@ -5,28 +5,26 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { toAuthentication, toFlow } from "../../../shared/lib/routes/authentication";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useCreateFlow } from "../hooks/use-create-flow";
 import { NameDescription } from "./name-description";
 
 const TYPES = ["basic-flow", "client-flow"] as const;
 
-export default function CreateFlow() {
-    const { adminClient } = useAdminClient();
+export function CreateFlow() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
     const form = useForm<AuthenticationFlowRepresentation>();
     const { handleSubmit, formState } = form;
+    const { mutateAsync: createFlowAsync } = useCreateFlow();
 
     const onSubmit = async (formValues: AuthenticationFlowRepresentation) => {
-        const flow = { ...formValues, builtIn: false, topLevel: true };
-
         try {
-            const { id } = await adminClient.authenticationManagement.createFlow(flow);
+            const { id } = await createFlowAsync(formValues);
             toast.success(t("flowCreatedSuccess"));
             navigate({
                 to: toFlow({

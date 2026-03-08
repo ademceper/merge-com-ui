@@ -9,17 +9,20 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../../shared/lib/useParams";
+import {
+    type IdentityProviderCreateParams,
+    toIdentityProvider,
+    toIdentityProviders
+} from "../../../shared/lib/routes/identity-providers";
+import { useParams } from "../../../shared/lib/use-params";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toIdentityProvider, type IdentityProviderCreateParams, toIdentityProviders } from "../../../shared/lib/routes/identity-providers";
+import { useCreateIdentityProvider } from "../hooks/use-create-identity-provider";
 import { GeneralSettings } from "./general-settings";
 
-export default function AddIdentityProvider() {
-    const { adminClient } = useAdminClient();
+export function AddIdentityProvider() {
 
     const { t } = useTranslation();
     const { providerId } = useParams<IdentityProviderCreateParams>();
@@ -49,10 +52,11 @@ export default function AddIdentityProvider() {
     } = form;
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: createIdp } = useCreateIdentityProvider();
 
     const onSubmit = async (provider: IdentityProviderRepresentation) => {
         try {
-            await adminClient.identityProviders.create({
+            await createIdp({
                 ...provider,
                 providerId,
                 alias: provider.alias!

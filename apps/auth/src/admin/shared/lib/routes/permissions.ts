@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 type NewPermissionConfigurationParams = {
     realm: string;

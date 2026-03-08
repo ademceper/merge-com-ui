@@ -1,4 +1,3 @@
-import { NetworkError } from "@keycloak/keycloak-admin-client";
 import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
@@ -21,7 +20,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Trash } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
     type ColumnDef,
@@ -29,20 +28,16 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { fetchAdminUI } from "../../app/providers/auth/admin-ui-endpoint";
+import type { RealmNameRepresentation } from "../../api/realm";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useRecentRealms } from "../../app/providers/recent-realms";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
 import { toDashboard } from "../../shared/lib/route-helpers";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
 import NewRealmForm from "./add/new-realm-form";
+import { useDeleteRealms } from "./hooks/use-delete-realms";
+import { useRealmNames } from "./hooks/use-realm-names";
 import { toRealm } from "./realm-routes";
-
-export type RealmNameRepresentation = {
-    name: string;
-    displayName?: string;
-};
 
 type RealmRow = RealmNameRepresentation & { id: string };
 
@@ -79,37 +74,15 @@ export default function RealmSection() {
     const navigate = useNavigate();
     const { whoAmI } = useWhoAmI();
     const { realm } = useRealm();
-    const { adminClient } = useAdminClient();
 
-    const [realms, setRealms] = useState<RealmRow[]>([]);
+    const { data: realmNames = [], refetch: refreshRealms } = useRealmNames();
+    const realms: RealmRow[] = useMemo(
+        () => realmNames.map(r => ({ ...r, id: r.name })),
+        [realmNames]
+    );
     const [selected, setSelected] = useState<RealmRow[]>([]);
     const [openNewRealm, setOpenNewRealm] = useState(false);
-    const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey(k => k + 1), []);
-
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const result = await fetchAdminUI<RealmNameRepresentation[]>(
-                    adminClient,
-                    "ui-ext/realms/names",
-                    { first: "0", max: "1000" }
-                );
-                if (cancelled) return;
-                setRealms((result ?? []).map(r => ({ ...r, id: r.name })));
-            } catch (error) {
-                if (error instanceof NetworkError && error.response.status < 500) {
-                    if (!cancelled) setRealms([]);
-                } else if (!cancelled) {
-                    setRealms([]);
-                }
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, adminClient]);
+    const { mutateAsync: deleteRealmsMut } = useDeleteRealms();
 
     const onDeleteConfirm = async () => {
         try {
@@ -121,16 +94,12 @@ export default function RealmSection() {
                 setSelected([]);
                 return;
             }
-            await Promise.all(
-                filtered.map(({ name: realmName }) =>
-                    adminClient.realms.del({ realm: realmName })
-                )
-            );
+            await deleteRealmsMut(filtered.map(({ name }) => name));
             toast.success(t("deletedSuccessRealmSetting"));
             if (selected.filter(({ name }) => name === realm).length > 0) {
                 navigate({ to: toRealm({ realm: "master" }) as string });
             }
-            refresh();
+            refreshRealms();
             setSelected([]);
         } catch (error) {
             toast.error(t("deleteError", { error: getErrorMessage(error) }), {
@@ -238,7 +207,7 @@ export default function RealmSection() {
                 <NewRealmForm
                     onClose={() => {
                         setOpenNewRealm(false);
-                        refresh();
+                        refreshRealms();
                     }}
                 />
             )}

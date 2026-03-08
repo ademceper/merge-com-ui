@@ -12,12 +12,9 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { convertFormValuesToObject } from "../../shared/lib/util";
-import {
-    type ClientScopeDefaultOptionalType,
-    changeScope
-} from "../../shared/ui/client-scope/client-scope-types";
+import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+import { useCreateClientScope } from "./hooks/use-create-client-scope";
 import { ScopeForm } from "./details/scope-form";
 
 type AddClientScopeDialogProps = {
@@ -28,10 +25,10 @@ type AddClientScopeDialogProps = {
 const FORM_ID = "add-client-scope-form";
 
 export function AddClientScopeDialog({ trigger, onSuccess }: AddClientScopeDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [saving, setSaving] = useState(false);
+    const { mutateAsync: createClientScope } = useCreateClientScope();
 
     const handleSave = async (formData: ClientScopeDefaultOptionalType) => {
         if (saving) return;
@@ -41,16 +38,7 @@ export function AddClientScopeDialog({ trigger, onSuccess }: AddClientScopeDialo
             name: formData.name?.trim().replace(/ /g, "_")
         });
         try {
-            await adminClient.clientScopes.create(clientScope);
-            const scope = await adminClient.clientScopes.findOneByName({
-                name: clientScope.name!
-            });
-            if (!scope) throw new Error(t("notFound"));
-            await changeScope(
-                adminClient,
-                { ...clientScope, id: scope.id },
-                clientScope.type
-            );
+            await createClientScope(clientScope);
             toast.success(t("createClientScopeSuccess"));
             setOpen(false);
             onSuccess?.();

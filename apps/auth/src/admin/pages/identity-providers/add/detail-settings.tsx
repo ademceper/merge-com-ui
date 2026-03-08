@@ -1,7 +1,6 @@
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { IdentityProviderType } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import {
@@ -20,6 +19,7 @@ import {
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -41,12 +41,18 @@ import {
     KeycloakSpinner,
     ScrollForm
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import { useParams, useParams as useRouterParams } from "../../../shared/lib/useParams";
+import {
+    type IdentityProviderParams,
+    toIdentityProvider,
+    toIdentityProviderAddMapper,
+    toIdentityProviderEditMapper,
+    toIdentityProviders
+} from "../../../shared/lib/routes/identity-providers";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+import { useParams, useParams as useRouterParams } from "../../../shared/lib/use-params";
 import { toUpperCase } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
@@ -55,17 +61,15 @@ import { FormAccess } from "../../../shared/ui/form/form-access";
 import { PermissionsTab } from "../../../shared/ui/permission-tab/permission-tab";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { AdminEvents } from "../../events/admin-events";
-import { idpKeys } from "../api/keys";
-import { useIdentityProvider } from "../api/use-identity-provider";
-import { useIdentityProviderMappers } from "../api/use-identity-provider-mappers";
-import { useIdentityProviderMapperTypes } from "../api/use-identity-provider-mapper-types";
-import {
-    toIdentityProviderAddMapper,
-    toIdentityProviderEditMapper,
-    type IdentityProviderParams,
-    toIdentityProvider,
-    toIdentityProviders
-} from "../../../shared/lib/routes/identity-providers";
+import { idpKeys } from "../hooks/keys";
+import { useDeleteIdentityProvider } from "../hooks/use-delete-identity-provider";
+import { useDeleteIdentityProviderMapper } from "../hooks/use-delete-identity-provider-mapper";
+import { useIdentityProvider } from "../hooks/use-identity-provider";
+import { useIdentityProviderMapperTypes } from "../hooks/use-identity-provider-mapper-types";
+import { useIdentityProviderMappers } from "../hooks/use-identity-provider-mappers";
+import { useImportFromUrl } from "../hooks/use-import-from-url";
+import { useReloadKeys } from "../hooks/use-reload-keys";
+import { useUpdateIdentityProvider } from "../hooks/use-update-identity-provider";
 import { AdvancedSettings } from "./advanced-settings";
 import { DescriptorSettings } from "./descriptor-settings";
 import { DiscoverySettings } from "./discovery-settings";
@@ -73,7 +77,7 @@ import { ExtendedNonDiscoverySettings } from "./extended-non-discovery-settings"
 import { ExtendedOAuth2Settings } from "./extended-o-auth2-settings";
 import { GeneralSettings } from "./general-settings";
 import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
-import JWTAuthorizationGrantSettings from "./jwt-authorization-grant-settings";
+import { JWTAuthorizationGrantSettings } from "./jwt-authorization-grant-settings";
 import { KubernetesSettings } from "./kubernetes-settings";
 import { UserProfileClaimsSettings } from "./o-auth2-user-profile-claims-settings";
 import { OIDCAuthentication } from "./oidc-authentication";
@@ -98,12 +102,13 @@ type IdPWithMapperAttributes = IdentityProviderMapperRepresentation & {
 };
 
 const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { alias: displayName } = useParams<{ alias: string }>();
     const { data: provider } = useIdentityProvider(displayName);
     const { setValue, formState, control } = useFormContext();
+    const { mutateAsync: importFromUrlMutation } = useImportFromUrl();
+    const { mutateAsync: reloadKeysMutation } = useReloadKeys();
 
     const validateSignature = useWatch({
         control,
@@ -132,7 +137,7 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
 
     const importSamlKeys = async (providerId: string, metadataDescriptorUrl: string) => {
         try {
-            const result = await adminClient.identityProviders.importFromUrl({
+            const result = await importFromUrlMutation({
                 providerId: providerId,
                 fromUrl: metadataDescriptorUrl
             });
@@ -155,9 +160,7 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
 
     const reloadSamlKeys = async (alias: string) => {
         try {
-            const result = await adminClient.identityProviders.reloadKeys({
-                alias: alias
-            });
+            const result = await reloadKeysMutation(alias);
             if (result) {
                 toast.success(t("reloadKeysSuccess"));
             } else {
@@ -286,8 +289,7 @@ const MapperLink = ({ name, mapperId, provider }: MapperLinkProps) => {
     );
 };
 
-export default function DetailSettings() {
-    const { adminClient } = useAdminClient();
+export function DetailSettings() {
     const queryClient = useQueryClient();
 
     const { t } = useTranslation();
@@ -297,6 +299,9 @@ export default function DetailSettings() {
     const form = useForm<IdentityProviderRepresentation>();
     const { handleSubmit, getValues, reset, control } = form;
     const [provider, setProvider] = useState<IdentityProviderRepresentation>();
+    const { mutateAsync: updateIdp } = useUpdateIdentityProvider(alias);
+    const { mutateAsync: deleteIdp } = useDeleteIdentityProvider();
+    const { mutateAsync: deleteMapperMutation } = useDeleteIdentityProviderMapper(alias);
     const [selectedMapper, setSelectedMapper] = useState<IdPWithMapperAttributes>();
     const serverInfo = useServerInfo();
     const providerInfo = useMemo(() => {
@@ -356,15 +361,12 @@ export default function DetailSettings() {
             p.config.authnContextDeclRefs = JSON.stringify(p.config.authnContextDeclRefs);
 
         try {
-            await adminClient.identityProviders.update(
-                { alias },
-                {
-                    ...p,
-                    config: { ...provider?.config, ...p.config },
-                    alias,
-                    providerId
-                }
-            );
+            await updateIdp({
+                ...p,
+                config: { ...provider?.config, ...p.config },
+                alias,
+                providerId
+            });
             if (origAuthnContextClassRefs) {
                 p.config!.authnContextClassRefs = origAuthnContextClassRefs;
             }
@@ -388,7 +390,7 @@ export default function DetailSettings() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.identityProviders.del({ alias: alias });
+                await deleteIdp(alias);
                 toast.success(t("deletedSuccessIdentityProvider"));
                 navigate({ to: toIdentityProviders({ realm }) as string });
             } catch (error) {
@@ -409,10 +411,7 @@ export default function DetailSettings() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.identityProviders.delMapper({
-                    alias: alias,
-                    id: selectedMapper?.mapperId!
-                });
+                await deleteMapperMutation(selectedMapper?.mapperId!);
                 toast.success(t("deleteMapperSuccess"));
                 await queryClient.invalidateQueries({ queryKey: idpKeys.mappers(alias) });
                 navigate({

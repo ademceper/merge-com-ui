@@ -26,8 +26,8 @@ import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { useAccess } from "../../../app/providers/access/access";
 import { useAvailableRoleMappings } from "../../api/use-available-role-mappings";
-import { translationFormatter } from "../../lib/translationFormatter";
-import useLocaleSort from "../../lib/useLocaleSort";
+import { translationFormatter } from "../../lib/translation-formatter";
+import { useLocaleSort } from "../../lib/use-locale-sort";
 import type { ResourcesKey, Row } from "./role-mapping";
 
 type AddRoleMappingModalProps = {

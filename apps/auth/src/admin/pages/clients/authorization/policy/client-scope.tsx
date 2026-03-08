@@ -15,9 +15,9 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
+import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
 import { AddScopeDialog } from "../../scopes/add-scope-dialog";
-import { useClientScopes } from "../api/use-client-scopes";
+import { useClientScopes } from "../hooks/use-client-scopes";
 
 export type RequiredIdValue = {
     id: string;

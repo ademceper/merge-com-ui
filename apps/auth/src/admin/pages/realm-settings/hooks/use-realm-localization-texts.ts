@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { fetchRealmLocalizationTexts } from "../../../api/realm-settings";
 import { realmSettingsKeys } from "./keys";
@@ -9,7 +8,6 @@ export function useRealmLocalizationTexts(
     translationKey: string,
     deps: { first: number; max: number; filter: string }
 ) {
-    const { adminClient } = useAdminClient();
     const { realm } = useRealm();
     return useQuery({
         queryKey: [
@@ -25,7 +23,7 @@ export function useRealmLocalizationTexts(
             const selectedLocales = locales.slice(deps.first, deps.first + deps.max + 1);
             const results = await Promise.all(
                 selectedLocales.map(selectedLocale =>
-                    fetchRealmLocalizationTexts(adminClient, realm, selectedLocale)
+                    fetchRealmLocalizationTexts(realm, selectedLocale)
                 )
             );
             return results.map((result, index) => ({

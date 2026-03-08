@@ -11,7 +11,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { useUsersByIds } from "../../api/use-users-by-ids";
 import { useUsersSearch } from "../../api/use-users-search";
-import useToggle from "../../lib/useToggle";
+import { useToggle } from "../../lib/use-toggle";
 import type { ComponentProps } from "../dynamic/components";
 
 type UserSelectVariant = "typeaheadMulti" | "typeahead";

@@ -8,8 +8,8 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useUpdateRealm } from "./hooks/use-update-realm";
 import { FormAccess } from "../../shared/ui/form/form-access";
 
 type RealmSettingsLoginTabProps = {
@@ -20,10 +20,10 @@ type RealmSettingsLoginTabProps = {
 type SwitchType = { [K in keyof RealmRepresentation]: boolean };
 
 export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm: realmName } = useRealm();
+    const { mutateAsync: updateRealmMut } = useUpdateRealm();
 
     const updateSwitchValue = async (switches: SwitchType | SwitchType[]) => {
         const name = Array.isArray(switches)
@@ -31,10 +31,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
             : Object.keys(switches)[0];
 
         try {
-            await adminClient.realms.update(
-                {
-                    realm: realmName
-                },
+            await updateRealmMut(
                 Array.isArray(switches)
                     ? switches.reduce((realm, s) => Object.assign(realm, s), realm)
                     : Object.assign(realm, switches)

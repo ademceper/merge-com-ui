@@ -5,7 +5,7 @@ import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
 import { convertAttributeNameToForm, toUpperCase } from "../../shared/lib/util";
 import { AdvancedSettings } from "./advanced/advanced-settings";
 import { AuthenticationOverrides } from "./advanced/authentication-overrides";

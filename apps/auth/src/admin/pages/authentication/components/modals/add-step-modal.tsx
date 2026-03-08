@@ -14,9 +14,9 @@ import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group"
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
-import { type FlowType as QueryFlowType } from "../../api/keys";
-import { useStepProviders } from "../../api/use-step-providers";
+import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
+import type { FlowType as QueryFlowType } from "../../hooks/keys";
+import { useStepProviders } from "../../hooks/use-step-providers";
 
 type AuthenticationProviderListProps = {
     list?: AuthenticationProviderRepresentation[];

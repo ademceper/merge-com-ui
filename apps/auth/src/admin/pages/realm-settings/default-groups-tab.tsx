@@ -19,13 +19,13 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useToggle from "../../shared/lib/useToggle";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
-import { useAddDefaultGroup } from "./api/use-add-default-group";
-import { useDefaultGroups } from "./api/use-default-groups";
-import { useRemoveDefaultGroup } from "./api/use-remove-default-group";
+import { useAddDefaultGroup } from "./hooks/use-add-default-group";
+import { useDefaultGroups } from "./hooks/use-default-groups";
+import { useRemoveDefaultGroup } from "./hooks/use-remove-default-group";
 
 export const DefaultGroupsTab = () => {
     const { t } = useTranslation();

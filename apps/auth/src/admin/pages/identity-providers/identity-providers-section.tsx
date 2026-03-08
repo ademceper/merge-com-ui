@@ -1,5 +1,4 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
@@ -37,6 +36,7 @@ import {
     Trash,
     TwitterLogo
 } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { groupBy, sortBy } from "lodash-es";
 import type { SetStateAction } from "react";
@@ -45,13 +45,19 @@ import { toast } from "sonner";
 import { type ColumnDef, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { DraggableTableRows } from "@/admin/shared/ui/table-draggable-rows";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import {
+    toIdentityProvider,
+    toIdentityProviderCreate
+} from "../../shared/lib/routes/identity-providers";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
 import { upperCaseFormatter } from "../../shared/lib/util";
 import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
-import { toIdentityProvider, toIdentityProviderCreate } from "../../shared/lib/routes/identity-providers";
+import { idpKeys } from "./hooks/keys";
+import { useDeleteIdentityProvider } from "./hooks/use-delete-identity-provider";
+import { useIdentityProvidersList } from "./hooks/use-identity-providers-list";
+import { useUpdateIdentityProviderOrder } from "./hooks/use-update-identity-provider-order";
 
 function getIdpIcon(iconId: string) {
     switch (iconId) {
@@ -84,50 +90,30 @@ function getIdpIcon(iconId: string) {
     }
 }
 
-export default function IdentityProvidersSection() {
-    const { adminClient } = useAdminClient();
+export function IdentityProvidersSection() {
     const { t } = useTranslation();
     const identityProviders = groupBy(useServerInfo().identityProviders, "groupName");
     const { realm } = useRealm();
     const navigate = useNavigate();
 
-    const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey(k => k + 1), []);
+    const queryClient = useQueryClient();
     const [hide, setHide] = useState(false);
-    const [hasProviders, setHasProviders] = useState(false);
+    const { data } = useIdentityProvidersList(hide);
+    const { mutateAsync: deleteIdp } = useDeleteIdentityProvider();
+    const { mutateAsync: updateOrder } = useUpdateIdentityProviderOrder();
+    const invalidateIdps = () => queryClient.invalidateQueries({ queryKey: idpKeys.all });
+    const hasProviders = data?.hasProviders ?? false;
     const [providers, setProviders] = useState<IdentityProviderRepresentation[]>([]);
     const [search, setSearch] = useState("");
     const [selectedProvider, setSelectedProvider] =
         useState<IdentityProviderRepresentation>();
 
+    // Sync query data into local state so drag-and-drop reordering works
     useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const [firstPage, list] = await Promise.all([
-                    adminClient.identityProviders.find({ max: 1 }),
-                    adminClient.identityProviders.find({
-                        first: 0,
-                        max: 1000,
-                        realmOnly: hide
-                    } as IdentityProvidersQuery)
-                ]);
-                if (cancelled) return;
-                setHasProviders((firstPage?.length ?? 0) > 0);
-                setProviders(
-                    sortBy(list ?? [], [p => Number(p.config?.guiOrder ?? 0), "alias"])
-                );
-            } catch {
-                if (!cancelled) {
-                    setHasProviders(false);
-                    setProviders([]);
-                }
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, hide, adminClient]);
+        if (data?.providers) {
+            setProviders(data.providers);
+        }
+    }, [data?.providers]);
 
     const filteredProviders = useMemo(() => {
         if (!search.trim()) return providers;
@@ -150,7 +136,7 @@ export default function IdentityProvidersSection() {
                 }
                 const filteredSet = new Set(next.map(p => p.alias));
                 let j = 0;
-                return current.map(p => (filteredSet.has(p.alias!) ? next[j++] : p));
+                return current.map(p => (filteredSet.has(p.alias ?? "") ? next[j++] : p));
             });
         },
         [filteredProviders]
@@ -164,32 +150,29 @@ export default function IdentityProvidersSection() {
                     ? (() => {
                           let j = 0;
                           return providers.map(p =>
-                              filteredSet.has(p.alias!) ? reorderedData[j++] : p
+                              filteredSet.has(p.alias ?? "") ? reorderedData[j++] : p
                           );
                       })()
                     : reorderedData;
 
-            const updates = fullOrder.map((provider, index) => {
-                const updated = {
+            const updates = fullOrder.map((provider, index) => ({
+                alias: provider.alias ?? "",
+                provider: {
                     ...provider,
                     config: { ...provider.config, guiOrder: String(index) }
-                };
-                return adminClient.identityProviders.update(
-                    { alias: provider.alias! },
-                    updated
-                );
-            });
+                }
+            }));
             try {
-                await Promise.all(updates);
+                await updateOrder(updates);
                 toast.success(t("orderChangeSuccess"));
-                refresh();
+                invalidateIdps();
             } catch (error) {
                 toast.error(t("orderChangeError", { error: getErrorMessage(error) }), {
                     description: getErrorDescription(error)
                 });
             }
         },
-        [adminClient, t, refresh, providers]
+        [t, invalidateIdps, providers, updateOrder]
     );
 
     const navigateToCreate = (providerId: string) =>
@@ -221,11 +204,9 @@ export default function IdentityProvidersSection() {
     const onDeleteConfirm = async () => {
         if (!selectedProvider?.alias) return;
         try {
-            await adminClient.identityProviders.del({
-                alias: selectedProvider.alias
-            });
+            await deleteIdp(selectedProvider.alias);
             setSelectedProvider(undefined);
-            refresh();
+            invalidateIdps();
             toast.success(t("deletedSuccessIdentityProvider"));
         } catch (error) {
             toast.error(
@@ -249,8 +230,8 @@ export default function IdentityProvidersSection() {
                             to={
                                 toIdentityProvider({
                                     realm,
-                                    providerId: idp.providerId!,
-                                    alias: idp.alias!,
+                                    providerId: idp.providerId ?? "",
+                                    alias: idp.alias ?? "",
                                     tab: "settings"
                                 }) as string
                             }
@@ -400,7 +381,6 @@ export default function IdentityProvidersSection() {
                                     checked={hide}
                                     onCheckedChange={checked => {
                                         setHide(!!checked);
-                                        refresh();
                                     }}
                                 />
                                 {t("hideOrganizationLinkedIdps")}

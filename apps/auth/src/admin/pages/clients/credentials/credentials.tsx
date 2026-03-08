@@ -14,13 +14,14 @@ import {
     HelpItem,
     SelectField
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { useRegenerateClientSecret } from "../hooks/use-regenerate-client-secret";
+import { useRegenerateAccessToken } from "../hooks/use-regenerate-access-token";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useClientCredentials } from "../api/use-client-credentials";
+import { useClientCredentials } from "../hooks/use-client-credentials";
 import type { FormFields } from "../client-details";
 import { ClientSecret } from "./client-secret";
 import { SignedJWT } from "./signed-jwt";
@@ -37,10 +38,11 @@ type CredentialsProps = {
 };
 
 export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const clientId = client.id!;
+    const { mutateAsync: regenerateClientSecretMutation } = useRegenerateClientSecret();
+    const { mutateAsync: regenerateAccessTokenMutation } = useRegenerateAccessToken();
 
     const { data: credentialsData } = useClientCredentials(clientId);
     const providers = credentialsData?.providers ?? [];
@@ -96,7 +98,7 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
 
     const regenerateClientSecret = async () => {
         const secret = await regenerate<CredentialRepresentation>(
-            clientId => adminClient.clients.generateNewClientSecret({ id: clientId }),
+            cId => regenerateClientSecretMutation(cId),
             "clientSecret"
         );
         setSecret(secret?.value || "");
@@ -113,8 +115,7 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
 
     const regenerateAccessToken = async () => {
         const accessToken = await regenerate<AccessToken>(
-            clientId =>
-                adminClient.clients.generateRegistrationAccessToken({ id: clientId }),
+            cId => regenerateAccessTokenMutation(cId),
             "accessToken"
         );
         setAccessToken(accessToken?.registrationAccessToken || "");

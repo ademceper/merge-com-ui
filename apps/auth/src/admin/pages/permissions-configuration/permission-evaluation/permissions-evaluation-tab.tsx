@@ -21,10 +21,10 @@ import {
     getErrorMessage,
     SelectField
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
+import { useEvaluateResource } from "../hooks/use-evaluate-resource";
+import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { UserSelect } from "../../../shared/ui/users/user-select";
 import { ForbiddenSection } from "../../forbidden-section";
@@ -58,8 +58,8 @@ export const PermissionsEvaluationTab = (props: Props) => {
 
 const PermissionEvaluateContent = ({ client }: Props) => {
     const { t } = useTranslation();
-    const { adminClient } = useAdminClient();
     const realm = useRealm();
+    const { mutateAsync: evaluateResourceMut } = useEvaluateResource();
     const form = useForm<EvaluateFormInputs>({
         mode: "onChange",
         defaultValues: {
@@ -131,10 +131,11 @@ const PermissionEvaluateContent = ({ client }: Props) => {
         };
 
         try {
-            const evaluation = await adminClient.clients.evaluateResource(
-                { id: client.id!, realm: realm.realm },
+            const evaluation = await evaluateResourceMut({
+                clientId: client.id!,
+                realm: realm.realm,
                 resEval
-            );
+            });
 
             setEvaluateResult(evaluation);
             setIsEvaluated(true);

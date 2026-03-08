@@ -18,8 +18,8 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../../shared/lib/useFormatDate";
+import { useDeleteClusterNode, useTestNodesAvailable } from "../hooks/use-cluster-nodes";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "../../../shared/lib/use-format-date";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { TimeSelectorForm } from "../../../shared/ui/time-selector/time-selector-form";
@@ -35,10 +35,11 @@ export const ClusteringPanel = ({
     save,
     client: { id, registeredNodes, access }
 }: AdvancedProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const formatDate = useFormatDate();
+    const { mutateAsync: deleteClusterNode } = useDeleteClusterNode();
+    const { mutateAsync: testNodesAvailableMutation } = useTestNodesAvailable();
 
     const [nodes, setNodes] = useState(registeredNodes || {});
     const [expanded, setExpanded] = useState(false);
@@ -57,7 +58,7 @@ export const ClusteringPanel = ({
     );
 
     const testCluster = async () => {
-        const result = await adminClient.clients.testNodesAvailable({ id: id! });
+        const result = await testNodesAvailableMutation(id!);
         parseResult(result, "testCluster", t);
     };
 
@@ -70,10 +71,7 @@ export const ClusteringPanel = ({
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.clients.deleteClusterNode({
-                    id: id!,
-                    node: selectedNode
-                });
+                await deleteClusterNode({ clientId: id!, node: selectedNode });
                 setNodes({
                     ...Object.keys(nodes).reduce((object: any, key) => {
                         if (key !== selectedNode) {

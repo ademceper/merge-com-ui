@@ -11,22 +11,22 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../../shared/lib/useParams";
+import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
+import { toUserFederation } from "../../../shared/lib/routes/user-federation";
+import { useParams } from "../../../shared/lib/use-params";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useCustomComponent } from "../api/use-custom-component";
-import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
-import { toUserFederation } from "../../../shared/lib/routes/user-federation";
+import { useCreateComponent } from "../hooks/use-create-component";
+import { useCustomComponent } from "../hooks/use-custom-component";
+import { useUpdateComponent } from "../hooks/use-update-component";
 import { ExtendedHeader } from "../shared/extended-header";
 import { SettingsCache } from "../shared/settings-cache";
 import { SyncSettings } from "./sync-settings";
 
-export default function CustomProviderSettings() {
-    const { adminClient } = useAdminClient();
+export function CustomProviderSettings() {
 
     const { t } = useTranslation();
     const { id, providerId } = useParams<CustomUserFederationRouteParams>();
@@ -47,6 +47,8 @@ export default function CustomProviderSettings() {
     ).find(p => p.id === providerId);
 
     const { data: fetchedComponent, isLoading } = useCustomComponent(id);
+    const { mutateAsync: createComponentMut } = useCreateComponent();
+    const { mutateAsync: updateComponentMut } = useUpdateComponent();
 
     useEffect(() => {
         if (fetchedComponent) {
@@ -72,10 +74,10 @@ export default function CustomProviderSettings() {
 
         try {
             if (!id) {
-                await adminClient.components.create(saveComponent);
+                await createComponentMut(saveComponent);
                 navigate({ to: toUserFederation({ realm: realmName }) as string });
             } else {
-                await adminClient.components.update({ id }, saveComponent);
+                await updateComponentMut({ id, component: saveComponent });
             }
             reset({ ...component });
             toast.success(

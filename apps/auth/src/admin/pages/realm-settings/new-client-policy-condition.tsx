@@ -21,14 +21,17 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    type EditClientPolicyConditionParams,
+    toEditClientPolicy
+} from "../../shared/lib/routes/realm-settings";
+import { useParams } from "../../shared/lib/use-params";
 import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useClientPolicies } from "./api/use-client-policies";
-import { toEditClientPolicy, type EditClientPolicyConditionParams } from "../../shared/lib/routes/realm-settings";
+import { useClientPolicies } from "./hooks/use-client-policies";
 
 export type ItemType = { value: string };
 
@@ -37,8 +40,7 @@ type ConfigProperty = ConfigPropertyRepresentation & {
     config: any;
 };
 
-export default function NewClientPolicyCondition() {
-    const { adminClient } = useAdminClient();
+export function NewClientPolicyCondition() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -70,6 +72,7 @@ export default function NewClientPolicyCondition() {
         form.reset({ config: condition.configuration || {} });
     };
 
+    const { mutateAsync: updateClientPolicyMut } = useUpdateClientPolicy();
     const { data: policiesData } = useClientPolicies();
 
     useEffect(() => {
@@ -157,7 +160,7 @@ export default function NewClientPolicyCondition() {
         }) as ClientPolicyRepresentation[];
 
         try {
-            await adminClient.clientPolicies.updatePolicy({
+            await updateClientPolicyMut({
                 policies: updatedPolicies
             });
             setPolicies(updatedPolicies);

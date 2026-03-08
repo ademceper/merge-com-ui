@@ -19,17 +19,20 @@ import {
     type Row
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useDeletePageComponent } from "./hooks/use-delete-page-component";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    addDetailPage,
+    type PageListParams,
+    toDetailPage
+} from "../../shared/lib/routes/page";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { usePageComponents } from "./api/use-page-components";
+import { usePageComponents } from "./hooks/use-page-components";
 import { PAGE_PROVIDER } from "./constants";
-import { addDetailPage, type PageListParams, toDetailPage } from "../../shared/lib/routes/page";
 
-export default function PageList() {
-    const { adminClient } = useAdminClient();
+export function PageList() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { providerId } = useParams<PageListParams>();
@@ -46,6 +49,8 @@ export default function PageList() {
         refetchComponents();
     };
 
+    const { mutateAsync: deleteComponent } = useDeletePageComponent();
+
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "itemDeleteConfirmTitle",
         messageKey: "itemDeleteConfirm",
@@ -53,7 +58,7 @@ export default function PageList() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.components.del({ id: selectedItem!.id! });
+                await deleteComponent(selectedItem!.id!);
                 toast.success(t("itemDeletedSuccess"));
                 refresh();
             } catch (error) {

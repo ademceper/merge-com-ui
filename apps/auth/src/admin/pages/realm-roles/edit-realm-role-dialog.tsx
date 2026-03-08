@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -17,9 +17,10 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
+import { useRealmRole } from "./hooks/use-realm-role";
+import { useUpdateRealmRole } from "./hooks/use-update-realm-role";
 
 const FORM_ID = "edit-realm-role-form";
 
@@ -36,32 +37,20 @@ export function EditRealmRoleDialog({
     roleId,
     onSuccess
 }: EditRealmRoleDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const [loading, setLoading] = useState(false);
-    const [role, setRole] = useState<RoleRepresentation | null>(null);
 
     const form = useForm<AttributeForm>({ mode: "onChange" });
 
+    const { data: role, isLoading: loading } = useRealmRole(roleId ?? "");
+    const { mutateAsync: updateRole } = useUpdateRealmRole(roleId ?? "");
+
     useEffect(() => {
-        if (!open || !roleId) {
-            setRole(null);
-            return;
-        }
-        setLoading(true);
-        adminClient.roles
-            .findOneById({ id: roleId })
-            .then(r => {
-                if (!r) throw new Error(t("notFound"));
-                setRole(r);
-                form.reset({
-                    name: r.name,
-                    description: r.description ?? ""
-                });
-            })
-            .catch(console.error)
-            .finally(() => setLoading(false));
-    }, [roleId, open, adminClient, t]);
+        if (!open || !roleId || !role) return;
+        form.reset({
+            name: role.name,
+            description: role.description ?? ""
+        });
+    }, [role, open, roleId]);
 
     const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         if (!roleId) return;
@@ -72,7 +61,7 @@ export function EditRealmRoleDialog({
             attributes: role?.attributes ?? {}
         };
         try {
-            await adminClient.roles.updateById({ id: roleId }, payload);
+            await updateRole(payload);
             toast.success(t("roleSaveSuccess"));
             onOpenChange(false);
             onSuccess?.();

@@ -33,21 +33,24 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
+import {
+    toAddClientPolicy,
+    toClientPolicies,
+    toEditClientPolicy
+} from "../../shared/lib/routes/realm-settings";
+import { translationFormatter } from "../../shared/lib/translation-formatter";
 import { prettyPrintJSON } from "../../shared/lib/util";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import CodeEditor from "../../shared/ui/form/code-editor";
-import { useClientPolicies } from "./api/use-client-policies";
-import { toAddClientPolicy, toClientPolicies, toEditClientPolicy } from "../../shared/lib/routes/realm-settings";
+import { CodeEditor } from "../../shared/ui/form/code-editor";
+import { useClientPolicies } from "./hooks/use-client-policies";
 
 type ClientPolicy = ClientPolicyRepresentation & {
     global?: boolean;
 };
 
 export const PoliciesTab = () => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -60,7 +63,8 @@ export const PoliciesTab = () => {
 
     const form = useForm<Record<string, boolean>>({ mode: "onChange" });
 
-    const { data: allPoliciesData, refetch: refetchPolicies } = useClientPolicies();
+    const { mutateAsync: updateClientPolicyMut } = useUpdateClientPolicy();
+    const { data: allPoliciesData } = useClientPolicies();
 
     useEffect(() => {
         if (allPoliciesData) {
@@ -100,7 +104,7 @@ export const PoliciesTab = () => {
             });
 
         try {
-            await adminClient.clientPolicies.updatePolicy({
+            await updateClientPolicyMut({
                 policies: updatedPolicies
             });
             navigate({ to: toClientPolicies({ realm, tab: "policies" }) as string });
@@ -132,12 +136,12 @@ export const PoliciesTab = () => {
                 .map(policy => normalizePolicy(policy));
 
             try {
-                await adminClient.clientPolicies.updatePolicy({
+                await updateClientPolicyMut({
                     policies: changedPolicies,
                     globalPolicies: changedGlobalPolicies
                 });
                 toast.success(t("updateClientPoliciesSuccess"));
-                refetchPolicies();
+                // cache invalidated by hook
             } catch (error) {
                 toast.error(
                     t("updateClientPoliciesError", { error: getErrorMessage(error) }),
@@ -145,7 +149,6 @@ export const PoliciesTab = () => {
                 );
             }
         } catch (error) {
-            console.warn("Invalid json, ignoring value using {}");
             toast.error(
                 t("invalidJsonClientPoliciesError", { error: getErrorMessage(error) }),
                 { description: getErrorDescription(error) }
@@ -166,12 +169,12 @@ export const PoliciesTab = () => {
             });
 
         try {
-            await adminClient.clientPolicies.updatePolicy({
+            await updateClientPolicyMut({
                 policies: updatedPolicies ?? []
             });
             setSelectedPolicy(undefined);
             toast.success(t("deleteClientPolicySuccess"));
-            refetchPolicies();
+            // cache invalidated by hook
         } catch (error) {
             toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), {
                 description: getErrorDescription(error)

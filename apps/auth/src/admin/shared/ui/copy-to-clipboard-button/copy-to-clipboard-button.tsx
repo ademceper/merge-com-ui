@@ -10,7 +10,7 @@ import { Copy } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { useSetTimeout } from "../../../../shared/keycloak-ui-shared";
 
-import useQueryPermission from "../../lib/useQueryPermission";
+import { useQueryPermission } from "../../lib/use-query-permission";
 
 enum CopyState {
     Ready,

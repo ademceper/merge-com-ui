@@ -6,7 +6,6 @@ import {
     listPolicyProviders,
     searchResourcesOrPolicies
 } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { type Type, authzKeys, typeMapping } from "./keys";
 
 export function useResourcesPolicySelectItems(
@@ -16,7 +15,6 @@ export function useResourcesPolicySelectItems(
     permissionId?: string,
     preSelected?: string
 ) {
-    const { adminClient } = useAdminClient();
     const functions = typeMapping[name];
     return useQuery({
         queryKey: authzKeys.resourcesPolicySelect(
@@ -32,23 +30,21 @@ export function useResourcesPolicySelectItems(
                 search === "" ? null : { name: search }
             );
             return await Promise.all([
-                listPolicyProviders(adminClient, clientId),
+                listPolicyProviders(clientId),
                 searchResourcesOrPolicies(
-                    adminClient,
                     clientId,
                     functions.searchFunction,
                     params
                 ),
                 permissionId
                     ? fetchAssociatedItems(
-                          adminClient,
                           clientId,
                           functions.fetchFunction,
                           permissionId
                       )
                     : Promise.resolve([]),
                 preSelected && name === "resources"
-                    ? getResource(adminClient, clientId, preSelected)
+                    ? getResource(clientId, preSelected)
                     : Promise.resolve([])
             ]);
         }

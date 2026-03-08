@@ -1,13 +1,12 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { ComponentQuery } from "@keycloak/keycloak-admin-client/lib/resources/components";
+import { adminClient } from "../app/admin-client";
 import { PAGE_PROVIDER } from "../pages/page/constants";
 import { TAB_PROVIDER } from "../shared/lib/page-constants";
 
 // ── List / find ──────────────────────────────────────────────────────────
 
 export async function findPageComponents(
-    adminClient: KeycloakAdminClient,
     realmId: string
 ) {
     return adminClient.components.find({
@@ -16,24 +15,17 @@ export async function findPageComponents(
     } as ComponentQuery);
 }
 
-export async function findPageComponent(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findPageComponent(id: string) {
     return adminClient.components.findOne({ id });
 }
 
 // ── Mutations ────────────────────────────────────────────────────────────
 
-export async function deletePageComponent(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function deletePageComponent(id: string) {
     return adminClient.components.del({ id });
 }
 
 export async function savePageComponent(
-    adminClient: KeycloakAdminClient,
     id: string | undefined,
     component: ComponentRepresentation
 ) {
@@ -47,7 +39,6 @@ export async function savePageComponent(
 // ── Handler data ─────────────────────────────────────────────────────────
 
 export async function findHandlerData(
-    adminClient: KeycloakAdminClient,
     id: string | undefined,
     providerType: string,
     providerId: string | undefined

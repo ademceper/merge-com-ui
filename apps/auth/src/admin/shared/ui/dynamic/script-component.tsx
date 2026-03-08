@@ -2,8 +2,10 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import CodeEditor from "../form/code-editor";
+import { CodeEditor } from "../form/code-editor";
 import type { ComponentProps } from "./components";
+
+const preWrapStyle = { whiteSpace: "pre-wrap" } as const;
 
 export const ScriptComponent = ({
     name,
@@ -25,7 +27,7 @@ export const ScriptComponent = ({
                     {required && " *"}
                 </Label>
                 <HelpItem
-                    helpText={<span style={{ whiteSpace: "pre-wrap" }}>{helpText}</span>}
+                    helpText={<span style={preWrapStyle}>{helpText}</span>}
                     fieldLabelId={`${label}`}
                 />
             </div>

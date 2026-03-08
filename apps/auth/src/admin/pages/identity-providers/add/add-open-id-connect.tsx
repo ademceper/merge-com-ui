@@ -8,10 +8,13 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import {
+    toIdentityProvider,
+    toIdentityProviders
+} from "../../../shared/lib/routes/identity-providers";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toIdentityProvider, toIdentityProviders } from "../../../shared/lib/routes/identity-providers";
+import { useCreateIdentityProvider } from "../hooks/use-create-identity-provider";
 import { OIDCAuthentication } from "./oidc-authentication";
 import { OIDCGeneralSettings } from "./oidc-general-settings";
 import { OpenIdConnectSettings } from "./open-id-connect-settings";
@@ -20,8 +23,7 @@ type DiscoveryIdentity = IdentityProviderRepresentation & {
     discoveryEndpoint?: string;
 };
 
-export default function AddOpenIdConnect() {
-    const { adminClient } = useAdminClient();
+export function AddOpenIdConnect() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -38,11 +40,12 @@ export default function AddOpenIdConnect() {
         formState: { isDirty }
     } = form;
     const { realm } = useRealm();
+    const { mutateAsync: createIdp } = useCreateIdentityProvider();
 
     const onSubmit = async (provider: DiscoveryIdentity) => {
         delete provider.discoveryEndpoint;
         try {
-            await adminClient.identityProviders.create({
+            await createIdp({
                 ...provider,
                 providerId: id
             });

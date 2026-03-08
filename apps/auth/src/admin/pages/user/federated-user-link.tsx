@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { toCustomUserFederation } from "../../shared/lib/routes/user-federation";
-import { useFederationComponent } from "./api/use-federation-component";
+import { useFederationComponent } from "./hooks/use-federation-component";
 
 type FederatedUserLinkProps = {
     user: UserRepresentation;

@@ -10,8 +10,8 @@ import {
     TextAreaControl,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useUploadCertificate } from "../hooks/use-upload-certificate";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { type ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
 
@@ -22,8 +22,8 @@ type JwksSettingsProps = {
 export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
     const { t } = useTranslation();
     const { control, setValue } = useFormContext<IdentityProviderRepresentation>();
-    const { adminClient } = useAdminClient();
     const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
+    const { mutateAsync: uploadCertMutation } = useUploadCertificate();
     const useJwks = useWatch({
         control,
         name: "config.useJwksUrl",
@@ -44,10 +44,7 @@ export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
             }
 
             formData.append("file", file);
-            const info = await adminClient.identityProviders.uploadCertificate(
-                {},
-                formData
-            );
+            const info = await uploadCertMutation(formData);
             if (info.jwks) {
                 setValue("config.publicKeySignatureVerifier", info.jwks);
                 setValue("config.publicKeySignatureVerifierKeyId", "");

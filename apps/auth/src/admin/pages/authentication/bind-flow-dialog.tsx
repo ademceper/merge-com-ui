@@ -15,8 +15,8 @@ import {
     getErrorMessage,
     SelectField
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useBindFlow } from "./hooks/use-bind-flow";
 import { REALM_FLOWS } from "./constants";
 
 type BindingForm = {
@@ -29,18 +29,15 @@ type BindFlowDialogProps = {
 };
 
 export const BindFlowDialog = ({ flowAlias, onClose }: BindFlowDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<BindingForm>();
-    const { realm, realmRepresentation: realmRep, refresh } = useRealm();
+    const { refresh } = useRealm();
+    const { mutateAsync: bindFlow } = useBindFlow();
 
     const onSubmit = async ({ bindingType }: BindingForm) => {
         try {
-            await adminClient.realms.update(
-                { realm },
-                { ...realmRep, [bindingType]: flowAlias }
-            );
+            await bindFlow({ flowAlias, bindingType });
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error) {

@@ -22,8 +22,8 @@ import {
     PasswordControl,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useTestLdapConnection } from "../hooks/use-test-ldap-connection";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
@@ -63,19 +63,19 @@ export const LdapSettingsConnection = ({
     showSectionHeading = false,
     showSectionDescription = false
 }: LdapSettingsConnectionProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
     const edit = !!id;
+    const { mutateAsync: testLdapConnectionMut } = useTestLdapConnection();
 
     const testLdap = async (testType: TestTypes) => {
         try {
             const settings = convertFormToSettings(form);
-            await adminClient.realms.testLDAPConnection(
-                { realm },
-                { ...settings, action: testType, componentId: id }
-            );
+            await testLdapConnectionMut({
+                realm,
+                settings: { ...settings, action: testType, componentId: id }
+            });
             toast.success(t("testSuccess"));
         } catch (error) {
             toast.error(t("testError", { error: getErrorMessage(error) }), {

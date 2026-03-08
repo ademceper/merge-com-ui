@@ -12,7 +12,7 @@ import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { useUpdatePriorities } from "./hooks/use-update-priorities";
 
 type ManagePriorityDialogProps = {
     components: ComponentRepresentation[];
@@ -23,9 +23,9 @@ export const ManagePriorityDialog = ({
     components,
     onClose
 }: ManagePriorityDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: updatePrioritiesMut } = useUpdatePriorities();
     const [liveText, setLiveText] = useState("");
     const [order, setOrder] = useState(
         sortBy(components, "config.priority", "name").map(component => component.name!)
@@ -104,14 +104,14 @@ export const ManagePriorityDialog = ({
                             const updates = order.map((name, index) => {
                                 const component = components!.find(c => c.name === name)!;
                                 component.config!.priority = [index.toString()];
-                                return adminClient.components.update(
-                                    { id: component.id! },
+                                return {
+                                    id: component.id!,
                                     component
-                                );
+                                };
                             });
 
                             try {
-                                await Promise.all(updates);
+                                await updatePrioritiesMut(updates);
                                 toast.success(t("orderChangeSuccessUserFed"));
                             } catch (error) {
                                 toast.error(

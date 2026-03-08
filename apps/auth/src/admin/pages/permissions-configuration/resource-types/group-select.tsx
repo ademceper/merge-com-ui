@@ -19,7 +19,7 @@ import {
 } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "../../../shared/ui/dynamic/components";
 import { GroupPickerDialog } from "../../../shared/ui/group/group-picker-dialog";
-import { useGroupDetails } from "../api/use-group-details";
+import { useGroupDetails } from "../hooks/use-group-details";
 
 type GroupSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: "typeahead" | "typeaheadMulti";

@@ -16,13 +16,13 @@ import {
     getErrorMessage,
     SelectField
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
     convertToFormValues
 } from "../../shared/lib/util";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+import { useLinkIdentityProvider } from "./hooks/use-link-identity-provider";
 import { IdentityProviderSelect } from "./identity-provider-select";
 import type { OrganizationFormType } from "./organization-form";
 
@@ -45,11 +45,11 @@ export const LinkIdentityProviderModal = ({
     identityProvider,
     onClose
 }: LinkIdentityProviderModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const form = useForm<LinkRepresentation>({ mode: "onChange" });
     const { handleSubmit, formState, setValue } = form;
     const { getValues } = useFormContext<OrganizationFormType>();
+    const { mutateAsync: linkIdp } = useLinkIdentityProvider(orgId);
 
     useEffect(
         () =>
@@ -66,29 +66,13 @@ export const LinkIdentityProviderModal = ({
 
     const submitForm = async (data: LinkRepresentation) => {
         try {
-            const foundIdentityProvider = await adminClient.identityProviders.findOne({
-                alias: data.alias[0]
-            });
-            if (!foundIdentityProvider) {
-                throw new Error(t("notFound"));
-            }
             const { config } = convertFormValuesToObject(data);
-            foundIdentityProvider.config = {
-                ...foundIdentityProvider.config,
-                ...config
-            };
-            foundIdentityProvider.hideOnLogin = data.hideOnLogin ?? true;
-            await adminClient.identityProviders.update(
-                { alias: data.alias[0] },
-                foundIdentityProvider
-            );
-
-            if (!identityProvider) {
-                await adminClient.organizations.linkIdp({
-                    orgId,
-                    alias: data.alias[0]
-                });
-            }
+            await linkIdp({
+                alias: data.alias[0] as string,
+                config,
+                hideOnLogin: data.hideOnLogin ?? true,
+                isNew: !identityProvider
+            });
             toast.success(
                 t(!identityProvider ? "linkSuccessful" : "linkUpdatedSuccessful")
             );

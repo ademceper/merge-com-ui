@@ -18,8 +18,8 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
+import { useCreateRealm } from "../hooks/use-create-realm";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
@@ -31,12 +31,11 @@ type NewRealmFormProps = {
 };
 
 export default function NewRealmForm({ onClose }: NewRealmFormProps) {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { refresh, whoAmI } = useWhoAmI();
     const [realm, setRealm] = useState<RealmRepresentation>();
+    const { mutateAsync: createRealmMut } = useCreateRealm();
 
     const form = useForm<RealmRepresentation>({
         mode: "onChange"
@@ -52,7 +51,7 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
 
     const save = async (fields: RealmRepresentation) => {
         try {
-            await adminClient.realms.create({
+            await createRealmMut({
                 ...realm,
                 ...convertFormValuesToObject(fields)
             });

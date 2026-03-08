@@ -41,17 +41,22 @@ import {
     KeycloakSpinner,
     setUserProfileServerError
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../shared/lib/useParams";
+import type { UserParams } from "../../shared/lib/routes/user";
+import { toUsers } from "../../shared/lib/routes/user";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
 import { AdminEvents } from "../events/admin-events";
 import { UserEvents } from "../events/user-events";
 import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";
-import { useUserDetail } from "./api/use-user-detail";
+import { useDeleteUser } from "./hooks/use-delete-user";
+import { useImpersonateUser } from "./hooks/use-impersonate-user";
+import { useLogoutUser } from "./hooks/use-logout-user";
+import { useUpdateUser } from "./hooks/use-update-user";
+import { useUserDetail } from "./hooks/use-user-detail";
 import {
     filterManagedAttributes,
     toUserFormFields,
@@ -60,8 +65,6 @@ import {
     type UserFormFields
 } from "./form-state";
 import { Organizations } from "./organizations";
-import type { UserParams } from "../../shared/lib/routes/user";
-import { toUsers } from "../../shared/lib/routes/user";
 import { UserAttributes } from "./user-attributes";
 import { UserConsents } from "./user-consents";
 import { UserCredentials } from "./user-credentials";
@@ -72,8 +75,7 @@ import { UserRoleMapping } from "./user-role-mapping";
 import { UserSessions } from "./user-sessions";
 import { isLightweightUser } from "./utils";
 
-export default function EditUser() {
-    const { adminClient } = useAdminClient();
+export function EditUser() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -96,6 +98,11 @@ export default function EditUser() {
     const [userProfileMetadata, setUserProfileMetadata] = useState<UserProfileMetadata>();
     const lightweightUser = isLightweightUser(user?.id);
     const [upConfig, setUpConfig] = useState<UserProfileConfig>();
+
+    const { mutateAsync: updateUserMut } = useUpdateUser(id!);
+    const { mutateAsync: deleteUserMut } = useDeleteUser();
+    const { mutateAsync: logoutUserMut } = useLogoutUser();
+    const { mutateAsync: impersonateUserMut } = useImpersonateUser();
 
     const [realmHasOrganizations, setRealmHasOrganizations] = useState(false);
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -121,7 +128,9 @@ export default function EditUser() {
             };
         // userDetailData already has userProfileMetadata separated
         setUserProfileMetadata(userDetailData.userProfileMetadata);
-        userData.unmanagedAttributes = (userDetailData.user as any).unmanagedAttributes;
+        userData.unmanagedAttributes = (
+            userDetailData.user as UIUserRepresentation
+        ).unmanagedAttributes;
         userData.attributes = filterManagedAttributes(
             userData.attributes,
             userData.unmanagedAttributes
@@ -141,7 +150,7 @@ export default function EditUser() {
 
     const save = async (data: UserFormFields) => {
         try {
-            await adminClient.users.update({ id: user!.id! }, toUserRepresentation(data));
+            await updateUserMut(toUserRepresentation(data));
             toast.success(t("userSaved"));
             refresh();
         } catch (error) {
@@ -173,19 +182,25 @@ export default function EditUser() {
                                 form.setError(field, params);
                             }
                         },
-                        ((key, param) => t(key as string, param as any)) as TFunction
+                        ((key, param) =>
+                            t(
+                                key as string,
+                                param as Record<string, string>
+                            )) as TFunction
                     );
                     if (someUnmanagedAttributeError) {
-                        form.setError(
-                            "unmanagedAttributes",
-                            unmanagedAttributeErrors as any
-                        );
+                        form.setError("unmanagedAttributes", {
+                            types: unmanagedAttributeErrors as unknown as Record<
+                                string,
+                                string
+                            >
+                        });
                     }
                 } else {
                     setUserProfileServerError<UserFormFields>(error, form.setError, ((
                         key,
                         param
-                    ) => t(key as string, param as any)) as TFunction);
+                    ) => t(key as string, param as Record<string, string>)) as TFunction);
                 }
                 toast.error(t("userNotSaved"));
             } else {
@@ -214,9 +229,9 @@ export default function EditUser() {
         if (!user?.id) return;
         try {
             if (lightweightUser) {
-                await adminClient.users.logout({ id: user.id });
+                await logoutUserMut(user.id);
             } else {
-                await adminClient.users.del({ id: user.id });
+                await deleteUserMut(user.id);
             }
             setDeleteDialogOpen(false);
             toast.success(t("userDeletedSuccess"));
@@ -234,10 +249,10 @@ export default function EditUser() {
         continueButtonLabel: "impersonate",
         onConfirm: async () => {
             try {
-                const data = await adminClient.users.impersonation(
-                    { id: user!.id! },
-                    { user: user!.id!, realm: realmName }
-                );
+                const data = await impersonateUserMut({
+                    id: user!.id!,
+                    realm: realmName
+                });
                 if (data.sameRealm) {
                     window.location = data.redirect;
                 } else {

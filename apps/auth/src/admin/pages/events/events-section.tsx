@@ -2,13 +2,13 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import { AdminEvents } from "./admin-events";
 import type { EventsTab } from "../../shared/lib/routes/events";
 import { toEvents } from "../../shared/lib/routes/events";
+import { useParams } from "../../shared/lib/use-params";
+import { AdminEvents } from "./admin-events";
 import { UserEvents } from "./user-events";
 
-export default function EventsSection() {
+export function EventsSection() {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const { tab } = useParams<{ tab?: string }>();

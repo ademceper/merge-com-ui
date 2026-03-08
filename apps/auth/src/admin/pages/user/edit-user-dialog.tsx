@@ -18,7 +18,7 @@ import {
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
 import { TextControl } from "../../../shared/keycloak-ui-shared/controls/text-control";
-import { useAdminClient } from "../../app/admin-client";
+import { findUser, updateUser } from "../../api/users";
 import { emailRegexPattern } from "../../shared/lib/util";
 import { FormAccess } from "../../shared/ui/form/form-access";
 
@@ -44,7 +44,6 @@ export function EditUserDialog({
     userId,
     onSuccess
 }: EditUserDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<UserRepresentation | null>(null);
@@ -57,8 +56,7 @@ export function EditUserDialog({
             return;
         }
         setLoading(true);
-        adminClient.users
-            .findOne({ id: userId })
+        findUser(userId)
             .then(u => {
                 if (!u) throw new Error(t("notFound"));
                 setUser(u);
@@ -71,7 +69,7 @@ export function EditUserDialog({
             })
             .catch(console.error)
             .finally(() => setLoading(false));
-    }, [userId, open, adminClient, t]);
+    }, [userId, open, t]);
 
     const onSubmit = async (values: EditUserFormFields) => {
         if (!userId) return;
@@ -83,7 +81,7 @@ export function EditUserDialog({
             lastName: values.lastName?.trim() || undefined
         };
         try {
-            await adminClient.users.update({ id: userId }, payload);
+            await updateUser(userId, payload);
             toast.success(t("userSaved"));
             onOpenChange(false);
             onSuccess?.();

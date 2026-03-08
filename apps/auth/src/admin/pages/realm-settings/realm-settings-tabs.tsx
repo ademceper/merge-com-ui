@@ -30,7 +30,7 @@ import {
     UploadSimple
 } from "@phosphor-icons/react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -38,17 +38,22 @@ import {
     getErrorMessage,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { fetchRealmLocalizationTexts, getAdminClientBaseUrl, getAdminClientAccessToken } from "../../api/realm-settings";
+import { useDeleteRealm } from "./hooks/use-delete-realm";
 import type { Environment } from "../../app/environment";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
-import { joinPath } from "../../shared/lib/joinPath";
+import { getAuthorizationHeaders } from "../../shared/lib/get-authorization-headers";
+import { joinPath } from "../../shared/lib/join-path";
 import type { RealmSettingsTab } from "../../shared/lib/route-helpers";
 import { toDashboard, toRealmSettings } from "../../shared/lib/route-helpers";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import useLocale from "../../shared/lib/useLocale";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    type ClientPoliciesTab,
+    toClientPolicies
+} from "../../shared/lib/routes/realm-settings";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useLocale } from "../../shared/lib/use-locale";
+import { useParams } from "../../shared/lib/use-params";
 import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
@@ -61,11 +66,10 @@ import { RealmSettingsLoginTab } from "./login-tab";
 import { PartialExportDialog } from "./partial-export";
 import { PartialImportDialog } from "./partial-import";
 import { PoliciesTab } from "./policies-tab";
-import ProfilesTab from "./profiles-tab";
-import { type ClientPoliciesTab, toClientPolicies } from "../../shared/lib/routes/realm-settings";
+import { ProfilesTab } from "./profiles-tab";
 import { SecurityDefenses } from "./security-defences/security-defenses";
 import { RealmSettingsSessionsTab } from "./sessions-tab";
-import ThemesTab from "./themes/themes-tab";
+import { ThemesTab } from "./themes/themes-tab";
 import { RealmSettingsTokensTab } from "./tokens-tab";
 import { UserProfileTab } from "./user-profile/user-profile-tab";
 import { UserRegistration } from "./user-registration";
@@ -82,147 +86,151 @@ type RealmSettingsHeaderProps = {
     refresh: () => void;
 };
 
-const RealmSettingsHeader = ({
-    save,
-    onChange,
-    value,
-    realmName,
-    refresh
-}: RealmSettingsHeaderProps) => {
-    const { adminClient } = useAdminClient();
-    const { environment } = useEnvironment<Environment>();
-    const { t } = useTranslation();
-    const navigate = useNavigate();
-    const [partialImportOpen, setPartialImportOpen] = useState(false);
-    const [partialExportOpen, setPartialExportOpen] = useState(false);
-    const [deleteRealmDialogOpen, setDeleteRealmDialogOpen] = useState(false);
-    const { hasAccess } = useAccess();
-    const canManageRealm = hasAccess("manage-realm");
+const RealmSettingsHeader = memo(
+    ({ save, onChange, value, realmName, refresh }: RealmSettingsHeaderProps) => {
+        const { environment } = useEnvironment<Environment>();
+        const { t } = useTranslation();
+        const navigate = useNavigate();
+        const [partialImportOpen, setPartialImportOpen] = useState(false);
+        const [partialExportOpen, setPartialExportOpen] = useState(false);
+        const [deleteRealmDialogOpen, setDeleteRealmDialogOpen] = useState(false);
+        const { hasAccess } = useAccess();
+        const canManageRealm = hasAccess("manage-realm");
+        const { mutateAsync: deleteRealmMut } = useDeleteRealm();
 
-    const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
-        titleKey: "disableConfirmTitle",
-        messageKey: "disableConfirmRealm",
-        continueButtonLabel: "disable",
-        onConfirm: () => {
-            onChange(!value);
-            save();
-        }
-    });
+        const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
+            titleKey: "disableConfirmTitle",
+            messageKey: "disableConfirmRealm",
+            continueButtonLabel: "disable",
+            onConfirm: () => {
+                onChange(!value);
+                save();
+            }
+        });
 
-    const onDeleteRealmConfirm = async () => {
-        try {
-            await adminClient.realms.del({ realm: realmName });
-            setDeleteRealmDialogOpen(false);
-            toast.success(t("deletedSuccessRealmSetting"));
-            navigate({ to: toDashboard({ realm: environment.masterRealm }) as string });
-            refresh();
-        } catch (error) {
-            toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), {
-                description: getErrorDescription(error)
-            });
-        }
-    };
+        const onDeleteRealmConfirm = async () => {
+            try {
+                await deleteRealmMut(realmName);
+                setDeleteRealmDialogOpen(false);
+                toast.success(t("deletedSuccessRealmSetting"));
+                navigate({
+                    to: toDashboard({ realm: environment.masterRealm }) as string
+                });
+                refresh();
+            } catch (error) {
+                toast.error(
+                    t("deleteErrorRealmSetting", { error: getErrorMessage(error) }),
+                    {
+                        description: getErrorDescription(error)
+                    }
+                );
+            }
+        };
 
-    return (
-        <>
-            <DisableConfirm />
-            <AlertDialog
-                open={deleteRealmDialogOpen}
-                onOpenChange={setDeleteRealmDialogOpen}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {t("deleteConfirmRealmSetting")}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction
-                            variant="destructive"
-                            data-testid="confirm"
-                            onClick={onDeleteRealmConfirm}
-                        >
-                            {t("delete")}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <PartialImportDialog
-                open={partialImportOpen}
-                toggleDialog={() => setPartialImportOpen(!partialImportOpen)}
-            />
-            <PartialExportDialog
-                isOpen={partialExportOpen}
-                onClose={() => setPartialExportOpen(false)}
-            />
-            <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap items-center gap-2" />
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 mr-4">
-                        <Label htmlFor="realm-settings-switch" className="text-sm">
-                            {t("enabled")}
-                        </Label>
-                        <Switch
-                            id="realm-settings-switch"
-                            data-testid="realm-settings-switch"
-                            disabled={!canManageRealm}
-                            checked={value}
-                            aria-label={t("enabled")}
-                            onCheckedChange={val => {
-                                if (!val) {
-                                    toggleDisableDialog();
-                                } else {
-                                    onChange(val);
-                                    save();
-                                }
-                            }}
-                        />
-                    </div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger
-                            data-testid="action-dropdown"
-                            className={buttonVariants({ variant: "ghost", size: "icon" })}
-                        >
-                            <DotsThreeVertical className="size-5" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                key="import"
-                                data-testid="openPartialImportModal"
-                                disabled={!canManageRealm}
-                                onClick={() => setPartialImportOpen(true)}
+        return (
+            <>
+                <DisableConfirm />
+                <AlertDialog
+                    open={deleteRealmDialogOpen}
+                    onOpenChange={setDeleteRealmDialogOpen}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {t("deleteConfirmRealmSetting")}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction
+                                variant="destructive"
+                                data-testid="confirm"
+                                onClick={onDeleteRealmConfirm}
                             >
-                                <DownloadSimple className="size-4 shrink-0" />
-                                {t("partialImport")}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                key="export"
-                                data-testid="openPartialExportModal"
-                                disabled={!canManageRealm}
-                                onClick={() => setPartialExportOpen(true)}
-                            >
-                                <UploadSimple className="size-4 shrink-0" />
-                                {t("partialExport")}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator key="separator" />
-                            <DropdownMenuItem
-                                key="delete"
-                                disabled={!canManageRealm}
-                                onClick={() => setDeleteRealmDialogOpen(true)}
-                                className="text-destructive focus:text-destructive"
-                            >
-                                <Trash className="size-4 shrink-0" />
                                 {t("delete")}
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <PartialImportDialog
+                    open={partialImportOpen}
+                    toggleDialog={() => setPartialImportOpen(!partialImportOpen)}
+                />
+                <PartialExportDialog
+                    isOpen={partialExportOpen}
+                    onClose={() => setPartialExportOpen(false)}
+                />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mr-4">
+                            <Label htmlFor="realm-settings-switch" className="text-sm">
+                                {t("enabled")}
+                            </Label>
+                            <Switch
+                                id="realm-settings-switch"
+                                data-testid="realm-settings-switch"
+                                disabled={!canManageRealm}
+                                checked={value}
+                                aria-label={t("enabled")}
+                                onCheckedChange={val => {
+                                    if (!val) {
+                                        toggleDisableDialog();
+                                    } else {
+                                        onChange(val);
+                                        save();
+                                    }
+                                }}
+                            />
+                        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants({
+                                    variant: "ghost",
+                                    size: "icon"
+                                })}
+                            >
+                                <DotsThreeVertical className="size-5" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="import"
+                                    data-testid="openPartialImportModal"
+                                    disabled={!canManageRealm}
+                                    onClick={() => setPartialImportOpen(true)}
+                                >
+                                    <DownloadSimple className="size-4 shrink-0" />
+                                    {t("partialImport")}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    key="export"
+                                    data-testid="openPartialExportModal"
+                                    disabled={!canManageRealm}
+                                    onClick={() => setPartialExportOpen(true)}
+                                >
+                                    <UploadSimple className="size-4 shrink-0" />
+                                    {t("partialExport")}
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator key="separator" />
+                                <DropdownMenuItem
+                                    key="delete"
+                                    disabled={!canManageRealm}
+                                    onClick={() => setDeleteRealmDialogOpen(true)}
+                                    className="text-destructive focus:text-destructive"
+                                >
+                                    <Trash className="size-4 shrink-0" />
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
-            </div>
-        </>
-    );
-};
+            </>
+        );
+    }
+);
 
 function ClientPoliciesSubTabs({
     realmName: _realmName,
@@ -238,7 +246,6 @@ function ClientPoliciesSubTabs({
 }
 
 export const RealmSettingsTabs = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
     const combinedLocales = useLocale();
@@ -268,10 +275,10 @@ export const RealmSettingsTabs = () => {
                     combinedLocales.map(async locale => {
                         try {
                             const response =
-                                await adminClient.realms.getRealmLocalizationTexts({
-                                    realm: realmName,
-                                    selectedLocale: locale
-                                });
+                                await fetchRealmLocalizationTexts(
+                                    realmName,
+                                    locale
+                                );
 
                             if (response) {
                                 setTableData([response]);
@@ -315,13 +322,13 @@ export const RealmSettingsTabs = () => {
                 savedRealm.smtpServer = { ...savedRealm.smtpServer, port: null };
             }
             const response = await fetchWithError(
-                joinPath(adminClient.baseUrl, `admin/realms/${realmName}/ui-ext`),
+                joinPath(getAdminClientBaseUrl(), `admin/realms/${realmName}/ui-ext`),
                 {
                     method: "PUT",
                     body: JSON.stringify(savedRealm),
                     headers: {
                         "Content-Type": "application/json",
-                        ...getAuthorizationHeaders(await adminClient.getAccessToken())
+                        ...getAuthorizationHeaders(await getAdminClientAccessToken())
                     }
                 }
             );
@@ -369,7 +376,7 @@ export const RealmSettingsTabs = () => {
             return <KeysTab subTab={tab} />;
         }
         if (isUserProfileSubTab) {
-            return <UserProfileTab setTableData={setTableData as any} subTab={tab} />;
+            return <UserProfileTab setTableData={setTableData} subTab={tab} />;
         }
         if (isClientPoliciesSubTab && isFeatureEnabled(Feature.ClientPolicies)) {
             const clientPoliciesTab: ClientPoliciesTab =
@@ -443,12 +450,7 @@ export const RealmSettingsTabs = () => {
                     <ClientPoliciesSubTabs realmName={realmName} subTab="profiles" />
                 ) : null;
             case "user-profile":
-                return (
-                    <UserProfileTab
-                        setTableData={setTableData as any}
-                        subTab="attributes"
-                    />
-                );
+                return <UserProfileTab setTableData={setTableData} subTab="attributes" />;
             case "user-registration":
                 return canViewUserRegistration ? <UserRegistration /> : null;
             default:

@@ -25,16 +25,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import useFormatDate from "../../shared/lib/useFormatDate";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
+import { useFormatDate } from "../../shared/lib/use-format-date";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
 import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
-import { useDeleteInvitations } from "./api/use-delete-invitations";
-import { useOrganizationInvitations } from "./api/use-organization-invitations";
-import { useResendInvitation } from "./api/use-resend-invitation";
+import { useDeleteInvitations } from "./hooks/use-delete-invitations";
+import { useOrganizationInvitations } from "./hooks/use-organization-invitations";
+import { useResendInvitation } from "./hooks/use-resend-invitation";
 import { InviteMemberModal } from "./invite-member-modal";
-import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
 
 const InvitationStatusBadge = ({ status }: { status?: OrganizationInvitationStatus }) => {
     const { t } = useTranslation();

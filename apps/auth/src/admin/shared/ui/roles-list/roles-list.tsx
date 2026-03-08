@@ -22,12 +22,13 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useDeleteRealmRole } from "../../../pages/realm-roles/hooks/use-delete-realm-role";
+import { useRemoveCompositeRoles } from "../../../pages/realm-roles/hooks/use-remove-composite-roles";
 import { useRolesList as useRolesListQuery } from "../../api/use-roles-list";
 import { toRealmSettings } from "../../lib/route-helpers";
-import { translationFormatter } from "../../lib/translationFormatter";
+import { translationFormatter } from "../../lib/translation-formatter";
 import { emptyFormatter, upperCaseFormatter } from "../../lib/util";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
@@ -82,7 +83,6 @@ export const RolesList = ({
     toDetail,
     isReadOnly
 }: RolesListProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realmRepresentation: realm } = useRealm();
@@ -90,6 +90,8 @@ export const RolesList = ({
     const [selectedRole, setSelectedRole] = useState<RoleRepresentation>();
 
     const { data: roles = [] } = useRolesListQuery(loader!, parentRoleId);
+    const { mutateAsync: deleteRoleMut } = useDeleteRealmRole();
+    const { mutateAsync: removeCompositesMut } = useRemoveCompositeRoles();
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "roleDeleteConfirm",
@@ -101,13 +103,12 @@ export const RolesList = ({
         onConfirm: async () => {
             try {
                 if (!parentRoleId) {
-                    await adminClient.roles.delById({
-                        id: selectedRole!.id!
-                    });
+                    await deleteRoleMut(selectedRole!.id!);
                 } else {
-                    await adminClient.roles.delCompositeRoles({ id: parentRoleId }, [
-                        selectedRole!
-                    ]);
+                    await removeCompositesMut({
+                        parentRoleId,
+                        roles: [selectedRole!]
+                    });
                 }
                 setSelectedRole(undefined);
                 toast.success(t("roleDeletedSuccess"));

@@ -23,13 +23,19 @@ import {
     TextAreaControl,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import { useSaveClientProfiles } from "./hooks/use-save-client-profiles";
+import {
+    type ClientProfileParams,
+    toAddExecutor,
+    toClientPolicies,
+    toClientProfile,
+    toExecutor
+} from "../../shared/lib/routes/realm-settings";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useClientProfiles } from "./api/use-client-profiles";
-import { toAddExecutor, toClientPolicies, type ClientProfileParams, toClientProfile, toExecutor } from "../../shared/lib/routes/realm-settings";
+import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ClientProfileForm = Required<ClientProfileRepresentation>;
 
@@ -39,8 +45,7 @@ const defaultValues: ClientProfileForm = {
     executors: []
 };
 
-export default function ClientProfileForm() {
-    const { adminClient } = useAdminClient();
+export function ClientProfileForm() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -77,6 +82,7 @@ export default function ClientProfileForm() {
         name: string;
     }>();
     const editMode = !!profileName;
+    const { mutateAsync: saveClientProfilesMut } = useSaveClientProfiles();
 
     const { data: allProfilesData, refetch: reloadProfiles } = useClientProfiles();
 
@@ -104,7 +110,7 @@ export default function ClientProfileForm() {
         const updatedProfiles = form;
 
         try {
-            await adminClient.clientPolicies.createProfiles({
+            await saveClientProfilesMut({
                 ...profiles,
                 profiles: [...(profiles?.profiles || []), updatedProfiles]
             });
@@ -146,7 +152,7 @@ export default function ClientProfileForm() {
             if (executorToDelete?.name!) {
                 remove(executorToDelete.idx);
                 try {
-                    await adminClient.clientPolicies.createProfiles({
+                    await saveClientProfilesMut({
                         ...profiles,
                         profiles: [...(profiles!.profiles || []), getValues()]
                     });
@@ -160,7 +166,7 @@ export default function ClientProfileForm() {
                 }
             } else {
                 try {
-                    await adminClient.clientPolicies.createProfiles(profiles);
+                    await saveClientProfilesMut(profiles!);
                     toast.success(t("deleteClientSuccess"));
                     navigate({
                         to: toClientPolicies({ realm, tab: "profiles" }) as string

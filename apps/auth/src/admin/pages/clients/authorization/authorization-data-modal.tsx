@@ -9,7 +9,7 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { Textarea } from "@merge-rd/ui/components/textarea";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { prettyPrintJSON } from "../../../shared/lib/util";
 
 type AuthorizationDataModalProps = {

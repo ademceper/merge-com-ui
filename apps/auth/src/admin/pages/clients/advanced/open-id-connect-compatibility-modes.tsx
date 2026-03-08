@@ -4,7 +4,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import type { FormFields } from "../client-details";

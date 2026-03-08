@@ -12,7 +12,6 @@ import {
     updateProtocolMapper
 } from "../../../api/client-scopes";
 import { findClientDetail } from "../../../api/realm-roles";
-import { useAdminClient } from "../../../app/admin-client";
 import { clientScopeKeys } from "./keys";
 
 export function useProtocolMapper(
@@ -21,7 +20,6 @@ export function useProtocolMapper(
     isUpdating: boolean,
     isOnClientScope: boolean
 ) {
-    const { adminClient } = useAdminClient();
     const queryClient = useQueryClient();
 
     const query = useQuery({
@@ -29,8 +27,8 @@ export function useProtocolMapper(
         queryFn: async () => {
             if (isUpdating) {
                 const data = isOnClientScope
-                    ? await findProtocolMapper(adminClient, id, mapperId)
-                    : await findClientProtocolMapper(adminClient, id, mapperId);
+                    ? await findProtocolMapper(id, mapperId)
+                    : await findClientProtocolMapper(id, mapperId);
                 if (!data) {
                     throw new Error("Protocol mapper not found");
                 }
@@ -43,8 +41,8 @@ export function useProtocolMapper(
                 };
             } else {
                 const model = isOnClientScope
-                    ? await findClientScope(adminClient, id)
-                    : await findClientDetail(adminClient, id);
+                    ? await findClientScope(id)
+                    : await findClientDetail(id);
                 if (!model) {
                     throw new Error("Model not found");
                 }
@@ -69,15 +67,15 @@ export function useProtocolMapper(
         }) => {
             if (isUpdate) {
                 if (isOnClientScope) {
-                    await updateProtocolMapper(adminClient, id, mapperId, mapping);
+                    await updateProtocolMapper(id, mapperId, mapping);
                 } else {
-                    await updateClientProtocolMapper(adminClient, id, mapperId, mapping);
+                    await updateClientProtocolMapper(id, mapperId, mapping);
                 }
             } else {
                 if (isOnClientScope) {
-                    await addProtocolMapper(adminClient, id, mapping);
+                    await addProtocolMapper(id, mapping);
                 } else {
-                    await addClientProtocolMapper(adminClient, id, mapping);
+                    await addClientProtocolMapper(id, mapping);
                 }
             }
         },
@@ -94,9 +92,9 @@ export function useProtocolMapper(
     const deleteMutation = useMutation({
         mutationFn: async () => {
             if (isOnClientScope) {
-                await deleteProtocolMapperFromScope(adminClient, id, mapperId);
+                await deleteProtocolMapperFromScope(id, mapperId);
             } else {
-                await deleteProtocolMapperFromClient(adminClient, id, mapperId);
+                await deleteProtocolMapperFromClient(id, mapperId);
             }
         },
         onSuccess: () => {

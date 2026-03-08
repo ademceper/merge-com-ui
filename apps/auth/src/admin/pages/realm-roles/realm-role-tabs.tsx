@@ -17,11 +17,26 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
+import { useAddCompositeRoles } from "./hooks/use-add-composite-roles";
+import { useDeleteClientRole } from "./hooks/use-delete-client-role";
+import { useDeleteRealmRole } from "./hooks/use-delete-realm-role";
+import { useUpdateClientRole } from "./hooks/use-update-client-role";
+import { useUpdateRealmRole } from "./hooks/use-update-realm-role";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams, useParams as useRouterParams } from "../../shared/lib/useParams";
+import {
+    type ClientRoleParams,
+    type ClientRoleTab,
+    toClient,
+    toClientRole
+} from "../../shared/lib/routes/clients";
+import {
+    type RealmRoleTab,
+    toRealmRole,
+    toRealmRoles
+} from "../../shared/lib/routes/realm-roles";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useParams, useParams as useRouterParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import {
     type AttributeForm,
@@ -35,20 +50,12 @@ import {
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
 import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
-import { toClient } from "../../shared/lib/routes/clients";
-import {
-    type ClientRoleParams,
-    type ClientRoleTab,
-    toClientRole
-} from "../../shared/lib/routes/clients";
 import { AdminEvents } from "../events/admin-events";
-import { useClientDetail } from "./api/use-client-detail";
-import { useRealmRole } from "./api/use-realm-role";
-import { type RealmRoleTab, toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
+import { useClientDetail } from "./hooks/use-client-detail";
+import { useRealmRole } from "./hooks/use-realm-role";
 import { UsersInRoleTab } from "./users-in-role-tab";
 
-export default function RealmRoleTabs() {
-    const { adminClient } = useAdminClient();
+export function RealmRoleTabs() {
 
     const isFeatureEnabled = useIsFeatureEnabled();
     const { t } = useTranslation();
@@ -91,6 +98,12 @@ export default function RealmRoleTabs() {
     const { data: roleData, refetch: refetchRole } = useRealmRole(id);
     const refresh = () => refetchRole();
 
+    const { mutateAsync: updateRealmRole } = useUpdateRealmRole(id);
+    const { mutateAsync: updateClientRoleMut } = useUpdateClientRole(clientId ?? "");
+    const { mutateAsync: deleteRealmRoleMut } = useDeleteRealmRole();
+    const { mutateAsync: deleteClientRoleMut } = useDeleteClientRole(clientId ?? "");
+    const { mutateAsync: addComposites } = useAddCompositeRoles();
+
     useEffect(() => {
         if (!roleData) return;
         const convertedRole = convert(roleData);
@@ -115,12 +128,12 @@ export default function RealmRoleTabs() {
             roleRepresentation.attributes = keyValueToArray(attributes);
 
             if (!clientId) {
-                await adminClient.roles.updateById({ id }, roleRepresentation);
+                await updateRealmRole(roleRepresentation);
             } else {
-                await adminClient.clients.updateRole(
-                    { id: clientId, roleName: formValues.name! },
-                    roleRepresentation
-                );
+                await updateClientRoleMut({
+                    roleName: formValues.name!,
+                    role: roleRepresentation
+                });
             }
 
             setAttributes(attributes);
@@ -183,12 +196,9 @@ export default function RealmRoleTabs() {
         onConfirm: async () => {
             try {
                 if (!clientId) {
-                    await adminClient.roles.delById({ id });
+                    await deleteRealmRoleMut(id);
                 } else {
-                    await adminClient.clients.delRole({
-                        id: clientId,
-                        roleName: roleName!
-                    });
+                    await deleteClientRoleMut(roleName!);
                 }
                 toast.success(t("roleDeletedSuccess"));
                 navigate({ to: toOverview() as string });
@@ -200,12 +210,13 @@ export default function RealmRoleTabs() {
         }
     });
 
-    const addComposites = async (composites: RoleRepresentation[]) => {
+    const handleAddComposites = async (composites: RoleRepresentation[]) => {
         try {
-            await adminClient.roles.createComposite(
-                { roleId: id, realm: realm!.realm },
+            await addComposites({
+                roleId: id,
+                realm: realm!.realm!,
                 composites
-            );
+            });
             refresh();
             navigate({ to: toTab("associated-roles") as string });
             toast.success(t("addAssociatedRolesSuccess"));
@@ -232,7 +243,7 @@ export default function RealmRoleTabs() {
                         id={id}
                         type="roles"
                         isManager
-                        save={rows => addComposites(rows.map(r => r.role))}
+                        save={rows => handleAddComposites(rows.map(r => r.role))}
                     />
                 );
             case "attributes":

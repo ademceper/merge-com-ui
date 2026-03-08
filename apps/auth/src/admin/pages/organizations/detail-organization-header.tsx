@@ -23,17 +23,16 @@ import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { toOrganizations } from "../../shared/lib/routes/organizations";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useDeleteOrganization } from "./hooks/use-delete-organization";
 
 type DetailOrganizationHeaderProps = {
     save: () => void;
 };
 
 export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps) => {
-    const { adminClient } = useAdminClient();
     const { realm } = useRealm();
     const navigate = useNavigate();
 
@@ -42,6 +41,7 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
     const name = useWatch({ name: "name" });
 
     const { setValue } = useFormContext();
+    const { mutateAsync: deleteOrg } = useDeleteOrganization();
 
     const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
         titleKey: "disableConfirmOrganizationTitle",
@@ -57,7 +57,7 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
 
     const onDeleteConfirm = async () => {
         try {
-            await adminClient.organizations.delById({ id });
+            await deleteOrg(id);
             setDeleteDialogOpen(false);
             toast.success(t("organizationDeletedSuccess"));
             navigate({ to: toOrganizations({ realm }) as string });

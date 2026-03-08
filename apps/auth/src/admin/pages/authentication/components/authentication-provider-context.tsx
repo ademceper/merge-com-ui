@@ -4,7 +4,7 @@ import {
     createNamedContext,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { useAuthenticationProviders } from "../api/use-authentication-providers";
+import { useAuthenticationProviders } from "../hooks/use-authentication-providers";
 
 const AuthenticationProviderContext = createNamedContext<
     { providers?: AuthenticationProviderRepresentation[] } | undefined

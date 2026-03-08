@@ -2,7 +2,7 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useAuthFlows } from "../api/use-auth-flows";
+import { useAuthFlows } from "../hooks/use-auth-flows";
 
 type AuthenticationOverridesProps = {
     save: () => void;

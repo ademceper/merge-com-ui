@@ -31,12 +31,12 @@ import { TextControl } from "../../shared/keycloak-ui-shared";
 import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/multi-select-field";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../app/providers/server-info/server-info-provider";
-import { useAdminEvents } from "../pages/events/api/use-admin-events";
-import { useEventsConfig } from "../pages/events/api/use-events-config";
+import { useAdminEvents } from "../pages/events/hooks/use-admin-events";
+import { useEventsConfig } from "../pages/events/hooks/use-events-config";
 import { CellResourceLinkRenderer } from "../pages/events/resource-links";
-import useFormatDate, { FORMAT_DATE_AND_TIME } from "../shared/lib/useFormatDate";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "../shared/lib/use-format-date";
 import { prettyPrintJSON } from "../shared/lib/util";
-import CodeEditor from "../shared/ui/form/code-editor";
+import { CodeEditor } from "../shared/ui/form/code-editor";
 import { EventsBanners } from "./banners";
 
 type DisplayDialogProps = PropsWithChildren<{

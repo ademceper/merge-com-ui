@@ -10,7 +10,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useMemo, useState } from "react";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
-import useToggle from "../../../../shared/lib/useToggle";
+import { useToggle } from "../../../../shared/lib/use-toggle";
 
 type ValidatorSelectProps = {
     selectedValidators: string[];

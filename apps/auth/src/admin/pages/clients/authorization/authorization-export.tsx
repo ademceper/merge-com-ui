@@ -10,11 +10,11 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useParams } from "../../../shared/lib/useParams";
+import type { ClientParams } from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
 import { prettyPrintJSON } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import type { ClientParams } from "../../../shared/lib/routes/clients";
-import { useExportResource } from "./api/use-export-resource";
+import { useExportResource } from "./hooks/use-export-resource";
 
 export const AuthorizationExport = () => {
     const { t } = useTranslation();

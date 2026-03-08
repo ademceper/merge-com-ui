@@ -15,14 +15,13 @@ import {
     TextControl,
     useHelp
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
+import { useUpdateRealmPolicy } from "../hooks/use-update-realm-policy";
 
 const SIGNATURE_ALGORITHMS = [
     "ES256",
@@ -85,10 +84,8 @@ export const WebauthnPolicy = ({
     realmUpdated,
     isPasswordLess = false
 }: WebauthnPolicyProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { realm: realmName } = useRealm();
     const { enabled } = useHelp();
     const form = useForm({ mode: "onChange" });
     const {
@@ -96,6 +93,7 @@ export const WebauthnPolicy = ({
         handleSubmit,
         formState: { isDirty }
     } = form;
+    const { mutateAsync: updateRealmPolicy } = useUpdateRealmPolicy();
 
     const namePrefix = isPasswordLess ? "webAuthnPolicyPasswordless" : "webAuthnPolicy";
 
@@ -107,7 +105,7 @@ export const WebauthnPolicy = ({
     const onSubmit = async (realm: RealmRepresentation) => {
         const submittedRealm = convertFormValuesToObject(realm);
         try {
-            await adminClient.realms.update({ realm: realmName }, submittedRealm);
+            await updateRealmPolicy(submittedRealm);
             realmUpdated(submittedRealm);
             setupForm(submittedRealm);
             toast.success(t("webAuthnUpdateSuccess"));

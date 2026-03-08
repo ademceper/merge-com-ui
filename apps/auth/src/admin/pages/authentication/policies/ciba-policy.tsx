@@ -10,11 +10,10 @@ import {
     SelectField,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useUpdateRealmPolicyWithRefetch } from "../hooks/use-update-realm-policy-with-refetch";
 
 const CIBA_BACKHANNEL_TOKEN_DELIVERY_MODES = ["poll", "ping"] as const;
 const CIBA_EXPIRES_IN_MIN = 10;
@@ -30,11 +29,10 @@ type CibaPolicyProps = {
 type FormFields = Omit<RealmRepresentation, "clients" | "components" | "groups">;
 
 export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<FormFields>({ mode: "onChange" });
-    const { realm: realmName } = useRealm();
+    const { mutateAsync: updateRealmPolicy } = useUpdateRealmPolicyWithRefetch();
     const setupForm = (realm: RealmRepresentation) =>
         convertToFormValues(realm, form.setValue);
 
@@ -42,14 +40,9 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
 
     const onSubmit = async (formValues: FormFields) => {
         try {
-            await adminClient.realms.update(
-                { realm: realmName },
+            const updatedRealm = await updateRealmPolicy(
                 convertFormValuesToObject(formValues)
             );
-
-            const updatedRealm = await adminClient.realms.findOne({
-                realm: realmName
-            });
 
             realmUpdated(updatedRealm!);
             setupForm(updatedRealm!);

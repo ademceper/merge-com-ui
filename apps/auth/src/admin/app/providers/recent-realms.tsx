@@ -6,7 +6,6 @@ import {
     useRequiredContext,
     useStoredState
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../admin-client";
 import { fetchAdminUI } from "./auth/admin-ui-endpoint";
 import { useRealm } from "./realm-context/realm-context";
 
@@ -30,8 +29,6 @@ function convertRealmToNameRepresentation(
 
 export const RecentRealmsProvider = ({ children }: PropsWithChildren) => {
     const { realmRepresentation: realm } = useRealm();
-    const { adminClient } = useAdminClient();
-
     const [storedRealms, setStoredRealms] = useStoredState(localStorage, "recentRealms", [
         { name: "" }
     ] as RealmNameRepresentation[]);
@@ -47,7 +44,6 @@ export const RecentRealmsProvider = ({ children }: PropsWithChildren) => {
                     try {
                         return (
                             await fetchAdminUI<RealmNameRepresentation[]>(
-                                adminClient,
                                 "ui-ext/realms/names",
                                 { search: r.name }
                             )
@@ -60,14 +56,15 @@ export const RecentRealmsProvider = ({ children }: PropsWithChildren) => {
             )
     });
     useEffect(() => {
-        if (recentRealmsData)
+        if (recentRealmsData) {
             setStoredRealms(
                 recentRealmsData.filter((r): r is RealmNameRepresentation => !!r)
             );
+        }
     }, [recentRealmsData]);
 
     useEffect(() => {
-        if (storedRealms.map(r => r.name).includes(realm?.realm || "") || !realm) {
+        if (!realm || storedRealms.some(r => r.name === (realm.realm || ""))) {
             return;
         }
         setStoredRealms(

@@ -37,7 +37,9 @@ declare global {
 
 const KcLoginPage = lazy(() => import("./login/kc-page"));
 const KcAccountPage = lazy(() => import("./account/app/kc-page"));
-const KcAdminPage = lazy(() => import("./admin/app/kc-page"));
+const KcAdminPage = lazy(() =>
+    import("./admin/app/kc-page").then((m) => ({ default: m.KcPage }))
+);
 
 export function KcPage(props: { kcContext: KcContext; fallback?: ReactNode }) {
     const { kcContext, fallback } = props;

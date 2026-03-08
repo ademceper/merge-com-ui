@@ -14,8 +14,8 @@ import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import { useCreateRealmRole } from "./hooks/use-create-realm-role";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
 
 const FORM_ID = "add-realm-role-form";
@@ -26,9 +26,9 @@ type AddRealmRoleDialogProps = {
 };
 
 export function AddRealmRoleDialog({ trigger, onSuccess }: AddRealmRoleDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
+    const { mutateAsync: createRole } = useCreateRealmRole();
 
     const form = useForm<AttributeForm>({ mode: "onChange" });
 
@@ -39,7 +39,7 @@ export function AddRealmRoleDialog({ trigger, onSuccess }: AddRealmRoleDialogPro
             attributes: {}
         };
         try {
-            await adminClient.roles.create(role);
+            await createRole(role);
             toast.success(t("roleCreated"));
             setOpen(false);
             form.reset();

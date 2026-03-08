@@ -32,7 +32,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../app/admin-client";
 import type { Environment } from "../app/environment";
 import { useAccess } from "../app/providers/access/access";
 import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
@@ -42,7 +41,7 @@ import { useServerInfo } from "../app/providers/server-info/server-info-provider
 import { routes } from "../app/routes";
 import { toDashboard } from "../shared/lib/route-helpers";
 import { toPage } from "../shared/lib/routes/page";
-import useIsFeatureEnabled, { Feature } from "../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../shared/lib/use-is-feature-enabled";
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -96,24 +95,23 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     const isFeatureEnabled = useIsFeatureEnabled();
     const pages = componentTypes?.["org.keycloak.services.ui.extend.UiPageProvider"];
     const { realm, realmRepresentation } = useRealm();
-    const { adminClient } = useAdminClient();
 
     const { data: realms = [] } = useQuery({
-        queryKey: ["realmNames", adminClient.realmName],
+        queryKey: ["realmNames", realm],
         queryFn: () =>
-            fetchAdminUI<RealmNameRepresentation[]>(
-                adminClient,
-                "ui-ext/realms/names",
-                { first: "0", max: "1000" }
-            ).then(result => result ?? []),
+            fetchAdminUI<RealmNameRepresentation[]>("ui-ext/realms/names", {
+                first: "0",
+                max: "1000"
+            }).then(result => result ?? []),
         staleTime: 5 * 60_000
     });
 
     const realmItems: SwitcherItem[] = useMemo(
-        () => realms.map(r => ({
-            value: r.name,
-            label: label(t, r.displayName, r.name) as string
-        })),
+        () =>
+            realms.map(r => ({
+                value: r.name,
+                label: label(t, r.displayName, r.name) as string
+            })),
         [realms, t]
     );
 

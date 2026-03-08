@@ -1,8 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import JSZip from "jszip";
-import type { ChangeEvent } from "react";
+import { type ChangeEvent, useRef } from "react";
 import type { ThemeRealmRepresentation } from "./themes-tab";
+
+const hiddenInputStyle = { display: "none" } as const;
 
 type UploadJarProps = {
     onUpload: (theme: ThemeRealmRepresentation) => void;
@@ -10,12 +12,10 @@ type UploadJarProps = {
 
 export const UploadJar = ({ onUpload }: UploadJarProps) => {
     const { t } = useTranslation();
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const triggerUpload = () => {
-        const input = document.getElementById("jarUpload") as HTMLInputElement;
-        if (input) {
-            input.click();
-        }
+        fileInputRef.current?.click();
     };
 
     const handleAcceptedFiles = async (files: ChangeEvent<HTMLInputElement>) => {
@@ -38,10 +38,10 @@ export const UploadJar = ({ onUpload }: UploadJarProps) => {
     return (
         <>
             <input
-                id="jarUpload"
+                ref={fileInputRef}
                 type="file"
                 accept=".jar"
-                style={{ display: "none" }}
+                style={hiddenInputStyle}
                 onChange={acceptedFiles => handleAcceptedFiles(acceptedFiles)}
             />
             <Button variant="outline" onClick={triggerUpload}>

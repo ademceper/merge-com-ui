@@ -8,13 +8,17 @@ import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    type EditOrganizationParams,
+    toEditOrganization
+} from "../../shared/lib/routes/organizations";
+import { useParams } from "../../shared/lib/use-params";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { AttributesForm } from "../../shared/ui/key-value-form/attribute-form";
 import { arrayToKeyValue } from "../../shared/ui/key-value-form/key-value-convert";
 import { AdminEvents } from "../events/admin-events";
-import { useOrganization } from "./api/use-organization";
-import { useUpdateOrganization } from "./api/use-update-organization";
+import { useOrganization } from "./hooks/use-organization";
+import { useUpdateOrganization } from "./hooks/use-update-organization";
 import { DetailOrganizationHeader } from "./detail-organization-header";
 import { IdentityProviders } from "./identity-providers";
 import { MembersSection } from "./members-section";
@@ -23,12 +27,8 @@ import {
     OrganizationForm,
     type OrganizationFormType
 } from "./organization-form";
-import {
-    type EditOrganizationParams,
-    toEditOrganization
-} from "../../shared/lib/routes/organizations";
 
-export default function DetailOrganization() {
+export function DetailOrganization() {
     const { realm, realmRepresentation } = useRealm();
     const { id, tab = "settings" } = useParams<
         EditOrganizationParams & { tab?: string }

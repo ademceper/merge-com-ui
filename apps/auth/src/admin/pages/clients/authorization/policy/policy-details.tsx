@@ -20,17 +20,20 @@ import {
 const RouterLink = Link as ComponentType<LinkProps>;
 
 import { KeycloakSpinner } from "../../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../../app/admin-client";
+import { useUpdatePolicy, useCreatePolicy, useDeletePolicyMutation } from "../hooks/use-authorization-mutations";
 import { toPermissionsConfigurationTabs } from "../../../../shared/lib/route-helpers";
-import { useIsAdminPermissionsClient } from "../../../../shared/lib/useIsAdminPermissionsClient";
-import { useParams } from "../../../../shared/lib/useParams";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
+import {
+    type PolicyDetailsParams,
+    toAuthorizationTab,
+    toPolicyDetails
+} from "../../../../shared/lib/routes/clients";
 import type { NewPermissionPolicyDetailsParams } from "../../../../shared/lib/routes/permissions";
 import { toPermissionPolicyDetails } from "../../../../shared/lib/routes/permissions";
-import { toAuthorizationTab } from "../../../../shared/lib/routes/clients";
-import { type PolicyDetailsParams, toPolicyDetails } from "../../../../shared/lib/routes/clients";
-import { usePolicyDetails as usePolicyDetailsQuery } from "../api/use-policy-details";
+import { useIsAdminPermissionsClient } from "../../../../shared/lib/use-is-admin-permissions-client";
+import { useParams } from "../../../../shared/lib/use-params";
+import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../../../shared/ui/form/form-access";
+import { usePolicyDetails as usePolicyDetailsQuery } from "../hooks/use-policy-details";
 import { Aggregate } from "./aggregate";
 import { Client } from "./client";
 import { ClientScope, type RequiredIdValue } from "./client-scope";
@@ -65,12 +68,14 @@ const COMPONENTS: {
 
 export const isValidComponentType = (value: string) => value in COMPONENTS;
 
-export default function PolicyDetails() {
-    const { adminClient } = useAdminClient();
+export function PolicyDetails() {
     const { t } = useTranslation();
     const { id, realm, policyId, policyType } = useParams<PolicyDetailsParams>();
     const { permissionClientId } = useParams<NewPermissionPolicyDetailsParams>();
     const navigate = useNavigate();
+    const { mutateAsync: updatePolicyMutation } = useUpdatePolicy();
+    const { mutateAsync: createPolicyMutation } = useCreatePolicy();
+    const { mutateAsync: deletePolicyMutation } = useDeletePolicyMutation();
     const form = useForm();
     const { reset, handleSubmit } = form;
     const [policy, setPolicy] = useState<PolicyRepresentation>();
@@ -108,15 +113,18 @@ export default function PolicyDetails() {
 
         try {
             if (policyId) {
-                await adminClient.clients.updatePolicy(
-                    { id: clientId!, type: policyType!, policyId },
+                await updatePolicyMutation({
+                    clientId: clientId!,
+                    type: policyType!,
+                    policyId,
                     policy
-                );
+                });
             } else {
-                const result = await adminClient.clients.createPolicy(
-                    { id: clientId!, type: policyType! },
+                const result = await createPolicyMutation({
+                    clientId: clientId!,
+                    type: policyType!,
                     policy
-                );
+                });
 
                 navigate({
                     to: navigateTo({
@@ -142,8 +150,8 @@ export default function PolicyDetails() {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPolicy({
-                    id: isAdminPermissionsClient ? permissionClientId : id,
+                await deletePolicyMutation({
+                    clientId: isAdminPermissionsClient ? permissionClientId : id,
                     policyId
                 });
                 toast.success(t("policyDeletedSuccess"));

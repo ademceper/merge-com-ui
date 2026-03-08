@@ -2,22 +2,20 @@ import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import {
-    type ClientScopeDefaultOptionalType,
-    changeScope
-} from "../../shared/ui/client-scope/client-scope-types";
-import { ScopeForm } from "./details/scope-form";
 import { toClientScope } from "../../shared/lib/routes/client-scopes";
+import { convertFormValuesToObject } from "../../shared/lib/util";
+import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+import { useCreateClientScope } from "./hooks/use-create-client-scope";
+import { ScopeForm } from "./details/scope-form";
 
-export default function CreateClientScope() {
-    const { adminClient } = useAdminClient();
+export function CreateClientScope() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: createClientScope } = useCreateClientScope();
+
     const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
         const clientScope = convertFormValuesToObject({
             ...formData,
@@ -25,21 +23,7 @@ export default function CreateClientScope() {
         });
 
         try {
-            await adminClient.clientScopes.create(clientScope);
-
-            const scope = await adminClient.clientScopes.findOneByName({
-                name: clientScope.name!
-            });
-
-            if (!scope) {
-                throw new Error(t("notFound"));
-            }
-
-            await changeScope(
-                adminClient,
-                { ...clientScope, id: scope.id },
-                clientScope.type
-            );
+            const scope = await createClientScope(clientScope);
 
             toast.success(t("createClientScopeSuccess"));
 

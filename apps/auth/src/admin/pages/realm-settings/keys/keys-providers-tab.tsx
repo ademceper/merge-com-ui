@@ -25,12 +25,15 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useDeleteComponent } from "../hooks/use-delete-component";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import useToggle from "../../../shared/lib/useToggle";
+import {
+    type ProviderType,
+    toKeyProvider
+} from "../../../shared/lib/routes/realm-settings";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
-import { type ProviderType, toKeyProvider } from "../../../shared/lib/routes/realm-settings";
 import { KeyProviderModal } from "./key-providers/key-provider-modal";
 import { KeyProvidersPicker } from "./key-providers/key-providers-picker";
 
@@ -44,7 +47,6 @@ type KeysProvidersTabProps = {
 };
 
 export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
 
@@ -53,6 +55,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
     const keyProviderComponentTypes =
         serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
 
+    const { mutateAsync: deleteComponentMut } = useDeleteComponent();
     const [providerOpen, toggleProviderOpen] = useToggle();
     const [defaultUIDisplayName, setDefaultUIDisplayName] = useState<ProviderType>();
     const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
@@ -74,10 +77,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
     const onDeleteConfirm = async () => {
         if (!selectedComponent?.id) return;
         try {
-            await adminClient.components.del({
-                id: selectedComponent.id,
-                realm: realm
-            });
+            await deleteComponentMut(selectedComponent.id);
             setSelectedComponent(undefined);
             refresh();
             toast.success(t("deleteProviderSuccess"));

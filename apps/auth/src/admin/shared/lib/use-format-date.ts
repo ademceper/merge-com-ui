@@ -5,7 +5,7 @@ export const FORMAT_DATE_AND_TIME: Intl.DateTimeFormatOptions = {
     timeStyle: "short"
 };
 
-export default function useFormatDate() {
+export function useFormatDate() {
     const { whoAmI } = useWhoAmI();
 
     return function formatDate(date: Date, options?: Intl.DateTimeFormatOptions) {

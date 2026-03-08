@@ -21,16 +21,16 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useClientAssignedScopes } from "../api/use-client-assigned-scopes";
+import { useClientAssignedScopes } from "../hooks/use-client-assigned-scopes";
 
 const RouterLink = Link as ComponentType<LinkProps>;
 
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { translationFormatter } from "../../../shared/lib/translationFormatter";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { toDedicatedScope } from "../../../shared/lib/routes/clients";
+import { translationFormatter } from "../../../shared/lib/translation-formatter";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
 import {
     AllClientScopes,
     type AllClientScopeType,
@@ -43,7 +43,6 @@ import {
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { ChangeTypeDropdown } from "../../client-scopes/change-type-dropdown";
 import { PROTOCOL_OID4VC, PROTOCOL_OIDC } from "../constants";
-import { toDedicatedScope } from "../../../shared/lib/routes/clients";
 import { AddScopeDialog } from "./add-scope-dialog";
 
 type ClientScopesProps = {
@@ -72,7 +71,6 @@ const TypeSelector = ({
     fineGrainedAccess,
     ...scope
 }: TypeSelectorProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { hasAccess } = useAccess();
@@ -88,7 +86,6 @@ const TypeSelector = ({
             onSelect={async value => {
                 try {
                     await changeClientScope(
-                        adminClient,
                         clientId,
                         scope,
                         scope.type,
@@ -113,7 +110,6 @@ export const ClientScopes = ({
     clientName,
     fineGrainedAccess
 }: ClientScopesProps) => {
-    const { adminClient } = useAdminClient();
     const isFeatureEnabled = useIsFeatureEnabled();
 
     const { t } = useTranslation();
@@ -210,7 +206,6 @@ export const ClientScopes = ({
         onConfirm: async () => {
             try {
                 await removeClientScope(
-                    adminClient,
                     clientId,
                     selectedRows[0],
                     selectedRows[0].type as ClientScope
@@ -301,7 +296,6 @@ export const ClientScopes = ({
                                 scopes.map(
                                     async scope =>
                                         await addClientScope(
-                                            adminClient,
                                             clientId,
                                             scope.scope,
                                             scope.type!
@@ -357,7 +351,6 @@ export const ClientScopes = ({
                                                 await Promise.all(
                                                     selectedRows.map(row =>
                                                         removeClientScope(
-                                                            adminClient,
                                                             clientId,
                                                             { ...row },
                                                             row.type as ClientScope

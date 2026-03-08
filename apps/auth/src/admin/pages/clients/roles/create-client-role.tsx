@@ -7,22 +7,21 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreateClientRole } from "../hooks/use-client-roles";
+import type { NewRoleParams } from "../../../shared/lib/routes/clients";
+import { toClient, toClientRole } from "../../../shared/lib/routes/clients";
 import type { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../../shared/ui/role-form/role-form";
-import { toClient } from "../../../shared/lib/routes/clients";
-import { toClientRole } from "../../../shared/lib/routes/clients";
-import type { NewRoleParams } from "../../../shared/lib/routes/clients";
 
-export default function CreateClientRole() {
-    const { adminClient } = useAdminClient();
+export function CreateClientRole() {
 
     const { t } = useTranslation();
     const form = useForm<AttributeForm>({ mode: "onChange" });
     const navigate = useNavigate();
     const { clientId } = useParams({ strict: false }) as NewRoleParams;
     const { realm } = useRealm();
+    const { mutateAsync: createClientRole } = useCreateClientRole();
     const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
@@ -31,14 +30,9 @@ export default function CreateClientRole() {
         };
 
         try {
-            await adminClient.clients.createRole({
-                id: clientId,
-                ...role
-            });
-
-            const createdRole = (await adminClient.clients.findRole({
-                id: clientId!,
-                roleName: role.name!
+            const createdRole = (await createClientRole({
+                clientId: clientId!,
+                role
             }))!;
 
             toast.success(t("roleCreated"));

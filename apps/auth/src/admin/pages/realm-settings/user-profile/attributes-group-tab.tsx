@@ -19,10 +19,16 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useLocale from "../../../shared/lib/useLocale";
-import { toEditAttributesGroup, toNewAttributesGroup } from "../../../shared/lib/routes/realm-settings";
+import {
+    deleteRealmLocalizationTexts,
+    fetchRealmLocalizationTexts
+} from "../../../api/realm-settings";
+import {
+    toEditAttributesGroup,
+    toNewAttributesGroup
+} from "../../../shared/lib/routes/realm-settings";
+import { useLocale } from "../../../shared/lib/use-locale";
 import { useUserProfile } from "./user-profile-context";
 
 type AttributesGroupTabProps = {
@@ -32,7 +38,6 @@ type AttributesGroupTabProps = {
 };
 
 export const AttributesGroupTab = ({ setTableData }: AttributesGroupTabProps) => {
-    const { adminClient } = useAdminClient();
     const { config, save } = useUserProfile();
     const { t } = useTranslation();
     const combinedLocales = useLocale();
@@ -62,31 +67,25 @@ export const AttributesGroupTab = ({ setTableData }: AttributesGroupTabProps) =>
             await Promise.all(
                 combinedLocales.map(async locale => {
                     try {
-                        await adminClient.realms.getRealmLocalizationTexts({
-                            realm,
-                            selectedLocale: locale
-                        });
+                        await fetchRealmLocalizationTexts(realm, locale);
 
                         if (translationsForDisplayHeaderToDelete) {
-                            await adminClient.realms.deleteRealmLocalizationTexts({
+                            await deleteRealmLocalizationTexts(
                                 realm,
-                                selectedLocale: locale,
-                                key: translationsForDisplayHeaderToDelete
-                            });
+                                locale,
+                                translationsForDisplayHeaderToDelete
+                            );
                         }
                         if (translationsForDisplayDescriptionToDelete) {
-                            await adminClient.realms.deleteRealmLocalizationTexts({
+                            await deleteRealmLocalizationTexts(
                                 realm,
-                                selectedLocale: locale,
-                                key: translationsForDisplayDescriptionToDelete
-                            });
+                                locale,
+                                translationsForDisplayDescriptionToDelete
+                            );
                         }
 
                         const updatedData =
-                            await adminClient.realms.getRealmLocalizationTexts({
-                                realm,
-                                selectedLocale: locale
-                            });
+                            await fetchRealmLocalizationTexts(realm, locale);
                         setTableData([updatedData]);
                     } catch {
                         console.error(`Error removing translations for ${locale}`);

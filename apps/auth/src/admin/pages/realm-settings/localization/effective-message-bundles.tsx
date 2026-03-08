@@ -24,11 +24,11 @@ import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { findEffectiveMessageBundles } from "../../../api/realm-settings";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
 import { localeToDisplayName } from "../../../shared/lib/util";
 
 type EffectiveMessageBundlesProps = {
@@ -56,7 +56,6 @@ export const EffectiveMessageBundles = ({
     defaultSupportedLocales,
     defaultLocales
 }: EffectiveMessageBundlesProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
     const serverInfo = useServerInfo();
@@ -77,9 +76,13 @@ export const EffectiveMessageBundles = ({
     const themeNames = useMemo(() => {
         if (!themes) return [];
         return localeSort(
-            Object.values(themes as Record<string, { name: string }[]>)
-                .flatMap(theme => theme.map(item => item.name))
-                .filter((value, index, self) => self.indexOf(value) === index),
+            [
+                ...new Set(
+                    Object.values(themes as Record<string, { name: string }[]>).flatMap(
+                        theme => theme.map(item => item.name)
+                    )
+                )
+            ],
             name => name
         );
     }, [themes, localeSort]);
@@ -127,8 +130,7 @@ export const EffectiveMessageBundles = ({
             return;
         }
 
-        adminClient.serverInfo
-            .findEffectiveMessageBundles({
+        findEffectiveMessageBundles({
                 realm,
                 theme: filter.theme,
                 themeType: filter.themeType,

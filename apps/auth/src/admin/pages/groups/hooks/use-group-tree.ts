@@ -1,7 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGroupChildren, fetchGroupTree } from "../../../api/groups";
-import { useAdminClient } from "../../../app/admin-client";
 import { groupKeys } from "./keys";
 
 /**
@@ -15,7 +14,6 @@ export function useGroupTree(params: {
     firstSub: number;
     subGroupCount: number;
 }) {
-    const { adminClient } = useAdminClient();
     const { first, max, search, activeItemId, firstSub, subGroupCount } = params;
     return useQuery({
         queryKey: groupKeys.tree({
@@ -26,7 +24,7 @@ export function useGroupTree(params: {
             firstSub
         }),
         queryFn: async () => {
-            const groups = await fetchGroupTree(adminClient, {
+            const groups = await fetchGroupTree({
                 first,
                 max,
                 search
@@ -34,7 +32,6 @@ export function useGroupTree(params: {
             let subGroups: GroupRepresentation[] = [];
             if (activeItemId) {
                 subGroups = await fetchGroupChildren(
-                    adminClient,
                     activeItemId,
                     firstSub,
                     subGroupCount

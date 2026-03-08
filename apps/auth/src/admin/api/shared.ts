@@ -1,50 +1,38 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { ManagementPermissionReference } from "@keycloak/keycloak-admin-client/lib/defs/managementPermissionReference";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import type { ClientQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import { getAuthorizationHeaders } from "../shared/lib/getAuthorizationHeaders";
+import { adminClient } from "../app/admin-client";
+import { getAuthorizationHeaders } from "../shared/lib/get-authorization-headers";
 import { addTrailingSlash, prettyPrintJSON } from "../shared/lib/util";
 
 // ── Users ──
 
-export async function searchUsers(
-    adminClient: KeycloakAdminClient,
-    username: string
-) {
+export async function searchUsers(username: string) {
     return adminClient.users.find({ username, max: 20 });
 }
 
-export async function findUsersByIds(
-    adminClient: KeycloakAdminClient,
-    ids: string[]
-) {
+export async function findUsersByIds(ids: string[]) {
     if (!ids || ids.length === 0) return [];
     const foundUsers = await Promise.all(
         ids.map(id => adminClient.users.findOne({ id }))
     );
-    return foundUsers.filter(
-        (user): user is UserRepresentation => user !== undefined
-    );
+    return foundUsers.filter((user): user is UserRepresentation => user !== undefined);
 }
 
-export async function findCurrentUser(
-    adminClient: KeycloakAdminClient,
-    userId: string
-) {
+export async function findCurrentUser(userId: string) {
     return adminClient.users.findOne({ id: userId });
 }
 
-export async function fetchUserProfile(adminClient: KeycloakAdminClient) {
+export async function fetchUserProfile() {
     return adminClient.users.getProfile();
 }
 
 // ── Groups ──
 
 export async function findGroupPicker(
-    adminClient: KeycloakAdminClient,
     groupId: string | undefined,
     filter: string,
     first: number,
@@ -84,7 +72,6 @@ export async function findGroupPicker(
 // ── Identity providers ──
 
 export async function searchIdentityProviders(
-    adminClient: KeycloakAdminClient,
     search: string,
     identityProviderType: string,
     realmOnly: boolean
@@ -102,10 +89,7 @@ export async function searchIdentityProviders(
 
 // ── Clients ──
 
-export async function searchClients(
-    adminClient: KeycloakAdminClient,
-    search: string
-) {
+export async function searchClients(search: string) {
     const params: ClientQuery = { max: 20 };
     if (search) {
         params.clientId = search;
@@ -115,7 +99,6 @@ export async function searchClients(
 }
 
 export async function findClientsByValues(
-    adminClient: KeycloakAdminClient,
     values: string[],
     clientKey: keyof ClientRepresentation
 ) {
@@ -145,7 +128,6 @@ type PermissionScreenType =
     | "identityProviders";
 
 export async function fetchPermissions(
-    adminClient: KeycloakAdminClient,
     id: string | undefined,
     type: PermissionScreenType,
     realm: string
@@ -186,10 +168,38 @@ export async function fetchPermissions(
     };
 }
 
+export async function togglePermissionEnabled(
+    id: string | undefined,
+    type: PermissionScreenType,
+    realm: string,
+    enabled: boolean
+) {
+    switch (type) {
+        case "clients":
+            return adminClient.clients.updateFineGrainPermission(
+                { id: id! },
+                { enabled }
+            );
+        case "users":
+            return adminClient.realms.updateUsersManagementPermissions({
+                realm,
+                enabled
+            });
+        case "groups":
+            return adminClient.groups.updatePermission({ id: id! }, { enabled });
+        case "roles":
+            return adminClient.roles.updatePermission({ id: id! }, { enabled });
+        case "identityProviders":
+            return adminClient.identityProviders.updatePermission(
+                { alias: id! },
+                { enabled }
+            );
+    }
+}
+
 // ── Resource server ──
 
 export async function fetchResourceServer(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     return adminClient.clients.getResourceServer({ id: clientId });
@@ -198,7 +208,6 @@ export async function fetchResourceServer(
 // ── Installation / Download ──
 
 export async function fetchInstallationSnippet(
-    adminClient: KeycloakAdminClient,
     id: string,
     selected: string,
     mediaType: string | undefined,
@@ -211,9 +220,7 @@ export async function fetchInstallationSnippet(
             )}admin/realms/${realm}/clients/${id}/installation/providers/${selected}`,
             {
                 method: "GET",
-                headers: getAuthorizationHeaders(
-                    await adminClient.getAccessToken()
-                )
+                headers: getAuthorizationHeaders(await adminClient.getAccessToken())
             }
         );
         return response.arrayBuffer();

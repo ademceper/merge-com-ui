@@ -26,18 +26,19 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { findUser } from "../../api/users";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
+import type { UserParams } from "../../shared/lib/routes/user";
+import { toUsers } from "../../shared/lib/routes/user";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
 import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
 import { OrganizationModal } from "../organizations/organization-modal";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
-import { useUserOrganizations } from "./api/use-user-organizations";
-import type { UserParams } from "../../shared/lib/routes/user";
-import { toUsers } from "../../shared/lib/routes/user";
+import { useRemoveOrgMember, useAddOrgMember, useInviteToOrg } from "./hooks/use-org-membership";
+import { useUserOrganizations } from "./hooks/use-user-organizations";
 
 type OrganizationProps = {
     user: UserRepresentation;
@@ -48,7 +49,6 @@ type MembershipTypeRepresentation = OrganizationRepresentation & {
 };
 
 export const Organizations = ({ user }: OrganizationProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { id } = useParams<UserParams>();
     const navigate = useNavigate();
@@ -60,6 +60,9 @@ export const Organizations = ({ user }: OrganizationProps) => {
     const [searchText, setSearchText] = useState<string>("");
     const [searchTriggerText, setSearchTriggerText] = useState<string>("");
     const [filteredMembershipTypes, setFilteredMembershipTypes] = useState<string[]>([]);
+    const { mutateAsync: removeOrgMemberMut } = useRemoveOrgMember(id!);
+    const { mutateAsync: addOrgMemberMut } = useAddOrgMember(user.id!);
+    const { mutateAsync: inviteToOrgMut } = useInviteToOrg(user.id!);
     const [isOpen, setIsOpen] = useState(false);
 
     const membershipOptions = [
@@ -123,16 +126,9 @@ export const Organizations = ({ user }: OrganizationProps) => {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await Promise.all(
-                    selectedOrgs.map(org =>
-                        adminClient.organizations.delMember({
-                            orgId: org.id!,
-                            userId: id!
-                        })
-                    )
-                );
+                await removeOrgMemberMut(selectedOrgs.map(org => org.id!));
                 toast.success(t("organizationRemovedSuccess"));
-                const foundUser = await adminClient.users.findOne({ id: id! });
+                const foundUser = await findUser(id!);
                 if (!foundUser) {
                     navigate({ to: toUsers({ realm: realm }) as string });
                 }
@@ -276,21 +272,17 @@ export const Organizations = ({ user }: OrganizationProps) => {
                     onClose={() => setOpenOrganizationPicker(false)}
                     onAdd={async orgs => {
                         try {
-                            await Promise.all(
-                                orgs.map(org => {
-                                    const form = new FormData();
-                                    form.append("id", id!);
-                                    return shouldJoin
-                                        ? adminClient.organizations.addMember({
-                                              orgId: org.id!,
-                                              userId: `"${user.id!}"`
-                                          })
-                                        : adminClient.organizations.inviteExistingUser(
-                                              { orgId: org.id! },
-                                              form
-                                          );
-                                })
-                            );
+                            if (shouldJoin) {
+                                await addOrgMemberMut(orgs.map(org => org.id!));
+                            } else {
+                                await Promise.all(
+                                    orgs.map(org => {
+                                        const formData = new FormData();
+                                        formData.append("id", id!);
+                                        return inviteToOrgMut({ orgId: org.id!, formData });
+                                    })
+                                );
+                            }
                             toast.success(
                                 t(
                                     shouldJoin

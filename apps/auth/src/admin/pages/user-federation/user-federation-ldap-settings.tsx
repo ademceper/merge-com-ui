@@ -8,13 +8,13 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import { useComponentDetail } from "./api/use-component-detail";
-import { LdapMapperList } from "./ldap/mappers/ldap-mapper-list";
 import type { UserFederationLdapParams } from "../../shared/lib/routes/user-federation";
 import { toUserFederationLdapMapper } from "../../shared/lib/routes/user-federation";
+import { useParams } from "../../shared/lib/use-params";
+import { useComponentDetail } from "./hooks/use-component-detail";
+import { useUpdateComponent } from "./hooks/use-update-component";
+import { LdapMapperList } from "./ldap/mappers/ldap-mapper-list";
 import { ExtendedHeader } from "./shared/extended-header";
 import {
     type LdapComponentRepresentation,
@@ -22,8 +22,7 @@ import {
     UserFederationLdapForm
 } from "./user-federation-ldap-form";
 
-export default function UserFederationLdapSettings() {
-    const { adminClient } = useAdminClient();
+export function UserFederationLdapSettings() {
 
     const { t } = useTranslation();
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
@@ -31,6 +30,7 @@ export default function UserFederationLdapSettings() {
     const { id, tab } = useParams<UserFederationLdapParams & { tab?: string }>();
 
     const { data: component, refetch: refetchComponent } = useComponentDetail(id);
+    const { mutateAsync: updateComponentMut } = useUpdateComponent();
 
     useEffect(() => {
         if (component) {
@@ -58,7 +58,7 @@ export default function UserFederationLdapSettings() {
 
     const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
-            await adminClient.components.update({ id: id! }, serializeFormData(formData));
+            await updateComponentMut({ id: id!, component: serializeFormData(formData) });
             toast.success(t("userProviderSaveSuccess"));
             refresh();
         } catch (error) {

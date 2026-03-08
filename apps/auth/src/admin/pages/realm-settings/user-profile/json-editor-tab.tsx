@@ -7,7 +7,7 @@ import {
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
 import { prettyPrintJSON } from "../../../shared/lib/util";
-import CodeEditor from "../../../shared/ui/form/code-editor";
+import { CodeEditor } from "../../../shared/ui/form/code-editor";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { useUserProfile } from "./user-profile-context";
 

@@ -35,15 +35,17 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useToggle from "../../../shared/lib/useToggle";
+import { useDeletePermissionMutation } from "./hooks/use-authorization-mutations";
+import {
+    toNewPermission,
+    toPermissionDetails,
+    toPolicyDetails
+} from "../../../shared/lib/routes/clients";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { toNewPermission } from "../../../shared/lib/routes/clients";
-import { toPermissionDetails } from "../../../shared/lib/routes/clients";
-import { toPolicyDetails } from "../../../shared/lib/routes/clients";
-import { usePermissionProviders } from "./api/use-permission-providers";
-import { usePermissions } from "./api/use-permissions";
+import { usePermissionProviders } from "./hooks/use-permission-providers";
+import { usePermissions } from "./hooks/use-permissions";
 import { DetailDescriptionLink } from "./detail-description";
 import { EmptyPermissionsState } from "./empty-permissions-state";
 import { MoreLabel } from "./more-label";
@@ -72,11 +74,11 @@ export const AuthorizationPermissions = ({
     clientId,
     isDisabled = false
 }: PermissionsProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: deletePermissionMutation } = useDeletePermissionMutation();
 
     const [permissions, setPermissions] = useState<ExpandablePolicyRepresentation[]>();
     const [selectedPermission, setSelectedPermission] = useState<PolicyRepresentation>();
@@ -129,8 +131,8 @@ export const AuthorizationPermissions = ({
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPermission({
-                    id: clientId,
+                await deletePermissionMutation({
+                    clientId,
                     type: selectedPermission?.type!,
                     permissionId: selectedPermission?.id!
                 });

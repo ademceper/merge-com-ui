@@ -1,7 +1,4 @@
-import {
-    generateEncodedPath,
-    type PathParams
-} from "../generateEncodedPath";
+import { generateEncodedPath, type PathParams } from "../generate-encoded-path";
 
 // Clients list
 export type ClientsTab = "list" | "initial-access-token" | "client-registration";
@@ -92,10 +89,20 @@ export type DedicatedScopeDetailsParams = {
 };
 
 export const toDedicatedScope = (params: DedicatedScopeDetailsParams): string => {
-    const path = params.tab
-        ? "/:realm/clients/:clientId/clientScopes/dedicated/:tab"
-        : "/:realm/clients/:clientId/clientScopes/dedicated";
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath(
+            "/:realm/clients/:clientId/clientScopes/dedicated/:tab",
+            {
+                realm: params.realm,
+                clientId: params.clientId,
+                tab: params.tab
+            }
+        );
+    }
+    return generateEncodedPath("/:realm/clients/:clientId/clientScopes/dedicated", {
+        realm: params.realm,
+        clientId: params.clientId
+    });
 };
 
 // New role
@@ -118,10 +125,17 @@ export type ScopeDetailsParams = {
 };
 
 export const toScopeDetails = (params: ScopeDetailsParams): string => {
-    const path = params.scopeId
-        ? "/:realm/clients/:id/authorization/scope/:scopeId"
-        : "/:realm/clients/:id/authorization/scope";
-    return generateEncodedPath(path, params as any);
+    if (params.scopeId) {
+        return generateEncodedPath("/:realm/clients/:id/authorization/scope/:scopeId", {
+            realm: params.realm,
+            id: params.id,
+            scopeId: params.scopeId
+        });
+    }
+    return generateEncodedPath("/:realm/clients/:id/authorization/scope", {
+        realm: params.realm,
+        id: params.id
+    });
 };
 
 // New resource (authorization)
@@ -138,10 +152,20 @@ export type ResourceDetailsParams = {
 };
 
 export const toResourceDetails = (params: ResourceDetailsParams): string => {
-    const path = params.resourceId
-        ? "/:realm/clients/:id/authorization/resource/:resourceId"
-        : "/:realm/clients/:id/authorization/resource";
-    return generateEncodedPath(path, params as any);
+    if (params.resourceId) {
+        return generateEncodedPath(
+            "/:realm/clients/:id/authorization/resource/:resourceId",
+            {
+                realm: params.realm,
+                id: params.id,
+                resourceId: params.resourceId
+            }
+        );
+    }
+    return generateEncodedPath("/:realm/clients/:id/authorization/resource", {
+        realm: params.realm,
+        id: params.id
+    });
 };
 
 // New permission (authorization)
@@ -155,10 +179,25 @@ export type NewPermissionParams = {
 };
 
 export const toNewPermission = (params: NewPermissionParams): string => {
-    const path = params.selectedId
-        ? "/:realm/clients/:id/authorization/permission/new/:permissionType/:selectedId"
-        : "/:realm/clients/:id/authorization/permission/new/:permissionType";
-    return generateEncodedPath(path, params as any);
+    if (params.selectedId) {
+        return generateEncodedPath(
+            "/:realm/clients/:id/authorization/permission/new/:permissionType/:selectedId",
+            {
+                realm: params.realm,
+                id: params.id,
+                permissionType: params.permissionType,
+                selectedId: params.selectedId
+            }
+        );
+    }
+    return generateEncodedPath(
+        "/:realm/clients/:id/authorization/permission/new/:permissionType",
+        {
+            realm: params.realm,
+            id: params.id,
+            permissionType: params.permissionType
+        }
+    );
 };
 
 // Permission details (authorization)
@@ -220,10 +259,25 @@ export type RegistrationProviderParams = {
 };
 
 export const toRegistrationProvider = (params: RegistrationProviderParams): string => {
-    const path = params.id
-        ? "/:realm/clients/client-registration/:subTab/:providerId/:id"
-        : "/:realm/clients/client-registration/:subTab/:providerId";
-    return generateEncodedPath(path, params as any);
+    if (params.id) {
+        return generateEncodedPath(
+            "/:realm/clients/client-registration/:subTab/:providerId/:id",
+            {
+                realm: params.realm,
+                subTab: params.subTab,
+                providerId: params.providerId,
+                id: params.id
+            }
+        );
+    }
+    return generateEncodedPath(
+        "/:realm/clients/client-registration/:subTab/:providerId",
+        {
+            realm: params.realm,
+            subTab: params.subTab,
+            providerId: params.providerId
+        }
+    );
 };
 
 // Mapper (dedicated scope)

@@ -21,7 +21,7 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { Database, Trash } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
     type ColumnDef,
@@ -29,49 +29,34 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import {
+    toCustomUserFederation,
+    toNewCustomUserFederation,
+    toUserFederationKerberos,
+    toUserFederationLdap
+} from "../../shared/lib/routes/user-federation";
 import { toUpperCase } from "../../shared/lib/util";
 import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+import { useDeleteComponent } from "./hooks/use-delete-component";
+import { useUserFederationList } from "./hooks/use-user-federation-list";
 import { ManagePriorityDialog } from "./manage-priority-dialog";
-import { toCustomUserFederation, toNewCustomUserFederation, toUserFederationKerberos, toUserFederationLdap } from "../../shared/lib/routes/user-federation";
 
-export default function UserFederationSection() {
-    const { adminClient } = useAdminClient();
+export function UserFederationSection() {
     const { t } = useTranslation();
     const { realm, realmRepresentation } = useRealm();
     const navigate = useNavigate();
 
-    const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
-    const [userFederations, setUserFederations] = useState<ComponentRepresentation[]>([]);
     const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
 
     const providers =
         useServerInfo().componentTypes?.["org.keycloak.storage.UserStorageProvider"] ??
         [];
 
-    useEffect(() => {
-        if (!realmRepresentation?.id) return;
-        let cancelled = false;
-        (async () => {
-            try {
-                const list = await adminClient.components.find({
-                    parent: realmRepresentation.id,
-                    type: "org.keycloak.storage.UserStorageProvider"
-                });
-                if (cancelled) return;
-                setUserFederations(list ?? []);
-            } catch {
-                if (!cancelled) setUserFederations([]);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, realmRepresentation?.id, adminClient]);
+    const { data: userFederations = [] } = useUserFederationList(realmRepresentation?.id);
+    const { mutateAsync: deleteComponentMut } = useDeleteComponent();
 
     const toDetails = useCallback(
         (providerId: string, id: string) => {
@@ -90,9 +75,8 @@ export default function UserFederationSection() {
     const onDeleteConfirm = async () => {
         if (!selectedComponent?.id) return;
         try {
-            await adminClient.components.del({ id: selectedComponent.id });
+            await deleteComponentMut(selectedComponent.id);
             setSelectedComponent(undefined);
-            refresh();
             toast.success(t("userFedDeletedSuccess"));
         } catch (error) {
             toast.error(

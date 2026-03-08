@@ -28,9 +28,16 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../../app/admin-client";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import { useParams } from "../../../../shared/lib/useParams";
+import { useCreateComponent } from "../../hooks/use-create-component";
+import { useDeleteComponent } from "../../hooks/use-delete-component";
+import { useSyncMappers } from "../../hooks/use-sync-mappers";
+import { useUpdateComponent } from "../../hooks/use-update-component";
+import {
+    toUserFederationLdap,
+    type UserFederationLdapMapperParams
+} from "../../../../shared/lib/routes/user-federation";
+import { useParams } from "../../../../shared/lib/use-params";
 import {
     convertFormValuesToObject,
     convertToFormValues
@@ -41,11 +48,9 @@ import {
     DynamicComponents
 } from "../../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { useLdapMapperDetail } from "../../api/use-ldap-mapper-detail";
-import { toUserFederationLdap, type UserFederationLdapMapperParams } from "../../../../shared/lib/routes/user-federation";
+import { useLdapMapperDetail } from "../../hooks/use-ldap-mapper-detail";
 
-export default function LdapMapperDetails() {
-    const { adminClient } = useAdminClient();
+export function LdapMapperDetails() {
 
     const form = useForm<ComponentRepresentation>();
     const [mapping, setMapping] = useState<ComponentRepresentation>();
@@ -61,6 +66,10 @@ export default function LdapMapperDetails() {
         id,
         mapperId
     );
+    const { mutateAsync: createComponentMut } = useCreateComponent();
+    const { mutateAsync: updateComponentMut } = useUpdateComponent();
+    const { mutateAsync: syncMappersMut } = useSyncMappers();
+    const { mutateAsync: deleteComponentMut } = useDeleteComponent();
     const refresh = () => {
         refetchMapperDetail();
     };
@@ -94,7 +103,7 @@ export default function LdapMapperDetails() {
 
         try {
             if (mapperId === "new") {
-                await adminClient.components.create(map);
+                await createComponentMut(map);
                 navigate({
                     to: toUserFederationLdap({
                         realm,
@@ -103,7 +112,7 @@ export default function LdapMapperDetails() {
                     }) as string
                 });
             } else {
-                await adminClient.components.update({ id: mapperId }, map);
+                await updateComponentMut({ id: mapperId, component: map });
             }
             setupForm(map as ComponentRepresentation);
             toast.success(
@@ -121,7 +130,7 @@ export default function LdapMapperDetails() {
 
     const sync = async (direction: DirectionType) => {
         try {
-            const result = await adminClient.userStorageProvider.mappersSync({
+            const result = await syncMappersMut({
                 parentId: mapping?.parentId || "",
                 id: mapperId,
                 direction
@@ -146,9 +155,7 @@ export default function LdapMapperDetails() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.components.del({
-                    id: mapping!.id!
-                });
+                await deleteComponentMut(mapping!.id!);
                 toast.success(t("mappingDeletedSuccess"));
                 navigate({
                     to: toUserFederationLdap({ id, realm, tab: "mappers" }) as string

@@ -11,15 +11,14 @@ import {
     KeycloakSpinner,
     setUserProfileServerError
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useUserProfileMetadata } from "./api/use-user-profile-metadata";
-import { toUserRepresentation, type UserFormFields } from "./form-state";
 import { toUser } from "../../shared/lib/routes/user";
+import { useCreateUser } from "./hooks/use-create-user";
+import { useUserProfileMetadata } from "./hooks/use-user-profile-metadata";
+import { toUserRepresentation, type UserFormFields } from "./form-state";
 import { UserForm } from "./user-form";
 
-export default function CreateUser() {
-    const { adminClient } = useAdminClient();
+export function CreateUser() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -27,10 +26,11 @@ export default function CreateUser() {
     const form = useForm<UserFormFields>({ mode: "onChange" });
     const [addedGroups, setAddedGroups] = useState<GroupRepresentation[]>([]);
     const { data: userProfileMetadata } = useUserProfileMetadata(realmName);
+    const { mutateAsync: createUserMut } = useCreateUser();
 
     const save = async (data: UserFormFields) => {
         try {
-            const createdUser = await adminClient.users.create({
+            const createdUser = await createUserMut({
                 ...toUserRepresentation(data),
                 groups: addedGroups.map(group => group.path!),
                 enabled: true

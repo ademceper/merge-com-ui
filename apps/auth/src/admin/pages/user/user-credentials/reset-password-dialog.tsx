@@ -10,8 +10,10 @@ import {
     getErrorMessage,
     PasswordInput
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import useToggle from "../../../shared/lib/useToggle";
+import { fetchUserCredentials } from "../../../api/users";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useResetPassword } from "../hooks/use-reset-password";
+import { useUpdateCredentialLabel } from "../hooks/use-update-credential-label";
 import {
     ConfirmDialogModal,
     useConfirmDialog
@@ -45,7 +47,6 @@ export const ResetPasswordDialog = ({
     refresh,
     onClose
 }: ResetPasswordDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<CredentialsForm>({
@@ -61,6 +62,8 @@ export const ResetPasswordDialog = ({
         setError
     } = form;
 
+    const { mutateAsync: resetPasswordMut } = useResetPassword(user.id!);
+    const { mutateAsync: updateLabelMut } = useUpdateCredentialLabel(user.id!);
     const [confirm, toggle] = useToggle(true);
     const password = watch("password", "");
     const passwordConfirmation = watch("passwordConfirmation", "");
@@ -76,32 +79,24 @@ export const ResetPasswordDialog = ({
 
     const saveUserPassword = async ({ password, temporaryPassword }: CredentialsForm) => {
         try {
-            await adminClient.users.resetPassword({
-                id: user.id!,
-                credential: {
-                    temporary: temporaryPassword,
-                    type: "password",
-                    value: password
-                }
+            await resetPasswordMut({
+                temporary: temporaryPassword,
+                type: "password",
+                value: password
             });
             if (temporaryPassword) {
                 onAddRequiredActions?.([RequiredActionAlias.UPDATE_PASSWORD]);
             }
-            const credentials = await adminClient.users.getCredentials({
-                id: user.id!
-            });
+            const credentials = await fetchUserCredentials(user.id!);
             const credentialLabel = credentials.find(c => c.type === "password");
             const isLocalCredential =
                 credentialLabel && credentialLabel.federationLink === undefined;
 
             if (isLocalCredential) {
-                await adminClient.users.updateCredentialLabel(
-                    {
-                        id: user.id!,
-                        credentialId: credentialLabel.id!
-                    },
-                    t("defaultPasswordLabel")
-                );
+                await updateLabelMut({
+                    credentialId: credentialLabel.id!,
+                    label: t("defaultPasswordLabel")
+                });
             }
             toast.success(
                 isResetPassword ? t("resetCredentialsSuccess") : t("savePasswordSuccess")

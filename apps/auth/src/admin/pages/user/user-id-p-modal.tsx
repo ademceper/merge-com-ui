@@ -18,7 +18,7 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { useAddFederatedIdentity } from "./hooks/use-add-federated-identity";
 
 type UserIdpModalProps = {
     userId: string;
@@ -33,7 +33,6 @@ export const UserIdpModal = ({
     onClose,
     onRefresh
 }: UserIdpModalProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<FederatedIdentityRepresentation>({
@@ -43,11 +42,11 @@ export const UserIdpModal = ({
         handleSubmit,
         formState: { isValid }
     } = form;
+    const { mutateAsync: addFederatedIdentityMut } = useAddFederatedIdentity(userId);
 
     const onSubmit = async (federatedIdentity: FederatedIdentityRepresentation) => {
         try {
-            await adminClient.users.addToFederatedIdentity({
-                id: userId,
+            await addFederatedIdentityMut({
                 federatedIdentityId: federatedId,
                 federatedIdentity
             });

@@ -9,12 +9,12 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useGenerateAndDownloadKey, useUploadCertificate } from "../hooks/use-key-operations";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useClientKeyInfo } from "../api/use-client-key-info";
+import { useClientKeyInfo } from "../hooks/use-client-key-info";
 import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";
 import { GenerateKeyDialog, getFileExtension } from "./generate-key-dialog";
@@ -35,9 +35,10 @@ export const Keys = ({
     refresh: refreshParent,
     hasConfigureAccess
 }: KeysProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: generateAndDownloadKey } = useGenerateAndDownloadKey();
+    const { mutateAsync: uploadCertificateMutation } = useUploadCertificate();
     const {
         control,
         getValues,
@@ -59,13 +60,11 @@ export const Keys = ({
 
     const generate = async (config: KeyStoreConfig) => {
         try {
-            const keyStore = await adminClient.clients.generateAndDownloadKey(
-                {
-                    id: clientId,
-                    attr
-                },
+            const keyStore = await generateAndDownloadKey({
+                clientId,
+                attr,
                 config
-            );
+            });
             saveAs(
                 new Blob([keyStore], { type: "application/octet-stream" }),
                 `keystore.${getFileExtension(config.format ?? "")}`
@@ -89,7 +88,7 @@ export const Keys = ({
             }
 
             formData.append("file", file);
-            await adminClient.clients.uploadCertificate({ id: clientId, attr }, formData);
+            await uploadCertificateMutation({ clientId, attr, formData });
             toast.success(t("importSuccess"));
             refresh();
         } catch (error) {

@@ -10,7 +10,7 @@ import {
     useFormContext
 } from "react-hook-form";
 import { FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { useRequiredActions } from "../api/use-required-actions";
+import { useRequiredActions } from "../hooks/use-required-actions";
 
 type RequiredActionMultiSelectProps<
     T extends FieldValues,
@@ -55,79 +55,78 @@ export const RequiredActionMultiSelect = <
                 render={({ field }) => {
                     const values = (field.value ?? []) as string[];
                     return (
-                    <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={open}
-                                className="min-h-9 w-full justify-between font-normal"
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    className="min-h-9 w-full justify-between font-normal"
+                                >
+                                    <span className="truncate">
+                                        {values.length > 0
+                                            ? values
+                                                  .map(
+                                                      (id: string) =>
+                                                          options.find(o => o.key === id)
+                                                              ?.value ?? id
+                                                  )
+                                                  .join(", ")
+                                            : t("requiredActionPlaceholder")}
+                                    </span>
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="w-(--radix-popover-trigger-width) p-0"
+                                align="start"
                             >
-                                <span className="truncate">
-                                    {values.length > 0
-                                        ? values
-                                              .map(
-                                                  (id: string) =>
-                                                      options.find(o => o.key === id)
-                                                          ?.value ?? id
-                                              )
-                                              .join(", ")
-                                        : t("requiredActionPlaceholder")}
-                                </span>
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                            className="w-(--radix-popover-trigger-width) p-0"
-                            align="start"
-                        >
-                            <ul className="max-h-[375px] overflow-auto py-1">
-                                {options.map(opt => {
-                                    const selected = values.includes(
-                                        opt.key
-                                    );
-                                    return (
-                                        <li
-                                            key={opt.key}
-                                            aria-selected={selected}
-                                            className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                            onMouseDown={e => e.preventDefault()}
+                                <ul className="max-h-[375px] overflow-auto py-1">
+                                    {options.map(opt => {
+                                        const selected = values.includes(opt.key);
+                                        return (
+                                            <li
+                                                key={opt.key}
+                                                aria-selected={selected}
+                                                className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                onMouseDown={e => e.preventDefault()}
+                                                onClick={() => {
+                                                    if (selected)
+                                                        field.onChange(
+                                                            values.filter(
+                                                                (x: string) =>
+                                                                    x !== opt.key
+                                                            )
+                                                        );
+                                                    else
+                                                        field.onChange([
+                                                            ...values,
+                                                            opt.key
+                                                        ]);
+                                                }}
+                                            >
+                                                {opt.value}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                                {values.length > 0 && (
+                                    <div className="border-t px-2 py-1">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-7 w-full justify-center"
                                             onClick={() => {
-                                                if (selected)
-                                                    field.onChange(
-                                                        values.filter(
-                                                            (x: string) => x !== opt.key
-                                                        )
-                                                    );
-                                                else
-                                                    field.onChange([
-                                                        ...values,
-                                                        opt.key
-                                                    ]);
+                                                field.onChange([]);
+                                                setOpen(false);
                                             }}
                                         >
-                                            {opt.value}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                            {values.length > 0 && (
-                                <div className="border-t px-2 py-1">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-7 w-full justify-center"
-                                        onClick={() => {
-                                            field.onChange([]);
-                                            setOpen(false);
-                                        }}
-                                    >
-                                        {t("clear")}
-                                    </Button>
-                                </div>
-                            )}
-                        </PopoverContent>
-                    </Popover>
+                                            {t("clear")}
+                                        </Button>
+                                    </div>
+                                )}
+                            </PopoverContent>
+                        </Popover>
                     );
                 }}
             />

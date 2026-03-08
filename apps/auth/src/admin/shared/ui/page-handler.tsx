@@ -2,7 +2,6 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,11 +11,12 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useHandlerData } from "../../pages/page/hooks/use-handler-data";
+import { useSavePageComponent } from "../../pages/page/hooks/use-save-page-component";
 import { type PAGE_PROVIDER, TAB_PROVIDER } from "../lib/page-constants";
 import { toPage } from "../lib/routes/page";
-import { useParams } from "../lib/useParams";
+import { useParams } from "../lib/use-params";
 import { DynamicComponents } from "./dynamic/dynamic-components";
 
 type PageHandlerProps = {
@@ -30,7 +30,6 @@ export const PageHandler = ({
     providerType,
     page: { id: providerId, ...page }
 }: PageHandlerProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<ComponentTypeRepresentation>();
@@ -40,20 +39,12 @@ export const PageHandler = ({
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const { data: pageHandlerData } = useQuery({
-        queryKey: ["pageHandler", id, providerId, providerType],
-        queryFn: async () =>
-            await Promise.all([
-                id ? adminClient.components.findOne({ id }) : Promise.resolve(),
-                providerType === TAB_PROVIDER
-                    ? adminClient.components.find({ type: TAB_PROVIDER })
-                    : Promise.resolve()
-            ])
-    });
+    const { data: pageHandlerData } = useHandlerData(id, providerType, providerId);
+    const { mutateAsync: saveComponentMut } = useSavePageComponent();
+
     useEffect(() => {
         if (!pageHandlerData) return;
-        const [data, tabs] = pageHandlerData;
-        const tab = (tabs || []).find(t => t.providerId === providerId);
+        const { data, tab } = pageHandlerData;
         form.reset(data || tab || {});
         if (tab) setId(tab.id);
         setIsLoading(false);
@@ -74,11 +65,12 @@ export const PageHandler = ({
                 providerType,
                 parentId: realm?.id
             };
-            if (id) {
-                await adminClient.components.update({ id }, updatedComponent);
-            } else {
-                const { id } = await adminClient.components.create(updatedComponent);
-                setId(id);
+            const result = await saveComponentMut({
+                id,
+                component: updatedComponent
+            });
+            if (!id && result.id) {
+                setId(result.id);
             }
             toast.success(t("itemSaveSuccessful"));
         } catch (error) {

@@ -9,8 +9,8 @@ import {
 import { PlusCircle } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toUpperCase } from "../../../shared/lib/util";
 import { type PermissionType, toNewPermission } from "../../../shared/lib/routes/clients";
+import { toUpperCase } from "../../../shared/lib/util";
 
 type EmptyButtonProps = {
     permissionType: PermissionType;

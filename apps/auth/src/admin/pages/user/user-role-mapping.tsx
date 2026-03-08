@@ -2,8 +2,8 @@ import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/def
 import { useTranslation } from "@merge-rd/i18n";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
+import { useAssignRoleMappings } from "./hooks/use-assign-role-mappings";
 
 type UserRoleMappingProps = {
     id: string;
@@ -11,29 +11,25 @@ type UserRoleMappingProps = {
 };
 
 export const UserRoleMapping = ({ id, name }: UserRoleMappingProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: assignRoleMappingsMut } = useAssignRoleMappings();
     const assignRoles = async (rows: Row[]) => {
         try {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
                 .flatMap(row => row.role as RoleMappingPayload);
-            await adminClient.users.addRealmRoleMappings({
-                id,
-                roles: realmRoles
+            const clientRoles = rows
+                .filter(row => row.client !== undefined)
+                .map(row => ({
+                    clientId: row.client!.id!,
+                    roles: [row.role as RoleMappingPayload]
+                }));
+            await assignRoleMappingsMut({
+                userId: id,
+                realmRoles,
+                clientRoles
             });
-            await Promise.all(
-                rows
-                    .filter(row => row.client !== undefined)
-                    .map(row =>
-                        adminClient.users.addClientRoleMappings({
-                            id,
-                            clientUniqueId: row.client!.id!,
-                            roles: [row.role as RoleMappingPayload]
-                        })
-                    )
-            );
             toast.success(t("userRoleMappingUpdatedSuccess"));
         } catch (error) {
             toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {

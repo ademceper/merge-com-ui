@@ -1,10 +1,9 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+import { useMoveGroup } from "./hooks/use-move-group";
 
 type MoveDialogProps = {
     source: GroupRepresentation;
@@ -12,24 +11,16 @@ type MoveDialogProps = {
     refresh: () => void;
 };
 
-const moveToRoot = (adminClient: KeycloakAdminClient, source: GroupRepresentation) =>
-    source.id ? adminClient.groups.updateRoot(source) : adminClient.groups.create(source);
-
-const moveToGroup = async (
-    adminClient: KeycloakAdminClient,
-    source: GroupRepresentation,
-    dest: GroupRepresentation
-) => adminClient.groups.updateChildGroup({ id: dest.id! }, source);
-
 export const MoveDialog = ({ source, onClose, refresh }: MoveDialogProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
+    const { mutateAsync: moveGroupMutation } = useMoveGroup();
 
     const moveGroup = async (group?: GroupRepresentation[]) => {
         try {
-            await (group
-                ? moveToGroup(adminClient, source, group[0])
-                : moveToRoot(adminClient, source));
+            await moveGroupMutation({
+                source,
+                dest: group ? group[0] : undefined
+            });
             refresh();
             toast.success(t("moveGroupSuccess"));
             onClose();

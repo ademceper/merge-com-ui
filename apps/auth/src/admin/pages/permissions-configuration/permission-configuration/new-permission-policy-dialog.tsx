@@ -22,8 +22,8 @@ import {
     SelectField,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreatePolicy } from "../hooks/use-create-policy";
 import { Aggregate } from "../../clients/authorization/policy/aggregate";
 import { Client } from "../../clients/authorization/policy/client";
 import {
@@ -95,9 +95,9 @@ export const NewPermissionPolicyDialog = ({
     toggleDialog,
     onAssign
 }: NewPermissionConfigurationDialogProps) => {
-    const { adminClient } = useAdminClient();
     const { realmRepresentation } = useRealm();
     const { t } = useTranslation();
+    const { mutateAsync: createPolicyMut } = useCreatePolicy(permissionClientId);
     const form = useForm<Policy>({
         mode: "onChange",
         defaultValues
@@ -149,10 +149,10 @@ export const NewPermissionPolicyDialog = ({
         };
 
         try {
-            const createdPolicy = await adminClient.clients.createPolicy(
-                { id: permissionClientId, type: policyTypeSelector! },
-                cleanedPolicy
-            );
+            const createdPolicy = await createPolicyMut({
+                type: policyTypeSelector!,
+                policy: cleanedPolicy
+            });
 
             onAssign(createdPolicy);
             toggleDialog();

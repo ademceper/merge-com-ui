@@ -59,11 +59,7 @@ export const RealmContextProvider = ({ children }: PropsWithChildren) => {
         return <KeycloakSpinner />;
     }
 
-    return (
-        <RealmContext.Provider value={value}>
-            {children}
-        </RealmContext.Provider>
-    );
+    return <RealmContext.Provider value={value}>{children}</RealmContext.Provider>;
 };
 
 export const useRealm = () => useRequiredContext(RealmContext);

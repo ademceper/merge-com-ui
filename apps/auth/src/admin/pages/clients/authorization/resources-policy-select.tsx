@@ -22,16 +22,17 @@ import {
     useWatch
 } from "react-hook-form";
 import { SelectVariant } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
-import useToggle from "../../../shared/lib/useToggle";
+import {
+    toCreatePolicy,
+    toPolicyDetails,
+    toResourceDetails
+} from "../../../shared/lib/routes/clients";
+import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { toCreatePolicy } from "../../../shared/lib/routes/clients";
-import { toPolicyDetails } from "../../../shared/lib/routes/clients";
-import { toResourceDetails } from "../../../shared/lib/routes/clients";
-import { useResourcesPolicySelectItems } from "./api/use-resources-policy-select-items";
-import { useSelectedItems } from "./api/use-selected-items";
+import { useResourcesPolicySelectItems } from "./hooks/use-resources-policy-select-items";
+import { useSelectedItems } from "./hooks/use-selected-items";
 import { NewPolicyDialog } from "./new-policy-dialog";
 
 type Type = "resources" | "policies";
@@ -81,7 +82,6 @@ export const ResourcesPolicySelect = ({
     preSelected,
     isRequired = false
 }: ResourcesPolicySelectProps) => {
-    const { adminClient } = useAdminClient();
 
     const { realm } = useRealm();
     const { t } = useTranslation();
@@ -151,7 +151,11 @@ export const ResourcesPolicySelect = ({
 
     useEffect(() => {
         if (selectedItemsData) {
-            setSelected((selectedItemsData as any[]).map(r => convert(r)));
+            setSelected(
+                (
+                    selectedItemsData as (PolicyRepresentation | ResourceRepresentation)[]
+                ).map(r => convert(r))
+            );
         }
     }, [selectedItemsData]);
 

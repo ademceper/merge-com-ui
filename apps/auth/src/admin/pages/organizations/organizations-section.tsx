@@ -44,18 +44,18 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useCreateOrganization } from "./api/use-create-organization";
-import { useDeleteOrganization } from "./api/use-delete-organization";
-import { useOrganizations } from "./api/use-organizations";
+import { useCreateOrganization } from "./hooks/use-create-organization";
+import { useDeleteOrganization } from "./hooks/use-delete-organization";
+import { useOrganizations } from "./hooks/use-organizations";
 import {
     convertToOrg,
     OrganizationForm,
     type OrganizationFormType
 } from "./organization-form";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
 
-export default function OrganizationSection() {
+export function OrganizationSection() {
     const { realm } = useRealm();
     const { t } = useTranslation();
     const navigate = useNavigate();

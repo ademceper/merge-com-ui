@@ -2,7 +2,7 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -11,24 +11,28 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useParams } from "../../shared/lib/use-params";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { KerberosSettingsRequired } from "./kerberos/kerberos-settings-required";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useComponentDetail } from "./hooks/use-component-detail";
+import { useCreateComponent } from "./hooks/use-create-component";
+import { useUpdateComponent } from "./hooks/use-update-component";
 import { Header } from "./shared/header";
 import { SettingsCache } from "./shared/settings-cache";
 
-export default function UserFederationKerberosSettings() {
-    const { adminClient } = useAdminClient();
+export function UserFederationKerberosSettings() {
     const { t } = useTranslation();
     const form = useForm<ComponentRepresentation>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
     const { id } = useParams<{ id?: string }>();
-    const [loading, setLoading] = useState(!!id);
+
+    const { data: fetchedComponent, isLoading } = useComponentDetail(id);
+    const { mutateAsync: createComponentMut } = useCreateComponent();
+    const { mutateAsync: updateComponentMut } = useUpdateComponent();
 
     const setupForm = useCallback(
         (component: ComponentRepresentation) => {
@@ -38,34 +42,18 @@ export default function UserFederationKerberosSettings() {
     );
 
     useEffect(() => {
-        if (!id) {
-            setLoading(false);
-            return;
+        if (fetchedComponent) {
+            setupForm(fetchedComponent);
         }
-        let cancelled = false;
-        adminClient.components
-            .findOne({ id })
-            .then(data => {
-                if (!cancelled && data) setupForm(data);
-            })
-            .catch(() => {
-                if (!cancelled) setLoading(false);
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false);
-            });
-        return () => {
-            cancelled = true;
-        };
-    }, [id, adminClient, setupForm]);
+    }, [fetchedComponent, setupForm]);
 
     const save = async (component: ComponentRepresentation) => {
         try {
             if (!id) {
-                await adminClient.components.create(component);
+                await createComponentMut(component);
                 navigate({ to: `/${realm}/user-federation` as string });
             } else {
-                await adminClient.components.update({ id }, component);
+                await updateComponentMut({ id, component });
             }
             setupForm(component as ComponentRepresentation);
             toast.success(
@@ -81,7 +69,7 @@ export default function UserFederationKerberosSettings() {
         }
     };
 
-    if (loading) {
+    if (isLoading) {
         return <KeycloakSpinner />;
     }
 

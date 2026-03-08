@@ -81,13 +81,21 @@ export const ConfirmDialogModal = ({
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {t(titleKey, titleKeyVariables as any) as React.ReactNode}
+                        {
+                            t(
+                                titleKey,
+                                titleKeyVariables as Record<string, string>
+                            ) as React.ReactNode
+                        }
                     </DialogTitle>
                 </DialogHeader>
                 <div className="py-2 break-all whitespace-pre-wrap">
                     {!messageKey && children}
                     {messageKey &&
-                        (t(messageKey, messageKeyVariables as any) as React.ReactNode)}
+                        (t(
+                            messageKey,
+                            messageKeyVariables as Record<string, string>
+                        ) as React.ReactNode)}
                 </div>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">

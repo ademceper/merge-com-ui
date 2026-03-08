@@ -30,7 +30,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { usePartialImport } from "./hooks/use-partial-import";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { JsonFileUpload } from "../../shared/ui/json-file-upload/json-file-upload";
 
@@ -61,10 +61,10 @@ const INITIAL_RESOURCES: Readonly<ResourceChecked> = {
 };
 
 export const PartialImportDialog = (props: PartialImportProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: partialImportMut } = usePartialImport();
 
     const [importedFile, setImportedFile] = useState<ImportedMultiRealm>();
     const isFileSelected = !!importedFile;
@@ -216,10 +216,7 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         setImportInProgress(true);
 
         try {
-            const importResults = await adminClient.realms.partialImport({
-                realm,
-                rep: jsonForImport()
-            });
+            const importResults = await partialImportMut(jsonForImport());
             setImportResponse(importResults);
         } catch (error) {
             toast.error(t("importFail", { error: getErrorMessage(error) }), {

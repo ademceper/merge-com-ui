@@ -34,13 +34,15 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useFetchPermissionsByResource, useDeleteResource } from "./hooks/use-authorization-mutations";
+import {
+    toCreateResource,
+    toNewPermission,
+    toResourceDetails
+} from "../../../shared/lib/routes/clients";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { toNewPermission } from "../../../shared/lib/routes/clients";
-import { toCreateResource } from "../../../shared/lib/routes/clients";
-import { toResourceDetails } from "../../../shared/lib/routes/clients";
-import { useResources as useResourcesQuery } from "./api/use-resources";
+import { useResources as useResourcesQuery } from "./hooks/use-resources";
 import { DetailCell } from "./detail-cell";
 import { MoreLabel } from "./more-label";
 import { SearchDropdown, type SearchForm } from "./search-dropdown";
@@ -64,10 +66,11 @@ export const AuthorizationResources = ({
     clientId,
     isDisabled = false
 }: ResourcesProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: fetchPermissionsByResource } = useFetchPermissionsByResource();
+    const { mutateAsync: deleteResourceMutation } = useDeleteResource();
 
     const [resources, setResources] = useState<ExpandableResourceRepresentation[]>();
     const [selectedResource, setSelectedResource] = useState<ResourceRepresentation>();
@@ -96,10 +99,7 @@ export const AuthorizationResources = ({
     }, [resourcesData]);
 
     const fetchPermissions = async (id: string) => {
-        return adminClient.clients.listPermissionsByResource({
-            id: clientId,
-            resourceId: id
-        });
+        return fetchPermissionsByResource({ clientId, resourceId: id });
     };
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
@@ -124,8 +124,8 @@ export const AuthorizationResources = ({
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delResource({
-                    id: clientId,
+                await deleteResourceMutation({
+                    clientId,
                     resourceId: selectedResource?._id!
                 });
                 toast.success(t("resourceDeletedSuccess"));

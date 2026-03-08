@@ -1,7 +1,8 @@
 import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
-export const Route = createFileRoute(
-    "/_app/$realm/identity-providers/oauth2/add",
-)({
-    component: lazyRouteComponent(() => import("../../../../../pages/identity-providers/add/add-o-auth2")),
+export const Route = createFileRoute("/_app/$realm/identity-providers/oauth2/add")({
+    component: lazyRouteComponent(
+        () => import("../../../../../pages/identity-providers/add/add-o-auth2"),
+        "AddOpenIdConnect"
+    )
 });

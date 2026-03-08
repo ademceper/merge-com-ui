@@ -21,11 +21,11 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { TextControl } from "../../shared/keycloak-ui-shared";
 import { useRealm } from "../app/providers/realm-context/realm-context";
-import { useEventsConfig } from "../pages/events/api/use-events-config";
-import { useUserEvents } from "../pages/events/api/use-user-events";
+import { useEventsConfig } from "../pages/events/hooks/use-events-config";
+import { useUserEvents } from "../pages/events/hooks/use-user-events";
 import { toUser } from "../shared/lib/routes/user";
-import useFormatDate, { FORMAT_DATE_AND_TIME } from "../shared/lib/useFormatDate";
-import useLocaleSort from "../shared/lib/useLocaleSort";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "../shared/lib/use-format-date";
+import { useLocaleSort } from "../shared/lib/use-locale-sort";
 import { EventsBanners } from "./banners";
 
 type UserEventSearchForm = {

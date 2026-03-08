@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 // Client Scopes list
 type ClientScopesParams = { realm: string };

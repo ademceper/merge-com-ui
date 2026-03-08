@@ -4,8 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/component
 import { useNavigate } from "@tanstack/react-router";
 import JSZip from "jszip";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import { type ThemesTabType, toThemesTab } from "../../../shared/lib/routes/realm-settings";
+import {
+    type ThemesTabType,
+    toThemesTab
+} from "../../../shared/lib/routes/realm-settings";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
 import { LogoContext } from "./logo-context";
 import { ThemeColors } from "./theme-colors";
 import { ThemeSettingsTab } from "./theme-settings";
@@ -23,7 +26,7 @@ export type ThemeRealmRepresentation = RealmRepresentation & {
     bgimage?: File;
 };
 
-export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTabProps) {
+export function ThemesTab({ realm, save, subTab = "settings" }: ThemesTabProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm: realmName } = useRealm();

@@ -12,7 +12,7 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import useToggle from "../../../../shared/lib/useToggle";
+import { useToggle } from "../../../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import type { DefaultValue } from "../../../../shared/ui/key-value-form/key-value-input";
 import type { IndexedValidations } from "../../new-attribute-settings";

@@ -1,12 +1,17 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 export type AuthenticationTab = "flows" | "required-actions" | "policies";
 
 type AuthenticationParams = { realm: string; tab?: AuthenticationTab };
 
 export const toAuthentication = (params: AuthenticationParams): string => {
-    const path = params.tab ? "/:realm/authentication/:tab" : "/:realm/authentication";
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath("/:realm/authentication/:tab", {
+            realm: params.realm,
+            tab: params.tab
+        });
+    }
+    return generateEncodedPath("/:realm/authentication", { realm: params.realm });
 };
 
 type CreateFlowParams = { realm: string };
@@ -22,8 +27,17 @@ export type FlowParams = {
 };
 
 export const toFlow = (params: FlowParams): string => {
-    const path = params.builtIn
-        ? "/:realm/authentication/:id/:usedBy/:builtIn"
-        : "/:realm/authentication/:id/:usedBy";
-    return generateEncodedPath(path, params as any);
+    if (params.builtIn) {
+        return generateEncodedPath("/:realm/authentication/:id/:usedBy/:builtIn", {
+            realm: params.realm,
+            id: params.id,
+            usedBy: params.usedBy,
+            builtIn: params.builtIn
+        });
+    }
+    return generateEncodedPath("/:realm/authentication/:id/:usedBy", {
+        realm: params.realm,
+        id: params.id,
+        usedBy: params.usedBy
+    });
 };

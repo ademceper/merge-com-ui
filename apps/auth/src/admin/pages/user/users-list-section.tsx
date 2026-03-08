@@ -12,6 +12,7 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,31 +22,33 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { toUser } from "../../shared/lib/routes/user";
 import { emptyFormatter } from "../../shared/lib/util";
 import { AddUserDialog } from "./add-user-dialog";
-import { useUsers } from "./api/use-users";
+import { userKeys } from "./hooks/keys";
+import { useDeleteUser } from "./hooks/use-delete-user";
+import { useUsers } from "./hooks/use-users";
 import { EditUserDialog } from "./edit-user-dialog";
-import { toUser } from "../../shared/lib/routes/user";
 
 export function UsersListSection() {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
     const { hasAccess } = useAccess();
     const canManage = hasAccess("manage-users");
 
-    const { data: users = [], refetch } = useUsers();
-    const refresh = () => refetch();
+    const queryClient = useQueryClient();
+    const { data: users = [] } = useUsers();
+    const { mutateAsync: deleteUserMut } = useDeleteUser();
+    const refresh = () => queryClient.invalidateQueries({ queryKey: userKeys.lists() });
     const [selectedUser, setSelectedUser] = useState<UserRepresentation | undefined>();
     const [editUserId, setEditUserId] = useState<string | null>(null);
 
     const onDeleteConfirm = async () => {
         if (!selectedUser?.id) return;
         try {
-            await adminClient.users.del({ id: selectedUser.id });
+            await deleteUserMut(selectedUser.id);
             toast.success(t("userDeletedSuccess"));
             setSelectedUser(undefined);
             refresh();

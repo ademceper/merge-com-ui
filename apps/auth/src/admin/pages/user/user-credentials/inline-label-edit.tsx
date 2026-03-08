@@ -9,7 +9,7 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { useUpdateCredentialLabel } from "../hooks/use-update-credential-label";
 
 type UserLabelForm = {
     userLabel: string;
@@ -28,19 +28,16 @@ export const InlineLabelEdit = ({
     isEditable,
     toggle
 }: InlineLabelEditProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { register, handleSubmit } = useForm<UserLabelForm>();
+    const { mutateAsync: updateLabelMut } = useUpdateCredentialLabel(userId);
     const saveUserLabel = async (userLabel: UserLabelForm) => {
         try {
-            await adminClient.users.updateCredentialLabel(
-                {
-                    id: userId,
-                    credentialId: credential.id!
-                },
-                userLabel.userLabel || ""
-            );
+            await updateLabelMut({
+                credentialId: credential.id!,
+                label: userLabel.userLabel || ""
+            });
             toast.success(t("updateCredentialUserLabelSuccess"));
             toggle();
         } catch (error) {

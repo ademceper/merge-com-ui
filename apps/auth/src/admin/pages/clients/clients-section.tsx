@@ -14,33 +14,35 @@ import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
     type ColumnDef,
     DataTable,
-    DataTableRowActions
+    DataTableRowActions,
+    type Row
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
+import type { ClientRegistrationTab, ClientsTab } from "../../shared/lib/routes/clients";
+import {
+    toClient,
+    toClientRegistration,
+    toClients
+} from "../../shared/lib/routes/clients";
+import { translationFormatter } from "../../shared/lib/translation-formatter";
 import { exportClient } from "../../shared/lib/util";
 import { AddClientDialog } from "./add/add-client-dialog";
-import { useClients } from "./api/use-clients";
+import { useClients } from "./hooks/use-clients";
+import { useDeleteClient } from "./hooks/use-delete-client";
 import { InitialAccessTokenList } from "./initial-access/initial-access-token-list";
 import { ClientRegistration } from "./registration/client-registration";
-import { toClient } from "../../shared/lib/routes/clients";
-import type { ClientRegistrationTab } from "../../shared/lib/routes/clients";
-import { toClientRegistration } from "../../shared/lib/routes/clients";
-import type { ClientsTab } from "../../shared/lib/routes/clients";
-import { toClients } from "../../shared/lib/routes/clients";
 import { getProtocolName, isRealmClient } from "./utils";
 
-export default function ClientsSection() {
-    const { adminClient } = useAdminClient();
+export function ClientsSection() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -50,120 +52,136 @@ export default function ClientsSection() {
         subTab?: string;
     };
 
-    const { data: clients = [], refetch } = useClients();
+    const { data: clients = [] } = useClients();
     const [selectedClient, setSelectedClient] = useState<ClientRepresentation>();
+    const { mutateAsync: deleteClient } = useDeleteClient();
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients");
 
-    const onDeleteConfirm = async () => {
+    const onDeleteConfirm = useCallback(async () => {
         if (!selectedClient?.id) return;
         try {
-            await adminClient.clients.del({ id: selectedClient.id });
+            await deleteClient(selectedClient.id);
             setSelectedClient(undefined);
             toast.success(t("clientDeletedSuccess"));
-            refetch();
         } catch (error) {
             toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), {
                 description: getErrorDescription(error)
             });
         }
-    };
+    }, [selectedClient?.id, deleteClient, t]);
 
-    const columns: ColumnDef<ClientRepresentation>[] = [
-        {
-            accessorKey: "clientId",
-            header: t("clientId"),
-            cell: ({ row }) => (
-                <span className="flex items-center gap-2">
-                    <Link
-                        to={
-                            toClient({
-                                realm,
-                                clientId: row.original.id!,
-                                tab: "settings"
-                            }) as string
-                        }
-                        className="text-primary hover:underline"
-                    >
-                        {row.original.clientId}
-                    </Link>
-                    {!row.original.enabled && (
-                        <Badge variant="secondary">{t("disabled")}</Badge>
-                    )}
-                </span>
-            )
-        },
-        {
-            accessorKey: "name",
-            header: t("clientName"),
-            cell: ({ row }) =>
-                (translationFormatter(t)(row.original.name) as string) || "-"
-        },
-        {
-            accessorKey: "protocol",
-            header: t("type"),
-            cell: ({ row }) =>
-                getProtocolName(t, row.original.protocol ?? "openid-connect")
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => row.original.description || "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => {
-                const client = row.original;
-                const canDelete =
-                    !isRealmClient(client) && (isManager || client.access?.configure);
-                return (
-                    <DataTableRowActions row={row}>
-                        <button
-                            type="button"
-                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                            onClick={() =>
-                                navigate({
-                                    to: toClient({
-                                        realm,
-                                        clientId: client.id!,
-                                        tab: "settings"
-                                    }) as string
-                                })
+    const columns: ColumnDef<ClientRepresentation>[] = useMemo(
+        () => [
+            {
+                accessorKey: "clientId",
+                header: t("clientId"),
+                cell: ({ row }) => (
+                    <span className="flex items-center gap-2">
+                        <Link
+                            to={
+                                toClient({
+                                    realm,
+                                    clientId: row.original.id ?? "",
+                                    tab: "settings"
+                                }) as string
                             }
+                            className="text-primary hover:underline"
                         >
-                            <PencilSimple className="size-4 shrink-0" />
-                            {t("edit")}
-                        </button>
-                        <button
-                            type="button"
-                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                            onClick={() => exportClient(client)}
-                        >
-                            <DownloadSimple className="size-4 shrink-0" />
-                            {t("export")}
-                        </button>
-                        {canDelete && (
-                            <>
-                                <div className="my-1 h-px bg-border" />
-                                <button
-                                    type="button"
-                                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                    onClick={() => setSelectedClient(client)}
-                                >
-                                    <Trash className="size-4 shrink-0" />
-                                    {t("delete")}
-                                </button>
-                            </>
+                            {row.original.clientId}
+                        </Link>
+                        {!row.original.enabled && (
+                            <Badge variant="secondary">{t("disabled")}</Badge>
                         )}
-                    </DataTableRowActions>
-                );
+                    </span>
+                )
+            },
+            {
+                accessorKey: "name",
+                header: t("clientName"),
+                cell: ({ row }) =>
+                    (translationFormatter(t)(row.original.name) as string) || "-"
+            },
+            {
+                accessorKey: "protocol",
+                header: t("type"),
+                cell: ({ row }) =>
+                    getProtocolName(t, row.original.protocol ?? "openid-connect")
+            },
+            {
+                accessorKey: "description",
+                header: t("description"),
+                cell: ({ row }) => row.original.description || "-"
+            },
+            {
+                id: "actions",
+                header: "",
+                size: 50,
+                enableHiding: false,
+                cell: ({ row }) => {
+                    const client = row.original;
+                    const canDelete =
+                        !isRealmClient(client) && (isManager || client.access?.configure);
+                    return (
+                        <DataTableRowActions row={row}>
+                            <button
+                                type="button"
+                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                onClick={() =>
+                                    navigate({
+                                        to: toClient({
+                                            realm,
+                                            clientId: client.id ?? "",
+                                            tab: "settings"
+                                        }) as string
+                                    })
+                                }
+                            >
+                                <PencilSimple className="size-4 shrink-0" />
+                                {t("edit")}
+                            </button>
+                            <button
+                                type="button"
+                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                onClick={() => exportClient(client)}
+                            >
+                                <DownloadSimple className="size-4 shrink-0" />
+                                {t("export")}
+                            </button>
+                            {canDelete && (
+                                <>
+                                    <div className="my-1 h-px bg-border" />
+                                    <button
+                                        type="button"
+                                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        onClick={() => setSelectedClient(client)}
+                                    >
+                                        <Trash className="size-4 shrink-0" />
+                                        {t("delete")}
+                                    </button>
+                                </>
+                            )}
+                        </DataTableRowActions>
+                    );
+                }
             }
-        }
-    ];
+        ],
+        [t, realm, isManager, navigate]
+    );
+
+    const handleRowClick = useCallback(
+        (row: Row<ClientRepresentation>) => {
+            navigate({
+                to: toClient({
+                    realm,
+                    clientId: row.original.id ?? "",
+                    tab: "settings"
+                }) as string
+            });
+        },
+        [navigate, realm]
+    );
 
     const isClientRegistration = Boolean(subTab);
     const clientRegistrationTab: ClientRegistrationTab =
@@ -228,15 +246,7 @@ export default function ClientsSection() {
                         searchColumnId="clientId"
                         searchPlaceholder={t("searchForClient")}
                         emptyMessage={t("noClients")}
-                        onRowClick={row =>
-                            navigate({
-                                to: toClient({
-                                    realm,
-                                    clientId: row.original.id!,
-                                    tab: "settings"
-                                }) as string
-                            })
-                        }
+                        onRowClick={handleRowClick}
                         toolbar={
                             <AddClientDialog
                                 trigger={

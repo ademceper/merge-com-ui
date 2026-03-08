@@ -14,7 +14,7 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { useAddClusterNode } from "../hooks/use-cluster-nodes";
 
 type FormFields = {
     node: string;
@@ -33,9 +33,9 @@ export const AddHostDialog = ({
     onAdded,
     onClose
 }: AddHostDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: addClusterNode } = useAddClusterNode();
     const form = useForm<FormFields>();
     const {
         handleSubmit,
@@ -43,10 +43,7 @@ export const AddHostDialog = ({
     } = form;
     async function onSubmit({ node }: FormFields) {
         try {
-            await adminClient.clients.addClusterNode({
-                id,
-                node
-            });
+            await addClusterNode({ clientId: id, node });
             onAdded(node);
             toast.success(t("addedNodeSuccess"));
         } catch (error) {

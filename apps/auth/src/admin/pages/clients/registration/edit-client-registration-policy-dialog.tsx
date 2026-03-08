@@ -16,8 +16,8 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useUpdateComponent } from "../hooks/use-component-operations";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -38,10 +38,10 @@ export function EditClientRegistrationPolicyDialog({
     onClose,
     onSuccess
 }: EditClientRegistrationPolicyDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realmRepresentation } = useRealm();
     const serverInfo = useServerInfo();
+    const { mutateAsync: updateComponentMutation } = useUpdateComponent();
     const [saving, setSaving] = useState(false);
 
     const provider = useMemo(() => {
@@ -76,7 +76,7 @@ export function EditClientRegistrationPolicyDialog({
                 providerType: POLICY_TYPE,
                 providerId: policy.providerId
             };
-            await adminClient.components.update({ id: policy.id }, updatedComponent);
+            await updateComponentMutation({ id: policy.id, component: updatedComponent });
             toast.success(t("providerUpdatedSuccess"));
             onClose();
             onSuccess();

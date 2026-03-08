@@ -2,7 +2,7 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { importFromUrlFormData } from "../../../api/identity-providers";
 import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
 import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
 import { DiscoverySettings } from "./discovery-settings";
@@ -12,7 +12,6 @@ type OpenIdConnectSettingsProps = {
 };
 
 export const OpenIdConnectSettings = ({ isOIDC }: OpenIdConnectSettingsProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const id = "oidc";
@@ -39,7 +38,7 @@ export const OpenIdConnectSettings = ({ isOIDC }: OpenIdConnectSettingsProps) =>
         formData.append("file", new Blob([JSON.stringify(obj)]));
 
         try {
-            const result = await adminClient.identityProviders.importFromUrl(formData);
+            const result = await importFromUrlFormData(formData);
             setupForm(result);
         } catch (error) {
             setError("discoveryError", {

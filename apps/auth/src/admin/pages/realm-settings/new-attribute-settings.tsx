@@ -14,13 +14,16 @@ import {
     getErrorMessage,
     ScrollForm
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    type AttributeParams,
+    toUserProfile
+} from "../../shared/lib/routes/realm-settings";
+import { useParams } from "../../shared/lib/use-params";
 import { convertToFormValues } from "../../shared/lib/util";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import type { TranslationForm } from "./add-translation-modal";
-import { useUserProfileConfigGlobal } from "./api/use-user-profile-config-global";
-import { type AttributeParams, toUserProfile } from "../../shared/lib/routes/realm-settings";
+import { useUpdateUserProfile } from "./hooks/use-update-user-profile";
+import { useUserProfileConfigGlobal } from "./hooks/use-user-profile-config-global";
 import { AttributeAnnotations } from "./user-profile/attribute/attribute-annotations";
 import { AttributeGeneralSettings } from "./user-profile/attribute/attribute-general-settings";
 import { AttributePermission } from "./user-profile/attribute/attribute-permission";
@@ -121,12 +124,12 @@ const CreateAttributeFormContent = ({
     );
 };
 
-export default function NewAttributeSettings() {
-    const { adminClient } = useAdminClient();
+export function NewAttributeSettings() {
     const { realm: realmName, attributeName } = useParams<AttributeParams>();
     const form = useForm<UserProfileAttributeFormFields>();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { mutateAsync: updateUserProfileMut } = useUpdateUserProfile();
     const [config, setConfig] = useState<UserProfileConfig | null>(null);
     const editMode = !!attributeName;
 
@@ -254,7 +257,7 @@ export default function NewAttributeSettings() {
         try {
             const updatedAttributes = editMode ? patchAttributes() : addAttribute();
 
-            await adminClient.users.updateProfile({
+            await updateUserProfileMut({
                 ...config,
                 attributes: updatedAttributes as UserProfileAttribute[],
                 realm: realmName
@@ -263,7 +266,6 @@ export default function NewAttributeSettings() {
             if (formFields.translation) {
                 try {
                     await saveTranslations({
-                        adminClient,
                         realmName,
                         translationsData: {
                             translation: formFields.translation

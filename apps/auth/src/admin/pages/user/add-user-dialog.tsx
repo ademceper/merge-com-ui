@@ -15,8 +15,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { TextControl } from "../../../shared/keycloak-ui-shared/controls/text-control";
-import { useAdminClient } from "../../app/admin-client";
 import { emailRegexPattern } from "../../shared/lib/util";
+import { useCreateUser } from "./hooks/use-create-user";
 import { FormAccess } from "../../shared/ui/form/form-access";
 
 const FORM_ID = "add-user-form";
@@ -34,11 +34,11 @@ type AddUserDialogProps = {
 };
 
 export function AddUserDialog({ trigger, onSuccess }: AddUserDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
     const form = useForm<AddUserFormFields>({ mode: "onChange" });
+    const { mutateAsync: createUserMut } = useCreateUser();
 
     const onSubmit = async (values: AddUserFormFields) => {
         const user: UserRepresentation = {
@@ -49,7 +49,7 @@ export function AddUserDialog({ trigger, onSuccess }: AddUserDialogProps) {
             enabled: true
         };
         try {
-            await adminClient.users.create(user);
+            await createUserMut(user);
             toast.success(t("userCreated"));
             setOpen(false);
             form.reset();

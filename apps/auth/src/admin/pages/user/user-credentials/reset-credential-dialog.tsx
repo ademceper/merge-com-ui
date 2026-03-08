@@ -7,8 +7,8 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useExecuteActionsEmail } from "../hooks/use-execute-actions-email";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { LifespanField } from "./lifespan-field";
 import { RequiredActionMultiSelect } from "./required-action-multi-select";
@@ -27,7 +27,6 @@ export const ResetCredentialDialog = ({
     userId,
     onClose
 }: ResetCredentialDialogProps) => {
-    const { adminClient } = useAdminClient();
     const { realmRepresentation: realm } = useRealm();
     const { t } = useTranslation();
     const form = useForm<CredentialResetForm>({
@@ -37,6 +36,7 @@ export const ResetCredentialDialog = ({
         }
     });
     const { handleSubmit, control } = form;
+    const { mutateAsync: executeActionsEmailMut } = useExecuteActionsEmail();
 
     const resetActionWatcher = useWatch({
         control,
@@ -52,8 +52,8 @@ export const ResetCredentialDialog = ({
         }
 
         try {
-            await adminClient.users.executeActionsEmail({
-                id: userId,
+            await executeActionsEmailMut({
+                userId,
                 actions,
                 lifespan
             });

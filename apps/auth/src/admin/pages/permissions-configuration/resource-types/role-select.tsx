@@ -22,7 +22,7 @@ import {
     type FilterType
 } from "../../../shared/ui/role-mapping/add-role-mapping-modal";
 import { type Row, ServiceRole } from "../../../shared/ui/role-mapping/role-mapping";
-import { useRoleDetails } from "../api/use-role-details";
+import { useRoleDetails } from "../hooks/use-role-details";
 
 type RoleSelectorProps = {
     name: string;

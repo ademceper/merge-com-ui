@@ -1,30 +1,27 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import { useQueryClient } from "@tanstack/react-query";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
+import { useUpdateAdminPermissionsClient } from "./hooks/use-update-admin-permissions-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
 import { ConfirmDialogModal } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { AuthorizationPolicies } from "../clients/authorization/policies";
 import type { FormFields, SaveOptions } from "../clients/client-details";
-import { permissionsKeys } from "./api/keys";
-import { useAdminPermissionsClient } from "./api/use-admin-permissions-client";
+import { useAdminPermissionsClient } from "./hooks/use-admin-permissions-client";
 import { PermissionsConfigurationTab } from "./permission-configuration/permissions-configuration-tab";
 import { PermissionsEvaluationTab } from "./permission-evaluation/permissions-evaluation-tab";
 
-export default function PermissionsConfigurationSection() {
-    const { adminClient } = useAdminClient();
+export function PermissionsConfigurationSection() {
     const { t } = useTranslation();
     const { hasAccess } = useAccess();
     const { tab } = useParams<{ tab?: string }>();
-    const queryClient = useQueryClient();
     const { data: adminPermissionsClient } = useAdminPermissionsClient();
+    const { mutateAsync: updatePermissionsClient } = useUpdateAdminPermissionsClient();
     const [changeAuthenticatorOpen, toggleChangeAuthenticatorOpen] = useToggle();
     const form = useForm<FormFields>();
     useRealm();
@@ -74,12 +71,11 @@ export default function PermissionsConfigurationSection() {
 
             newClient.clientId = newClient.clientId?.trim();
 
-            await adminClient.clients.update(
-                { id: adminPermissionsClient!.clientId! },
-                newClient
-            );
+            await updatePermissionsClient({
+                client: adminPermissionsClient!,
+                updates: newClient
+            });
             setupForm(newClient);
-            await queryClient.invalidateQueries({ queryKey: permissionsKeys.adminPermissionsClient() });
             toast.success(t(messageKey));
         } catch (error) {
             toast.error(t("clientSaveError", { error: getErrorMessage(error) }), {

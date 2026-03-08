@@ -1,5 +1,4 @@
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
-import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
@@ -19,27 +18,26 @@ import {
     KeycloakSpinner,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
+import type { ClientScopeParams } from "../../shared/lib/routes/client-scopes";
+import { toClientScopes, toMapper } from "../../shared/lib/routes/client-scopes";
+import { useParams } from "../../shared/lib/use-params";
 import { convertFormValuesToObject } from "../../shared/lib/util";
-import {
-    type ClientScopeDefaultOptionalType,
-    changeScope
-} from "../../shared/ui/client-scope/client-scope-types";
+import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
 import { AdminEvents } from "../events/admin-events";
-import { useClientScope } from "./api/use-client-scope";
+import { useAddProtocolMappers } from "./hooks/use-add-protocol-mappers";
+import { useAssignScopeRoles } from "./hooks/use-assign-scope-roles";
+import { useClientScope } from "./hooks/use-client-scope";
+import { useDeleteClientScope } from "./hooks/use-delete-client-scope";
+import { useDeleteProtocolMapper } from "./hooks/use-delete-protocol-mapper";
+import { useUpdateClientScope } from "./hooks/use-update-client-scope";
 import { MapperList } from "./details/mapper-list";
 import { ScopeForm } from "./details/scope-form";
-import type { ClientScopeParams } from "../../shared/lib/routes/client-scopes";
-import { toClientScopes } from "../../shared/lib/routes/client-scopes";
-import { toMapper } from "../../shared/lib/routes/client-scopes";
 
-export default function EditClientScope() {
-    const { adminClient } = useAdminClient();
+export function EditClientScope() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -52,6 +50,11 @@ export default function EditClientScope() {
         refetchScope();
     };
     const { hasAccess } = useAccess();
+    const { mutateAsync: updateScope } = useUpdateClientScope(id);
+    const { mutateAsync: deleteScope } = useDeleteClientScope();
+    const { mutateAsync: assignScopeRoles } = useAssignScopeRoles(id);
+    const { mutateAsync: addProtocolMappers } = useAddProtocolMappers(id);
+    const { mutateAsync: deleteProtocolMapper } = useDeleteProtocolMapper(id);
 
     const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
         const clientScope = convertFormValuesToObject({
@@ -60,9 +63,7 @@ export default function EditClientScope() {
         });
 
         try {
-            await adminClient.clientScopes.update({ id }, clientScope);
-            await changeScope(adminClient, { ...clientScope, id }, clientScope.type);
-
+            await updateScope(clientScope);
             toast.success(t("updateSuccessClientScope"));
         } catch (error) {
             toast.error(t("updateErrorClientScope", { error: getErrorMessage(error) }), {
@@ -81,7 +82,7 @@ export default function EditClientScope() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.clientScopes.del({ id });
+                await deleteScope({ id } as ClientScopeDefaultOptionalType);
                 toast.success(t("deletedSuccessClientScope"));
                 navigate({ to: toClientScopes({ realm }) as string });
             } catch (error) {
@@ -95,28 +96,7 @@ export default function EditClientScope() {
 
     const assignRoles = async (rows: Row[]) => {
         try {
-            const realmRoles = rows
-                .filter(row => row.client === undefined)
-                .flatMap(row => row.role as RoleMappingPayload);
-            await adminClient.clientScopes.addRealmScopeMappings(
-                {
-                    id
-                },
-                realmRoles
-            );
-            await Promise.all(
-                rows
-                    .filter(row => row.client !== undefined)
-                    .map(row =>
-                        adminClient.clientScopes.addClientScopeMappings(
-                            {
-                                id,
-                                client: row.client!.id!
-                            },
-                            [row.role as RoleMappingPayload]
-                        )
-                    )
-            );
+            await assignScopeRoles(rows);
             toast.success(t("roleMappingUpdatedSuccess"));
         } catch (error) {
             toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {
@@ -140,10 +120,7 @@ export default function EditClientScope() {
             });
         } else {
             try {
-                await adminClient.clientScopes.addMultipleProtocolMappers(
-                    { id: clientScope!.id! },
-                    mappers as ProtocolMapperRepresentation[]
-                );
+                await addProtocolMappers(mappers as ProtocolMapperRepresentation[]);
                 refresh();
                 toast.success(t("mappingCreatedSuccess"));
             } catch (error) {
@@ -156,10 +133,7 @@ export default function EditClientScope() {
 
     const onDelete = async (mapper: ProtocolMapperRepresentation) => {
         try {
-            await adminClient.clientScopes.delProtocolMapper({
-                id: clientScope!.id!,
-                mapperId: mapper.id!
-            });
+            await deleteProtocolMapper(mapper.id!);
             toast.success(t("mappingDeletedSuccess"));
             refresh();
         } catch (error) {

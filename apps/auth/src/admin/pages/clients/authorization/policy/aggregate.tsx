@@ -1,9 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { useParams } from "../../../../shared/lib/useParams";
-import type { NewPermissionPolicyDetailsParams } from "../../../../shared/lib/routes/permissions";
 import type { PolicyDetailsParams } from "../../../../shared/lib/routes/clients";
+import type { NewPermissionPolicyDetailsParams } from "../../../../shared/lib/routes/permissions";
+import { useParams } from "../../../../shared/lib/use-params";
 import { DecisionStrategySelect } from "../decision-strategy-select";
 import { ResourcesPolicySelect } from "../resources-policy-select";
 

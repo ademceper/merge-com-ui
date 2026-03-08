@@ -20,10 +20,10 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreateComponent } from "../hooks/use-component-operations";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 
@@ -41,10 +41,10 @@ export function AddClientRegistrationPolicyDialog({
     subTab,
     onSuccess
 }: AddClientRegistrationPolicyDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realmRepresentation } = useRealm();
     const serverInfo = useServerInfo();
+    const { mutateAsync: createComponentMutation } = useCreateComponent();
     const [open, setOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [selectedProvider, setSelectedProvider] =
@@ -120,7 +120,7 @@ export function AddClientRegistrationPolicyDialog({
                 providerType: POLICY_TYPE,
                 providerId: selectedProvider.id
             };
-            await adminClient.components.create(updatedComponent);
+            await createComponentMutation(updatedComponent);
             toast.success(t("providerCreateSuccess"));
             setOpen(false);
             handleOpenChange(false);

@@ -1,5 +1,5 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import type AuthenticationExecutionInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationExecutionInfoRepresentation";
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type AuthenticatorConfigInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
@@ -10,10 +10,11 @@ import type RequiredActionConfigRepresentation from "@keycloak/keycloak-admin-cl
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type RequiredActionProviderSimpleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderSimpleRepresentation";
 import { sortBy } from "lodash-es";
-import { getAuthorizationHeaders } from "../shared/lib/getAuthorizationHeaders";
-import { addTrailingSlash } from "../shared/lib/util";
-import { ExecutionList } from "../pages/authentication/execution-model";
+import { adminClient } from "../app/admin-client";
 import type { AuthenticationType } from "../pages/authentication/constants";
+import { ExecutionList } from "../pages/authentication/execution-model";
+import { getAuthorizationHeaders } from "../shared/lib/get-authorization-headers";
+import { addTrailingSlash } from "../shared/lib/util";
 
 export type FlowType = "client" | "form" | "basic" | "condition" | "subFlow";
 
@@ -25,7 +26,7 @@ export type DataType = RequiredActionProviderRepresentation &
         configurable?: boolean;
     };
 
-export type RequiredActionRow = {
+type RequiredActionRow = {
     name?: string;
     enabled: boolean;
     defaultAction: boolean;
@@ -34,10 +35,7 @@ export type RequiredActionRow = {
 
 // --- Query functions ---
 
-export async function fetchAuthenticationFlows(
-    adminClient: KeycloakAdminClient,
-    realm: string
-) {
+export async function fetchAuthenticationFlows(realm: string) {
     const flowsRequest = await fetchWithError(
         `${addTrailingSlash(
             adminClient.baseUrl
@@ -57,10 +55,7 @@ export async function fetchAuthenticationFlows(
     ) as AuthenticationType[];
 }
 
-export async function fetchFlowDetail(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function fetchFlowDetail(id: string) {
     const flows = await adminClient.authenticationManagement.getFlows();
     const flow = flows.find(f => f.id === id);
     if (!flow) {
@@ -72,9 +67,7 @@ export async function fetchFlowDetail(
     return { flow, executionList: new ExecutionList(executions) };
 }
 
-export async function fetchAuthenticationProviders(
-    adminClient: KeycloakAdminClient
-) {
+export async function fetchAuthenticationProviders() {
     const [clientProviders, formActionProviders, authenticatorProviders] =
         await Promise.all([
             adminClient.authenticationManagement.getClientAuthenticatorProviders(),
@@ -88,10 +81,7 @@ export async function fetchAuthenticationProviders(
     ] as AuthenticationProviderRepresentation[];
 }
 
-export async function fetchStepProviders(
-    adminClient: KeycloakAdminClient,
-    type: FlowType
-) {
+export async function fetchStepProviders(type: FlowType) {
     switch (type) {
         case "client":
             return adminClient.authenticationManagement.getClientAuthenticatorProviders();
@@ -106,38 +96,31 @@ export async function fetchStepProviders(
             const providers =
                 await adminClient.authenticationManagement.getAuthenticatorProviders();
             return providers.filter(
-                (p: AuthenticationProviderRepresentation) =>
-                    !providerConditionFilter(p)
+                (p: AuthenticationProviderRepresentation) => !providerConditionFilter(p)
             );
         }
     }
 }
 
-export async function fetchFormProviders(adminClient: KeycloakAdminClient) {
+export async function fetchFormProviders() {
     return adminClient.authenticationManagement.getFormProviders();
 }
 
-export async function fetchFlowProviderId(
-    adminClient: KeycloakAdminClient,
-    flowId: string
-) {
+export async function fetchFlowProviderId(flowId: string) {
     const flow = await adminClient.authenticationManagement.getFlow({
         flowId
     });
     return flow.providerId;
 }
 
-export async function fetchExecutionConfig(
-    adminClient: KeycloakAdminClient,
-    execution: {
-        id?: string;
-        providerId?: string;
-        authenticationConfig?: string;
-        configurable?: boolean;
-        authenticationFlow?: boolean;
-        displayName?: string;
-    }
-) {
+export async function fetchExecutionConfig(execution: {
+    id?: string;
+    providerId?: string;
+    authenticationConfig?: string;
+    configurable?: boolean;
+    authenticationFlow?: boolean;
+    displayName?: string;
+}) {
     const configDescription = execution.configurable
         ? await adminClient.authenticationManagement.getConfigDescription({
               providerId: execution.providerId!
@@ -157,18 +140,14 @@ export async function fetchExecutionConfig(
     return { configDescription, config };
 }
 
-export async function fetchRequiredActionConfigData(
-    adminClient: KeycloakAdminClient,
-    alias: string
-) {
+export async function fetchRequiredActionConfigData(alias: string) {
     const configDescription =
-        await adminClient.authenticationManagement.getRequiredActionConfigDescription(
-            { alias }
-        );
-    const config =
-        await adminClient.authenticationManagement.getRequiredActionConfig({
+        await adminClient.authenticationManagement.getRequiredActionConfigDescription({
             alias
         });
+    const config = await adminClient.authenticationManagement.getRequiredActionConfig({
+        alias
+    });
     configDescription.properties = [...configDescription.properties!];
     return {
         configDescription,
@@ -179,10 +158,7 @@ export async function fetchRequiredActionConfigData(
     };
 }
 
-export async function fetchRequiredActions(
-    adminClient: KeycloakAdminClient,
-    realm: string
-) {
+export async function fetchRequiredActions(realm: string) {
     const requiredActionsRequest = await fetchWithError(
         `${addTrailingSlash(
             adminClient.baseUrl
@@ -214,22 +190,16 @@ export async function fetchRequiredActions(
 
 // --- Mutation functions ---
 
-export async function deleteFlow(
-    adminClient: KeycloakAdminClient,
-    flowId: string
-) {
+export async function deleteFlow(flowId: string) {
     return adminClient.authenticationManagement.deleteFlow({ flowId });
 }
 
-export async function copyFlow(
-    adminClient: KeycloakAdminClient,
-    params: {
-        flow: string;
-        newName: string;
-        description?: string;
-        originalDescription?: string;
-    }
-) {
+export async function copyFlow(params: {
+    flow: string;
+    newName: string;
+    description?: string;
+    originalDescription?: string;
+}) {
     await adminClient.authenticationManagement.copyFlow({
         flow: params.flow,
         newName: params.newName
@@ -247,23 +217,17 @@ export async function copyFlow(
     return newFlow;
 }
 
-export async function updateFlow(
-    adminClient: KeycloakAdminClient,
-    params: {
-        flow: AuthenticationFlowRepresentation;
-        formValues: AuthenticationFlowRepresentation;
-    }
-) {
+export async function updateFlow(params: {
+    flow: AuthenticationFlowRepresentation;
+    formValues: AuthenticationFlowRepresentation;
+}) {
     return adminClient.authenticationManagement.updateFlow(
         { flowId: params.flow.id! },
         { ...params.flow, ...params.formValues }
     );
 }
 
-export async function createFlow(
-    adminClient: KeycloakAdminClient,
-    flow: AuthenticationFlowRepresentation
-) {
+export async function createFlow(flow: AuthenticationFlowRepresentation) {
     return adminClient.authenticationManagement.createFlow({
         ...flow,
         builtIn: false,
@@ -271,13 +235,10 @@ export async function createFlow(
     });
 }
 
-export async function updateRequiredAction(
-    adminClient: KeycloakAdminClient,
-    params: {
-        action: DataType;
-        field: "enabled" | "defaultAction";
-    }
-) {
+export async function updateRequiredAction(params: {
+    action: DataType;
+    field: "enabled" | "defaultAction";
+}) {
     const { action, field } = params;
     if (field in action) {
         action[field] = !action[field];
@@ -294,46 +255,34 @@ export async function updateRequiredAction(
     }
 }
 
-export async function updateExecution(
-    adminClient: KeycloakAdminClient,
-    params: {
-        flowAlias: string;
-        execution: Record<string, unknown>;
-    }
-) {
+export async function updateExecution(params: {
+    flowAlias: string;
+    execution: Record<string, unknown>;
+}) {
     return adminClient.authenticationManagement.updateExecution(
         { flow: params.flowAlias },
-        params.execution as any
+        params.execution as unknown as AuthenticationExecutionInfoRepresentation
     );
 }
 
-export async function deleteExecution(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function deleteExecution(id: string) {
     return adminClient.authenticationManagement.delExecution({ id });
 }
 
-export async function addExecutionToFlow(
-    adminClient: KeycloakAdminClient,
-    params: { flow: string; provider: string }
-) {
+export async function addExecutionToFlow(params: { flow: string; provider: string }) {
     return adminClient.authenticationManagement.addExecutionToFlow({
         flow: params.flow,
         provider: params.provider
     });
 }
 
-export async function addFlowToFlow(
-    adminClient: KeycloakAdminClient,
-    params: {
-        flow: string;
-        alias: string;
-        description: string;
-        provider: string;
-        type: string;
-    }
-) {
+export async function addFlowToFlow(params: {
+    flow: string;
+    alias: string;
+    description: string;
+    provider: string;
+    type: string;
+}) {
     return adminClient.authenticationManagement.addFlowToFlow({
         flow: params.flow,
         alias: params.alias,
@@ -343,14 +292,11 @@ export async function addFlowToFlow(
     });
 }
 
-export async function saveExecutionConfig(
-    adminClient: KeycloakAdminClient,
-    params: {
-        config?: AuthenticatorConfigRepresentation;
-        executionId: string;
-        changedConfig: { alias?: string; config?: Record<string, string> };
-    }
-) {
+export async function saveExecutionConfig(params: {
+    config?: AuthenticatorConfigRepresentation;
+    executionId: string;
+    changedConfig: { alias?: string; config?: Record<string, string> };
+}) {
     const { config, executionId, changedConfig } = params;
     if (config) {
         const newConfig = {
@@ -366,50 +312,47 @@ export async function saveExecutionConfig(
         alias: changedConfig.alias,
         config: changedConfig.config
     };
-    const { id } =
-        await adminClient.authenticationManagement.createConfig(newConfig);
+    const { id } = await adminClient.authenticationManagement.createConfig(newConfig);
     return { ...newConfig.config, id, alias: newConfig.alias };
 }
 
-export async function deleteExecutionConfig(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function deleteExecutionConfig(id: string) {
     return adminClient.authenticationManagement.delConfig({ id });
 }
 
-export async function saveRequiredActionConfig(
-    adminClient: KeycloakAdminClient,
-    params: {
-        alias: string;
-        config: RequiredActionConfigRepresentation;
-    }
-) {
+export async function saveRequiredActionConfig(params: {
+    alias: string;
+    config: RequiredActionConfigRepresentation;
+}) {
     return adminClient.authenticationManagement.updateRequiredActionConfig(
         { alias: params.alias },
         params.config
     );
 }
 
-export async function removeRequiredActionConfig(
-    adminClient: KeycloakAdminClient,
-    alias: string
-) {
+export async function removeRequiredActionConfig(alias: string) {
     return adminClient.authenticationManagement.removeRequiredActionConfig({
         alias
     });
 }
 
-export async function updateRealm(
-    adminClient: KeycloakAdminClient,
-    realm: string,
-    realmData: RealmRepresentation
-) {
+export async function fetchConfig(id: string) {
+    return adminClient.authenticationManagement.getConfig({ id });
+}
+
+export async function lowerPriorityExecution(id: string) {
+    return adminClient.authenticationManagement.lowerPriorityExecution({ id });
+}
+
+export async function raisePriorityExecution(id: string) {
+    return adminClient.authenticationManagement.raisePriorityExecution({ id });
+}
+
+export async function updateRealm(realm: string, realmData: RealmRepresentation) {
     return adminClient.realms.update({ realm }, realmData);
 }
 
 export async function updateRealmWithRefetch(
-    adminClient: KeycloakAdminClient,
     realm: string,
     realmData: RealmRepresentation
 ) {

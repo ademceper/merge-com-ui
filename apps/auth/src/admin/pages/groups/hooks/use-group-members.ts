@@ -2,7 +2,6 @@ import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/g
 import { useQuery } from "@tanstack/react-query";
 import { uniqBy } from "lodash-es";
 import { fetchGroupMembers, findSubGroups } from "../../../api/groups";
-import { useAdminClient } from "../../../app/admin-client";
 import { groupKeys } from "./keys";
 
 /**
@@ -15,14 +14,13 @@ export function useGroupMembers(
         currentGroup?: GroupRepresentation;
     }
 ) {
-    const { adminClient } = useAdminClient();
     const includeSubGroup = options?.includeSubGroup ?? false;
     const currentGroup = options?.currentGroup;
 
     const getSubGroups = async (gId?: string, count = 0) => {
         let nestedGroups: GroupRepresentation[] = [];
         if (!count || !gId) return nestedGroups;
-        const subGroups = await findSubGroups(adminClient, gId, 0, count);
+        const subGroups = await findSubGroups(gId, 0, count);
         nestedGroups = nestedGroups.concat(subGroups);
         await Promise.all(subGroups.map(g => getSubGroups(g.id, g.subGroupCount))).then(
             values => {
@@ -41,7 +39,6 @@ export function useGroupMembers(
         queryFn: async () => {
             if (!groupId) return [];
             let list = await fetchGroupMembers(
-                adminClient,
                 groupId,
                 true,
                 0,
@@ -54,7 +51,7 @@ export function useGroupMembers(
                 );
                 const values = await Promise.all(
                     subGroups.map(g =>
-                        fetchGroupMembers(adminClient, g.id!, true)
+                        fetchGroupMembers(g.id!, true)
                     )
                 );
                 values.forEach(users => (list = list.concat(users)));

@@ -9,18 +9,17 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useDeletePageComponent } from "./hooks/use-delete-page-component";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import { type PageParams, toPage } from "../../shared/lib/routes/page";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { usePageComponent } from "./api/use-page-component";
+import { usePageComponent } from "./hooks/use-page-component";
 import { PAGE_PROVIDER } from "./constants";
 import { PageHandler } from "./page-handler";
-import { type PageParams, toPage } from "../../shared/lib/routes/page";
 
-export default function Page() {
-    const { adminClient } = useAdminClient();
+export function Page() {
 
     const { t } = useTranslation();
     const { componentTypes } = useServerInfo();
@@ -35,6 +34,7 @@ export default function Page() {
     }
 
     const { data: pageData } = usePageComponent(id);
+    const { mutateAsync: deleteComponent } = useDeletePageComponent();
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "itemDeleteConfirmTitle",
@@ -43,9 +43,7 @@ export default function Page() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.components.del({
-                    id: id!
-                });
+                await deleteComponent(id!);
                 toast.success(t("itemDeletedSuccess"));
                 navigate({ to: toPage({ realm, providerId: providerId! }) as string });
             } catch (error) {

@@ -35,7 +35,12 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    addLocalization,
+    deleteRealmLocalizationTexts,
+    fetchRealmLocalizationTexts,
+    setAdminClientRealmConfig
+} from "../../../api/realm-settings";
 import { i18n } from "../../../app/i18n";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
@@ -73,7 +78,6 @@ export const RealmOverrides = ({
     realm,
     tableData
 }: RealmOverridesProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm: currentRealm } = useRealm();
     const { whoAmI } = useWhoAmI();
@@ -98,12 +102,10 @@ export const RealmOverrides = ({
 
         const fetchLocalizationTexts = async () => {
             try {
-                const result = await adminClient.realms.getRealmLocalizationTexts({
-                    first: 0,
-                    max: PAGE_SIZE,
-                    realm: realm.realm!,
+                const result = await fetchRealmLocalizationTexts(
+                    realm.realm!,
                     selectedLocale
-                });
+                );
                 if (cancelled) return;
                 const entries = Object.entries(result);
                 setTranslations(entries);
@@ -117,7 +119,7 @@ export const RealmOverrides = ({
         return () => {
             cancelled = true;
         };
-    }, [tableKey, tableData, selectMenuLocale, realm.realm, adminClient]);
+    }, [tableKey, tableData, selectMenuLocale, realm.realm]);
 
     const localeOptions = [
         <SelectGroup key="group1">
@@ -141,15 +143,13 @@ export const RealmOverrides = ({
 
     const addKeyValue = async (pair: KeyValueType): Promise<void> => {
         try {
-            await adminClient.realms.addLocalization(
-                {
-                    realm: currentRealm!,
-                    selectedLocale: selectMenuLocale || DEFAULT_LOCALE,
-                    key: pair.key
-                },
+            await addLocalization(
+                currentRealm!,
+                selectMenuLocale || DEFAULT_LOCALE,
+                pair.key,
                 pair.value
             );
-            adminClient.setConfig({ realmName: currentRealm! });
+            setAdminClientRealmConfig(currentRealm!);
             refreshTable();
             translationForm.setValue("key", "");
             translationForm.setValue("value", "");
@@ -169,11 +169,11 @@ export const RealmOverrides = ({
                     | Record<string, string>
                     | undefined;
                 if (data && key in data) delete data[key];
-                await adminClient.realms.deleteRealmLocalizationTexts({
-                    realm: currentRealm!,
-                    selectedLocale: selectMenuLocale,
+                await deleteRealmLocalizationTexts(
+                    currentRealm!,
+                    selectMenuLocale,
                     key
-                });
+                );
             }
             setKeysToDelete([]);
             refreshTable();
@@ -188,12 +188,10 @@ export const RealmOverrides = ({
 
     const handleSaveEdit = async (key: string, newValue: string) => {
         try {
-            await adminClient.realms.addLocalization(
-                {
-                    realm: realm.realm!,
-                    selectedLocale: selectMenuLocale || DEFAULT_LOCALE,
-                    key
-                },
+            await addLocalization(
+                realm.realm!,
+                selectMenuLocale || DEFAULT_LOCALE,
+                key,
                 newValue
             );
             await i18n.reloadResources();

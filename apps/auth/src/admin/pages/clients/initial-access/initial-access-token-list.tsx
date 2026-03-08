@@ -12,6 +12,7 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
 import { Plus, Trash } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -23,28 +24,31 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../../shared/lib/useFormatDate";
-import { useInitialAccessTokens } from "../api/use-initial-access-tokens";
+import { useDeleteInitialAccessToken } from "../hooks/use-delete-initial-access-token";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "../../../shared/lib/use-format-date";
+import { clientKeys } from "../hooks/keys";
+import { useInitialAccessTokens } from "../hooks/use-initial-access-tokens";
 import { AddInitialAccessTokenDialog } from "./add-initial-access-token-dialog";
 
 export const InitialAccessTokenList = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
     const formatDate = useFormatDate();
 
-    const { data: tokens = [], refetch } = useInitialAccessTokens();
+    const queryClient = useQueryClient();
+    const { mutateAsync: deleteToken } = useDeleteInitialAccessToken();
+    const { data: tokens = [] } = useInitialAccessTokens();
     const [token, setToken] = useState<ClientInitialAccessPresentation>();
+    const invalidateTokens = () =>
+        queryClient.invalidateQueries({ queryKey: clientKeys.initialAccessTokens() });
 
     const onDeleteConfirm = async () => {
         if (!token?.id) return;
         try {
-            await adminClient.realms.delClientsInitialAccess({ realm, id: token.id });
+            await deleteToken(token.id);
             toast.success(t("tokenDeleteSuccess"));
             setToken(undefined);
-            refetch();
         } catch (error) {
             toast.error(t("tokenDeleteError", { error: getErrorMessage(error) }), {
                 description: getErrorDescription(error)
@@ -140,7 +144,7 @@ export const InitialAccessTokenList = () => {
                 emptyMessage={t("noTokens")}
                 toolbar={
                     <AddInitialAccessTokenDialog
-                        onSuccess={() => refetch()}
+                        onSuccess={() => invalidateTokens()}
                         trigger={
                             <Button
                                 type="button"

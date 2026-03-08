@@ -1,4 +1,3 @@
-import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
@@ -9,21 +8,17 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { convertFormValuesToObject } from "../../shared/lib/util";
-import {
-    AllClientScopes,
-    ClientScope,
-    type ClientScopeDefaultOptionalType,
-    changeScope
-} from "../../shared/ui/client-scope/client-scope-types";
+import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+import { useClientScope } from "./hooks/use-client-scope";
+import { useUpdateClientScope } from "./hooks/use-update-client-scope";
 import { ScopeForm } from "./details/scope-form";
 
 type EditClientScopeDialogProps = {
@@ -35,49 +30,17 @@ type EditClientScopeDialogProps = {
 
 const FORM_ID = "edit-client-scope-form";
 
-async function determineScopeType(
-    adminClient: ReturnType<typeof useAdminClient>["adminClient"],
-    clientScope: ClientScopeRepresentation
-) {
-    const defaultScopes = await adminClient.clientScopes.listDefaultClientScopes();
-    if (defaultScopes.find(s => s.name === clientScope.name)) return ClientScope.default;
-    const optionalScopes =
-        await adminClient.clientScopes.listDefaultOptionalClientScopes();
-    return optionalScopes.find(s => s.name === clientScope.name)
-        ? ClientScope.optional
-        : AllClientScopes.none;
-}
-
 export function EditClientScopeDialog({
     open,
     onOpenChange,
     scopeId,
     onSuccess
 }: EditClientScopeDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [saving, setSaving] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType | null>(
-        null
-    );
 
-    useEffect(() => {
-        if (!open || !scopeId) {
-            setClientScope(null);
-            return;
-        }
-        setLoading(true);
-        adminClient.clientScopes
-            .findOne({ id: scopeId })
-            .then(async scope => {
-                if (!scope) throw new Error(t("notFound"));
-                const type = await determineScopeType(adminClient, scope);
-                setClientScope({ ...scope, type } as ClientScopeDefaultOptionalType);
-            })
-            .catch(console.error)
-            .finally(() => setLoading(false));
-    }, [scopeId, open, adminClient, t]);
+    const { data: clientScope, isLoading: loading } = useClientScope(scopeId ?? "");
+    const { mutateAsync: updateScope } = useUpdateClientScope(scopeId ?? "");
 
     const handleSave = async (formData: ClientScopeDefaultOptionalType) => {
         if (!scopeId || saving) return;
@@ -87,8 +50,7 @@ export function EditClientScopeDialog({
             name: formData.name?.trim().replace(/ /g, "_")
         });
         try {
-            await adminClient.clientScopes.update({ id: scopeId }, payload);
-            await changeScope(adminClient, { ...payload, id: scopeId }, payload.type);
+            await updateScope(payload);
             toast.success(t("updateSuccessClientScope"));
             onOpenChange(false);
             onSuccess?.();
@@ -119,7 +81,7 @@ export function EditClientScopeDialog({
                     <>
                         <div className="min-h-[200px]">
                             <ScopeForm
-                                clientScope={clientScope}
+                                clientScope={clientScope as ClientScopeDefaultOptionalType}
                                 save={handleSave}
                                 formId={FORM_ID}
                                 embedded

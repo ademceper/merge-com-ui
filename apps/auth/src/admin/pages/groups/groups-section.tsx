@@ -29,20 +29,20 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import useToggle from "../../shared/lib/useToggle";
+import { toGroups } from "../../shared/lib/routes/groups";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import { AdminEvents } from "../events/admin-events";
-import { useNavigationPath } from "./api/use-navigation-path";
+import { useNavigationPath } from "./hooks/use-navigation-path";
 import { DeleteGroup } from "./components/delete-group";
 import { GroupTree } from "./components/group-tree";
 import { GroupAttributes } from "./group-attributes";
 import { GroupRoleMapping } from "./group-role-mapping";
 import { GroupTable } from "./group-table";
-import { getId, getLastId } from "./groupIdUtils";
+import { getId, getLastId } from "./group-id-utils";
 import { GroupsModal } from "./groups-modal";
 import { Members } from "./members";
-import { toGroups } from "../../shared/lib/routes/groups";
 import { useSubGroups } from "./sub-groups-context";
 
 /** Desktop: sayfa akışında açılıp kapanan panel. Mobil: render edilmez (yerine Sheet kullanılır). */
@@ -149,7 +149,7 @@ function GroupsSectionLayout({
     );
 }
 
-export default function GroupsSection() {
+export function GroupsSection() {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(0);
 

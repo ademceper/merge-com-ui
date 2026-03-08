@@ -8,24 +8,24 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useCreateCompositeRole } from "./hooks/use-create-composite-role";
 import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
 import { DefaultGroupsTab } from "./default-groups-tab";
 
 export const UserRegistration = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realmRepresentation: realm, realm: realmName } = useRealm();
     const [key, setKey] = useState(0);
     const [activeTab, setActiveTab] = useState("roles");
+    const { mutateAsync: createCompositeRoleMut } = useCreateCompositeRole();
 
     const addComposites = async (composites: RoleRepresentation[]) => {
         try {
-            await adminClient.roles.createComposite(
-                { roleId: realm?.defaultRole!.id!, realm: realmName },
-                composites
-            );
+            await createCompositeRoleMut({
+                roleId: realm?.defaultRole!.id!,
+                roles: composites as { id: string; name: string }[]
+            });
             setKey(key + 1);
             toast.success(t("addAssociatedRolesSuccess"));
         } catch (error) {

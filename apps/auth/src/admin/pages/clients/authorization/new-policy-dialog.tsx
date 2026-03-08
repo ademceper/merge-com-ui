@@ -16,7 +16,7 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
 import { isValidComponentType } from "./policy/policy-details";
 
 type NewPolicyDialogProps = {

@@ -21,11 +21,11 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../../app/admin-client";
-import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
-import { useParams } from "../../../../shared/lib/useParams";
+import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
+import { useDeleteComponent } from "../../hooks/use-delete-component";
+import { useParams } from "../../../../shared/lib/use-params";
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import { useLdapMappers } from "../../../user-federation/api/use-ldap-mappers";
+import { useLdapMappers } from "../../hooks/use-ldap-mappers";
 
 type LdapMapperListProps = {
     toCreate: string;
@@ -41,7 +41,6 @@ const MapperLink = ({ toDetail, ...mapper }: MapperLinkProps) => (
 );
 
 export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const localeSort = useLocaleSort();
@@ -51,6 +50,7 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
     const [selectedMapper, setSelectedMapper] = useState<ComponentRepresentation>();
 
     const { data: rawMappers, refetch: refetchMappers } = useLdapMappers(id);
+    const { mutateAsync: deleteComponentMut } = useDeleteComponent();
     const refresh = () => {
         refetchMappers();
     };
@@ -75,9 +75,7 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.components.del({
-                    id: selectedMapper!.id!
-                });
+                await deleteComponentMut(selectedMapper!.id!);
                 refresh();
                 toast.success(t("mappingDeletedSuccess"));
                 setSelectedMapper(undefined);

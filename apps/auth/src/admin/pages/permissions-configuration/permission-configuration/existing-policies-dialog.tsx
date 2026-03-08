@@ -25,10 +25,10 @@ import {
 import { CaretDown, Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { capitalizeFirstLetterFormatter } from "../../../shared/lib/util";
-import { usePoliciesList } from "../api/use-policies-list";
-import { usePolicyProviders } from "../api/use-policy-providers";
+import { usePoliciesList } from "../hooks/use-policies-list";
+import { usePolicyProviders } from "../hooks/use-policy-providers";
 
 type ExistingPoliciesDialogProps = {
     toggleDialog: () => void;

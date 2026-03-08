@@ -19,52 +19,33 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { Label } from "@merge-rd/ui/components/label";
 import { Info } from "@phosphor-icons/react";
-import { differenceBy } from "lodash-es";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { emptyFormatter } from "../../shared/lib/util";
+import { useAvailableUsers } from "./hooks/use-available-users";
 
 type MemberModalProps = {
-    membersQuery: (first?: number, max?: number) => Promise<UserRepresentation[]>;
+    /** Unique key for the query cache (e.g. groupId or orgId). */
+    membersQueryKey: string;
+    /** Function that returns the current members to exclude from the list. */
+    fetchCurrentMembers: () => Promise<UserRepresentation[]>;
     onAdd: (users: UserRepresentation[]) => Promise<void>;
     onClose: () => void;
 };
 
-export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) => {
-    const { adminClient } = useAdminClient();
+export const MemberModal = ({
+    membersQueryKey,
+    fetchCurrentMembers,
+    onAdd,
+    onClose
+}: MemberModalProps) => {
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
-    const [users, setUsers] = useState<UserRepresentation[]>([]);
 
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const members = await membersQuery(0, 100);
-                const found = await adminClient.users.find({
-                    first: 0,
-                    max: 500,
-                    search: ""
-                });
-                const available = differenceBy(found, members, "id").slice(0, 100);
-                if (!cancelled) setUsers(available);
-            } catch (error) {
-                if (!cancelled) {
-                    toast.error(
-                        t("noUsersFoundError", { error: getErrorMessage(error) }),
-                        { description: getErrorDescription(error) }
-                    );
-                    setUsers([]);
-                }
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, []);
+    const { data: users = [] } = useAvailableUsers(
+        membersQueryKey,
+        fetchCurrentMembers
+    );
 
     const toggleSelect = (user: UserRepresentation) => {
         setSelectedRows(prev =>

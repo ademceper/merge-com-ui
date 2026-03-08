@@ -18,14 +18,14 @@ import {
     getErrorMessage,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useDeleteSession } from "./hooks/use-delete-session";
+import { useLogoutUser } from "./hooks/use-logout-user";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import useFormatDate from "../../shared/lib/useFormatDate";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { toClient } from "../../shared/lib/routes/clients";
-import { toUser } from "../../shared/lib/routes/user";
-import { toUsers } from "../../shared/lib/routes/user";
+import { toUser, toUsers } from "../../shared/lib/routes/user";
+import { useFormatDate } from "../../shared/lib/use-format-date";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { isLightweightUser } from "../user/utils";
 
 type ColumnName = "username" | "start" | "lastAccess" | "clients" | "type" | "ipAddress";
@@ -39,7 +39,7 @@ type SessionsTableProps = {
     logoutUser?: string;
 };
 
-export default function SessionsTable({
+export function SessionsTable({
     sessions,
     refresh,
     toolbar,
@@ -48,7 +48,6 @@ export default function SessionsTable({
     logoutUser
 }: SessionsTableProps) {
     const { keycloak } = useEnvironment();
-    const { adminClient } = useAdminClient();
     const { realm } = useRealm();
     const { whoAmI } = useWhoAmI();
     const navigate = useNavigate();
@@ -57,6 +56,8 @@ export default function SessionsTable({
     const refreshInternal = () => refresh();
     const location = useLocation();
     const isOnUserPage = location.pathname.includes("/users/");
+    const { mutateAsync: deleteSessionMut } = useDeleteSession();
+    const { mutateAsync: logoutUserMut } = useLogoutUser();
 
     const [toggleLogoutDialog, LogoutConfirm] = useConfirmDialog({
         titleKey: "logoutAllSessions",
@@ -64,7 +65,7 @@ export default function SessionsTable({
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.users.logout({ id: logoutUser! });
+                await logoutUserMut(logoutUser!);
                 if (isOnUserPage && logoutUser && isLightweightUser(logoutUser)) {
                     navigate({ to: toUsers({ realm }) as string });
                 } else {
@@ -82,20 +83,12 @@ export default function SessionsTable({
     });
 
     const onClickRevoke = async (session: UserSessionRepresentation) => {
-        await adminClient.realms.deleteSession({
-            realm,
-            session: session.id!,
-            isOffline: true
-        });
+        await deleteSessionMut({ sessionId: session.id!, isOffline: true });
         refreshInternal();
     };
 
     const onClickSignOut = async (session: UserSessionRepresentation) => {
-        await adminClient.realms.deleteSession({
-            realm,
-            session: session.id!,
-            isOffline: false
-        });
+        await deleteSessionMut({ sessionId: session.id!, isOffline: false });
         if (session.userId === whoAmI.userId) {
             await keycloak.logout({ redirectUri: "" });
         } else if (isOnUserPage && session.userId && isLightweightUser(session.userId)) {

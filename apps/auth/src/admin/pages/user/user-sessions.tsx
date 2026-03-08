@@ -1,9 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import SessionsTable from "../sessions/sessions-table";
-import { useUserSessions } from "./api/use-user-sessions";
 import type { UserParams } from "../../shared/lib/routes/user";
+import { useParams } from "../../shared/lib/use-params";
+import { SessionsTable } from "../sessions/sessions-table";
+import { useUserSessions } from "./hooks/use-user-sessions";
 
 export const UserSessions = () => {
     const { id } = useParams<UserParams>();

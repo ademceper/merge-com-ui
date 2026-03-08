@@ -8,13 +8,12 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreateClient } from "../hooks/use-create-client";
+import { toClient, toClients } from "../../../shared/lib/routes/clients";
 import { convertFormValuesToObject } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
-import { toClient } from "../../../shared/lib/routes/clients";
-import { toClients } from "../../../shared/lib/routes/clients";
 import { CapabilityConfig } from "./capability-config";
 import { GeneralSettings } from "./general-settings";
 import { LoginSettings } from "./login-settings";
@@ -26,12 +25,12 @@ type WizardStep = {
     component: React.ReactNode;
 };
 
-export default function NewClientForm() {
-    const { adminClient } = useAdminClient();
+export function NewClientForm() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
+    const { mutateAsync: createClient } = useCreateClient();
     const [saving, setSaving] = useState<boolean>(false);
     const [currentStep, setCurrentStep] = useState(0);
     const form = useForm<FormFields>({
@@ -60,7 +59,7 @@ export default function NewClientForm() {
         setSaving(true);
         const client = convertFormValuesToObject(getValues());
         try {
-            const newClient = await adminClient.clients.create({
+            const newClient = await createClient({
                 ...client,
                 clientId: client.clientId?.trim()
             });

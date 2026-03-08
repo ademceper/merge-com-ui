@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 type UserFederationParams = { realm: string };
 
@@ -14,10 +14,17 @@ export type UserFederationLdapParams = {
 };
 
 export const toUserFederationLdap = (params: UserFederationLdapParams): string => {
-    const path = params.tab
-        ? "/:realm/user-federation/ldap/:id/:tab"
-        : "/:realm/user-federation/ldap/:id";
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath("/:realm/user-federation/ldap/:id/:tab", {
+            realm: params.realm,
+            id: params.id,
+            tab: params.tab
+        });
+    }
+    return generateEncodedPath("/:realm/user-federation/ldap/:id", {
+        realm: params.realm,
+        id: params.id
+    });
 };
 
 export type UserFederationLdapMapperParams = {

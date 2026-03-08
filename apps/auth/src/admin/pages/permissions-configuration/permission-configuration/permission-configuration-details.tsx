@@ -16,26 +16,25 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { toPermissionsConfigurationTabs } from "../../../shared/lib/route-helpers";
-
-import { useParams } from "../../../shared/lib/useParams";
-import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { NameDescription } from "../../clients/authorization/policy/name-description";
-import { ScopePicker } from "../../clients/authorization/scope-picker";
-import { usePermissionDetail } from "../api/use-permission-detail";
-import { useProvidersAndPolicies } from "../api/use-providers-and-policies";
-import { ResourceType } from "../resource-types/resource-type";
+import { useDeletePermission } from "../hooks/use-delete-permission";
+import { useSavePermission } from "../hooks/use-save-permission";
 import {
     type PermissionConfigurationDetailsParams,
     toPermissionConfigurationDetails
 } from "../../../shared/lib/routes/permissions";
+import { useParams } from "../../../shared/lib/use-params";
+import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { NameDescription } from "../../clients/authorization/policy/name-description";
+import { ScopePicker } from "../../clients/authorization/scope-picker";
+import { usePermissionDetail } from "../hooks/use-permission-detail";
+import { useProvidersAndPolicies } from "../hooks/use-providers-and-policies";
+import { ResourceType } from "../resource-types/resource-type";
 import { AssignedPolicies } from "./assigned-policies";
 
-export default function PermissionConfigurationDetails() {
-    const { adminClient } = useAdminClient();
+export function PermissionConfigurationDetails() {
     const { t } = useTranslation();
     const { realm, permissionClientId, permissionId, resourceType } =
         useParams<PermissionConfigurationDetailsParams>();
@@ -55,6 +54,9 @@ export default function PermissionConfigurationDetails() {
                 .map(scope => scope || ""),
         [resourceTypes, resourceType]
     );
+
+    const { mutateAsync: savePermissionMut } = useSavePermission(permissionClientId);
+    const { mutateAsync: deletePermissionMut } = useDeletePermission(permissionClientId);
 
     const { data: providersAndPolicies } = useProvidersAndPolicies(permissionClientId);
     const providers = providersAndPolicies?.providers;
@@ -103,15 +105,14 @@ export default function PermissionConfigurationDetails() {
             };
 
             if (permissionId) {
-                await adminClient.clients.updatePermission(
-                    { id: permissionClientId, type: "scope", permissionId },
-                    newPermission
-                );
+                await savePermissionMut({
+                    permissionId,
+                    permission: newPermission
+                });
             } else {
-                const result = await adminClient.clients.createPermission(
-                    { id: permissionClientId, type: "scope" },
-                    newPermission
-                );
+                const result = await savePermissionMut({
+                    permission: newPermission
+                });
                 setPermission(result);
                 navigate({
                     to: toPermissionConfigurationDetails({
@@ -142,10 +143,9 @@ export default function PermissionConfigurationDetails() {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPermission({
-                    id: permissionClientId!,
+                await deletePermissionMut({
                     type: "scope",
-                    permissionId: permissionId
+                    permissionId: permissionId!
                 });
                 toast.success(t("permissionDeletedSuccess"));
                 navigate({

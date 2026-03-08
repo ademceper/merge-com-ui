@@ -12,7 +12,7 @@ import {
 import { differenceBy } from "lodash-es";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useOrganizations } from "./api/use-organizations";
+import { useOrganizations } from "./hooks/use-organizations";
 
 type OrganizationModalProps = {
     isJoin?: boolean;

@@ -7,7 +7,6 @@ import {
     fetchUserUnmanagedAttributes,
     findUser
 } from "../../../api/users";
-import { useAdminClient } from "../../../app/admin-client";
 import type { UIUserRepresentation } from "../form-state";
 import { type UserDetailData, userKeys } from "./keys";
 
@@ -17,7 +16,6 @@ export function useUserDetail(
     realm: { bruteForceProtected?: boolean; organizationsEnabled?: boolean } | undefined,
     showOrganizations: boolean
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery<UserDetailData>({
         queryKey: userKeys.detail(id),
         queryFn: async () => {
@@ -28,14 +26,14 @@ export function useUserDetail(
                 upConfig,
                 organizations
             ] = await Promise.all([
-                findUser(adminClient, id, true) as Promise<
+                findUser(id, true) as Promise<
                     UIUserRepresentation | undefined
                 >,
-                fetchAttackDetection(adminClient, id),
-                fetchUserUnmanagedAttributes(adminClient, id),
-                fetchUserProfile(adminClient, realmName),
+                fetchAttackDetection(id),
+                fetchUserUnmanagedAttributes(id),
+                fetchUserProfile(realmName),
                 showOrganizations
-                    ? fetchOrganizations(adminClient, 0, 1)
+                    ? fetchOrganizations(0, 1)
                     : Promise.resolve([])
             ]);
 

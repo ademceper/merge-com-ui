@@ -20,13 +20,17 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import { useSaveClientProfiles } from "./hooks/use-save-client-profiles";
+import {
+    type ClientProfileParams,
+    type ExecutorParams,
+    toClientProfile
+} from "../../shared/lib/routes/realm-settings";
+import { useParams } from "../../shared/lib/use-params";
 import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { useClientProfiles } from "./api/use-client-profiles";
-import { type ClientProfileParams, toClientProfile, type ExecutorParams } from "../../shared/lib/routes/realm-settings";
+import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ExecutorForm = {
     config?: object;
@@ -38,8 +42,7 @@ const defaultValues: ExecutorForm = {
     executor: ""
 };
 
-export default function ExecutorForm() {
-    const { adminClient } = useAdminClient();
+export function ExecutorForm() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -59,6 +62,7 @@ export default function ExecutorForm() {
         []
     );
     const [profiles, setProfiles] = useState<ClientProfileRepresentation[]>([]);
+    const { mutateAsync: saveClientProfilesMut } = useSaveClientProfiles();
     const form = useForm({ defaultValues });
     const { control, reset, handleSubmit } = form;
     const editMode = !!executorName;
@@ -114,7 +118,7 @@ export default function ExecutorForm() {
             };
         });
         try {
-            await adminClient.clientPolicies.createProfiles({
+            await saveClientProfilesMut({
                 profiles: updatedProfiles,
                 globalProfiles: globalProfiles
             });

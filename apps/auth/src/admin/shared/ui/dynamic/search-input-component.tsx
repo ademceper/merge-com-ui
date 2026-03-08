@@ -3,6 +3,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { ArrowRight, MagnifyingGlass, X } from "@phosphor-icons/react";
 
+const searchButtonStyle = { marginLeft: "0.1rem" } as const;
+
 type SearchInputComponentProps = {
     value: string;
     onChange: (value: string) => void;
@@ -49,7 +51,7 @@ export const SearchInputComponent = ({
             </div>
             <Button
                 variant="outline"
-                style={{ marginLeft: "0.1rem" }}
+                style={searchButtonStyle}
                 onClick={() => onSearch(value)}
                 aria-label={t("search")}
                 data-testid="search"

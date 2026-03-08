@@ -3,9 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useCreateComponent } from "./hooks/use-create-component";
 import { ExtendedHeader } from "./shared/extended-header";
 import {
     type LdapComponentRepresentation,
@@ -13,16 +13,16 @@ import {
     UserFederationLdapForm
 } from "./user-federation-ldap-form";
 
-export default function CreateUserFederationLdapSettings() {
-    const { adminClient } = useAdminClient();
+export function CreateUserFederationLdapSettings() {
 
     const { t } = useTranslation();
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: createComponentMut } = useCreateComponent();
     const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
-            await adminClient.components.create(serializeFormData(formData));
+            await createComponentMut(serializeFormData(formData));
             toast.success(t("createUserProviderSuccess"));
             navigate({ to: toUserFederation({ realm }) as string });
         } catch (error) {

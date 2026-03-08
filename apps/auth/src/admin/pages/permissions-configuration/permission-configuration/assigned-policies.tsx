@@ -22,8 +22,8 @@ import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import useToggle from "../../../shared/lib/useToggle";
-import { usePolicyDetailsByType } from "../api/use-policy-details-by-type";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { usePolicyDetailsByType } from "../hooks/use-policy-details-by-type";
 import { ExistingPoliciesDialog } from "./existing-policies-dialog";
 import { NewPermissionPolicyDialog } from "./new-permission-policy-dialog";
 

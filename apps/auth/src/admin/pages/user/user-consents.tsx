@@ -19,14 +19,13 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import useFormatDate from "../../shared/lib/useFormatDate";
-import { useParams } from "../../shared/lib/useParams";
+import { useFormatDate } from "../../shared/lib/use-format-date";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { useUserConsents as useUserConsentsQuery } from "./api/use-user-consents";
+import { useRevokeConsent } from "./hooks/use-revoke-consent";
+import { useUserConsents as useUserConsentsQuery } from "./hooks/use-user-consents";
 
 export const UserConsents = () => {
-    const { adminClient } = useAdminClient();
 
     const [selectedClient, setSelectedClient] = useState<UserConsentRepresentation>();
     const { t } = useTranslation();
@@ -35,6 +34,7 @@ export const UserConsents = () => {
     const { id } = useParams<{ id: string }>();
 
     const { data: consents = [], refetch: refreshConsents } = useUserConsentsQuery(id);
+    const { mutateAsync: revokeConsentMut } = useRevokeConsent(id);
     const refresh = () => refreshConsents();
 
     const clientScopesRenderer = ({ grantedClientScopes }: UserConsentRepresentation) => {
@@ -62,10 +62,7 @@ export const UserConsents = () => {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.users.revokeConsent({
-                    id,
-                    clientId: selectedClient!.clientId!
-                });
+                await revokeConsentMut(selectedClient!.clientId!);
 
                 refresh();
 

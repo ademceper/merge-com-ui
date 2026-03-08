@@ -15,19 +15,18 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
+import { toUser } from "../../shared/lib/routes/user";
+import { translationFormatter } from "../../shared/lib/translation-formatter";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
 import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
 import { MemberModal } from "../groups/members-modal";
-import { toUser } from "../../shared/lib/routes/user";
-import { useAddOrganizationMembers } from "./api/use-add-organization-members";
-import { useOrganizationMembers } from "./api/use-organization-members";
-import { useRemoveOrganizationMembers } from "./api/use-remove-organization-members";
-import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
+import { useAddOrganizationMembers } from "./hooks/use-add-organization-members";
+import { useOrganizationMembers } from "./hooks/use-organization-members";
+import { useRemoveOrganizationMembers } from "./hooks/use-remove-organization-members";
 
 type MembershipTypeRepresentation = UserRepresentation & {
     membershipType?: string;
@@ -44,7 +43,6 @@ const UserDetailLink = (user: any) => {
 
 export const Members = () => {
     const { t } = useTranslation();
-    const { adminClient } = useAdminClient();
     const { id: orgId } = useParams<EditOrganizationParams>();
     const [openAddMembers, toggleAddMembers] = useToggle();
     const [selectedMembers, setSelectedMembers] = useState<UserRepresentation[]>([]);
@@ -111,7 +109,12 @@ export const Members = () => {
         <>
             {openAddMembers && (
                 <MemberModal
-                    membersQuery={() => adminClient.organizations.listMembers({ orgId })}
+                    membersQueryKey={`org-${orgId}`}
+                    fetchCurrentMembers={() =>
+                        import("../../api/organizations").then(m =>
+                            m.fetchOrganizationMembers(orgId)
+                        )
+                    }
                     onAdd={async selectedRows => {
                         try {
                             await addMembersMutation.mutateAsync(

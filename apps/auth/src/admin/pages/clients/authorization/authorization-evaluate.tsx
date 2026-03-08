@@ -24,8 +24,8 @@ import {
     MultiSelectField,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
+import { useEvaluateResource } from "./hooks/use-authorization-mutations";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { ClientSelect } from "../../../shared/ui/client/client-select";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -37,8 +37,8 @@ import { UserSelect } from "../../../shared/ui/users/user-select";
 import { ForbiddenSection } from "../../forbidden-section";
 import type { FormFields } from "../client-details";
 import { defaultContextAttributes } from "../utils";
-import { useResourcesAndScopes } from "./api/use-resources-and-scopes";
-import { useRoles } from "./api/use-roles";
+import { useResourcesAndScopes } from "./hooks/use-resources-and-scopes";
+import { useRoles } from "./hooks/use-roles";
 import { Results } from "./evaluate/results";
 import { KeyBasedAttributeInput } from "./key-based-attribute-input";
 
@@ -87,7 +87,6 @@ export const AuthorizationEvaluate = (props: Props) => {
 };
 
 const AuthorizationEvaluateContent = ({ client }: Props) => {
-    const { adminClient } = useAdminClient();
 
     const form = useForm<EvaluateFormInputs>({ mode: "onChange" });
     const {
@@ -97,6 +96,7 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
     } = form;
     const { t } = useTranslation();
     const realm = useRealm();
+    const { mutateAsync: evaluateResourceMutation } = useEvaluateResource();
     const [isExpanded, setIsExpanded] = useState(false);
     const [applyToResourceType, setApplyToResourceType] = useState(false);
     const [resources, setResources] = useState<ResourceRepresentation[]>([]);
@@ -149,10 +149,11 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
         };
 
         try {
-            const evaluation = await adminClient.clients.evaluateResource(
-                { id: client.id!, realm: realm.realm },
-                resEval
-            );
+            const evaluation = await evaluateResourceMutation({
+                clientId: client.id!,
+                realm: realm.realm!,
+                evaluation: resEval
+            });
 
             setEvaluateResult(evaluation);
         } catch (error) {

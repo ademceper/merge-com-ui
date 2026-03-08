@@ -2,7 +2,7 @@ import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
 
 type ValueMapperFn<T> = (item: T) => string | undefined;
 
-export default function useLocaleSort() {
+export function useLocaleSort() {
     const { whoAmI } = useWhoAmI();
 
     return function localeSort<T>(items: T[], mapperFn: ValueMapperFn<T>): T[] {

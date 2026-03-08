@@ -6,7 +6,7 @@ import {
 } from "@merge-rd/ui/components/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, useMatches } from "@tanstack/react-router";
-import { type PropsWithChildren, Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import {
     ErrorBoundaryFallback,
     ErrorBoundaryProvider,
@@ -15,7 +15,6 @@ import {
     useEnvironment
 } from "../../shared/keycloak-ui-shared";
 import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
-import { SubGroups } from "../pages/groups/sub-groups-context";
 import { ErrorRenderer } from "../shared/ui/error/error-renderer";
 import { AdminAppSidebar } from "../widgets/admin-app-sidebar";
 import { AdminHeader } from "../widgets/admin-header";
@@ -23,9 +22,12 @@ import { Banners } from "../widgets/banners";
 import { AdminClientContext, initAdminClient } from "./admin-client";
 import type { Environment } from "./environment";
 import { AccessContextProvider } from "./providers/access/access";
+import { BootstrapPrefetch } from "./providers/bootstrap-prefetch";
+import { composeProviders } from "./providers/compose-providers";
 import { RealmContextProvider } from "./providers/realm-context/realm-context";
 import { RecentRealmsProvider } from "./providers/recent-realms";
 import { ServerInfoProvider } from "./providers/server-info/server-info-provider";
+import { SubGroups } from "./providers/sub-groups/sub-groups-context";
 import { WhoAmIContextProvider } from "./providers/whoami/who-am-i";
 import { AuthWall } from "./root/auth-wall";
 
@@ -39,22 +41,23 @@ const queryClient = new QueryClient({
     }
 });
 
-const AppContexts = ({ children }: PropsWithChildren) => (
-    <ErrorBoundaryProvider>
-        <ErrorBoundaryFallback fallback={ErrorRenderer}>
-            <ServerInfoProvider>
-                <RealmContextProvider>
-                    <WhoAmIContextProvider>
-                        <RecentRealmsProvider>
-                            <AccessContextProvider>
-                                <SubGroups>{children}</SubGroups>
-                            </AccessContextProvider>
-                        </RecentRealmsProvider>
-                    </WhoAmIContextProvider>
-                </RealmContextProvider>
-            </ServerInfoProvider>
-        </ErrorBoundaryFallback>
-    </ErrorBoundaryProvider>
+/**
+ * Provider hierarchy with parallel fetching:
+ * ErrorBoundary → RealmContext (blocking) → BootstrapPrefetch (fetches ServerInfo + WhoAmI in parallel)
+ *   → ServerInfo (reads from cache) → WhoAmI (reads from cache) → rest
+ */
+const AppContexts = composeProviders(
+    ErrorBoundaryProvider,
+    ({ children }: { children: React.ReactNode }) => (
+        <ErrorBoundaryFallback fallback={ErrorRenderer}>{children}</ErrorBoundaryFallback>
+    ),
+    RealmContextProvider,
+    BootstrapPrefetch,
+    ServerInfoProvider,
+    WhoAmIContextProvider,
+    RecentRealmsProvider,
+    AccessContextProvider,
+    SubGroups
 );
 
 export const App = () => {
@@ -75,55 +78,55 @@ export const App = () => {
     }, [environment, keycloak]);
 
     const matches = useMatches();
-    const isNotFound = matches.some(
-        (m: any) =>
-            m.routeContext?.isNotFound === true || (m as any).handle?.isNotFound === true
+    const isNotFound = useMemo(
+        () =>
+            matches.some(m => {
+                const match = m as unknown as {
+                    routeContext?: { isNotFound?: boolean };
+                    handle?: { isNotFound?: boolean };
+                };
+                return (
+                    match.routeContext?.isNotFound === true ||
+                    match.handle?.isNotFound === true
+                );
+            }),
+        [matches]
     );
 
     if (!adminClient) return <KeycloakSpinner />;
 
-    if (isNotFound) {
-        return (
-            <QueryClientProvider client={queryClient}>
-                <AdminClientContext.Provider value={{ keycloak, adminClient }}>
-                    <AppContexts>
-                        <Banners />
-                        <div className="min-h-svh flex flex-1 flex-col">
-                            <Outlet />
-                        </div>
-                        <SessionExpirationWarningOverlay
-                            warnUserSecondsBeforeAutoLogout={45}
-                        />
-                    </AppContexts>
-                </AdminClientContext.Provider>
-            </QueryClientProvider>
-        );
-    }
+    const adminContext = { keycloak, adminClient };
 
     return (
         <QueryClientProvider client={queryClient}>
-            <AdminClientContext.Provider value={{ keycloak, adminClient }}>
+            <AdminClientContext.Provider value={adminContext}>
                 <AppContexts>
                     <Banners />
-                    <SidebarProvider
-                        defaultOpen={true}
-                        className="h-svh bg-sidebar overflow-hidden"
-                        data-scale-wrapper
-                    >
-                        <AdminAppSidebar />
-                        <SidebarInset>
-                            <AdminHeader />
-                            <SidebarPage id={mainPageContentId}>
-                                <ErrorBoundaryFallback fallback={ErrorRenderer}>
-                                    <Suspense fallback={<KeycloakSpinner />}>
-                                        <AuthWall>
-                                            <Outlet />
-                                        </AuthWall>
-                                    </Suspense>
-                                </ErrorBoundaryFallback>
-                            </SidebarPage>
-                        </SidebarInset>
-                    </SidebarProvider>
+                    {isNotFound ? (
+                        <div className="min-h-svh flex flex-1 flex-col">
+                            <Outlet />
+                        </div>
+                    ) : (
+                        <SidebarProvider
+                            defaultOpen={true}
+                            className="h-svh bg-sidebar overflow-hidden"
+                            data-scale-wrapper
+                        >
+                            <AdminAppSidebar />
+                            <SidebarInset>
+                                <AdminHeader />
+                                <SidebarPage id={mainPageContentId}>
+                                    <ErrorBoundaryFallback fallback={ErrorRenderer}>
+                                        <Suspense fallback={<KeycloakSpinner />}>
+                                            <AuthWall>
+                                                <Outlet />
+                                            </AuthWall>
+                                        </Suspense>
+                                    </ErrorBoundaryFallback>
+                                </SidebarPage>
+                            </SidebarInset>
+                        </SidebarProvider>
+                    )}
                     <SessionExpirationWarningOverlay
                         warnUserSecondsBeforeAutoLogout={45}
                     />

@@ -4,11 +4,18 @@ import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { Fragment, type FunctionComponent, type PropsWithChildren } from "react";
 import {
+    type FieldErrors,
     type FieldValues,
     useFieldArray,
     useFormContext,
     useWatch
 } from "react-hook-form";
+
+type NestedFieldError = {
+    key?: { message?: string };
+    value?: { message?: string };
+    message?: string;
+};
 
 export type DefaultValue = {
     key: string;
@@ -69,10 +76,15 @@ export const KeyValueInput = ({
                     <span>{t("value")}</span>
                 </div>
                 {fields.map((attribute, index) => {
-                    const error = (errors as any)[name]?.[index];
+                    const error = (
+                        errors as FieldErrors<Record<string, NestedFieldError[]>>
+                    )[name]?.[index];
                     const keyError = !!error?.key;
                     const valueErrorPresent = !!error?.value || !!error?.message;
-                    const valueError = error?.message || t("valueError");
+                    const valueError =
+                        (typeof error?.message === "string"
+                            ? error.message
+                            : undefined) || t("valueError");
                     return (
                         <Fragment key={attribute.id}>
                             <div className="col-span-5">

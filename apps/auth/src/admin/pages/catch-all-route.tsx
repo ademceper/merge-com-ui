@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "@tanstack/react-router";
 import { useRealm } from "../app/providers/realm-context/realm-context";
-import { generateEncodedPath } from "../shared/lib/generateEncodedPath";
+import { generateEncodedPath } from "../shared/lib/generate-encoded-path";
 import { ROUTES } from "../shared/lib/routes";
 
 /**

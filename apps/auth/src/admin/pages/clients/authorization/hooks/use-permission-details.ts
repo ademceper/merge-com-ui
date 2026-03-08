@@ -5,7 +5,6 @@ import {
     getAssociatedResources,
     getAssociatedScopes
 } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { authzKeys } from "./keys";
 
 export function usePermissionDetails(
@@ -13,7 +12,6 @@ export function usePermissionDetails(
     permissionType: string,
     permissionId?: string
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: authzKeys.permissionDetails(clientId, permissionType, permissionId),
         queryFn: async () => {
@@ -21,10 +19,10 @@ export function usePermissionDetails(
                 return {};
             }
             const [permission, resources, policies, scopes] = await Promise.all([
-                findOnePermission(adminClient, clientId, permissionType, permissionId),
-                getAssociatedResources(adminClient, clientId, permissionId),
-                getAssociatedPolicies(adminClient, clientId, permissionId),
-                getAssociatedScopes(adminClient, clientId, permissionId)
+                findOnePermission(clientId, permissionType, permissionId),
+                getAssociatedResources(clientId, permissionId),
+                getAssociatedPolicies(clientId, permissionId),
+                getAssociatedScopes(clientId, permissionId)
             ]);
 
             if (!permission) {

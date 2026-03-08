@@ -9,10 +9,9 @@ import { useState } from "react";
 import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
 
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useParams } from "../../../shared/lib/useParams";
 import type { ClientParams } from "../../../shared/lib/routes/clients";
-import { toPermissionDetails } from "../../../shared/lib/routes/clients";
-import { toPolicyDetails } from "../../../shared/lib/routes/clients";
+import { toPermissionDetails, toPolicyDetails } from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
 
 type Props = {
     idx: number;

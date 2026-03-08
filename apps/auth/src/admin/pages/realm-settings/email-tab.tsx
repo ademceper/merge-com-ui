@@ -17,13 +17,13 @@ import {
     PasswordControl,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { useCurrentUser } from "../../shared/lib/useCurrentUser";
-import useToggle from "../../shared/lib/useToggle";
+import { toUser } from "../../shared/lib/routes/user";
+import { useTestSMTP } from "./hooks/use-test-smtp";
+import { useCurrentUser } from "../../shared/lib/use-current-user";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { emailRegexPattern } from "../../shared/lib/util";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../shared/ui/form/form-access";
-import { toUser } from "../../shared/lib/routes/user";
 
 type RealmSettingsEmailTabProps = {
     realm: RealmRepresentation;
@@ -33,7 +33,6 @@ type RealmSettingsEmailTabProps = {
 type FormFields = Omit<RealmRepresentation, "users" | "federatedUsers">;
 
 export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const currentUser = useCurrentUser();
@@ -45,6 +44,7 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
     const watchFromValue = watch("smtpServer.from", "");
     const watchHostValue = watch("smtpServer.host", "");
     const [isTesting, toggleTest] = useToggle();
+    const { mutateAsync: testSmtpMut } = useTestSMTP();
 
     const authenticationEnabled = useWatch({
         control,
@@ -79,10 +79,7 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
 
         try {
             toggleTest();
-            await adminClient.realms.testSMTPConnection(
-                { realm: realm.realm! },
-                serverSettings
-            );
+            await testSmtpMut(serverSettings);
             toast.success(t("testConnectionSuccess"));
         } catch (error) {
             toast.error(t("testConnectionError", { error: getErrorMessage(error) }), {

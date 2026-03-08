@@ -1,12 +1,12 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../shared/lib/useParams";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useParams } from "../../shared/lib/use-params";
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import { UsersListSection } from "./users-list-section";
 
-export default function UsersSection() {
+export function UsersSection() {
     useTranslation();
     useRealm();
     const { tab } = useParams<{ tab?: string }>();

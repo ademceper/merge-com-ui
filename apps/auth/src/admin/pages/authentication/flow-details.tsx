@@ -1,5 +1,4 @@
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { Trans, useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
@@ -12,16 +11,26 @@ import {
 import { Label } from "@merge-rd/ui/components/label";
 import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Table, TableBody } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import {
+    type FlowParams,
+    toAuthentication,
+    toFlow
+} from "../../shared/lib/routes/authentication";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { useFlowDetail } from "./api/use-flow-detail";
+import { useAddExecutionToFlow } from "./hooks/use-add-execution-to-flow";
+import { useAddFlowToFlow } from "./hooks/use-add-flow-to-flow";
+import { useDeleteExecution } from "./hooks/use-delete-execution";
+import { useDeleteFlow } from "./hooks/use-delete-flow";
+import { useExecuteChange } from "./hooks/use-execute-change";
+import { useFlowDetail } from "./hooks/use-flow-detail";
+import { useUpdateExecution } from "./hooks/use-update-execution";
 import { BindFlowDialog } from "./bind-flow-dialog";
 import { BuildInLabel } from "./build-in-label";
 import { AuthenticationProviderContextProvider } from "./components/authentication-provider-context";
@@ -39,13 +48,11 @@ import type {
     IndexChange,
     LevelChange
 } from "./execution-model";
-import { toAuthentication, type FlowParams, toFlow } from "../../shared/lib/routes/authentication";
 
 export const providerConditionFilter = (value: AuthenticationProviderRepresentation) =>
     value.displayName?.startsWith("Condition ");
 
-export default function FlowDetails() {
-    const { adminClient } = useAdminClient();
+export function FlowDetails() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -53,7 +60,6 @@ export default function FlowDetails() {
     const navigate = useNavigate();
 
     const [tableView, setTableView] = useState(true);
-    const [liveText, _setLiveText] = useState("");
 
     const [showAddExecutionDialog, setShowAddExecutionDialog] = useState<boolean>();
     const [showAddSubFlowDialog, setShowSubFlowDialog] = useState<boolean>();
@@ -61,6 +67,13 @@ export default function FlowDetails() {
     const [open, toggleOpen, setOpen] = useToggle();
     const [edit, setEdit] = useState(false);
     const [bindFlowOpen, toggleBindFlow] = useToggle();
+
+    const { mutateAsync: executeChangeAsync } = useExecuteChange();
+    const { mutateAsync: updateExecutionAsync } = useUpdateExecution();
+    const { mutateAsync: addExecutionToFlowAsync } = useAddExecutionToFlow();
+    const { mutateAsync: addFlowToFlowAsync } = useAddFlowToFlow();
+    const { mutateAsync: deleteExecutionAsync } = useDeleteExecution();
+    const { mutateAsync: deleteFlowAsync } = useDeleteFlow();
 
     const { data: flowDetailData, refetch: refetchFlowDetail } = useFlowDetail(id);
     const refresh = () => {
@@ -70,80 +83,22 @@ export default function FlowDetails() {
     const [executionList, setExecutionList] = useState<ExecutionList>();
 
     // Update executionList when query data changes
-    if (flowDetailData?.executionList && executionList !== flowDetailData.executionList) {
-        setExecutionList(flowDetailData.executionList);
-    }
+    useEffect(() => {
+        if (flowDetailData?.executionList) {
+            setExecutionList(flowDetailData.executionList);
+        }
+    }, [flowDetailData?.executionList]);
 
     const executeChange = async (
         ex: AuthenticationFlowRepresentation | ExpandableExecution,
         change: LevelChange | IndexChange
     ) => {
         try {
-            let id = ex.id!;
-            if ("parent" in change) {
-                let config: AuthenticatorConfigRepresentation = {};
-                if ("authenticationConfig" in ex) {
-                    config = await adminClient.authenticationManagement.getConfig({
-                        id: ex.authenticationConfig as string
-                    });
-                }
-
-                try {
-                    await adminClient.authenticationManagement.delExecution({ id });
-                } catch {
-                    // skipping already deleted execution
-                }
-                if ("authenticationFlow" in ex) {
-                    const executionFlow = ex as ExpandableExecution;
-                    const result =
-                        await adminClient.authenticationManagement.addFlowToFlow({
-                            flow: change.parent?.displayName! || flow?.alias!,
-                            alias: executionFlow.displayName!,
-                            description: executionFlow.description!,
-                            provider: ex.providerId!,
-                            type: "basic-flow"
-                        });
-                    id = result.id!;
-                    ex.executionList?.forEach((e, i) =>
-                        executeChange(e, {
-                            parent: { ...ex, id: result.id },
-                            newIndex: i,
-                            oldIndex: i
-                        })
-                    );
-                } else {
-                    const result =
-                        await adminClient.authenticationManagement.addExecutionToFlow({
-                            flow: change.parent?.displayName! || flow?.alias!,
-                            provider: ex.providerId!
-                        });
-
-                    if (config.id) {
-                        const newConfig = {
-                            id: result.id,
-                            alias: config.alias,
-                            config: config.config
-                        };
-                        await adminClient.authenticationManagement.createConfig(
-                            newConfig
-                        );
-                    }
-
-                    id = result.id!;
-                }
-            }
-            const times = change.newIndex - change.oldIndex;
-            for (let index = 0; index < Math.abs(times); index++) {
-                if (times > 0) {
-                    await adminClient.authenticationManagement.lowerPriorityExecution({
-                        id
-                    });
-                } else {
-                    await adminClient.authenticationManagement.raisePriorityExecution({
-                        id
-                    });
-                }
-            }
+            await executeChangeAsync({
+                ex,
+                change,
+                flowAlias: flow?.alias!
+            });
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
@@ -156,10 +111,10 @@ export default function FlowDetails() {
     const update = async (execution: ExpandableExecution) => {
         const { executionList, isCollapsed, ...ex } = execution;
         try {
-            await adminClient.authenticationManagement.updateExecution(
-                { flow: flow?.alias! },
-                ex
-            );
+            await updateExecutionAsync({
+                flowAlias: flow?.alias!,
+                execution: ex
+            });
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
@@ -174,7 +129,7 @@ export default function FlowDetails() {
         type: AuthenticationProviderRepresentation
     ) => {
         try {
-            await adminClient.authenticationManagement.addExecutionToFlow({
+            await addExecutionToFlowAsync({
                 flow: name,
                 provider: type.id!
             });
@@ -188,12 +143,12 @@ export default function FlowDetails() {
     };
 
     const addFlow = async (
-        flow: string,
+        flowName: string,
         { name, description = "", type, provider }: Flow
     ) => {
         try {
-            await adminClient.authenticationManagement.addFlowToFlow({
-                flow,
+            await addFlowToFlowAsync({
+                flow: flowName,
                 alias: name,
                 description,
                 provider,
@@ -222,9 +177,7 @@ export default function FlowDetails() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.authenticationManagement.delExecution({
-                    id: selectedExecution?.id!
-                });
+                await deleteExecutionAsync(selectedExecution?.id!);
                 toast.success(t("deleteExecutionSuccess"));
                 refresh();
             } catch (error) {
@@ -248,9 +201,7 @@ export default function FlowDetails() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.authenticationManagement.deleteFlow({
-                    flowId: flow!.id!
-                });
+                await deleteFlowAsync(flow!.id!);
                 navigate({ to: toAuthentication({ realm }) as string });
                 toast.success(t("deleteFlowSuccess"));
             } catch (error) {
@@ -467,9 +418,6 @@ export default function FlowDetails() {
                                 )}
                             </>
                         )}
-                        <div className="sr-only" aria-live="assertive">
-                            {liveText}
-                        </div>
                     </>
                 )}
                 {!tableView && executionList?.expandableList && (

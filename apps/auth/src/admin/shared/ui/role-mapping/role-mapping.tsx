@@ -27,8 +27,7 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { translationFormatter } from "../../lib/translationFormatter";
+import { translationFormatter } from "../../lib/translation-formatter";
 import {
     AddRoleButton,
     AddRoleMappingModal,
@@ -104,7 +103,6 @@ export const RoleMapping = ({
     isManager = true,
     save
 }: RoleMappingProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [key, setKey] = useState(0);
     const refresh = useCallback(() => setKey(k => k + 1), []);
@@ -126,9 +124,9 @@ export const RoleMapping = ({
         let effectiveClientRoles: Row[] = [];
 
         if (!hide) {
-            effectiveRoles = await getEffectiveRoles(adminClient, type, id);
+            effectiveRoles = await getEffectiveRoles(type, id);
             effectiveClientRoles = (
-                await getEffectiveClientRoles(adminClient, { type, id })
+                await getEffectiveClientRoles({ type, id })
             ).map(e => ({
                 client: { clientId: e.client, id: e.clientId },
                 role: {
@@ -145,7 +143,7 @@ export const RoleMapping = ({
             );
         }
 
-        const roles = await getMapping(adminClient, type, id);
+        const roles = await getMapping(type, id);
         const realmRolesMapping = roles.realmMappings?.map(role => ({ role })) || [];
         const clientMapping = Object.values(roles.clientMappings || {}).flatMap(client =>
             client.mappings.map((role: RoleRepresentation) => ({
@@ -161,7 +159,7 @@ export const RoleMapping = ({
         );
         setRows(result);
         setLoading(false);
-    }, [adminClient, type, id, hide]);
+    }, [type, id, hide]);
 
     useEffect(() => {
         loadData();
@@ -169,7 +167,7 @@ export const RoleMapping = ({
 
     const onDeleteConfirm = async () => {
         try {
-            await Promise.all(deleteMapping(adminClient, type, id, selected));
+            await Promise.all(deleteMapping(type, id, selected));
             toast.success(t("roleMappingUpdatedSuccess"));
             setSelected([]);
             refresh();
@@ -197,7 +195,7 @@ export const RoleMapping = ({
             );
             if (nonInherited.length === 0) return;
             try {
-                await Promise.all(deleteMapping(adminClient, type, id, nonInherited));
+                await Promise.all(deleteMapping(type, id, nonInherited));
                 toast.success(t("roleMappingUpdatedSuccess"));
                 refresh();
             } catch (error) {
@@ -209,7 +207,7 @@ export const RoleMapping = ({
                 );
             }
         },
-        [adminClient, type, id, t, refresh]
+        [type, id, t, refresh]
     );
 
     const columns: ColumnDef<Row>[] = useMemo(

@@ -20,7 +20,7 @@ import {
 } from "../../../../shared/ui/role-mapping/add-role-mapping-modal";
 import { type Row, ServiceRole } from "../../../../shared/ui/role-mapping/role-mapping";
 import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
-import { useRolesById } from "../api/use-roles-by-id";
+import { useRolesById } from "../hooks/use-roles-by-id";
 import type { RequiredIdValue } from "./client-scope";
 
 export const Role = () => {

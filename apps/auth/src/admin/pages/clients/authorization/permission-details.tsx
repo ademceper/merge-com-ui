@@ -25,18 +25,18 @@ import {
     TextAreaControl,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
-import { useParams } from "../../../shared/lib/useParams";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import { useUpdatePermission, useCreatePermission, useDeletePermissionMutation } from "./hooks/use-authorization-mutations";
 import type { NewPermissionParams } from "../../../shared/lib/routes/clients";
 import {
     type PermissionDetailsParams,
+    toAuthorizationTab,
     toPermissionDetails
 } from "../../../shared/lib/routes/clients";
-import { usePermissionDetails as usePermissionDetailsQuery } from "./api/use-permission-details";
+import { useParams } from "../../../shared/lib/use-params";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { usePermissionDetails as usePermissionDetailsQuery } from "./hooks/use-permission-details";
 import { ResourcesPolicySelect } from "./resources-policy-select";
 import { ScopeSelect } from "./scope-select";
 
@@ -44,8 +44,7 @@ type FormFields = PolicyRepresentation & {
     resourceType: string;
 };
 
-export default function PermissionDetails() {
-    const { adminClient } = useAdminClient();
+export function PermissionDetails() {
 
     const { t } = useTranslation();
 
@@ -60,6 +59,9 @@ export default function PermissionDetails() {
     } = form;
 
     const navigate = useNavigate();
+    const { mutateAsync: updatePermissionMutation } = useUpdatePermission();
+    const { mutateAsync: createPermissionMutation } = useCreatePermission();
+    const { mutateAsync: deletePermissionMutation } = useDeletePermissionMutation();
     const { id, realm, permissionType, permissionId, selectedId } = useParams<
         NewPermissionParams & PermissionDetailsParams
     >();
@@ -103,15 +105,18 @@ export default function PermissionDetails() {
     const save = async (permission: PolicyRepresentation) => {
         try {
             if (permissionId) {
-                await adminClient.clients.updatePermission(
-                    { id, type: permissionType, permissionId },
+                await updatePermissionMutation({
+                    clientId: id,
+                    type: permissionType,
+                    permissionId,
                     permission
-                );
+                });
             } else {
-                const result = await adminClient.clients.createPermission(
-                    { id, type: permissionType },
+                const result = await createPermissionMutation({
+                    clientId: id,
+                    type: permissionType,
                     permission
-                );
+                });
                 setPermission(result);
                 navigate({
                     to: toPermissionDetails({
@@ -139,8 +144,8 @@ export default function PermissionDetails() {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPermission({
-                    id,
+                await deletePermissionMutation({
+                    clientId: id,
                     type: permissionType,
                     permissionId: permissionId
                 });

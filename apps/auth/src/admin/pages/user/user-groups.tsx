@@ -21,19 +21,19 @@ import {
     getErrorMessage,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { GroupPath } from "../../shared/ui/group/group-path";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
-import { useUserGroups as useUserGroupsQuery } from "./api/use-user-groups";
+import { useAddUserToGroups } from "./hooks/use-add-user-to-groups";
+import { useRemoveUserFromGroups } from "./hooks/use-remove-user-from-groups";
+import { useUserGroups as useUserGroupsQuery } from "./hooks/use-user-groups";
 
 type UserGroupsProps = {
     user: UserRepresentation;
 };
 
 export const UserGroups = ({ user }: UserGroupsProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
 
@@ -46,6 +46,9 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users");
+
+    const { mutateAsync: addUserToGroupsMut } = useAddUserToGroups(user.id!);
+    const { mutateAsync: removeUserFromGroupsMut } = useRemoveUserFromGroups(user.id!);
 
     const { data: userGroupsData, refetch: refetchGroups } = useUserGroupsQuery(
         user.id!,
@@ -73,14 +76,7 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await Promise.all(
-                    selectedGroups.map(group =>
-                        adminClient.users.delFromGroup({
-                            id: user.id!,
-                            groupId: group.id!
-                        })
-                    )
-                );
+                await removeUserFromGroupsMut(selectedGroups);
 
                 setSelectedGroups([]);
                 toast.success(t("removedGroupMembership"));
@@ -101,14 +97,7 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
 
     const addGroups = async (groups: GroupRepresentation[]): Promise<void> => {
         try {
-            await Promise.all(
-                groups.map(group =>
-                    adminClient.users.addToGroup({
-                        id: user.id!,
-                        groupId: group.id!
-                    })
-                )
-            );
+            await addUserToGroupsMut(groups);
 
             toast.success(t("addedGroupMembership"));
         } catch (error) {

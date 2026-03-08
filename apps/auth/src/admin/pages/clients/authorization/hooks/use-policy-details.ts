@@ -4,7 +4,6 @@ import {
     findOnePolicyWithType,
     getAssociatedPolicies
 } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { authzKeys } from "./keys";
 
 export function usePolicyDetails(
@@ -12,19 +11,17 @@ export function usePolicyDetails(
     policyType: string,
     policyId?: string
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: authzKeys.policyDetails(clientId, policyType, policyId),
         queryFn: async () => {
             if (policyId) {
                 const result = await Promise.all([
                     findOnePolicyWithType(
-                        adminClient,
                         clientId,
                         policyType,
                         policyId
                     ) as Promise<PolicyRepresentation | undefined>,
-                    getAssociatedPolicies(adminClient, clientId, policyId)
+                    getAssociatedPolicies(clientId, policyId)
                 ]);
 
                 if (!result[0]) {

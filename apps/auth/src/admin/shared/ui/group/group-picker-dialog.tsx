@@ -1,8 +1,4 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import type {
-    GroupQuery,
-    SubGroupQuery
-} from "@keycloak/keycloak-admin-client/lib/resources/groups";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
@@ -24,10 +20,9 @@ import {
 import { Input } from "@merge-rd/ui/components/input";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
-import { useQuery } from "@tanstack/react-query";
 import { type KeyboardEvent, useEffect, useState } from "react";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { useAdminClient } from "../../../app/admin-client";
+import { useGroupPicker } from "../../api/use-group-picker";
 import { GroupPath } from "./group-path";
 
 type GroupPickerDialogProps = {
@@ -55,7 +50,6 @@ export const GroupPickerDialog = ({
     onClose,
     onConfirm
 }: GroupPickerDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<SelectableGroup[]>([]);
@@ -87,47 +81,7 @@ export const GroupPickerDialog = ({
         if (e.key === "Enter") applyMoveSearch();
     };
 
-    const { data: groupPickerData } = useQuery({
-        queryKey: ["groupPicker", groupId, filter, first, max],
-        queryFn: async () => {
-            let group;
-            let groups;
-            let existingUserGroups;
-
-            if (!groupId) {
-                const args: GroupQuery = {
-                    first,
-                    max: max + 1
-                };
-                if (filter !== "") {
-                    args.search = filter;
-                }
-                groups = await adminClient.groups.find(args);
-            } else {
-                if (!navigation.map(({ id }) => id).includes(groupId)) {
-                    group = await adminClient.groups.findOne({ id: groupId });
-                    if (!group) {
-                        throw new Error(t("notFound"));
-                    }
-                }
-
-                const args: SubGroupQuery = {
-                    first,
-                    max,
-                    parentId: groupId
-                };
-                groups = await adminClient.groups.listSubGroups(args);
-            }
-
-            if (id) {
-                existingUserGroups = await adminClient.users.listGroups({
-                    id
-                });
-            }
-
-            return { group, groups, existingUserGroups };
-        }
-    });
+    const { data: groupPickerData } = useGroupPicker(groupId, filter, first, max, id);
 
     useEffect(() => {
         if (!groupPickerData) return;

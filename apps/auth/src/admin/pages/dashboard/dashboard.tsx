@@ -16,8 +16,8 @@ import { useMemo } from "react";
 import { HelpItem, KeycloakSpinner, label } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import useLocaleSort, { mapByKey } from "../../shared/lib/useLocaleSort";
-import { useParams } from "../../shared/lib/useParams";
+import { useLocaleSort, mapByKey } from "../../shared/lib/use-locale-sort";
+import { useParams } from "../../shared/lib/use-params";
 import { ProviderInfo } from "./provider-info";
 
 const EmptyDashboard = () => {
@@ -328,7 +328,7 @@ const Dashboard = () => {
     );
 };
 
-export default function DashboardSection() {
+export function DashboardSection() {
     const { realm } = useRealm();
     const isMasterRealm = realm === "master";
     return (

@@ -7,7 +7,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../../app/providers/access/access";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { IdentityProviderSelect } from "../../../shared/ui/identity-provider/identity-provider-select";

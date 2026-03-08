@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
  *
  * @param initialValue The initial value to use, false by default.
  */
-export default function useToggle(initialValue = false) {
+export function useToggle(initialValue = false) {
     const [value, setValue] = useState(initialValue);
     const toggleValue = useCallback(() => setValue(val => !val), []);
 

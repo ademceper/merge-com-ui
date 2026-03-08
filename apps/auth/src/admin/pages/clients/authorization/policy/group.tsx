@@ -16,7 +16,7 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { HelpItem, TextControl } from "../../../../../shared/keycloak-ui-shared";
 import { GroupPickerDialog } from "../../../../shared/ui/group/group-picker-dialog";
-import { useGroupsById } from "../api/use-groups-by-id";
+import { useGroupsById } from "../hooks/use-groups-by-id";
 
 type GroupForm = {
     groups?: GroupValue[];

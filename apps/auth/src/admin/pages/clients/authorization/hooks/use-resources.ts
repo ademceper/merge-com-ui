@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { listResources } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { authzKeys } from "./keys";
 
 export function useResources(
@@ -9,7 +8,6 @@ export function useResources(
     max: number,
     search: Record<string, unknown>
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: authzKeys.resources(clientId, first, max, search),
         queryFn: () => {
@@ -19,7 +17,7 @@ export function useResources(
                 deep: false,
                 ...search
             };
-            return listResources(adminClient, clientId, params);
+            return listResources(clientId, params);
         }
     });
 }

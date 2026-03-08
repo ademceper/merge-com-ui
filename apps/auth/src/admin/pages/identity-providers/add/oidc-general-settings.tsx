@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useParams } from "../../../shared/lib/useParams";
+import type { IdentityProviderParams } from "../../../shared/lib/routes/identity-providers";
+import { useParams } from "../../../shared/lib/use-params";
 import { DisplayOrder } from "../component/display-order";
 import { RedirectUrl } from "../component/redirect-url";
-import type { IdentityProviderParams } from "../../../shared/lib/routes/identity-providers";
 
 export const OIDCGeneralSettings = () => {
     const { t } = useTranslation();

@@ -1,7 +1,13 @@
 import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-    "/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition",
+    "/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition"
 )({
-    component: lazyRouteComponent(() => import("../../../../../../../../pages/realm-settings/new-client-policy-condition")),
+    component: lazyRouteComponent(
+        () =>
+            import(
+                "../../../../../../../../pages/realm-settings/new-client-policy-condition"
+            ),
+        "NewClientPolicyCondition"
+    )
 });

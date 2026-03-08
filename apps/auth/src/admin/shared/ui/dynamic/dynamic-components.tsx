@@ -46,7 +46,7 @@ export const DynamicComponents = ({
                     />
                 );
             } else {
-                console.warn(`There is no editor registered for ${componentType}`);
+                return null;
             }
         })}
     </div>

@@ -11,9 +11,9 @@ import {
     getErrorMessage,
     PasswordInput
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
-import useFormatDate from "../../../shared/lib/useFormatDate";
+import { useInvalidateClientSecret } from "../hooks/use-invalidate-client-secret";
+import { useFormatDate } from "../../../shared/lib/use-format-date";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
@@ -77,9 +77,9 @@ const ExpireDateFormatter = ({ time }: { time: number }) => {
 };
 
 export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: invalidateSecret } = useInvalidateClientSecret();
     const [secretRotated, setSecretRotated] = useState<string | undefined>(
         client.attributes?.["client.secret.rotated"]
     );
@@ -96,9 +96,7 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.invalidateSecret({
-                    id: client.id!
-                });
+                await invalidateSecret(client.id!);
                 setSecretRotated(undefined);
                 toast.success(t("invalidateRotatedSuccess"));
             } catch (error) {

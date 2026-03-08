@@ -18,6 +18,7 @@ import {
     Plus,
     Trash
 } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -28,10 +29,11 @@ import {
     type Row
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
-import { useGroupsList } from "./api/use-groups-list";
-import { getLastId } from "./groupIdUtils";
+import { groupKeys } from "./hooks/keys";
+import { useDeleteGroups } from "./hooks/use-delete-groups";
+import { useGroupsList } from "./hooks/use-groups-list";
+import { getLastId } from "./group-id-utils";
 import { GroupsModal } from "./groups-modal";
 import { MoveDialog } from "./move-dialog";
 import { useSubGroups } from "./sub-groups-context";
@@ -41,7 +43,6 @@ type GroupTableProps = {
 };
 
 export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const location = useLocation();
     const id = getLastId(location.pathname);
@@ -49,9 +50,11 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users") || currentGroup()?.access?.manage;
 
-    const { data: groups = [], refetch } = useGroupsList(id);
+    const queryClient = useQueryClient();
+    const { data: groups = [] } = useGroupsList(id);
+    const { mutateAsync: deleteGroupMutation } = useDeleteGroups();
     const refresh = () => {
-        refetch();
+        queryClient.invalidateQueries({ queryKey: groupKeys.all });
         viewRefresh();
     };
     const [groupToDelete, setGroupToDelete] = useState<GroupRepresentation | undefined>();
@@ -64,7 +67,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
     const onDeleteConfirm = async () => {
         if (!groupToDelete?.id) return;
         try {
-            await adminClient.groups.del({ id: groupToDelete.id });
+            await deleteGroupMutation([groupToDelete.id]);
             toast.success(t("groupDeleted", { count: 1 }));
             setGroupToDelete(undefined);
             refresh();

@@ -6,7 +6,7 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { useDelAuthorizationScope } from "./hooks/use-authorization-mutations";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import type { PermissionScopeRepresentation } from "./scopes";
 
@@ -25,9 +25,9 @@ export const DeleteScopeDialog = ({
     open,
     toggleDialog
 }: DeleteScopeDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: delScopeMutation } = useDelAuthorizationScope();
     return (
         <ConfirmDialogModal
             open={open}
@@ -36,8 +36,8 @@ export const DeleteScopeDialog = ({
             continueButtonLabel="confirm"
             onConfirm={async () => {
                 try {
-                    await adminClient.clients.delAuthorizationScope({
-                        id: clientId,
+                    await delScopeMutation({
+                        clientId,
                         scopeId: selectedScope?.id!
                     });
                     toast.success(t("resourceScopeSuccess"));

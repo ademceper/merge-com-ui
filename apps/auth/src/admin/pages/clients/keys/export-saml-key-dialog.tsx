@@ -15,8 +15,8 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useDownloadKey } from "../hooks/use-key-operations";
 import { getFileExtension, KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
 
@@ -31,23 +31,21 @@ export const ExportSamlKeyDialog = ({
     close,
     keyType
 }: ExportSamlKeyDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: downloadKeyMutation } = useDownloadKey();
     const form = useForm<KeyStoreConfig>({
         defaultValues: { realmAlias: realm }
     });
 
     const download = async (config: KeyStoreConfig) => {
         try {
-            const keyStore = await adminClient.clients.downloadKey(
-                {
-                    id: clientId,
-                    attr: keyType
-                },
+            const keyStore = await downloadKeyMutation({
+                clientId,
+                attr: keyType,
                 config
-            );
+            });
             saveAs(
                 new Blob([keyStore], { type: "application/octet-stream" }),
                 `keystore.${getFileExtension(config.format ?? "")}`

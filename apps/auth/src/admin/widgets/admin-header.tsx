@@ -1,14 +1,14 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
 import { useLocation } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import {
     avatarInitials,
     loggedInUserName,
     userEmailFromToken
-} from "../shared/lib/userMenuUtils";
+} from "../shared/lib/user-menu-utils";
 import { GroupBreadCrumbsForHeader } from "../shared/ui/bread-crumb/group-bread-crumbs";
 import {
     PageBreadCrumbs,
@@ -34,6 +34,21 @@ export function AdminHeader() {
     const { keycloak } = useEnvironment<Environment>();
     const isGroupsSection = pathname.includes("/groups");
     const pageTitle = usePageTitle();
+    const scaleWrapperRef = useRef<HTMLDivElement | null>(null);
+
+    const handleScaleToggle = useCallback(() => {
+        // Lazily find and cache the scale wrapper on first click
+        if (!scaleWrapperRef.current) {
+            scaleWrapperRef.current = document.querySelector(
+                "[data-scale-wrapper]"
+            ) as HTMLDivElement | null;
+        }
+        const wrapper = scaleWrapperRef.current;
+        if (wrapper) {
+            const isScaled = wrapper.getAttribute("data-scaled") === "true";
+            wrapper.setAttribute("data-scaled", isScaled ? "false" : "true");
+        }
+    }, []);
 
     const userMenuInfo = useMemo<UserMenuInfo>(
         () => ({
@@ -56,13 +71,7 @@ export function AdminHeader() {
             <button
                 type="button"
                 className="inline-flex h-7 items-center rounded-md bg-neutral-100 px-2.5 text-xs font-medium text-neutral-600 hover:bg-neutral-200 transition-colors mr-2"
-                onClick={() => {
-                    const wrapper = document.querySelector("[data-scale-wrapper]");
-                    if (wrapper) {
-                        const isScaled = wrapper.getAttribute("data-scaled") === "true";
-                        wrapper.setAttribute("data-scaled", isScaled ? "false" : "true");
-                    }
-                }}
+                onClick={handleScaleToggle}
             >
                 Scale
             </button>

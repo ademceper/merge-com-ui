@@ -48,9 +48,5 @@ export const AccessContextProvider = ({ children }: PropsWithChildren) => {
         return { hasAccess, hasSomeAccess };
     }, [access]);
 
-    return (
-        <AccessContext.Provider value={value}>
-            {children}
-        </AccessContext.Provider>
-    );
+    return <AccessContext.Provider value={value}>{children}</AccessContext.Provider>;
 };

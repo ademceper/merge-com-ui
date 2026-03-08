@@ -13,13 +13,13 @@ import {
     HelpItem,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
-import useToggle from "../../../shared/lib/useToggle";
+import { useImportResource, useUpdateResourceServer } from "./hooks/use-authorization-mutations";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useResourceServer } from "./api/use-resource-server";
+import { useResourceServer } from "./hooks/use-resource-server";
 import { DecisionStrategySelect } from "./decision-strategy-select";
 import { ImportDialog } from "./import-dialog";
 
@@ -28,9 +28,10 @@ const POLICY_ENFORCEMENT_MODES = ["ENFORCING", "PERMISSIVE", "DISABLED"] as cons
 type FormFields = Omit<ResourceServerRepresentation, "scopes" | "resources">;
 
 export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: importResourceMutation } = useImportResource();
+    const { mutateAsync: updateResourceServerMutation } = useUpdateResourceServer();
     const [resource, setResource] = useState<ResourceServerRepresentation>();
     const [importDialog, toggleImportDialog] = useToggle();
 
@@ -51,7 +52,7 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
 
     const importResource = async (value: ResourceServerRepresentation) => {
         try {
-            await adminClient.clients.importResource({ id: clientId }, value);
+            await importResourceMutation({ clientId, value });
             toast.success(t("importResourceSuccess"));
             reset({ ...value });
         } catch (error) {
@@ -63,7 +64,7 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
 
     const onSubmit = async (resource: ResourceServerRepresentation) => {
         try {
-            await adminClient.clients.updateResourceServer({ id: clientId }, resource);
+            await updateResourceServerMutation({ clientId, resource });
             toast.success(t("updateResourceSuccess"));
         } catch (error) {
             toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), {

@@ -6,7 +6,7 @@ type PlainPermissionStatus = {
     readonly state: PermissionState;
 };
 
-export default function useQueryPermission(
+export function useQueryPermission(
     name: PermissionName
 ): PlainPermissionStatus | null {
     const [status, setStatus] = useState<PermissionStatus | null>(null);

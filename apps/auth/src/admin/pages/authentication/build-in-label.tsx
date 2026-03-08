@@ -1,8 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { CheckCircle } from "@phosphor-icons/react";
+import { memo } from "react";
 
-export const BuildInLabel = () => {
+export const BuildInLabel = memo(() => {
     const { t } = useTranslation();
 
     return (
@@ -11,4 +12,4 @@ export const BuildInLabel = () => {
             {t("buildIn")}
         </Label>
     );
-};
+});

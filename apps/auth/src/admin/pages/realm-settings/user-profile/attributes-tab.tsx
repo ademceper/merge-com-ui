@@ -28,10 +28,13 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useLocale from "../../../shared/lib/useLocale";
+import {
+    deleteRealmLocalizationTexts,
+    fetchRealmLocalizationTexts
+} from "../../../api/realm-settings";
 import { toAddAttribute, toAttribute } from "../../../shared/lib/routes/realm-settings";
+import { useLocale } from "../../../shared/lib/use-locale";
 import { useUserProfile } from "./user-profile-context";
 
 const RESTRICTED_ATTRIBUTES = ["username", "email"];
@@ -43,7 +46,6 @@ type AttributesTabProps = {
 };
 
 export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
-    const { adminClient } = useAdminClient();
     const { config, save } = useUserProfile();
     const { realm } = useRealm();
     const { t } = useTranslation();
@@ -68,22 +70,16 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
             await Promise.all(
                 combinedLocales.map(async locale => {
                     try {
-                        await adminClient.realms.getRealmLocalizationTexts({
-                            realm,
-                            selectedLocale: locale
-                        });
+                        await fetchRealmLocalizationTexts(realm, locale);
 
-                        await adminClient.realms.deleteRealmLocalizationTexts({
+                        await deleteRealmLocalizationTexts(
                             realm,
-                            selectedLocale: locale,
-                            key: formattedTranslationsToDelete
-                        });
+                            locale,
+                            formattedTranslationsToDelete
+                        );
 
                         const updatedData =
-                            await adminClient.realms.getRealmLocalizationTexts({
-                                realm,
-                                selectedLocale: locale
-                            });
+                            await fetchRealmLocalizationTexts(realm, locale);
                         setTableData([updatedData]);
                     } catch {
                         console.error(`Error removing translations for ${locale}`);

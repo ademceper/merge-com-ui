@@ -12,6 +12,7 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,10 +25,11 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useClientRegistrationPolicies } from "../api/use-client-registration-policies";
+import { useDeleteRegistrationPolicy } from "../hooks/use-delete-registration-policy";
 import type { ClientRegistrationParams } from "../../../shared/lib/routes/clients";
+import { clientKeys } from "../hooks/keys";
+import { useClientRegistrationPolicies } from "../hooks/use-client-registration-policies";
 import { AddClientRegistrationPolicyDialog } from "./add-client-registration-policy-dialog";
 import { EditClientRegistrationPolicyDialog } from "./edit-client-registration-policy-dialog";
 
@@ -36,25 +38,25 @@ type ClientRegistrationListProps = {
 };
 
 export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { subTab: _subTab } = useParams({ strict: false }) as ClientRegistrationParams;
     const { realm } = useRealm();
-    const { data: policies = [], refetch } = useClientRegistrationPolicies(subType);
+    const queryClient = useQueryClient();
+    const { mutateAsync: deletePolicy } = useDeleteRegistrationPolicy();
+    const { data: policies = [] } = useClientRegistrationPolicies(subType);
     const [selectedPolicy, setSelectedPolicy] = useState<ComponentRepresentation>();
     const [editPolicy, setEditPolicy] = useState<ComponentRepresentation>();
     const refresh = () => {
-        refetch();
+        queryClient.invalidateQueries({
+            queryKey: clientKeys.registrationPolicies(subType)
+        });
     };
 
     const onDeleteConfirm = async () => {
         if (!selectedPolicy?.id) return;
         try {
-            await adminClient.components.del({
-                realm,
-                id: selectedPolicy.id
-            });
+            await deletePolicy(selectedPolicy.id);
             toast.success(t("clientRegisterPolicyDeleteSuccess"));
             setSelectedPolicy(undefined);
             refresh();

@@ -1,4 +1,3 @@
-import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type RequiredActionProviderSimpleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderSimpleRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
@@ -11,7 +10,7 @@ import {
     TooltipTrigger
 } from "@merge-rd/ui/components/tooltip";
 import { Gear } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import {
@@ -19,10 +18,9 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
-import { addTrailingSlash, toKey } from "../../shared/lib/util";
+import { toKey } from "../../shared/lib/util";
+import { useRequiredActions as useRequiredActionsQuery } from "./hooks/use-required-actions";
+import { useUpdateRequiredAction } from "./hooks/use-update-required-action";
 import { RequiredActionConfigModal } from "./components/required-action-config-modal";
 
 type DataType = RequiredActionProviderRepresentation &
@@ -38,83 +36,16 @@ type Row = {
 };
 
 export const RequiredActions = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { realm: realmName } = useRealm();
-    const [actions, setActions] = useState<Row[]>();
     const [selectedAction, setSelectedAction] = useState<DataType>();
-    const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey(k => k + 1), []);
 
-    const loadActions = useCallback(async (): Promise<
-        RequiredActionProviderRepresentation[]
-    > => {
-        const requiredActionsRequest = await fetchWithError(
-            `${addTrailingSlash(
-                adminClient.baseUrl
-            )}admin/realms/${realmName}/ui-ext/authentication-management/required-actions`,
-            {
-                method: "GET",
-                headers: getAuthorizationHeaders(await adminClient.getAccessToken())
-            }
-        );
-        return (await requiredActionsRequest.json()) as DataType[];
-    }, [adminClient, realmName]);
-
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const [requiredActions, unregisteredRequiredActions] = await Promise.all([
-                    loadActions(),
-                    adminClient.authenticationManagement.getUnregisteredRequiredActions()
-                ]);
-                if (cancelled) return;
-                const rows: Row[] = [
-                    ...requiredActions.map(action => ({
-                        name: action.name!,
-                        enabled: action.enabled!,
-                        defaultAction: action.defaultAction!,
-                        data: action
-                    })),
-                    ...unregisteredRequiredActions.map(action => ({
-                        name: action.name!,
-                        enabled: false,
-                        defaultAction: false,
-                        data: action
-                    }))
-                ];
-                setActions(rows);
-            } catch {
-                if (!cancelled) setActions([]);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, loadActions, adminClient]);
-
-    const isUnregisteredAction = (data: DataType): boolean => {
-        return !("alias" in data);
-    };
+    const { data: actions, isLoading } = useRequiredActionsQuery();
+    const { mutateAsync: updateRequiredAction } = useUpdateRequiredAction();
 
     const updateAction = useCallback(
         async (action: DataType, field: "enabled" | "defaultAction") => {
             try {
-                if (field in action) {
-                    action[field] = !action[field];
-                    delete action.configurable;
-                    await adminClient.authenticationManagement.updateRequiredAction(
-                        { alias: action.alias! },
-                        action
-                    );
-                } else if (isUnregisteredAction(action)) {
-                    await adminClient.authenticationManagement.registerRequiredAction({
-                        name: action.name,
-                        providerId: action.providerId
-                    });
-                }
-                refresh();
+                await updateRequiredAction({ action, field });
                 toast.success(t("updatedRequiredActionSuccess"));
             } catch (error) {
                 toast.error(
@@ -125,7 +56,7 @@ export const RequiredActions = () => {
                 );
             }
         },
-        [adminClient, refresh, t]
+        [updateRequiredAction, t]
     );
 
     const columns: ColumnDef<Row>[] = useMemo(
@@ -202,7 +133,7 @@ export const RequiredActions = () => {
         [t, updateAction]
     );
 
-    if (!actions) {
+    if (isLoading || !actions) {
         return <KeycloakSpinner />;
     }
 

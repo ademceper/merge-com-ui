@@ -26,12 +26,12 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useParams } from "../../../shared/lib/useParams";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useDeleteComponent } from "../hooks/use-delete-component";
 import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
 import { toUserFederation } from "../../../shared/lib/routes/user-federation";
+import { useParams } from "../../../shared/lib/use-params";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 
 type HeaderProps = {
     provider: string;
@@ -46,7 +46,6 @@ export const Header = ({
     noDivider = false,
     dropdownItems = []
 }: HeaderProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { id } = useParams<Partial<CustomUserFederationRouteParams>>();
@@ -54,6 +53,7 @@ export const Header = ({
     const { realm } = useRealm();
 
     const { control, setValue } = useFormContext();
+    const { mutateAsync: deleteComponentMut } = useDeleteComponent();
 
     const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
         titleKey: "userFedDisableConfirmTitle",
@@ -70,7 +70,7 @@ export const Header = ({
     const onDeleteConfirm = async () => {
         if (!id) return;
         try {
-            await adminClient.components.del({ id });
+            await deleteComponentMut(id);
             setDeleteDialogOpen(false);
             toast.success(t("userFedDeletedSuccess"));
             navigate({ to: toUserFederation({ realm }) as string, replace: true });

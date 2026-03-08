@@ -5,7 +5,7 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useScopeSelectScopes } from "./api/use-scope-select-scopes";
+import { useScopeSelectScopes } from "./hooks/use-scope-select-scopes";
 
 type ScopeSelectProps = {
     clientId: string;

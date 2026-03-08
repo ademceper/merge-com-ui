@@ -29,19 +29,21 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useSaveClientProfiles } from "./hooks/use-save-client-profiles";
+import {
+    toAddClientProfile,
+    toClientProfile
+} from "../../shared/lib/routes/realm-settings";
 import { prettyPrintJSON } from "../../shared/lib/util";
-import CodeEditor from "../../shared/ui/form/code-editor";
-import { useClientProfiles } from "./api/use-client-profiles";
-import { toAddClientProfile, toClientProfile } from "../../shared/lib/routes/realm-settings";
+import { CodeEditor } from "../../shared/ui/form/code-editor";
+import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ClientProfile = ClientProfileRepresentation & {
     global: boolean;
 };
 
-export default function ProfilesTab() {
-    const { adminClient } = useAdminClient();
+export function ProfilesTab() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -51,6 +53,7 @@ export default function ProfilesTab() {
     const [show, setShow] = useState(false);
     const [code, setCode] = useState<string>();
 
+    const { mutateAsync: saveClientProfilesMut } = useSaveClientProfiles();
     const { data: allProfilesData, refetch: refetchProfiles } = useClientProfiles();
 
     useEffect(() => {
@@ -83,7 +86,7 @@ export default function ProfilesTab() {
             .map<ClientProfileRepresentation>(profile => normalizeProfile(profile));
 
         try {
-            await adminClient.clientPolicies.createProfiles({
+            await saveClientProfilesMut({
                 profiles: updatedProfiles ?? [],
                 globalProfiles
             });
@@ -169,7 +172,7 @@ export default function ProfilesTab() {
                 .map(profile => normalizeProfile(profile));
 
             try {
-                await adminClient.clientPolicies.createProfiles({
+                await saveClientProfilesMut({
                     profiles: changedProfiles,
                     globalProfiles: changedGlobalProfiles
                 });

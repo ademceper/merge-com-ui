@@ -14,7 +14,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -24,23 +24,23 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../shared/lib/useParams";
+import {
+    type EditClientPolicyParams,
+    toClientPolicies,
+    toClientProfile,
+    toEditClientPolicy,
+    toEditClientPolicyCondition,
+    toNewClientPolicyCondition
+} from "../../shared/lib/routes/realm-settings";
+import { useParams } from "../../shared/lib/use-params";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { AddClientProfileModal } from "./add-client-profile-modal";
-import { useClientPolicies } from "./api/use-client-policies";
-import { useClientProfiles } from "./api/use-client-profiles";
-import {
-    toNewClientPolicyCondition,
-    toClientPolicies,
-    toClientProfile,
-    type EditClientPolicyParams,
-    toEditClientPolicy,
-    toEditClientPolicyCondition
-} from "../../shared/lib/routes/realm-settings";
+import { useClientPolicies } from "./hooks/use-client-policies";
+import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type FormFields = Required<ClientPolicyRepresentation>;
 
@@ -57,20 +57,11 @@ type PolicyDetailAttributes = {
     name: string;
 };
 
-export default function NewClientPolicy() {
-    const { adminClient } = useAdminClient();
-
+export function NewClientPolicy() {
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
-    const [policies, setPolicies] = useState<ClientPolicyRepresentation[]>();
-    const [globalPolicies, setGlobalPolicies] = useState<ClientPolicyRepresentation[]>();
-    const [allPolicies, setAllPolicies] = useState<ClientPolicyRepresentation[]>();
-    const [clientProfiles, setClientProfiles] = useState<ClientProfileRepresentation[]>(
-        []
-    );
+    const { mutateAsync: updateClientPolicyMut } = useUpdateClientPolicy();
 
-    const [currentPolicy, setCurrentPolicy] = useState<ClientPolicyRepresentation>();
     const [showAddConditionsAndProfilesForm, setShowAddConditionsAndProfilesForm] =
         useState(false);
 
@@ -94,43 +85,49 @@ export default function NewClientPolicy() {
     const { data: policiesData } = useClientPolicies();
     const { data: profilesData } = useClientProfiles();
 
+    const policies = useMemo(() => policiesData?.policies ?? [], [policiesData]);
+
+    const globalPolicies = useMemo(
+        () => policiesData?.globalPolicies ?? [],
+        [policiesData]
+    );
+
+    const allPolicies = useMemo(
+        () => [...globalPolicies, ...policies],
+        [globalPolicies, policies]
+    );
+
+    const currentPolicy = useMemo(() => {
+        if (!policiesData) return undefined;
+        return (
+            policiesData.policies?.find(item => item.name === policyName) ??
+            policiesData.globalPolicies?.find(item => item.name === policyName)
+        );
+    }, [policiesData, policyName]);
+
+    const isGlobalPolicy = useMemo(() => {
+        if (!policiesData) return false;
+        const inLocal = policiesData.policies?.some(item => item.name === policyName);
+        if (inLocal) return false;
+        return (
+            policiesData.globalPolicies?.some(item => item.name === policyName) ?? false
+        );
+    }, [policiesData, policyName]);
+
+    const clientProfiles = useMemo<ClientProfileRepresentation[]>(() => {
+        if (!profilesData) return [];
+        return [...(profilesData.globalProfiles ?? []), ...(profilesData.profiles ?? [])];
+    }, [profilesData]);
+
+    // Side effect: reset the form when currentPolicy changes
     useEffect(() => {
-        if (policiesData && profilesData) {
-            let curPolicy = policiesData.policies?.find(item => item.name === policyName);
-            if (curPolicy === undefined) {
-                curPolicy = policiesData.globalPolicies?.find(
-                    item => item.name === policyName
-                );
-                setIsGlobalPolicy(curPolicy !== undefined);
-            }
-
-            const allClientProfiles = [
-                ...(profilesData.globalProfiles ?? []),
-                ...(profilesData.profiles ?? [])
-            ];
-
-            const allClientPolicies = [
-                ...(policiesData.globalPolicies ?? []),
-                ...(policiesData.policies ?? [])
-            ];
-
-            setPolicies(policiesData.policies ?? []);
-            setGlobalPolicies(policiesData.globalPolicies ?? []);
-            setAllPolicies(allClientPolicies);
-            if (curPolicy) {
-                setupForm(curPolicy);
-                setClientProfiles(allClientProfiles);
-                setCurrentPolicy(curPolicy);
-                setShowAddConditionsAndProfilesForm(true);
-            }
+        if (currentPolicy) {
+            form.reset(currentPolicy);
+            setShowAddConditionsAndProfilesForm(true);
         }
-    }, [policiesData, profilesData]);
+    }, [currentPolicy]);
 
-    const setupForm = (policy: ClientPolicyRepresentation) => {
-        form.reset(policy);
-    };
-
-    const policy = (allPolicies || []).filter(policy => policy.name === policyName);
+    const policy = allPolicies.filter(policy => policy.name === policyName);
     const policyConditions = policy[0]?.conditions || [];
     const policyProfiles = policy[0]?.profiles || [];
 
@@ -148,26 +145,27 @@ export default function NewClientPolicy() {
         };
 
         const getAllPolicies = () => {
-            const policyNameExists = policies?.some(
+            const policyNameExists = policies.some(
                 policy => policy.name === createdPolicy.name
             );
 
             if (policyNameExists) {
-                return policies?.map(policy =>
+                return policies.map(policy =>
                     policy.name === createdPolicy.name ? createdPolicy : policy
                 );
             } else if (createdForm.name !== policyName) {
                 return policies
-                    ?.filter(item => item.name !== policyName)
+                    .filter(item => item.name !== policyName)
                     .concat(createdForm);
             }
-            return policies?.concat(createdForm);
+            return policies.concat(createdForm);
         };
 
         try {
-            await adminClient.clientPolicies.updatePolicy({
+            await updateClientPolicyMut({
                 policies: getAllPolicies()
             });
+
             toast.success(
                 policyName
                     ? t("updateClientPolicySuccess")
@@ -192,14 +190,13 @@ export default function NewClientPolicy() {
         continueButtonLabel: t("delete"),
         continueButtonVariant: "destructive",
         onConfirm: async () => {
-            const updatedPolicies = policies?.filter(
-                policy => policy.name !== policyName
-            );
+            const updatedPolicies = policies.filter(policy => policy.name !== policyName);
 
             try {
-                await adminClient.clientPolicies.updatePolicy({
+                await updateClientPolicyMut({
                     policies: updatedPolicies
                 });
+    
                 toast.success(t("deleteClientPolicySuccess"));
                 navigate({
                     to: toClientPolicies({
@@ -227,9 +224,10 @@ export default function NewClientPolicy() {
             if (conditionToDelete?.name) {
                 currentPolicy?.conditions?.splice(conditionToDelete.idx!, 1);
                 try {
-                    await adminClient.clientPolicies.updatePolicy({
+                    await updateClientPolicyMut({
                         policies: policies
                     });
+        
                     toast.success(t("deleteConditionSuccess"));
                     navigate({
                         to: toEditClientPolicy({
@@ -244,14 +242,15 @@ export default function NewClientPolicy() {
                     );
                 }
             } else {
-                const updatedPolicies = policies?.filter(
+                const updatedPolicies = policies.filter(
                     policy => policy.name !== policyName
                 );
 
                 try {
-                    await adminClient.clientPolicies.updatePolicy({
+                    await updateClientPolicyMut({
                         policies: updatedPolicies
                     });
+        
                     toast.success(t("deleteClientSuccess"));
                     navigate({
                         to: toClientPolicies({
@@ -281,9 +280,10 @@ export default function NewClientPolicy() {
             if (profileToDelete?.name) {
                 currentPolicy?.profiles?.splice(profileToDelete.idx!, 1);
                 try {
-                    await adminClient.clientPolicies.updatePolicy({
+                    await updateClientPolicyMut({
                         policies: policies
                     });
+        
                     toast.success(t("deleteClientPolicyProfileSuccess"));
                     form.setValue("profiles", currentPolicy?.profiles || []);
                     navigate({
@@ -301,14 +301,15 @@ export default function NewClientPolicy() {
                     );
                 }
             } else {
-                const updatedPolicies = policies?.filter(
+                const updatedPolicies = policies.filter(
                     policy => policy.name !== policyName
                 );
 
                 try {
-                    await adminClient.clientPolicies.updatePolicy({
+                    await updateClientPolicyMut({
                         policies: updatedPolicies
                     });
+        
                     toast.success(t("deleteClientSuccess"));
                     navigate({
                         to: toClientPolicies({
@@ -347,26 +348,23 @@ export default function NewClientPolicy() {
             conditions: currentPolicy?.conditions
         };
 
-        const index = policies?.findIndex(policy => createdPolicy.name === policy.name);
+        const index = policies.findIndex(policy => createdPolicy.name === policy.name);
 
-        if (index === undefined || index === -1) {
+        if (index === -1) {
             return;
         }
 
         const newPolicies = [
-            ...(policies || []).slice(0, index),
+            ...policies.slice(0, index),
             createdPolicy,
-            ...(policies || []).slice(index + 1)
+            ...policies.slice(index + 1)
         ];
 
         try {
-            await adminClient.clientPolicies.updatePolicy({
+            await updateClientPolicyMut({
                 policies: newPolicies
             });
-            setPolicies(newPolicies);
-            const allClientPolicies = [...(globalPolicies || []), ...newPolicies];
-            setAllPolicies(allClientPolicies);
-            setCurrentPolicy(createdPolicy);
+
             form.setValue("profiles", createdPolicy.profiles);
             navigate({
                 to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string
@@ -389,7 +387,7 @@ export default function NewClientPolicy() {
         }
     });
 
-    if (!policies) {
+    if (!policiesData) {
         return <KeycloakSpinner />;
     }
 

@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 // keys-tab
 export type KeySubTab = "list" | "providers";

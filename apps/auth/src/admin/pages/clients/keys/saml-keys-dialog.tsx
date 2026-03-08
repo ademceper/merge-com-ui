@@ -1,4 +1,3 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
 import { useTranslation } from "@merge-rd/i18n";
@@ -21,7 +20,7 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { uploadKey, generateKey } from "../../../api/clients";
 import { Certificate } from "./certificate";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
@@ -39,7 +38,6 @@ export type SamlKeysDialogForm = KeyStoreConfig & {
 };
 
 export const submitForm = async (
-    adminClient: KeycloakAdminClient,
     form: SamlKeysDialogForm,
     id: string,
     attr: KeyTypes,
@@ -53,7 +51,7 @@ export const submitForm = async (
         );
         formData.append("file", file);
 
-        await adminClient.clients.uploadKey({ id, attr }, formData);
+        await uploadKey(id, attr, formData);
         callback();
     } catch (error) {
         callback(error);
@@ -67,7 +65,6 @@ export const SamlKeysDialog = ({
     onClose,
     onCancel
 }: SamlKeysDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const [type, setType] = useState(false);
@@ -78,7 +75,7 @@ export const SamlKeysDialog = ({
         formState: { isValid }
     } = form;
     const submit = async (form: SamlKeysDialogForm) => {
-        await submitForm(adminClient, form, id, attr, error => {
+        await submitForm(form, id, attr, error => {
             if (error) {
                 toast.error(t("importError", { error: getErrorMessage(error) }), {
                     description: getErrorDescription(error)
@@ -91,10 +88,7 @@ export const SamlKeysDialog = ({
 
     const generate = async () => {
         try {
-            const key = await adminClient.clients.generateKey({
-                id,
-                attr
-            });
+            const key = await generateKey(id, attr);
             setKeys(key);
             saveAs(
                 new Blob([key.privateKey!], {

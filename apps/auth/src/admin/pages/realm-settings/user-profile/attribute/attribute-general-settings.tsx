@@ -19,14 +19,14 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../../shared/keycloak-ui-shared";
-import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
-import { useParams } from "../../../../shared/lib/useParams";
+import type { AttributeParams } from "../../../../shared/lib/routes/realm-settings";
+import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
+import { useParams } from "../../../../shared/lib/use-params";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
-import { useClientScopes } from "../../api/use-client-scopes";
-import { useUserProfileConfigGlobal } from "../../api/use-user-profile-config-global";
+import { useClientScopes } from "../../hooks/use-client-scopes";
+import { useUserProfileConfigGlobal } from "../../hooks/use-user-profile-config-global";
 import { USERNAME_EMAIL } from "../../new-attribute-settings";
-import type { AttributeParams } from "../../../../shared/lib/routes/realm-settings";
 import { TranslatableField } from "./translatable-field";
 
 const REQUIRED_FOR = [

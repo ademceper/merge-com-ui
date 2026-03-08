@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { listAllScopes } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { authzKeys } from "./keys";
 
 export function useScopePickerScopes(clientId: string, search: string) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: authzKeys.scopePicker(clientId, search),
         queryFn: () => {
@@ -14,7 +12,7 @@ export function useScopePickerScopes(clientId: string, search: string) {
                 deep: false,
                 name: search
             };
-            return listAllScopes(adminClient, clientId, params);
+            return listAllScopes(clientId, params);
         }
     });
 }

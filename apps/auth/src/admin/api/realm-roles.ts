@@ -1,28 +1,26 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
+import { adminClient } from "../app/admin-client";
 
-export async function findRealmRoles(adminClient: KeycloakAdminClient) {
+export async function findRealmRoles() {
     return adminClient.roles.find({ first: 0, max: 10000 });
 }
 
-export async function findRealmRole(adminClient: KeycloakAdminClient, id: string) {
+export async function findRealmRole(id: string) {
     return adminClient.roles.findOneById({ id });
 }
 
 export async function updateRealmRole(
-    adminClient: KeycloakAdminClient,
     id: string,
     role: RoleRepresentation
 ) {
     return adminClient.roles.updateById({ id }, role);
 }
 
-export async function deleteRealmRole(adminClient: KeycloakAdminClient, id: string) {
+export async function deleteRealmRole(id: string) {
     return adminClient.roles.delById({ id });
 }
 
 export async function updateClientRole(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     roleName: string,
     role: RoleRepresentation
@@ -31,7 +29,6 @@ export async function updateClientRole(
 }
 
 export async function deleteClientRole(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     roleName: string
 ) {
@@ -39,7 +36,6 @@ export async function deleteClientRole(
 }
 
 export async function addCompositeRoles(
-    adminClient: KeycloakAdminClient,
     roleId: string,
     realm: string,
     composites: RoleRepresentation[]
@@ -47,6 +43,49 @@ export async function addCompositeRoles(
     return adminClient.roles.createComposite({ roleId, realm }, composites);
 }
 
-export async function findClientDetail(adminClient: KeycloakAdminClient, clientId: string) {
+export async function createRealmRole(role: RoleRepresentation) {
+    return adminClient.roles.create(role);
+}
+
+export async function findRealmRoleByName(name: string) {
+    return adminClient.roles.findOneByName({ name });
+}
+
+export async function findUsersWithRealmRole(
+    roleName: string,
+    options?: { first?: number; max?: number; briefRepresentation?: boolean }
+) {
+    return adminClient.roles.findUsersWithRole({
+        name: roleName,
+        briefRepresentation: options?.briefRepresentation ?? true,
+        first: options?.first ?? 0,
+        max: options?.max ?? 500
+    });
+}
+
+export async function findUsersWithClientRole(
+    clientId: string,
+    roleName: string,
+    options?: { first?: number; max?: number; briefRepresentation?: boolean }
+) {
+    return adminClient.clients.findUsersWithRole({
+        id: clientId,
+        roleName,
+        briefRepresentation: options?.briefRepresentation ?? true,
+        first: options?.first ?? 0,
+        max: options?.max ?? 500
+    });
+}
+
+export async function removeCompositeRoles(
+    parentRoleId: string,
+    roles: RoleRepresentation[]
+) {
+    return adminClient.roles.delCompositeRoles({ id: parentRoleId }, roles);
+}
+
+export async function findClientDetail(
+    clientId: string
+) {
     return adminClient.clients.findOne({ id: clientId });
 }

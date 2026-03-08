@@ -1,11 +1,11 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/resourceEvaluation";
 import type { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import { sortBy } from "lodash-es";
+import { adminClient } from "../app/admin-client";
 
-export async function findAdminPermissionsClient(adminClient: KeycloakAdminClient) {
+export async function findAdminPermissionsClient() {
     const clients = await adminClient.clients.find({
         clientId: "admin-permissions"
     });
@@ -13,7 +13,6 @@ export async function findAdminPermissionsClient(adminClient: KeycloakAdminClien
 }
 
 export async function findPermissionsList(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     search: Record<string, unknown>,
     first: number,
@@ -57,7 +56,6 @@ export async function findPermissionsList(
 }
 
 export async function findPermissionDetail(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     permissionId: string
 ) {
@@ -89,7 +87,6 @@ export async function findPermissionDetail(
 }
 
 export async function findProvidersAndPolicies(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     const [providers, policies] = await Promise.all([
@@ -111,7 +108,6 @@ export async function findProvidersAndPolicies(
 }
 
 export async function findPolicyProviders(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     const providers = await adminClient.clients.listPolicyProviders({
@@ -125,7 +121,6 @@ export async function findPolicyProviders(
 }
 
 export async function findPoliciesList(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     filterType?: string
 ) {
@@ -140,24 +135,24 @@ export async function findPoliciesList(
 }
 
 export async function findPolicyDetailsByType(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     values: { id: string; type?: string }[]
 ) {
     if (!values || values.length === 0) return [] as PolicyRepresentation[];
     const results = await Promise.all(
-        values.map(p =>
-            adminClient.clients.findOnePolicyWithType({
-                id: clientId,
-                type: p.type!,
-                policyId: p.id
-            }) as Promise<PolicyRepresentation | undefined>
+        values.map(
+            p =>
+                adminClient.clients.findOnePolicyWithType({
+                    id: clientId,
+                    type: p.type!,
+                    policyId: p.id
+                }) as Promise<PolicyRepresentation | undefined>
         )
     );
     return results.filter((p): p is PolicyRepresentation => !!p);
 }
 
-export async function findGroupDetails(adminClient: KeycloakAdminClient, ids: string[]) {
+export async function findGroupDetails(ids: string[]) {
     if (ids.length === 0) return [];
     const groups = await Promise.all(ids.map(id => adminClient.groups.findOne({ id })));
     return groups
@@ -167,11 +162,9 @@ export async function findGroupDetails(adminClient: KeycloakAdminClient, ids: st
         ) as import("@keycloak/keycloak-admin-client/lib/defs/groupRepresentation").default[];
 }
 
-export async function findRoleDetails(adminClient: KeycloakAdminClient, ids: string[]) {
+export async function findRoleDetails(ids: string[]) {
     if (ids.length === 0) return [];
-    const roles = await Promise.all(
-        ids.map(id => adminClient.roles.findOneById({ id }))
-    );
+    const roles = await Promise.all(ids.map(id => adminClient.roles.findOneById({ id })));
     return Promise.all(
         roles.map(async role => ({
             role: role!,
@@ -185,7 +178,6 @@ export async function findRoleDetails(adminClient: KeycloakAdminClient, ids: str
 }
 
 export async function deletePermission(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     type: string,
     permissionId: string
@@ -198,7 +190,6 @@ export async function deletePermission(
 }
 
 export async function savePermission(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     permission: PolicyRepresentation,
     permissionId?: string
@@ -217,7 +208,6 @@ export async function savePermission(
 }
 
 export async function createPolicy(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     type: string,
     policy: PolicyRepresentation
@@ -226,7 +216,6 @@ export async function createPolicy(
 }
 
 export async function updateAdminPermissionsClient(
-    adminClient: KeycloakAdminClient,
     client: ClientRepresentation,
     updates: ClientRepresentation
 ) {
@@ -240,7 +229,6 @@ export async function updateAdminPermissionsClient(
 }
 
 export async function evaluateResource(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     realm: string,
     resEval: ResourceEvaluation

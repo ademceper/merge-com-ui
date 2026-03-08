@@ -6,7 +6,7 @@ import type React from "react";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { FileNameDialog } from "./file-name-dialog";

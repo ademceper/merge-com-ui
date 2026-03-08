@@ -11,53 +11,20 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
-import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
 import type { ClientRoleParams } from "../../shared/lib/routes/clients";
+import { useParams } from "../../shared/lib/use-params";
+import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
+import { useUsersInRole } from "./hooks/use-users-in-role";
 
 export const UsersInRoleTab = () => {
-    const { adminClient } = useAdminClient();
     const navigate = useNavigate();
     const { realm } = useRealm();
     const { t } = useTranslation();
     const { id, clientId } = useParams<ClientRoleParams>();
-    const [users, setUsers] = useState<UserRepresentation[]>([]);
-    const [key, _setKey] = useState(0);
-
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const role = await adminClient.roles.findOneById({ id: id! });
-                if (!role) throw new Error(t("notFound"));
-                const list = role.clientRole
-                    ? await adminClient.clients.findUsersWithRole({
-                          roleName: role.name!,
-                          id: clientId!,
-                          briefRepresentation: true,
-                          first: 0,
-                          max: 500
-                      })
-                    : await adminClient.roles.findUsersWithRole({
-                          name: role.name!,
-                          briefRepresentation: true,
-                          first: 0,
-                          max: 500
-                      });
-                if (!cancelled) setUsers(list);
-            } catch {
-                if (!cancelled) setUsers([]);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, id, clientId]);
+    const { data: users = [] } = useUsersInRole(id, clientId);
 
     const { enabled } = useHelp();
 
@@ -117,7 +84,6 @@ export const UsersInRoleTab = () => {
     return (
         <section className="py-6 bg-muted/30" data-testid="users-page">
             <DataTable<UserRepresentation>
-                key={key}
                 columns={columns}
                 data={users}
                 searchColumnId="username"

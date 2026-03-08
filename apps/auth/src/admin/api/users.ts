@@ -1,14 +1,15 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
+import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { adminClient } from "../app/admin-client";
 
 // ── List / find ─────────────────────────────────────────────────────────
 
-export async function findUsers(adminClient: KeycloakAdminClient) {
+export async function findUsers() {
     return adminClient.users.find({ first: 0, max: 1000 });
 }
 
 export async function findUser(
-    adminClient: KeycloakAdminClient,
     id: string,
     userProfileMetadata = false
 ) {
@@ -18,42 +19,48 @@ export async function findUser(
 // ── Mutations ───────────────────────────────────────────────────────────
 
 export async function updateUser(
-    adminClient: KeycloakAdminClient,
     id: string,
     user: UserRepresentation
 ) {
     return adminClient.users.update({ id }, user);
 }
 
-export async function deleteUser(adminClient: KeycloakAdminClient, id: string) {
+export async function createUser(user: UserRepresentation) {
+    return adminClient.users.create(user);
+}
+
+export async function deleteUser(id: string) {
     return adminClient.users.del({ id });
+}
+
+export async function logoutUser(id: string) {
+    return adminClient.users.logout({ id });
+}
+
+export async function impersonateUser(
+    id: string,
+    realm: string
+) {
+    return adminClient.users.impersonation({ id }, { user: id, realm });
 }
 
 // ── User detail helpers ─────────────────────────────────────────────────
 
-export async function fetchAttackDetection(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function fetchAttackDetection(id: string) {
     return adminClient.attackDetection.findOne({ id });
 }
 
 export async function fetchUserUnmanagedAttributes(
-    adminClient: KeycloakAdminClient,
     id: string
 ) {
     return adminClient.users.getUnmanagedAttributes({ id });
 }
 
-export async function fetchUserProfile(
-    adminClient: KeycloakAdminClient,
-    realm: string
-) {
+export async function fetchUserProfile(realm: string) {
     return adminClient.users.getProfile({ realm });
 }
 
 export async function fetchUserProfileMetadata(
-    adminClient: KeycloakAdminClient,
     realm: string
 ) {
     return adminClient.users.getProfileMetadata({ realm });
@@ -62,7 +69,6 @@ export async function fetchUserProfileMetadata(
 // ── Organizations ───────────────────────────────────────────────────────
 
 export async function fetchOrganizations(
-    adminClient: KeycloakAdminClient,
     first = 0,
     max = 1
 ) {
@@ -70,14 +76,12 @@ export async function fetchOrganizations(
 }
 
 export async function fetchMemberOrganizations(
-    adminClient: KeycloakAdminClient,
     userId: string
 ) {
     return adminClient.organizations.memberOrganizations({ userId });
 }
 
 export async function fetchOrganizationMembers(
-    adminClient: KeycloakAdminClient,
     orgId: string
 ) {
     return adminClient.organizations.listMembers({ orgId });
@@ -86,7 +90,6 @@ export async function fetchOrganizationMembers(
 // ── Sessions ────────────────────────────────────────────────────────────
 
 export async function fetchUserSessions(
-    adminClient: KeycloakAdminClient,
     id: string,
     realm: string
 ) {
@@ -96,7 +99,6 @@ export async function fetchUserSessions(
 // ── Groups ──────────────────────────────────────────────────────────────
 
 export async function fetchUserGroups(
-    adminClient: KeycloakAdminClient,
     id: string,
     first = 0,
     max = 500
@@ -105,7 +107,6 @@ export async function fetchUserGroups(
 }
 
 export async function addUserToGroup(
-    adminClient: KeycloakAdminClient,
     id: string,
     groupId: string
 ) {
@@ -113,7 +114,6 @@ export async function addUserToGroup(
 }
 
 export async function removeUserFromGroup(
-    adminClient: KeycloakAdminClient,
     id: string,
     groupId: string
 ) {
@@ -122,15 +122,11 @@ export async function removeUserFromGroup(
 
 // ── Consents ────────────────────────────────────────────────────────────
 
-export async function fetchUserConsents(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function fetchUserConsents(id: string) {
     return adminClient.users.listConsents({ id });
 }
 
 export async function revokeUserConsent(
-    adminClient: KeycloakAdminClient,
     id: string,
     clientId: string
 ) {
@@ -139,38 +135,72 @@ export async function revokeUserConsent(
 
 // ── Credentials ─────────────────────────────────────────────────────────
 
-export async function fetchUserCredentials(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function fetchUserCredentials(id: string) {
     return adminClient.users.getCredentials({ id });
 }
 
 export async function deleteUserCredential(
-    adminClient: KeycloakAdminClient,
     id: string,
     credentialId: string
 ) {
     return adminClient.users.deleteCredential({ id, credentialId });
 }
 
+export async function resetUserPassword(
+    id: string,
+    credential: CredentialRepresentation
+) {
+    return adminClient.users.resetPassword({ id, credential });
+}
+
+export async function updateCredentialLabel(
+    id: string,
+    credentialId: string,
+    label: string
+) {
+    return adminClient.users.updateCredentialLabel({ id, credentialId }, label);
+}
+
+export async function moveCredentialPositionDown(
+    id: string,
+    credentialId: string,
+    newPreviousCredentialId: string
+) {
+    return adminClient.users.moveCredentialPositionDown({
+        id,
+        credentialId,
+        newPreviousCredentialId
+    });
+}
+
+export async function moveCredentialPositionUp(
+    id: string,
+    credentialId: string
+) {
+    return adminClient.users.moveCredentialPositionUp({ id, credentialId });
+}
+
+export async function executeActionsEmail(
+    id: string,
+    actions: string[],
+    lifespan?: number
+) {
+    return adminClient.users.executeActionsEmail({ id, actions, lifespan });
+}
+
 // ── Federated identities ────────────────────────────────────────────────
 
 export async function fetchFederatedIdentities(
-    adminClient: KeycloakAdminClient,
     id: string
 ) {
     return adminClient.users.listFederatedIdentities({ id });
 }
 
-export async function fetchLinkedIdPs(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function fetchLinkedIdPs(id: string) {
     return adminClient.identityProviders.find();
 }
 
-export async function fetchAvailableIdPs(adminClient: KeycloakAdminClient) {
+export async function fetchAvailableIdPs() {
     return adminClient.identityProviders.find({
         first: 0,
         max: 500,
@@ -180,24 +210,64 @@ export async function fetchAvailableIdPs(adminClient: KeycloakAdminClient) {
 }
 
 export async function unlinkFederatedIdentity(
-    adminClient: KeycloakAdminClient,
     id: string,
     federatedIdentityId: string
 ) {
     return adminClient.users.delFromFederatedIdentity({ id, federatedIdentityId });
 }
 
+export async function addToFederatedIdentity(
+    id: string,
+    federatedIdentityId: string,
+    federatedIdentity: FederatedIdentityRepresentation
+) {
+    return adminClient.users.addToFederatedIdentity({
+        id,
+        federatedIdentityId,
+        federatedIdentity
+    });
+}
+
+// ── Role mappings ──────────────────────────────────────────────────────
+
+export async function addRealmRoleMappings(
+    id: string,
+    roles: { id: string; name: string }[]
+) {
+    return adminClient.users.addRealmRoleMappings({ id, roles });
+}
+
+export async function addClientRoleMappings(
+    id: string,
+    clientUniqueId: string,
+    roles: { id: string; name: string }[]
+) {
+    return adminClient.users.addClientRoleMappings({ id, clientUniqueId, roles });
+}
+
+// ── Organizations (user-facing) ────────────────────────────────────────
+
+export async function removeOrgMember(orgId: string, userId: string) {
+    return adminClient.organizations.delMember({ orgId, userId });
+}
+
+export async function addOrgMember(orgId: string, userId: string) {
+    return adminClient.organizations.addMember({ orgId, userId });
+}
+
+export async function inviteExistingUser(orgId: string, formData: FormData) {
+    return adminClient.organizations.inviteExistingUser({ orgId }, formData);
+}
+
 // ── Federation component ────────────────────────────────────────────────
 
 export async function fetchFederationComponent(
-    adminClient: KeycloakAdminClient,
     id: string
 ) {
     return adminClient.components.findOne({ id });
 }
 
 export async function fetchStorageProviderName(
-    adminClient: KeycloakAdminClient,
     id: string
 ) {
     return adminClient.userStorageProvider.name({ id });
@@ -205,6 +275,6 @@ export async function fetchStorageProviderName(
 
 // ── Required actions ────────────────────────────────────────────────────
 
-export async function fetchRequiredActions(adminClient: KeycloakAdminClient) {
+export async function fetchRequiredActions() {
     return adminClient.authenticationManagement.getRequiredActions();
 }

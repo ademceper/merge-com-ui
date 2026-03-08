@@ -13,21 +13,28 @@ type CodeEditorProps = {
     height?: number;
 };
 
-const CodeEditor = ({
+const codeEditorFontStyle = {
+    font: "var(--pf-global--FontFamily--monospace)"
+} as const;
+
+export const CodeEditor = ({
     onChange,
     height = 128,
     value,
     language,
     ...rest
 }: CodeEditorProps) => {
+    const wrapperStyle = useMemo(
+        () => ({ height: `${height}px`, overflow: "auto" }) as const,
+        [height]
+    );
+
     const codeEditor = useMemo(
         () => (
             <CodeEditorComponent
                 padding={15}
                 minHeight={height}
-                style={{
-                    font: "var(--pf-global--FontFamily--monospace)"
-                }}
+                style={codeEditorFontStyle}
                 onChange={event => onChange?.(event.target.value)}
                 value={value}
                 language={language}
@@ -37,7 +44,6 @@ const CodeEditor = ({
         [value, language]
     );
 
-    return <div style={{ height: `${height}px`, overflow: "auto" }}>{codeEditor}</div>;
+    return <div style={wrapperStyle}>{codeEditor}</div>;
 };
 
-export default CodeEditor;

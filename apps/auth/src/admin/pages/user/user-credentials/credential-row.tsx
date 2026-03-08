@@ -10,9 +10,9 @@ import {
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { type ReactNode, useMemo } from "react";
 import { TableCell } from "@/admin/shared/ui/data-table";
-import useFormatDate from "../../../shared/lib/useFormatDate";
-import useLocaleSort from "../../../shared/lib/useLocaleSort";
-import useToggle from "../../../shared/lib/useToggle";
+import { useFormatDate } from "../../../shared/lib/use-format-date";
+import { useLocaleSort } from "../../../shared/lib/use-locale-sort";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { CredentialDataDialog } from "./credential-data-dialog";
 
 type CredentialRowProps = {

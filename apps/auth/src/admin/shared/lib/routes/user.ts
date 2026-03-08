@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 // User
 export type UserTab =
@@ -28,6 +28,11 @@ type UsersUserTab = "list" | "permissions";
 type UsersParams = { realm: string; tab?: UsersUserTab };
 
 export const toUsers = (params: UsersParams): string => {
-    const path = params.tab ? "/:realm/users/:tab" : "/:realm/users";
-    return generateEncodedPath(path, params as any);
+    if (params.tab) {
+        return generateEncodedPath("/:realm/users/:tab", {
+            realm: params.realm,
+            tab: params.tab
+        });
+    }
+    return generateEncodedPath("/:realm/users", { realm: params.realm });
 };

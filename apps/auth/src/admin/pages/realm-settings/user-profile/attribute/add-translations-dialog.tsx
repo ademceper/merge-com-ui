@@ -32,9 +32,9 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../../app/providers/whoami/who-am-i";
-import useLocale from "../../../../shared/lib/useLocale";
+import { useLocale } from "../../../../shared/lib/use-locale";
 import { beerify, localeToDisplayName } from "../../../../shared/lib/util";
-import { useRealmLocalizationTexts } from "../../api/use-realm-localization-texts";
+import { useRealmLocalizationTexts } from "../../hooks/use-realm-localization-texts";
 import type { Translation, TranslationForm } from "./translatable-field";
 
 type AddTranslationsDialogProps = {

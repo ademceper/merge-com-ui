@@ -5,7 +5,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { LdapSettingsAdvanced } from "./ldap/ldap-settings-advanced";
 import { LdapSettingsConnection } from "./ldap/ldap-settings-connection";
@@ -13,7 +14,6 @@ import { LdapSettingsGeneral } from "./ldap/ldap-settings-general";
 import { LdapSettingsKerberosIntegration } from "./ldap/ldap-settings-kerberos-integration";
 import { LdapSettingsSearching } from "./ldap/ldap-settings-searching";
 import { LdapSettingsSynchronization } from "./ldap/ldap-settings-synchronization";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
 import { SettingsCache } from "./shared/settings-cache";
 
 export type LdapComponentRepresentation = ComponentRepresentation & {

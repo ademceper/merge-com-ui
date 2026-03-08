@@ -1,35 +1,12 @@
 "use client";
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from "@merge-rd/ui/components/alert-dialog";
-import { Button } from "@merge-rd/ui/components/button";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Input } from "@merge-rd/ui/components/input";
-import { Label } from "@merge-rd/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@merge-rd/ui/components/select";
 import {
     Table,
     TableBody,
@@ -39,22 +16,7 @@ import {
     TableRow
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import {
-    CaretDoubleLeft,
-    CaretDoubleRight,
-    CaretDown,
-    CaretLeft,
-    CaretRight,
-    CaretUp,
-    Columns,
-    DotsThreeVertical,
-    EyeSlash,
-    Funnel,
-    MagnifyingGlass,
-    Trash,
-    WarningCircle,
-    XCircle
-} from "@phosphor-icons/react";
+import { CaretDown, CaretUp, DotsThreeVertical, EyeSlash } from "@phosphor-icons/react";
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -71,7 +33,10 @@ import {
     type VisibilityState
 } from "@tanstack/react-table";
 import * as React from "react";
-import { useId, useMemo, useRef, useState } from "react";
+import { useCallback, useId, useState } from "react";
+
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 type DataTableProps<TData> = {
     columns: ColumnDef<TData>[];
@@ -104,9 +69,9 @@ export function DataTable<TData>({
     defaultPageSize = 10,
     defaultSorting = [],
     searchColumnId,
-    searchPlaceholder = "Filter...",
+    searchPlaceholder,
     facetFilterColumnId,
-    facetFilterLabel = "Filters",
+    facetFilterLabel,
     onDeleteRows,
     onRowClick,
     toolbar,
@@ -120,7 +85,6 @@ export function DataTable<TData>({
         pageSize: defaultPageSize
     });
     const [sorting, setSorting] = useState<SortingState>(defaultSorting);
-    const inputRef = useRef<HTMLInputElement>(null);
 
     const table = useReactTable({
         data,
@@ -143,214 +107,31 @@ export function DataTable<TData>({
         enableSortingRemoval: false
     });
 
-    const handleDeleteRows = () => {
-        const selectedRows = table.getSelectedRowModel().rows;
-        onDeleteRows?.(selectedRows);
-        table.resetRowSelection();
-    };
-
-    const facetColumn = facetFilterColumnId ? table.getColumn(facetFilterColumnId) : null;
-    const uniqueFacetValues = useMemo(() => {
-        if (!facetColumn) return [];
-        return Array.from(facetColumn.getFacetedUniqueValues().keys()).sort();
-    }, [facetColumn]);
-    const facetCounts = useMemo(() => {
-        if (!facetColumn) return new Map<string, number>();
-        return facetColumn.getFacetedUniqueValues();
-    }, [facetColumn]);
-    const selectedFacetValues = useMemo(() => {
-        const value = facetColumn?.getFilterValue() as string[] | undefined;
-        return value ?? [];
-    }, [facetColumn]);
-
-    const handleFacetChange = (checked: boolean, value: string) => {
-        const current = (facetColumn?.getFilterValue() as string[]) ?? [];
-        const next = checked ? [...current, value] : current.filter(v => v !== value);
-        facetColumn?.setFilterValue(next.length ? next : undefined);
-    };
-
-    const searchColumn = searchColumnId ? table.getColumn(searchColumnId) : null;
-    const searchValue = (searchColumn?.getFilterValue() ?? "") as string;
-
-    const [viewOpen, setViewOpen] = useState(false);
+    const handleRowClick = useCallback(
+        (e: React.MouseEvent, row: Row<TData>) => {
+            const target = e.target as HTMLElement;
+            if (
+                !target.closest(
+                    "button, a, [role='button'], [data-slot='dropdown-menu-trigger']"
+                )
+            )
+                onRowClick?.(row);
+        },
+        [onRowClick]
+    );
 
     return (
         <div className={cn("space-y-4", className)}>
-            <div className="flex flex-nowrap items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
-                <div className="flex min-w-0 flex-1 items-center gap-2 sm:flex-initial sm:min-w-0 sm:gap-3">
-                    {searchColumnId && searchColumn && (
-                        <div className="relative min-w-0 flex-1 sm:min-w-0 sm:flex-initial">
-                            <Input
-                                aria-label={searchPlaceholder}
-                                className={cn(
-                                    "peer h-9 min-w-0 flex-1 ps-9 sm:min-w-60",
-                                    searchValue && "pe-9"
-                                )}
-                                id={`${id}-input`}
-                                onChange={e =>
-                                    searchColumn.setFilterValue(e.target.value)
-                                }
-                                placeholder={searchPlaceholder}
-                                ref={inputRef}
-                                type="text"
-                                value={searchValue}
-                            />
-                            <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80">
-                                <MagnifyingGlass size={16} />
-                            </span>
-                            {searchValue && (
-                                <button
-                                    type="button"
-                                    aria-label="Clear filter"
-                                    className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none hover:text-foreground focus-visible:ring-2"
-                                    onClick={() => {
-                                        searchColumn.setFilterValue("");
-                                        inputRef.current?.focus();
-                                    }}
-                                >
-                                    <XCircle size={16} />
-                                </button>
-                            )}
-                        </div>
-                    )}
-                    {facetFilterColumnId &&
-                        facetColumn &&
-                        uniqueFacetValues.length > 0 && (
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" size="sm">
-                                        <Funnel size={16} className="-ms-1 opacity-60" />
-                                        {facetFilterLabel}
-                                        {selectedFacetValues.length > 0 && (
-                                            <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 text-[0.625rem] font-medium text-muted-foreground/70">
-                                                {selectedFacetValues.length}
-                                            </span>
-                                        )}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    align="start"
-                                    className="w-auto min-w-36 p-3"
-                                >
-                                    <div className="space-y-3">
-                                        <div className="text-muted-foreground text-xs font-medium">
-                                            {facetFilterLabel}
-                                        </div>
-                                        <div className="space-y-3">
-                                            {uniqueFacetValues.map((value, i) => (
-                                                <div
-                                                    key={value}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    <Checkbox
-                                                        checked={selectedFacetValues.includes(
-                                                            value
-                                                        )}
-                                                        id={`${id}-facet-${i}`}
-                                                        onCheckedChange={checked =>
-                                                            handleFacetChange(
-                                                                !!checked,
-                                                                value
-                                                            )
-                                                        }
-                                                    />
-                                                    <Label
-                                                        className="flex grow justify-between gap-2 font-normal"
-                                                        htmlFor={`${id}-facet-${i}`}
-                                                    >
-                                                        {value}
-                                                        <span className="ms-2 text-muted-foreground text-xs">
-                                                            {facetCounts.get(value)}
-                                                        </span>
-                                                    </Label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-                        )}
-                    <DropdownMenu
-                        modal={false}
-                        open={viewOpen}
-                        onOpenChange={setViewOpen}
-                    >
-                        <DropdownMenuTrigger className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-dashed border-input bg-background px-3 text-sm font-medium hover:bg-accent/10 cursor-pointer hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                            <Columns size={16} className="-ms-1 opacity-60" />
-                            View
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                            align="end"
-                            className="w-auto min-w-36 p-1"
-                            style={{ zIndex: 2147483647 }}
-                        >
-                            <div className="px-1.5 py-1 text-xs font-medium text-muted-foreground">
-                                Toggle columns
-                            </div>
-                            {table
-                                .getAllColumns()
-                                .filter(col => col.getCanHide())
-                                .map(col => (
-                                    <label
-                                        key={col.id}
-                                        className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm hover:bg-accent hover:text-accent-foreground"
-                                    >
-                                        <Checkbox
-                                            checked={col.getIsVisible()}
-                                            onCheckedChange={v =>
-                                                col.toggleVisibility(!!v)
-                                            }
-                                        />
-                                        <span className="capitalize">{col.id}</span>
-                                    </label>
-                                ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                    {onDeleteRows && table.getSelectedRowModel().rows.length > 0 && (
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                    <Trash size={16} className="-ms-1 opacity-60" />
-                                    Delete
-                                    <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 text-[0.625rem] font-medium text-muted-foreground/70">
-                                        {table.getSelectedRowModel().rows.length}
-                                    </span>
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
-                                    <div className="flex size-9 shrink-0 items-center justify-center rounded-full border">
-                                        <WarningCircle size={16} className="opacity-80" />
-                                    </div>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Are you absolutely sure?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This will permanently delete{" "}
-                                            {table.getSelectedRowModel().rows.length}{" "}
-                                            selected{" "}
-                                            {table.getSelectedRowModel().rows.length === 1
-                                                ? "row"
-                                                : "rows"}
-                                            .
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                </div>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleDeleteRows}>
-                                        Delete
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    )}
-                    {toolbar}
-                </div>
-            </div>
+            <DataTableToolbar
+                id={id}
+                table={table}
+                searchColumnId={searchColumnId}
+                searchPlaceholder={searchPlaceholder}
+                facetFilterColumnId={facetFilterColumnId}
+                facetFilterLabel={facetFilterLabel}
+                onDeleteRows={onDeleteRows}
+                toolbar={toolbar}
+            />
 
             <div className="overflow-hidden rounded-lg [-webkit-overflow-scrolling:touch]">
                 <Table className="min-w-full table-fixed">
@@ -470,16 +251,7 @@ export function DataTable<TData>({
                                         }
                                         onClick={
                                             onRowClick
-                                                ? e => {
-                                                      const target =
-                                                          e.target as HTMLElement;
-                                                      if (
-                                                          !target.closest(
-                                                              "button, a, [role='button'], [data-slot='dropdown-menu-trigger']"
-                                                          )
-                                                      )
-                                                          onRowClick(row);
-                                                  }
+                                                ? e => handleRowClick(e, row)
                                                 : undefined
                                         }
                                     >
@@ -520,84 +292,11 @@ export function DataTable<TData>({
                 </Table>
             </div>
 
-            <div className="flex items-center justify-between px-4">
-                <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
-                <div className="flex w-full items-center gap-8 lg:w-fit">
-                    <div className="hidden items-center gap-2 lg:flex">
-                        <Label htmlFor={id} className="text-sm font-medium">
-                            Rows per page
-                        </Label>
-                        <Select
-                            value={table.getState().pagination.pageSize.toString()}
-                            onValueChange={v => table.setPageSize(Number(v))}
-                        >
-                            <SelectTrigger className="h-8 min-h-8 w-20" id={id}>
-                                <SelectValue
-                                    placeholder={table.getState().pagination.pageSize}
-                                />
-                            </SelectTrigger>
-                            <SelectContent
-                                side="top"
-                                className="**:data-[slot=select-item]:min-h-8 **:data-[slot=select-item]:py-1.5 **:data-[slot=select-item]:text-sm"
-                            >
-                                {pageSizeOptions.map(size => (
-                                    <SelectItem key={size} value={size.toString()}>
-                                        {size}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="flex w-fit items-center justify-center text-sm font-medium">
-                        Page {table.getState().pagination.pageIndex + 1} of{" "}
-                        {table.getPageCount()}
-                    </div>
-                    <div className="ml-auto flex items-center gap-2 lg:ml-0">
-                        <Button
-                            variant="outline"
-                            className="hidden size-8 p-0 lg:flex"
-                            onClick={() => table.setPageIndex(0)}
-                            disabled={!table.getCanPreviousPage()}
-                            aria-label="Go to first page"
-                        >
-                            <CaretDoubleLeft size={16} />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="size-8"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                            aria-label="Go to previous page"
-                        >
-                            <CaretLeft size={16} />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="size-8"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                            aria-label="Go to next page"
-                        >
-                            <CaretRight size={16} />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="hidden size-8 lg:flex"
-                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                            disabled={!table.getCanNextPage()}
-                            aria-label="Go to last page"
-                        >
-                            <CaretDoubleRight size={16} />
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <DataTablePagination
+                id={id}
+                table={table}
+                pageSizeOptions={pageSizeOptions}
+            />
         </div>
     );
 }

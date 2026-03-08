@@ -12,8 +12,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-
-import { useAdminClient } from "../../app/admin-client";
+import { useEditFlow } from "./hooks/use-edit-flow";
 import { NameDescription } from "./form/name-description";
 
 type EditFlowModalProps = {
@@ -22,20 +21,17 @@ type EditFlowModalProps = {
 };
 
 export const EditFlowModal = ({ flow, toggleDialog }: EditFlowModalProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
     const { reset, handleSubmit } = form;
+    const { mutateAsync: editFlow } = useEditFlow();
 
     useEffect(() => reset(flow), [flow]);
 
     const onSubmit = async (formValues: AuthenticationFlowRepresentation) => {
         try {
-            await adminClient.authenticationManagement.updateFlow(
-                { flowId: flow.id! },
-                { ...flow, ...formValues }
-            );
+            await editFlow({ flow, formValues });
             toast.success(t("updateFlowSuccess"));
         } catch (error) {
             toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {

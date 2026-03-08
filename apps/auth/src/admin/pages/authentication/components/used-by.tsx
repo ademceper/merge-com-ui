@@ -9,10 +9,11 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { CheckCircle } from "@phosphor-icons/react";
+import { memo } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useToggle from "../../../shared/lib/useToggle";
-import { useUsedBy } from "../api/use-used-by";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useUsedBy } from "../hooks/use-used-by";
 import { type AuthenticationType, REALM_FLOWS } from "../constants";
 
 type UsedByProps = {
@@ -72,7 +73,7 @@ const UsedByModal = ({ id, isSpecificClient, onClose }: UsedByModalProps) => {
     );
 };
 
-export const UsedBy = ({ authType: { id, usedBy } }: UsedByProps) => {
+export const UsedBy = memo(({ authType: { id, usedBy } }: UsedByProps) => {
     const { t } = useTranslation();
     const { realmRepresentation: realm } = useRealm();
     const [open, toggle] = useToggle();
@@ -125,4 +126,4 @@ export const UsedBy = ({ authType: { id, usedBy } }: UsedByProps) => {
             {!usedBy?.type && t("used.notInUse")}
         </>
     );
-};
+});

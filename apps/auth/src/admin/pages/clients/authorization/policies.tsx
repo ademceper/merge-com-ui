@@ -34,17 +34,22 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
-import useToggle from "../../../shared/lib/useToggle";
+import { useDeletePolicyMutation } from "./hooks/use-authorization-mutations";
+import {
+    toCreatePolicy,
+    toPermissionDetails,
+    toPolicyDetails
+} from "../../../shared/lib/routes/clients";
+import {
+    toCreatePermissionPolicy,
+    toPermissionPolicyDetails
+} from "../../../shared/lib/routes/permissions";
+import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { toUpperCase } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { toCreatePermissionPolicy, toPermissionPolicyDetails } from "../../../shared/lib/routes/permissions";
-import { toCreatePolicy } from "../../../shared/lib/routes/clients";
-import { toPermissionDetails } from "../../../shared/lib/routes/clients";
-import { toPolicyDetails } from "../../../shared/lib/routes/clients";
-import { usePolicies as usePoliciesQuery } from "./api/use-policies";
+import { usePolicies as usePoliciesQuery } from "./hooks/use-policies";
 import { DetailDescriptionLink } from "./detail-description";
 import { MoreLabel } from "./more-label";
 import { NewPolicyDialog } from "./new-policy-dialog";
@@ -72,11 +77,11 @@ export const AuthorizationPolicies = ({
     clientId,
     isDisabled = false
 }: PoliciesProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
+    const { mutateAsync: deletePolicyMutation } = useDeletePolicyMutation();
 
     const [policies, setPolicies] = useState<ExpandablePolicyRepresentation[]>();
     const [selectedPolicy, setSelectedPolicy] =
@@ -133,8 +138,8 @@ export const AuthorizationPolicies = ({
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPolicy({
-                    id: clientId,
+                await deletePolicyMutation({
+                    clientId,
                     policyId: selectedPolicy?.id!
                 });
                 toast.success(t("policyDeletedSuccess"));

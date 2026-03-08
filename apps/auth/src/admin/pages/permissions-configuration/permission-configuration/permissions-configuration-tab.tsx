@@ -34,14 +34,17 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
-import useToggle from "../../../shared/lib/useToggle";
+import { useDeletePermission } from "../hooks/use-delete-permission";
+import {
+    toCreatePermissionConfiguration,
+    toPermissionConfigurationDetails
+} from "../../../shared/lib/routes/permissions";
+import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { usePermissionsList } from "../api/use-permissions-list";
+import { usePermissionsList } from "../hooks/use-permissions-list";
 import { SearchDropdown, type SearchForm } from "../resource-types/search-dropdown";
-import { toCreatePermissionConfiguration, toPermissionConfigurationDetails } from "../../../shared/lib/routes/permissions";
 import { AuthorizationScopesDetails } from "./authorization-scopes-details";
 import { NewPermissionConfigurationDialog } from "./new-permission-configuration-dialog";
 
@@ -59,7 +62,6 @@ type ExpandablePolicyRepresentation = PolicyRepresentation & {
 export const PermissionsConfigurationTab = ({
     clientId
 }: PermissionsConfigurationProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
@@ -83,6 +85,8 @@ export const PermissionsConfigurationTab = ({
         setPermissions(rawPermissions as ExpandablePolicyRepresentation[]);
     }
 
+    const { mutateAsync: deletePermissionMut } = useDeletePermission(clientId);
+
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deletePermission",
         messageKey: t("deleteAdminPermissionConfirm", {
@@ -92,8 +96,7 @@ export const PermissionsConfigurationTab = ({
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
-                await adminClient.clients.delPermission({
-                    id: clientId,
+                await deletePermissionMut({
                     type: selectedPermission?.type!,
                     permissionId: selectedPermission?.id!
                 });

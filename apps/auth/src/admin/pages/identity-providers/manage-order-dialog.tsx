@@ -16,9 +16,9 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { useIdentityProviders } from "./api/use-identity-providers";
-import { useOrgIdentityProviders } from "./api/use-org-identity-providers";
+import { useIdentityProviders } from "./hooks/use-identity-providers";
+import { useUpdateIdentityProviderOrder } from "./hooks/use-update-identity-provider-order";
+import { useOrgIdentityProviders } from "./hooks/use-org-identity-providers";
 
 type ManageOrderDialogProps = {
     orgId?: string;
@@ -31,9 +31,9 @@ export const ManageOrderDialog = ({
     hideRealmBasedIdps = false,
     onClose
 }: ManageOrderDialogProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: updateOrder } = useUpdateIdentityProviderOrder();
     const [liveText, setLiveText] = useState("");
     const [order, setOrder] = useState<string[]>([]);
     const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -128,15 +128,17 @@ export const ManageOrderDialog = ({
                         onClick={async () => {
                             const updates = order.map((alias, index) => {
                                 const provider = providers.find(p => p.alias === alias)!;
-                                provider.config!.guiOrder = index;
-                                return adminClient.identityProviders.update(
-                                    { alias },
-                                    provider
-                                );
+                                return {
+                                    alias,
+                                    provider: {
+                                        ...provider,
+                                        config: { ...provider.config, guiOrder: index }
+                                    }
+                                };
                             });
 
                             try {
-                                await Promise.all(updates);
+                                await updateOrder(updates);
                                 toast.success(t("orderChangeSuccess"));
                             } catch (error) {
                                 toast.error(

@@ -8,8 +8,8 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useDeleteGroups } from "../hooks/use-delete-groups";
 
 type DeleteConfirmProps = {
     selectedRows: GroupRepresentation[];
@@ -24,16 +24,13 @@ export const DeleteGroup = ({
     toggleDialog,
     refresh
 }: DeleteConfirmProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: deleteGroups } = useDeleteGroups();
+
     const multiDelete = async () => {
         try {
-            for (const group of selectedRows) {
-                await adminClient.groups.del({
-                    id: group.id!
-                });
-            }
+            await deleteGroups(selectedRows.map(g => g.id!));
             refresh();
             toast.success(t("groupDeleted", { count: selectedRows.length }));
         } catch (error) {

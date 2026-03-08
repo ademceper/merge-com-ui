@@ -19,7 +19,7 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
 import {
     addTrailingSlash,
     convertAttributeNameToForm,
@@ -30,7 +30,7 @@ import { FormAccess } from "../../shared/ui/form/form-access";
 import { KeyValueInput } from "../../shared/ui/key-value-form/key-value-input";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { SIGNATURE_ALGORITHMS } from "../clients/add/saml-signature";
-import { useUserProfileConfig } from "./api/use-user-profile-config";
+import { useUserProfileConfig } from "./hooks/use-user-profile-config";
 import type { UIRealmRepresentation } from "./realm-settings-tabs";
 
 type RealmSettingsGeneralTabProps = {
@@ -110,7 +110,10 @@ function RealmSettingsGeneralTabForm({
                 JSON.parse(realm.attributes["acr.loa.map"])
             ).flatMap(([key, value]) => ({ key, value }));
             result.concat({ key: "", value: "" });
-            setValue(convertAttributeNameToForm("attributes.acr.loa.map") as any, result);
+            setValue(
+                convertAttributeNameToForm<FormFields>("attributes.acr.loa.map"),
+                result
+            );
         }
     };
 

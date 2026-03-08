@@ -8,18 +8,20 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import {
+    toIdentityProvider,
+    toIdentityProviders
+} from "../../../shared/lib/routes/identity-providers";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toIdentityProvider, toIdentityProviders } from "../../../shared/lib/routes/identity-providers";
+import { useCreateIdentityProvider } from "../hooks/use-create-identity-provider";
 import { KubernetesSettings } from "./kubernetes-settings";
 
 type DiscoveryIdentityProvider = IdentityProviderRepresentation & {
     discoveryEndpoint?: string;
 };
 
-export default function AddKubernetesConnect() {
-    const { adminClient } = useAdminClient();
+export function AddKubernetesConnect() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -31,11 +33,12 @@ export default function AddKubernetesConnect() {
     });
     const { handleSubmit } = form;
     const { realm } = useRealm();
+    const { mutateAsync: createIdp } = useCreateIdentityProvider();
 
     const onSubmit = async (provider: DiscoveryIdentityProvider) => {
         delete provider.discoveryEndpoint;
         try {
-            await adminClient.identityProviders.create({
+            await createIdp({
                 ...provider,
                 providerId: id
             });

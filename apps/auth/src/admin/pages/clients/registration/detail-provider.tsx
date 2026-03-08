@@ -28,24 +28,26 @@ import {
     KeycloakSpinner,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useParams } from "../../../shared/lib/useParams";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useRegistrationProvider } from "../api/use-registration-provider";
+import { useCreateComponent, useUpdateComponent, useDeleteComponent } from "../hooks/use-component-operations";
 import {
     type RegistrationProviderParams,
+    toClientRegistration,
     toRegistrationProvider
 } from "../../../shared/lib/routes/clients";
-import { toClientRegistration } from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useRegistrationProvider } from "../hooks/use-registration-provider";
 
-export default function DetailProvider() {
-    const { adminClient } = useAdminClient();
+export function DetailProvider() {
 
     const { t } = useTranslation();
     const { id, providerId, subTab } = useParams<RegistrationProviderParams>();
     const navigate = useNavigate();
+    const { mutateAsync: createComponentMutation } = useCreateComponent();
+    const { mutateAsync: updateComponentMutation } = useUpdateComponent();
+    const { mutateAsync: deleteComponentMutation } = useDeleteComponent();
     const form = useForm<ComponentRepresentation>({
         defaultValues: { providerId }
     });
@@ -81,9 +83,9 @@ export default function DetailProvider() {
                 providerId
             };
             if (id) {
-                await adminClient.components.update({ id }, updatedComponent);
+                await updateComponentMutation({ id, component: updatedComponent });
             } else {
-                const { id } = await adminClient.components.create(updatedComponent);
+                const { id } = await createComponentMutation(updatedComponent);
                 navigate({
                     to: toRegistrationProvider({
                         id,
@@ -109,10 +111,7 @@ export default function DetailProvider() {
     const onDeleteConfirm = async () => {
         if (!id) return;
         try {
-            await adminClient.components.del({
-                realm,
-                id
-            });
+            await deleteComponentMutation(id);
             setDeleteDialogOpen(false);
             toast.success(t("clientRegisterPolicyDeleteSuccess"));
             navigate({ to: toClientRegistration({ realm, subTab }) as string });

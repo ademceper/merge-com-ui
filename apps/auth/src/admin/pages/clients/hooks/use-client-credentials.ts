@@ -4,17 +4,15 @@ import {
     fetchClientAuthenticatorProviders,
     fetchClientSecret
 } from "../../../api/clients";
-import { useAdminClient } from "../../../app/admin-client";
 import { clientKeys } from "./keys";
 
 export function useClientCredentials(clientId: string) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: clientKeys.credentials(clientId),
         queryFn: async () => {
             const [providers, secret] = await Promise.all([
-                fetchClientAuthenticatorProviders(adminClient),
-                fetchClientSecret(adminClient, clientId)
+                fetchClientAuthenticatorProviders(),
+                fetchClientSecret(clientId)
             ]);
             return {
                 providers: providers as AuthenticationProviderRepresentation[],

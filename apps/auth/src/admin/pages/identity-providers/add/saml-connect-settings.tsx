@@ -10,10 +10,13 @@ import {
     useEnvironment
 } from "../../../../shared/keycloak-ui-shared";
 
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    getAdminClientBaseUrl,
+    getAdminClientAccessToken
+} from "../../../api/identity-providers";
 import type { Environment } from "../../../app/environment";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../../shared/lib/getAuthorizationHeaders";
+import { getAuthorizationHeaders } from "../../../shared/lib/get-authorization-headers";
 import { addTrailingSlash } from "../../../shared/lib/util";
 import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
 import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
@@ -24,7 +27,6 @@ type FormFields = IdentityProviderRepresentation & {
 };
 
 export const SamlConnectSettings = () => {
-    const { adminClient } = useAdminClient();
     const { environment } = useEnvironment<Environment>();
 
     const { t } = useTranslation();
@@ -54,12 +56,12 @@ export const SamlConnectSettings = () => {
         try {
             const response = await fetchWithError(
                 `${addTrailingSlash(
-                    adminClient.baseUrl
+                    getAdminClientBaseUrl()
                 )}admin/realms/${realm}/identity-provider/import-config`,
                 {
                     method: "POST",
                     body: formData,
-                    headers: getAuthorizationHeaders(await adminClient.getAccessToken())
+                    headers: getAuthorizationHeaders(await getAdminClientAccessToken())
                 }
             );
             if (response.ok) {

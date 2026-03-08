@@ -11,9 +11,11 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../../shared/lib/getAuthorizationHeaders";
+import { useCreateClient } from "../hooks/use-create-client";
+import { getAdminClientBaseUrl, getAdminClientAccessToken } from "../../../api/clients";
+import { getAuthorizationHeaders } from "../../../shared/lib/get-authorization-headers";
+import { toClient, toClients } from "../../../shared/lib/routes/clients";
 import {
     addTrailingSlash,
     convertFormValuesToObject,
@@ -24,17 +26,15 @@ import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-
 import { CapabilityConfig } from "../add/capability-config";
 import { ClientDescription } from "../client-description";
 import type { FormFields } from "../client-details";
-import { toClient } from "../../../shared/lib/routes/clients";
-import { toClients } from "../../../shared/lib/routes/clients";
 
 const isXml = (text: string) => text.match(/(<.[^(><.)]+>)/g);
 
-export default function ImportForm() {
-    const { adminClient } = useAdminClient();
+export function ImportForm() {
 
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
+    const { mutateAsync: createClient } = useCreateClient();
     const form = useForm<FormFields>();
     const { handleSubmit, setValue, formState } = form;
     const [imported, setImported] = useState<ClientRepresentation>({});
@@ -58,12 +58,12 @@ export default function ImportForm() {
 
         const response = await fetchWithError(
             `${addTrailingSlash(
-                adminClient.baseUrl
+                getAdminClientBaseUrl()
             )}admin/realms/${realm}/client-description-converter`,
             {
                 method: "POST",
                 body: contents,
-                headers: getAuthorizationHeaders(await adminClient.getAccessToken())
+                headers: getAuthorizationHeaders(await getAdminClientAccessToken())
             }
         );
 
@@ -78,7 +78,7 @@ export default function ImportForm() {
 
     const save = async (client: ClientRepresentation) => {
         try {
-            const newClient = await adminClient.clients.create({
+            const newClient = await createClient({
                 ...imported,
                 ...convertFormValuesToObject({
                     ...client,

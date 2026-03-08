@@ -1,7 +1,7 @@
 import { createHashHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { useEffect, useReducer } from "react";
 import { routeTree } from "../routeTree.gen";
-import { startColorSchemeManagement } from "./colorScheme";
+import { startColorSchemeManagement } from "./color-scheme";
 import { i18n } from "./i18n";
 
 document.title = "Merge Administration Console";
@@ -17,7 +17,7 @@ const router = createRouter({
 const prI18nInitialized = i18n.init();
 startColorSchemeManagement();
 
-export default function KcAdminUi() {
+export function KcAdminUi() {
     const [isI18nInitialized, setI18nInitialized] = useReducer(() => true, false);
 
     useEffect(() => {

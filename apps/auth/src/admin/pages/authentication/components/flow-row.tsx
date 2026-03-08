@@ -8,6 +8,7 @@ import {
     TooltipTrigger
 } from "@merge-rd/ui/components/tooltip";
 import { Trash } from "@phosphor-icons/react";
+import { memo } from "react";
 import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
 import type { ExpandableExecution } from "../execution-model";
 import { AddFlowDropdown } from "./add-flow-dropdown";
@@ -45,106 +46,114 @@ const convertToType = (execution: ExpandableExecution): FlowType => {
     return "step";
 };
 
-export const FlowRow = ({
-    builtIn,
-    execution,
-    onRowClick,
-    onRowChange,
-    onAddExecution,
-    onAddFlow,
-    onDelete
-}: FlowRowProps) => {
-    const { t } = useTranslation();
-    const hasSubList = !!execution.executionList?.length;
+export const FlowRow = memo(
+    ({
+        builtIn,
+        execution,
+        onRowClick,
+        onRowChange,
+        onAddExecution,
+        onAddFlow,
+        onDelete
+    }: FlowRowProps) => {
+        const { t } = useTranslation();
+        const hasSubList = !!execution.executionList?.length;
 
-    return (
-        <>
-            <TableRow
-                key={`row-${execution.id}`}
-                className="keycloak__authentication__flow-row"
-                aria-level={(execution.level ?? 0) + 1}
-                aria-labelledby={execution.id}
-                aria-setsize={hasSubList ? execution.executionList!.length : 0}
-                data-expanded={!execution.isCollapsed}
-            >
-                <TableCell className="w-10" />
-                <TableCell>
-                    <FlowTitle
-                        id={execution.id}
-                        type={convertToType(execution)}
-                        key={execution.id}
-                        subtitle={
-                            (execution.authenticationFlow
-                                ? execution.description
-                                : execution.alias) || ""
-                        }
-                        providerId={execution.providerId!}
-                        title={execution.displayName!}
-                    />
-                </TableCell>
-                <TableCell>
-                    <FlowRequirementDropdown flow={execution} onChange={onRowChange} />
-                </TableCell>
-                {(!execution.authenticationFlow || builtIn) && (
-                    <>
-                        <TableCell className="w-10" />
-                        <TableCell className="w-10" />
-                    </>
-                )}
-                <TableCell className="w-10">
-                    <ExecutionConfigModal execution={execution} />
-                </TableCell>
-
-                {execution.authenticationFlow && !builtIn && (
-                    <>
-                        <TableCell className="w-10">
-                            <AddFlowDropdown
-                                execution={execution}
-                                onAddExecution={onAddExecution}
-                                onAddFlow={onAddFlow}
-                            />
-                        </TableCell>
-                        <TableCell className="w-10">
-                            <EditFlow execution={execution} onRowChange={onRowChange} />
-                        </TableCell>
-                    </>
-                )}
-                <TableCell className="w-10">
-                    {!builtIn && (
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8"
-                                        data-testid={`${execution.displayName}-delete`}
-                                        aria-label={t("delete")}
-                                        onClick={() => onDelete(execution)}
-                                    >
-                                        <Trash className="size-4" />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>{t("delete")}</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+        return (
+            <>
+                <TableRow
+                    key={`row-${execution.id}`}
+                    className="keycloak__authentication__flow-row"
+                    aria-level={(execution.level ?? 0) + 1}
+                    aria-labelledby={execution.id}
+                    aria-setsize={hasSubList ? execution.executionList!.length : 0}
+                    data-expanded={!execution.isCollapsed}
+                >
+                    <TableCell className="w-10" />
+                    <TableCell>
+                        <FlowTitle
+                            id={execution.id}
+                            type={convertToType(execution)}
+                            key={execution.id}
+                            subtitle={
+                                (execution.authenticationFlow
+                                    ? execution.description
+                                    : execution.alias) || ""
+                            }
+                            providerId={execution.providerId!}
+                            title={execution.displayName!}
+                        />
+                    </TableCell>
+                    <TableCell>
+                        <FlowRequirementDropdown
+                            flow={execution}
+                            onChange={onRowChange}
+                        />
+                    </TableCell>
+                    {(!execution.authenticationFlow || builtIn) && (
+                        <>
+                            <TableCell className="w-10" />
+                            <TableCell className="w-10" />
+                        </>
                     )}
-                </TableCell>
-            </TableRow>
-            {!execution.isCollapsed &&
-                hasSubList &&
-                execution.executionList?.map(ex => (
-                    <FlowRow
-                        builtIn={builtIn}
-                        key={ex.id}
-                        execution={ex}
-                        onRowClick={onRowClick}
-                        onRowChange={onRowChange}
-                        onAddExecution={onAddExecution}
-                        onAddFlow={onAddFlow}
-                        onDelete={onDelete}
-                    />
-                ))}
-        </>
-    );
-};
+                    <TableCell className="w-10">
+                        <ExecutionConfigModal execution={execution} />
+                    </TableCell>
+
+                    {execution.authenticationFlow && !builtIn && (
+                        <>
+                            <TableCell className="w-10">
+                                <AddFlowDropdown
+                                    execution={execution}
+                                    onAddExecution={onAddExecution}
+                                    onAddFlow={onAddFlow}
+                                />
+                            </TableCell>
+                            <TableCell className="w-10">
+                                <EditFlow
+                                    execution={execution}
+                                    onRowChange={onRowChange}
+                                />
+                            </TableCell>
+                        </>
+                    )}
+                    <TableCell className="w-10">
+                        {!builtIn && (
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            data-testid={`${execution.displayName}-delete`}
+                                            aria-label={t("delete")}
+                                            onClick={() => onDelete(execution)}
+                                        >
+                                            <Trash className="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>{t("delete")}</TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        )}
+                    </TableCell>
+                </TableRow>
+                {!execution.isCollapsed &&
+                    hasSubList &&
+                    execution.executionList?.map(ex => (
+                        <FlowRow
+                            builtIn={builtIn}
+                            key={ex.id}
+                            execution={ex}
+                            onRowClick={onRowClick}
+                            onRowChange={onRowChange}
+                            onAddExecution={onAddExecution}
+                            onAddFlow={onAddFlow}
+                            onDelete={onDelete}
+                        />
+                    ))}
+            </>
+        );
+    }
+);

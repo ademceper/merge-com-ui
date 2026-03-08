@@ -13,12 +13,12 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { useGenerateKey } from "../hooks/use-key-operations";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useSamlKeyInfo } from "../api/use-saml-key-info";
+import { useSamlKeyInfo } from "../hooks/use-saml-key-info";
 import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";
 import { ExportSamlKeyDialog } from "./export-saml-key-dialog";
@@ -190,9 +190,9 @@ const KeySection = ({
 };
 
 export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: generateKeyMutation } = useGenerateKey();
     const [isChanged, setIsChanged] = useState<KeyTypes>();
     const [keyInfo, setKeyInfo] = useState<CertificateRepresentation[]>();
     const [selectedType, setSelectedType] = useState<KeyTypes>();
@@ -210,10 +210,7 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
         const index = KEYS.indexOf(attr);
         try {
             const info = [...(keyInfo || [])];
-            info[index] = await adminClient.clients.generateKey({
-                id: clientId,
-                attr
-            });
+            info[index] = await generateKeyMutation({ clientId, attr });
 
             setKeyInfo(info);
             saveAs(

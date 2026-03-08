@@ -10,12 +10,12 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
+import { useAssignServiceAccountRoles } from "../hooks/use-service-account-roles";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
 import { toUser } from "../../../shared/lib/routes/user";
-import { useServiceAccountUser } from "../api/use-service-account-user";
+import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
+import { useServiceAccountUser } from "../hooks/use-service-account-user";
 
 const TransComponent = Trans as ComponentType<Record<string, unknown>>;
 const RouterLink = Link as ComponentType<LinkProps>;
@@ -25,10 +25,10 @@ type ServiceAccountProps = {
 };
 
 export const ServiceAccount = ({ client }: ServiceAccountProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { mutateAsync: assignRolesMutation } = useAssignServiceAccountRoles();
 
     const { data: serviceAccount } = useServiceAccountUser(client.id!);
 
@@ -40,21 +40,16 @@ export const ServiceAccount = ({ client }: ServiceAccountProps) => {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
                 .flatMap(row => row.role as RoleMappingPayload);
-            await adminClient.users.addRealmRoleMappings({
-                id: serviceAccount?.id!,
-                roles: realmRoles
-            });
-            await Promise.all(
-                rows
+            await assignRolesMutation({
+                userId: serviceAccount?.id!,
+                realmRoles: realmRoles as Record<string, unknown>[],
+                clientRoles: rows
                     .filter(row => row.client !== undefined)
-                    .map(row =>
-                        adminClient.users.addClientRoleMappings({
-                            id: serviceAccount?.id!,
-                            clientUniqueId: row.client!.id!,
-                            roles: [row.role as RoleMappingPayload]
-                        })
-                    )
-            );
+                    .map(row => ({
+                        clientUniqueId: row.client!.id!,
+                        roles: [row.role as Record<string, unknown>]
+                    }))
+            });
             toast.success(t("roleMappingUpdatedSuccess"));
         } catch (error) {
             toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {

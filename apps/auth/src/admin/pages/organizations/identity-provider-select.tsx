@@ -15,8 +15,8 @@ import {
     HelpItem,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import useToggle from "../../shared/lib/useToggle";
+import { searchIdentityProviders } from "../../api/identity-providers";
+import { useToggle } from "../../shared/lib/use-toggle";
 import type { ComponentProps } from "../../shared/ui/dynamic/components";
 
 type IdentityProviderSelectProps = Omit<ComponentProps, "convertToName"> & {
@@ -33,7 +33,6 @@ export const IdentityProviderSelect = ({
     variant = "typeahead",
     isDisabled
 }: IdentityProviderSelectProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const {
@@ -60,7 +59,7 @@ export const IdentityProviderSelect = ({
             if (search) {
                 params.search = search;
             }
-            return await adminClient.identityProviders.find(params);
+            return await searchIdentityProviders(params);
         }
     });
 

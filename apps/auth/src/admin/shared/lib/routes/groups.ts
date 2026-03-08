@@ -1,8 +1,13 @@
-import { generateEncodedPath } from "../generateEncodedPath";
+import { generateEncodedPath } from "../generate-encoded-path";
 
 type GroupsParams = { realm: string; id?: string; lazy?: string };
 
 export const toGroups = (params: GroupsParams): string => {
-    const path = params.id ? "/:realm/groups/:id" : "/:realm/groups/*";
-    return generateEncodedPath(path, params as any);
+    if (params.id) {
+        return generateEncodedPath("/:realm/groups/:id", {
+            realm: params.realm,
+            id: params.id
+        });
+    }
+    return generateEncodedPath("/:realm/groups/*", { realm: params.realm });
 };

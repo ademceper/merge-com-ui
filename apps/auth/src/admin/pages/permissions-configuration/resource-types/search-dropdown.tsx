@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import useToggle from "../../../shared/lib/useToggle";
+import { useToggle } from "../../../shared/lib/use-toggle";
 import { ResourceType } from "./resource-type";
 
 export type SearchForm = {

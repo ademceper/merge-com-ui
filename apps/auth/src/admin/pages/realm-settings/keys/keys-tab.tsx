@@ -4,9 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { realmSettingsKeys } from "../api/keys";
-import { useKeyProviderComponents } from "../api/use-key-provider-components";
 import { type KeySubTab, toKeysTab } from "../../../shared/lib/routes/realm-settings";
+import { realmSettingsKeys } from "../hooks/keys";
+import { useKeyProviderComponents } from "../hooks/use-key-provider-components";
 import { KeysListTab } from "./keys-list-tab";
 import { KeysProvidersTab } from "./keys-providers-tab";
 

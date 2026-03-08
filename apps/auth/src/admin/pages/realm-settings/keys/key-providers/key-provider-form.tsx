@@ -10,14 +10,18 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../../app/admin-client";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
-import { useParams } from "../../../../shared/lib/useParams";
+import { useSaveComponent } from "../../hooks/use-save-component";
+import {
+    type KeyProviderParams,
+    type ProviderType,
+    toKeysTab
+} from "../../../../shared/lib/routes/realm-settings";
+import { useParams } from "../../../../shared/lib/use-params";
 import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
 import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { useComponent } from "../../api/use-component";
-import { type KeyProviderParams, type ProviderType, toKeysTab } from "../../../../shared/lib/routes/realm-settings";
+import { useComponent } from "../../hooks/use-component";
 
 type KeyProviderFormProps = {
     id?: string;
@@ -26,13 +30,13 @@ type KeyProviderFormProps = {
 };
 
 export const KeyProviderForm = ({ providerType, onClose }: KeyProviderFormProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const serverInfo = useServerInfo();
     const allComponentTypes = serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
 
+    const { mutateAsync: saveComponentMut } = useSaveComponent();
     const form = useForm<ComponentRepresentation>({
         mode: "onChange"
     });
@@ -46,19 +50,21 @@ export const KeyProviderForm = ({ providerType, onClose }: KeyProviderFormProps)
             );
         try {
             if (id) {
-                await adminClient.components.update(
-                    { id },
-                    {
+                await saveComponentMut({
+                    id,
+                    component: {
                         ...component,
                         providerType: KEY_PROVIDER_TYPE
                     }
-                );
+                });
                 toast.success(t("saveProviderSuccess"));
             } else {
-                await adminClient.components.create({
-                    ...component,
-                    providerId: providerType,
-                    providerType: KEY_PROVIDER_TYPE
+                await saveComponentMut({
+                    component: {
+                        ...component,
+                        providerId: providerType,
+                        providerType: KEY_PROVIDER_TYPE
+                    }
                 });
                 toast.success(t("saveProviderSuccess"));
                 onClose?.();
@@ -120,7 +126,7 @@ export const KeyProviderForm = ({ providerType, onClose }: KeyProviderFormProps)
     );
 };
 
-export default function KeyProviderFormPage() {
+export function KeyProviderFormPage() {
     const { t } = useTranslation();
     const params = useParams<KeyProviderParams>();
     const navigate = useNavigate();

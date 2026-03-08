@@ -29,27 +29,29 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useWorkflows as useWorkflowsQuery } from "./api/use-workflows";
 import { toWorkflowDetail } from "../../shared/lib/routes/workflows";
+import { useDeleteWorkflow } from "./hooks/use-delete-workflow";
+import { useUpdateWorkflow } from "./hooks/use-update-workflow";
+import { useWorkflows as useWorkflowsQuery } from "./hooks/use-workflows";
 
-export default function WorkflowsSection() {
-    const { adminClient } = useAdminClient();
+export function WorkflowsSection() {
     const { realm } = useRealm();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { data: workflows = [], refetch: refreshWorkflows } = useWorkflowsQuery();
     const refresh = () => refreshWorkflows();
     const [workflowToDelete, setWorkflowToDelete] = useState<WorkflowRepresentation>();
+    const { mutateAsync: updateWorkflow } = useUpdateWorkflow();
+    const { mutateAsync: deleteWorkflow } = useDeleteWorkflow();
 
     const toggleEnabled = async (workflow: WorkflowRepresentation) => {
         const enabled = !(workflow.enabled ?? true);
         try {
-            await adminClient.workflows.update(
-                { id: workflow.id! },
-                { ...workflow, enabled }
-            );
+            await updateWorkflow({
+                id: workflow.id!,
+                workflow: { ...workflow, enabled }
+            });
             toast.success(enabled ? t("workflowEnabled") : t("workflowDisabled"));
             refresh();
         } catch (error) {
@@ -62,7 +64,7 @@ export default function WorkflowsSection() {
     const onDeleteConfirm = async () => {
         if (!workflowToDelete?.id) return;
         try {
-            await adminClient.workflows.delById({ id: workflowToDelete.id });
+            await deleteWorkflow(workflowToDelete.id);
             setWorkflowToDelete(undefined);
             toast.success(t("workflowDeletedSuccess"));
             refresh();

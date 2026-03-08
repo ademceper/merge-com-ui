@@ -19,12 +19,12 @@ import {
     getErrorDescription,
     getErrorMessage
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useCreateClient } from "../hooks/use-create-client";
+import { toClient } from "../../../shared/lib/routes/clients";
 import { convertFormValuesToObject } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
-import { toClient } from "../../../shared/lib/routes/clients";
 import { CapabilityConfig } from "./capability-config";
 import { GeneralSettings } from "./general-settings";
 import { LoginSettings } from "./login-settings";
@@ -42,10 +42,10 @@ type AddClientDialogProps = {
 };
 
 export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
+    const { mutateAsync: createClient } = useCreateClient();
     const [open, setOpen] = useState(false);
     const [saving, setSaving] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
@@ -109,7 +109,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
         setSaving(true);
         const client = convertFormValuesToObject(getValues());
         try {
-            const newClient = await adminClient.clients.create({
+            const newClient = await createClient({
                 ...client,
                 clientId: client.clientId?.trim()
             });

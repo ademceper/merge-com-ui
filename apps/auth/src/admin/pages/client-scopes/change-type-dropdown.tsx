@@ -8,7 +8,6 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import {
     allClientScopeTypes,
     type ClientScope,
@@ -29,7 +28,6 @@ export const ChangeTypeDropdown = ({
     selectedRows,
     refresh
 }: ChangeTypeDropdownProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
@@ -43,13 +41,12 @@ export const ChangeTypeDropdown = ({
                         selectedRows.map(row =>
                             clientId
                                 ? changeClientScope(
-                                      adminClient,
                                       clientId,
                                       row,
                                       row.type,
                                       value as ClientScope
                                   )
-                                : changeScope(adminClient, row, value as ClientScope)
+                                : changeScope(row, value as ClientScope)
                         )
                     );
                     setOpen(false);

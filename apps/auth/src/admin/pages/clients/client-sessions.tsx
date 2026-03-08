@@ -1,7 +1,7 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import SessionsTable from "../sessions/sessions-table";
-import { useClientSessions } from "./api/use-client-sessions";
+import { SessionsTable } from "../sessions/sessions-table";
+import { useClientSessions } from "./hooks/use-client-sessions";
 
 type ClientSessionsProps = {
     client: ClientRepresentation;

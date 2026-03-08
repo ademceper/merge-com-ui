@@ -11,8 +11,8 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
+import { useAssignScopeMappings, useUpdateClientFullScope } from "../hooks/use-scope-mappings";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
 
@@ -21,9 +21,10 @@ type DedicatedScopeProps = {
 };
 
 export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
+    const { mutateAsync: assignScopeMappings } = useAssignScopeMappings();
+    const { mutateAsync: updateClientFullScope } = useUpdateClientFullScope();
     const [client, setClient] = useState<ClientRepresentation>(initialClient);
 
     const { hasAccess } = useAccess();
@@ -34,25 +35,16 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
             const realmRoles = rows
                 .filter(row => row.client === undefined)
                 .flatMap(row => row.role as RoleMappingPayload);
-            await Promise.all([
-                adminClient.clients.addRealmScopeMappings(
-                    {
-                        id: client.id!
-                    },
-                    realmRoles
-                ),
-                ...rows
+            await assignScopeMappings({
+                clientId: client.id!,
+                realmRoles,
+                clientRoles: rows
                     .filter(row => row.client !== undefined)
-                    .map(row =>
-                        adminClient.clients.addClientScopeMappings(
-                            {
-                                id: client.id!,
-                                client: row.client!.id!
-                            },
-                            [row.role as RoleMappingPayload]
-                        )
-                    )
-            ]);
+                    .map(row => ({
+                        targetClientId: row.client!.id!,
+                        roles: [row.role as Record<string, unknown>]
+                    }))
+            });
 
             toast.success(t("clientScopeSuccess"));
         } catch (error) {
@@ -65,7 +57,7 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
     const update = async () => {
         const newClient = { ...client, fullScopeAllowed: !client.fullScopeAllowed };
         try {
-            await adminClient.clients.update({ id: client.id! }, newClient);
+            await updateClientFullScope({ clientId: client.id!, client: newClient });
             toast.success(t("clientScopeSuccess"));
             setClient(newClient);
         } catch (error) {

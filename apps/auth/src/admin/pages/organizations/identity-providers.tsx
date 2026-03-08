@@ -28,15 +28,15 @@ import {
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
-import { ManageOrderDialog } from "../identity-providers/manage-order-dialog";
-import { useHasIdentityProviders } from "./api/use-has-identity-providers";
-import { useOrganizationIdentityProviders } from "./api/use-organization-identity-providers";
-import { useUnlinkIdentityProvider } from "./api/use-unlink-identity-provider";
-import { useUpdateIdentityProvider } from "./api/use-update-identity-provider";
-import { LinkIdentityProviderModal } from "./link-identity-provider-modal";
 import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
+import { ManageOrderDialog } from "../identity-providers/manage-order-dialog";
+import { useHasIdentityProviders } from "./hooks/use-has-identity-providers";
+import { useOrganizationIdentityProviders } from "./hooks/use-organization-identity-providers";
+import { useUnlinkIdentityProvider } from "./hooks/use-unlink-identity-provider";
+import { useUpdateIdentityProvider } from "./hooks/use-update-identity-provider";
+import { LinkIdentityProviderModal } from "./link-identity-provider-modal";
 
 type ShownOnLoginPageCheckProps = {
     row: IdentityProviderRepresentation;

@@ -1,14 +1,13 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
+import { adminClient } from "../app/admin-client";
 
 // ── Evaluate page ──
 
-export async function findRoles(adminClient: KeycloakAdminClient) {
+export async function findRoles() {
     return adminClient.roles.find();
 }
 
 export async function listResourcesAndScopes(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     return Promise.all([
@@ -19,17 +18,13 @@ export async function listResourcesAndScopes(
 
 // ── Export ──
 
-export async function exportResource(
-    adminClient: KeycloakAdminClient,
-    clientId: string
-) {
+export async function exportResource(clientId: string) {
     return adminClient.clients.exportResource({ id: clientId });
 }
 
 // ── Detail cell ──
 
 export async function findScopesByResource(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     resourceName: string
 ) {
@@ -40,7 +35,6 @@ export async function findScopesByResource(
 }
 
 export async function findPermissionsByResource(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     resourceId: string
 ) {
@@ -53,7 +47,6 @@ export async function findPermissionsByResource(
 // ── Permission details ──
 
 export async function findOnePermission(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     type: string,
     permissionId: string
@@ -66,7 +59,6 @@ export async function findOnePermission(
 }
 
 export async function getAssociatedResources(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     permissionId: string
 ) {
@@ -77,7 +69,6 @@ export async function getAssociatedResources(
 }
 
 export async function getAssociatedPolicies(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     permissionId: string
 ) {
@@ -88,7 +79,6 @@ export async function getAssociatedPolicies(
 }
 
 export async function getAssociatedScopes(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     permissionId: string
 ) {
@@ -101,7 +91,6 @@ export async function getAssociatedScopes(
 // ── Permissions list ──
 
 export async function findPermissions(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     first: number,
     max: number,
@@ -116,14 +105,12 @@ export async function findPermissions(
 }
 
 export async function listPolicyProviders(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     return adminClient.clients.listPolicyProviders({ id: clientId });
 }
 
 export async function listResources(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     params?: Record<string, unknown>
 ) {
@@ -131,7 +118,6 @@ export async function listResources(
 }
 
 export async function listAllScopes(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     params?: Record<string, unknown>
 ) {
@@ -141,7 +127,6 @@ export async function listAllScopes(
 // ── Delete mutations ──
 
 export async function deletePermission(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     type: string,
     permissionId: string
@@ -150,7 +135,6 @@ export async function deletePermission(
 }
 
 export async function deletePolicy(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     policyId: string
 ) {
@@ -158,7 +142,6 @@ export async function deletePolicy(
 }
 
 export async function deleteResource(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     resourceId: string
 ) {
@@ -168,7 +151,6 @@ export async function deleteResource(
 // ── Policies list ──
 
 export async function findPolicies(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     first: number,
     max: number,
@@ -184,7 +166,6 @@ export async function findPolicies(
 }
 
 export async function listDependentPolicies(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     policyId: string
 ) {
@@ -197,7 +178,6 @@ export async function listDependentPolicies(
 // ── Scope permissions ──
 
 export async function listAllResourcesByScope(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     scopeId: string
 ) {
@@ -208,7 +188,6 @@ export async function listAllResourcesByScope(
 }
 
 export async function listAllPermissionsByScope(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     scopeId: string
 ) {
@@ -221,7 +200,6 @@ export async function listAllPermissionsByScope(
 // ── Scope details ──
 
 export async function getAuthorizationScope(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     scopeId: string
 ) {
@@ -234,7 +212,6 @@ export async function getAuthorizationScope(
 // ── Resource details ──
 
 export async function getResource(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     resourceId: string
 ) {
@@ -244,7 +221,6 @@ export async function getResource(
 // ── Resource server ──
 
 export async function getResourceServer(
-    adminClient: KeycloakAdminClient,
     clientId: string
 ) {
     return adminClient.clients.getResourceServer({ id: clientId });
@@ -253,7 +229,6 @@ export async function getResourceServer(
 // ── Policy details ──
 
 export async function findOnePolicyWithType(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     type: string,
     policyId: string
@@ -267,33 +242,23 @@ export async function findOnePolicyWithType(
 
 // ── Policy sub-components ──
 
-export async function findClientScopes(adminClient: KeycloakAdminClient) {
+export async function findClientScopes() {
     return adminClient.clientScopes.find();
 }
 
-export async function findGroupById(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findGroupById(id: string) {
     return adminClient.groups.findOne({ id });
 }
 
-export async function findRoleById(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findRoleById(id: string) {
     return adminClient.roles.findOneById({ id });
 }
 
-export async function findClientById(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findClientById(id: string) {
     return adminClient.clients.findOne({ id });
 }
 
 export async function findOnePolicy(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     policyId: string
 ) {
@@ -306,7 +271,6 @@ export async function findOnePolicy(
 // ── Resources/Policy select ──
 
 export async function searchResourcesOrPolicies(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     searchFunction: "listResources" | "listPolicies",
     params: PolicyQuery
@@ -315,7 +279,6 @@ export async function searchResourcesOrPolicies(
 }
 
 export async function fetchAssociatedItems(
-    adminClient: KeycloakAdminClient,
     clientId: string,
     fetchFunction: "getAssociatedResources" | "getAssociatedPolicies",
     permissionId: string
@@ -324,4 +287,136 @@ export async function fetchAssociatedItems(
         id: clientId,
         permissionId
     });
+}
+
+// ── Authorization settings ──
+
+export async function importResource(
+    clientId: string,
+    value: Record<string, unknown>
+) {
+    return adminClient.clients.importResource({ id: clientId }, value);
+}
+
+export async function updateResourceServer(
+    clientId: string,
+    resource: Record<string, unknown>
+) {
+    return adminClient.clients.updateResourceServer({ id: clientId }, resource);
+}
+
+// ── Authorization evaluate ──
+
+export async function evaluateResource(
+    clientId: string,
+    realm: string,
+    evaluation: Record<string, unknown>
+) {
+    return adminClient.clients.evaluateResource(
+        { id: clientId, realm },
+        evaluation
+    );
+}
+
+// ── Resource CRUD ──
+
+export async function createResource(
+    clientId: string,
+    resource: Record<string, unknown>
+) {
+    return adminClient.clients.createResource({ id: clientId }, resource);
+}
+
+export async function updateResource(
+    clientId: string,
+    resourceId: string,
+    resource: Record<string, unknown>
+) {
+    return adminClient.clients.updateResource(
+        { id: clientId, resourceId },
+        resource
+    );
+}
+
+// ── Scope CRUD ──
+
+export async function createAuthorizationScope(
+    clientId: string,
+    scope: Record<string, unknown>
+) {
+    return adminClient.clients.createAuthorizationScope(
+        { id: clientId },
+        scope
+    );
+}
+
+export async function updateAuthorizationScope(
+    clientId: string,
+    scopeId: string,
+    scope: Record<string, unknown>
+) {
+    return adminClient.clients.updateAuthorizationScope(
+        { id: clientId, scopeId },
+        scope
+    );
+}
+
+export async function delAuthorizationScope(
+    clientId: string,
+    scopeId: string
+) {
+    return adminClient.clients.delAuthorizationScope({
+        id: clientId,
+        scopeId
+    });
+}
+
+// ── Permission CRUD ──
+
+export async function createPermission(
+    clientId: string,
+    type: string,
+    permission: Record<string, unknown>
+) {
+    return adminClient.clients.createPermission(
+        { id: clientId, type },
+        permission
+    );
+}
+
+export async function updatePermission(
+    clientId: string,
+    type: string,
+    permissionId: string,
+    permission: Record<string, unknown>
+) {
+    return adminClient.clients.updatePermission(
+        { id: clientId, type, permissionId },
+        permission
+    );
+}
+
+// ── Policy CRUD ──
+
+export async function createPolicy(
+    clientId: string,
+    type: string,
+    policy: Record<string, unknown>
+) {
+    return adminClient.clients.createPolicy(
+        { id: clientId, type },
+        policy
+    );
+}
+
+export async function updatePolicy(
+    clientId: string,
+    type: string,
+    policyId: string,
+    policy: Record<string, unknown>
+) {
+    return adminClient.clients.updatePolicy(
+        { id: clientId, type, policyId },
+        policy
+    );
 }

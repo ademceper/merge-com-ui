@@ -21,8 +21,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
-import { useClientProfiles } from "./api/use-client-profiles";
+import { translationFormatter } from "../../shared/lib/translation-formatter";
+import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ClientProfile = ClientProfileRepresentation & {
     global: boolean;

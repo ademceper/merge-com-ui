@@ -9,10 +9,10 @@ import {
     getErrorMessage,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { realmSettingsKeys } from "../api/keys";
-import { useUserProfileConfig } from "../api/use-user-profile-config";
+import { updateUserProfile } from "../../../api/realm-settings";
+import { realmSettingsKeys } from "../hooks/keys";
+import { useUserProfileConfig } from "../hooks/use-user-profile-config";
 
 type UserProfileProps = {
     config: UserProfileConfig | null;
@@ -36,7 +36,6 @@ const UserProfileContext = createNamedContext<UserProfileProps | undefined>(
 );
 
 export const UserProfileProvider = ({ children }: PropsWithChildren) => {
-    const { adminClient } = useAdminClient();
 
     const { realm } = useRealm();
     const { t } = useTranslation();
@@ -49,7 +48,7 @@ export const UserProfileProvider = ({ children }: PropsWithChildren) => {
         setIsSaving(true);
 
         try {
-            await adminClient.users.updateProfile({
+            await updateUserProfile({
                 ...updatedConfig,
                 realm
             });

@@ -15,16 +15,16 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { toIdentityProvider } from "../../shared/lib/routes/identity-providers";
 import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { toIdentityProvider } from "../../shared/lib/routes/identity-providers";
-import { useAvailableIdPs as useAvailableIdPsQuery } from "./api/use-available-idps";
-import { useFederatedIdentities } from "./api/use-federated-identities";
-import { useLinkedIdPs } from "./api/use-linked-idps";
+import { useAvailableIdPs as useAvailableIdPsQuery } from "./hooks/use-available-idps";
+import { useFederatedIdentities } from "./hooks/use-federated-identities";
+import { useLinkedIdPs } from "./hooks/use-linked-idps";
+import { useUnlinkFederatedIdentity } from "./hooks/use-unlink-federated-identity";
 import { UserIdpModal } from "./user-id-p-modal";
 
 type UserIdentityProviderLinksProps = {
@@ -32,7 +32,6 @@ type UserIdentityProviderLinksProps = {
 };
 
 export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksProps) => {
-    const { adminClient } = useAdminClient();
     const [linkedNames, setLinkedNames] = useState<string[]>([]);
     const [federatedId, setFederatedId] = useState("");
     const [isLinkIdPModalOpen, setIsLinkIdPModalOpen] = useState(false);
@@ -47,6 +46,7 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
 
     const { data: federatedIdentities, refetch: refetchFederated } =
         useFederatedIdentities(userId);
+    const { mutateAsync: unlinkFederatedIdentityMut } = useUnlinkFederatedIdentity(userId);
 
     useEffect(() => {
         if (federatedIdentities) {
@@ -81,10 +81,7 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
         continueButtonVariant: "default",
         onConfirm: async () => {
             try {
-                await adminClient.users.delFromFederatedIdentity({
-                    id: userId,
-                    federatedIdentityId: federatedId
-                });
+                await unlinkFederatedIdentityMut(federatedId);
                 toast.success(t("idpUnlinkSuccess"));
                 refresh();
             } catch (error) {

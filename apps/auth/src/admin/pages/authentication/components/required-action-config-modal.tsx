@@ -18,10 +18,11 @@ import {
     isUserProfileError,
     setUserProfileServerError
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { useRequiredActionConfigData } from "../api/use-required-action-config-data";
+import { useRemoveRequiredActionConfig } from "../hooks/use-remove-required-action-config";
+import { useRequiredActionConfigData } from "../hooks/use-required-action-config-data";
+import { useSaveRequiredActionConfig } from "../hooks/use-save-required-action-config";
 
 type RequiredActionConfigModalForm = {
     // alias: string;
@@ -37,8 +38,9 @@ export const RequiredActionConfigModal = ({
     requiredAction,
     onClose
 }: RequiredActionConfigModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
+    const { mutateAsync: saveRequiredActionConfig } = useSaveRequiredActionConfig();
+    const { mutateAsync: removeRequiredActionConfig } = useRemoveRequiredActionConfig();
 
     const form = useForm<RequiredActionConfigModalForm>();
     const { setValue, handleSubmit } = form;
@@ -59,10 +61,10 @@ export const RequiredActionConfigModal = ({
     const save = async (saved: RequiredActionConfigModalForm) => {
         const newConfig = convertFormValuesToObject(saved);
         try {
-            await adminClient.authenticationManagement.updateRequiredActionConfig(
-                { alias: requiredAction.alias! },
-                newConfig
-            );
+            await saveRequiredActionConfig({
+                alias: requiredAction.alias!,
+                config: newConfig
+            });
             setupForm(newConfig);
             toast.success(t("configSaveSuccess"));
             onClose();
@@ -74,7 +76,7 @@ export const RequiredActionConfigModal = ({
                         // TODO: Does not set set the error message to the field, yet.
                         // Still, this will do all front end replacement and translation of keys.
                         toast.error(
-                            t("configSaveError", { error: (error as any).message }),
+                            t("configSaveError", { error: getErrorMessage(error) }),
                             { description: getErrorDescription(error) }
                         );
                     },
@@ -120,11 +122,7 @@ export const RequiredActionConfigModal = ({
                             data-testid="clear"
                             variant="link"
                             onClick={async () => {
-                                await adminClient.authenticationManagement.removeRequiredActionConfig(
-                                    {
-                                        alias: requiredAction.alias!
-                                    }
-                                );
+                                await removeRequiredActionConfig(requiredAction.alias!);
                                 form.reset({});
                                 onClose();
                             }}

@@ -10,7 +10,7 @@ import {
 import { Link, useLocation } from "@tanstack/react-router";
 import React, { useEffect } from "react";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useSubGroups } from "../../lib/sub-groups-context";
+import { useSubGroups } from "../../../app/providers/sub-groups/sub-groups-context";
 
 /** Header'da kullanılmak üzere merge UI Breadcrumb bileşenleriyle aynı grup yolunu gösterir. */
 export function GroupBreadCrumbsForHeader() {

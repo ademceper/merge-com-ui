@@ -13,8 +13,12 @@ import { Label } from "@merge-rd/ui/components/label";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import {
+    useClearNotBefore,
+    usePushRevocation,
+    useSetNotBeforeToNow
+} from "./hooks/use-revocation";
 
 type RevocationModalProps = {
     handleModalToggle: () => void;
@@ -22,11 +26,13 @@ type RevocationModalProps = {
 };
 
 export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
+    const { realmRepresentation: realm, refresh } = useRealm();
     const { register, handleSubmit } = useForm();
+    const { mutateAsync: setNotBeforeToNow } = useSetNotBeforeToNow();
+    const { mutateAsync: clearNotBeforeMut } = useClearNotBefore();
+    const { mutateAsync: pushRevocationMut } = usePushRevocation();
 
     const parseResult = (result: GlobalRequestResult, prefixKey: string) => {
         const successCount = result.successRequests?.length || 0;
@@ -56,14 +62,7 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
 
     const setToNow = async () => {
         try {
-            await adminClient.realms.update(
-                { realm: realmName },
-                {
-                    realm: realmName,
-                    notBefore: Date.now() / 1000
-                }
-            );
-
+            await setNotBeforeToNow();
             toast.success(t("notBeforeSuccess"));
         } catch (error) {
             toast.error(t("setToNowError", { error: getErrorMessage(error) }), {
@@ -74,13 +73,7 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
 
     const clearNotBefore = async () => {
         try {
-            await adminClient.realms.update(
-                { realm: realmName },
-                {
-                    realm: realmName,
-                    notBefore: 0
-                }
-            );
+            await clearNotBeforeMut();
             toast.success(t("notBeforeClearedSuccess"));
             refresh();
         } catch (error) {
@@ -91,11 +84,8 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
     };
 
     const push = async () => {
-        const result = await adminClient.realms.pushRevocation({
-            realm: realmName
-        });
+        const result = await pushRevocationMut();
         parseResult(result, "notBeforePush");
-
         refresh();
     };
 

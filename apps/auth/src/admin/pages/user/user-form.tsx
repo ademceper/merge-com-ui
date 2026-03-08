@@ -33,10 +33,10 @@ import {
     TextControl,
     UserProfileFields
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import useFormatDate from "../../shared/lib/useFormatDate";
+import { toUsers } from "../../shared/lib/routes/user";
+import { useFormatDate } from "../../shared/lib/use-format-date";
 import { emailRegexPattern } from "../../shared/lib/util";
 import { CopyToClipboardButton } from "../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
@@ -45,7 +45,8 @@ import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { FederatedUserLink } from "./federated-user-link";
 import { toUserFormFields, type UserFormFields } from "./form-state";
-import { toUsers } from "../../shared/lib/routes/user";
+import { useAddUserToGroups } from "./hooks/use-add-user-to-groups";
+import { useUpdateUser } from "./hooks/use-update-user";
 import { RequiredActionMultiSelect } from "./user-credentials/required-action-multi-select";
 
 export type BruteForced = {
@@ -77,7 +78,6 @@ export const UserForm = ({
     refresh,
     onGroupsUpdate
 }: UserFormProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const formatDate = useFormatDate();
@@ -85,6 +85,9 @@ export const UserForm = ({
     const isManager = hasAccess("manage-users");
     const canViewFederationLink = hasAccess("view-realm");
     const { whoAmI } = useWhoAmI();
+
+    const { mutateAsync: updateUserMut } = useUpdateUser(user?.id ?? "");
+    const { mutateAsync: addUserToGroupsMut } = useAddUserToGroups(user?.id ?? "");
 
     const { handleSubmit, setValue, control, reset, formState } = form;
     const { errors } = formState;
@@ -101,7 +104,7 @@ export const UserForm = ({
 
     const unLockUser = async () => {
         try {
-            await adminClient.users.update({ id: user!.id! }, { enabled: true });
+            await updateUserMut({ enabled: true });
             toast.success(t("unlockSuccess"));
             if (refresh) {
                 refresh();
@@ -124,22 +127,15 @@ export const UserForm = ({
     };
 
     const addGroups = async (groups: GroupRepresentation[]): Promise<void> => {
-        const newGroups = groups;
-
-        newGroups.forEach(async group => {
-            try {
-                await adminClient.users.addToGroup({
-                    id: user!.id!,
-                    groupId: group.id!
-                });
-                toast.success(t("addedGroupMembership"));
-            } catch (error) {
-                toast.error(
-                    t("addedGroupMembershipError", { error: getErrorMessage(error) }),
-                    { description: getErrorDescription(error) }
-                );
-            }
-        });
+        try {
+            await addUserToGroupsMut(groups);
+            toast.success(t("addedGroupMembership"));
+        } catch (error) {
+            toast.error(
+                t("addedGroupMembershipError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
+        }
     };
 
     const toggleModal = () => {

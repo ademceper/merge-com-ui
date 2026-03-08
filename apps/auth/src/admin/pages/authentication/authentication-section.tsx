@@ -1,4 +1,3 @@
-import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import { Trans, useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
@@ -15,8 +14,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { sortBy } from "lodash-es";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
     type ColumnDef,
@@ -28,89 +26,43 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
-import { addTrailingSlash } from "../../shared/lib/util";
+import type { AuthenticationTab } from "../../shared/lib/routes/authentication";
+import {
+    toAuthentication,
+    toCreateFlow,
+    toFlow
+} from "../../shared/lib/routes/authentication";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
+import { useDeleteFlow } from "./hooks/use-delete-flow";
+import { useFlows } from "./hooks/use-flows";
 import { BindFlowDialog } from "./bind-flow-dialog";
 import { UsedBy } from "./components/used-by";
 import type { AuthenticationType } from "./constants";
 import { DuplicateFlowModal } from "./duplicate-flow-modal";
 import { Policies } from "./policies/policies";
 import { RequiredActions } from "./required-actions";
-import type { AuthenticationTab } from "../../shared/lib/routes/authentication";
-import { toAuthentication, toCreateFlow, toFlow } from "../../shared/lib/routes/authentication";
 
-export default function AuthenticationSection() {
-    const { adminClient } = useAdminClient();
+export function AuthenticationSection() {
     const { t } = useTranslation();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     const { tab } = useParams<{ tab?: string }>();
     const navigate = useNavigate();
-    const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [selectedFlow, setSelectedFlow] = useState<AuthenticationType>();
     const [flowToDelete, setFlowToDelete] = useState<AuthenticationType>();
     const [open, toggleOpen] = useToggle();
     const [bindFlowOpen, toggleBindFlow] = useToggle();
-    const [flows, setFlows] = useState<AuthenticationType[]>([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (tab === "required-actions" || tab === "policies") {
-            setFlows([]);
-            setLoading(false);
-            return;
-        }
-        let cancelled = false;
-        setLoading(true);
-        (async () => {
-            try {
-                const flowsRequest = await fetchWithError(
-                    `${addTrailingSlash(
-                        adminClient.baseUrl
-                    )}admin/realms/${realmName}/ui-ext/authentication-management/flows`,
-                    {
-                        method: "GET",
-                        headers: getAuthorizationHeaders(
-                            await adminClient.getAccessToken()
-                        )
-                    }
-                );
-                const data = await flowsRequest.json();
-                if (cancelled) return;
-                if (!data) {
-                    setFlows([]);
-                    return;
-                }
-                const sorted = sortBy(
-                    [...data].sort((a, b) =>
-                        (a.alias ?? "").localeCompare(b.alias ?? "")
-                    ),
-                    flow => flow.usedBy?.type
-                );
-                if (!cancelled) setFlows(sorted);
-            } catch {
-                if (!cancelled) setFlows([]);
-            } finally {
-                if (!cancelled) setLoading(false);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [key, tab, realmName, adminClient]);
+    const { mutateAsync: deleteFlowAsync } = useDeleteFlow();
+    const isFlowsTab = tab !== "required-actions" && tab !== "policies";
+    const { data: flows = [], isLoading } = useFlows(isFlowsTab);
 
     const onDeleteFlowConfirm = async () => {
         if (!flowToDelete?.id) return;
         try {
-            await adminClient.authenticationManagement.deleteFlow({
-                flowId: flowToDelete.id
-            });
+            await deleteFlowAsync(flowToDelete.id);
             setFlowToDelete(undefined);
-            refresh();
             toast.success(t("deleteFlowSuccess"));
         } catch (error) {
             toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), {
@@ -260,7 +212,6 @@ export default function AuthenticationSection() {
                                 description={selectedFlow.description!}
                                 toggleDialog={toggleOpen}
                                 onComplete={() => {
-                                    refresh();
                                     toggleOpen();
                                 }}
                             />
@@ -269,17 +220,15 @@ export default function AuthenticationSection() {
                             <BindFlowDialog
                                 onClose={() => {
                                     toggleBindFlow();
-                                    refresh();
                                 }}
                                 flowAlias={selectedFlow?.alias!}
                             />
                         )}
-                        {loading ? (
+                        {isLoading ? (
                             <KeycloakSpinner />
                         ) : (
                             <div className="space-y-4">
                                 <DataTable<AuthenticationType>
-                                    key={key}
                                     columns={columns}
                                     data={flows}
                                     searchColumnId="alias"

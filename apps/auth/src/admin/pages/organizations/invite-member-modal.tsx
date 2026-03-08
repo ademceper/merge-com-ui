@@ -14,7 +14,7 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
+import { useInviteMember } from "./hooks/use-invite-member";
 
 type InviteMemberModalProps = {
     orgId: string;
@@ -22,10 +22,10 @@ type InviteMemberModalProps = {
 };
 
 export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const form = useForm<Record<string, string>>();
     const { handleSubmit, formState } = form;
+    const { mutateAsync: inviteMember } = useInviteMember(orgId);
 
     const submitForm = async (data: Record<string, string>) => {
         try {
@@ -33,7 +33,7 @@ export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) =>
             for (const key in data) {
                 formData.append(key, data[key]);
             }
-            await adminClient.organizations.invite({ orgId }, formData);
+            await inviteMember(formData);
             toast.success(t("inviteSent"));
             onClose();
         } catch (error) {

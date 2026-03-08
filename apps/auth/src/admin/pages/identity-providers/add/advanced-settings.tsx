@@ -17,8 +17,8 @@ import {
     HelpItem,
     SelectField
 } from "../../../../shared/keycloak-ui-shared";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import { useAuthenticationFlows } from "../api/use-authentication-flows";
+import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+import { useAuthenticationFlows } from "../hooks/use-authentication-flows";
 import type { FieldProps } from "../component/form-group-field";
 import { FormGroupField } from "../component/form-group-field";
 import { SwitchField } from "../component/switch-field";

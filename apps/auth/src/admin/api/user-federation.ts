@@ -1,12 +1,11 @@
-import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type TestLdapConnectionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/testLdapConnection";
 import type { DirectionType } from "@keycloak/keycloak-admin-client/lib/resources/userStorageProvider";
+import { adminClient } from "../app/admin-client";
 
 // ── List / find ──────────────────────────────────────────────────────────
 
 export async function findUserFederationList(
-    adminClient: KeycloakAdminClient,
     parentId: string
 ) {
     const list = await adminClient.components.find({
@@ -16,10 +15,7 @@ export async function findUserFederationList(
     return list ?? [];
 }
 
-export async function findComponentDetail(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findComponentDetail(id: string) {
     const component = await adminClient.components.findOne({ id });
     if (!component) {
         throw new Error("notFound");
@@ -28,7 +24,6 @@ export async function findComponentDetail(
 }
 
 export async function findLdapMappers(
-    adminClient: KeycloakAdminClient,
     parentId: string
 ) {
     return adminClient.components.find({
@@ -38,7 +33,6 @@ export async function findLdapMappers(
 }
 
 export async function findLdapMapperDetail(
-    adminClient: KeycloakAdminClient,
     id: string,
     mapperId: string
 ) {
@@ -55,24 +49,17 @@ export async function findLdapMapperDetail(
     return { components, fetchedMapper };
 }
 
-export async function findCustomComponent(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function findCustomComponent(id: string) {
     return adminClient.components.findOne({ id });
 }
 
 // ── Mutations ────────────────────────────────────────────────────────────
 
-export async function deleteComponent(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function deleteComponent(id: string) {
     return adminClient.components.del({ id });
 }
 
 export async function updateComponent(
-    adminClient: KeycloakAdminClient,
     id: string,
     component: ComponentRepresentation
 ) {
@@ -80,36 +67,27 @@ export async function updateComponent(
 }
 
 export async function createComponent(
-    adminClient: KeycloakAdminClient,
     component: ComponentRepresentation
 ) {
     return adminClient.components.create(component);
 }
 
 export async function syncUsers(
-    adminClient: KeycloakAdminClient,
     id: string,
     action: "triggerChangedUsersSync" | "triggerFullSync"
 ) {
     return adminClient.userStorageProvider.sync({ id, action });
 }
 
-export async function unlinkUsers(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function unlinkUsers(id: string) {
     return adminClient.userStorageProvider.unlinkUsers({ id });
 }
 
-export async function removeImportedUsers(
-    adminClient: KeycloakAdminClient,
-    id: string
-) {
+export async function removeImportedUsers(id: string) {
     return adminClient.userStorageProvider.removeImportedUsers({ id });
 }
 
 export async function syncMappers(
-    adminClient: KeycloakAdminClient,
     parentId: string,
     id: string,
     direction: DirectionType
@@ -122,7 +100,6 @@ export async function syncMappers(
 }
 
 export async function testLdapConnection(
-    adminClient: KeycloakAdminClient,
     realm: string,
     settings: TestLdapConnectionRepresentation & {
         action: string;
@@ -133,7 +110,6 @@ export async function testLdapConnection(
 }
 
 export async function fetchLdapServerCapabilities(
-    adminClient: KeycloakAdminClient,
     realm: string,
     settings: TestLdapConnectionRepresentation & { componentId?: string }
 ) {
@@ -141,7 +117,6 @@ export async function fetchLdapServerCapabilities(
 }
 
 export async function updateComponentPriorities(
-    adminClient: KeycloakAdminClient,
     updates: { id: string; component: ComponentRepresentation }[]
 ) {
     return Promise.all(

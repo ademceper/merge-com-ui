@@ -3,7 +3,6 @@ import {
     findPermissions,
     getAssociatedPolicies
 } from "../../../../api/client-authorization";
-import { useAdminClient } from "../../../../app/admin-client";
 import { authzKeys } from "./keys";
 
 export function usePermissions(
@@ -12,12 +11,10 @@ export function usePermissions(
     max: number,
     search: Record<string, unknown>
 ) {
-    const { adminClient } = useAdminClient();
     return useQuery({
         queryKey: authzKeys.permissions(clientId, first, max, search),
         queryFn: async () => {
             const permissions = await findPermissions(
-                adminClient,
                 clientId,
                 first,
                 max + 1,
@@ -27,7 +24,6 @@ export function usePermissions(
             return await Promise.all(
                 permissions.map(async permission => {
                     const associatedPolicies = await getAssociatedPolicies(
-                        adminClient,
                         clientId,
                         permission.id!
                     );

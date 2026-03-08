@@ -15,7 +15,7 @@ import {
 } from "@merge-rd/ui/components/tooltip";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useFlowProviderId } from "../api/use-flow-provider-id";
+import { useFlowProviderId } from "../hooks/use-flow-provider-id";
 import type { ExpandableExecution } from "../execution-model";
 import { AddStepModal, type FlowType } from "./modals/add-step-modal";
 import { AddSubFlowModal, type Flow } from "./modals/add-sub-flow-modal";

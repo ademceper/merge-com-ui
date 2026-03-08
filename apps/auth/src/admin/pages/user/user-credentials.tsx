@@ -13,7 +13,6 @@ import { Separator } from "@merge-rd/ui/components/separator";
 import {
     Fragment,
     type DragEvent as ReactDragEvent,
-    useEffect,
     useMemo,
     useRef,
     useState
@@ -32,11 +31,12 @@ import {
     getErrorMessage,
     HelpItem
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import useFormatDate from "../../shared/lib/useFormatDate";
+import { useFormatDate } from "../../shared/lib/use-format-date";
 import { toUpperCase } from "../../shared/lib/util";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { useUserCredentials as useUserCredentialsQuery } from "./api/use-user-credentials";
+import { useDeleteCredential } from "./hooks/use-delete-credential";
+import { useMoveCredentialDown, useMoveCredentialUp } from "./hooks/use-move-credential";
+import { useUserCredentials as useUserCredentialsQuery } from "./hooks/use-user-credentials";
 import { FederatedUserLink } from "./federated-user-link";
 import { CredentialRow } from "./user-credentials/credential-row";
 import { InlineLabelEdit } from "./user-credentials/inline-label-edit";
@@ -105,22 +105,16 @@ const UserCredentialsRow = ({
 );
 
 export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const formatDate = useFormatDate();
     const [isOpen, setIsOpen] = useState(false);
     const [openCredentialReset, setOpenCredentialReset] = useState(false);
-    const [userCredentials, setUserCredentials] = useState<CredentialRepresentation[]>(
-        []
-    );
-    const [groupedUserCredentials, setGroupedUserCredentials] = useState<
-        ExpandableCredentialRepresentation[]
-    >([]);
     const [selectedCredential, setSelectedCredential] =
         useState<CredentialRepresentation>({});
     const [isResetPassword, setIsResetPassword] = useState(false);
     const [isUserLabelEdit, setIsUserLabelEdit] = useState<UserLabelEdit>();
+    const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
 
     const bodyRef = useRef<HTMLTableSectionElement>(null);
     const [state, setState] = useState({
@@ -132,32 +126,35 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
 
     const { data: allCredentials = [], refetch: refetchCredentials } =
         useUserCredentialsQuery(user.id!, !!user.enabled);
+    const { mutateAsync: deleteCredentialMut } = useDeleteCredential(user.id!);
+    const { mutateAsync: moveDownMut } = useMoveCredentialDown(user.id!);
+    const { mutateAsync: moveUpMut } = useMoveCredentialUp(user.id!);
     const refresh = () => refetchCredentials();
 
-    useEffect(() => {
-        const credentials = allCredentials.filter(
-            (c: CredentialRepresentation) => c.federationLink === undefined
+    const userCredentials = useMemo(
+        () =>
+            allCredentials.filter(
+                (c: CredentialRepresentation) => c.federationLink === undefined
+            ),
+        [allCredentials]
+    );
+
+    const groupedUserCredentials = useMemo<ExpandableCredentialRepresentation[]>(() => {
+        const groupedCredentials = userCredentials.reduce(
+            (r, a) => {
+                r[a.type!] = r[a.type!] || [];
+                r[a.type!].push(a);
+                return r;
+            },
+            Object.create(null) as Record<string, CredentialRepresentation[]>
         );
-        setUserCredentials(credentials);
 
-        const groupedCredentials = credentials.reduce((r, a) => {
-            r[a.type!] = r[a.type!] || [];
-            r[a.type!].push(a);
-            return r;
-        }, Object.create(null));
-
-        const groupedCredentialsArray = Object.keys(groupedCredentials).map(key => ({
+        return Object.keys(groupedCredentials).map(key => ({
             key,
-            value: groupedCredentials[key]
+            value: groupedCredentials[key],
+            isExpanded: expandedKeys.has(key)
         }));
-
-        setGroupedUserCredentials(
-            groupedCredentialsArray.map(groupedCredential => ({
-                ...groupedCredential,
-                isExpanded: false
-            }))
-        );
-    }, [allCredentials]);
+    }, [userCredentials, expandedKeys]);
 
     const toggleModal = () => setIsOpen(!isOpen);
 
@@ -177,10 +174,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.users.deleteCredential({
-                    id: user.id!,
-                    credentialId: selectedCredential.id!
-                });
+                await deleteCredentialMut(selectedCredential.id!);
                 toast.success(t("deleteCredentialsSuccess"));
                 refresh();
             } catch (error) {
@@ -339,16 +333,12 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
             for (const id of ids)
                 for (let index = 0; index < Math.abs(times); index++) {
                     if (times > 0) {
-                        await adminClient.users.moveCredentialPositionDown({
-                            id: user.id!,
+                        await moveDownMut({
                             credentialId: id,
                             newPreviousCredentialId: itemOrder[newIndex]
                         });
                     } else {
-                        await adminClient.users.moveCredentialPositionUp({
-                            id: user.id!,
-                            credentialId: id
-                        });
+                        await moveUpMut(id);
                     }
                 }
 
@@ -477,18 +467,23 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                                         groupedCredential.isExpanded
                                                     }
                                                     onClick={() => {
-                                                        const rows =
-                                                            groupedUserCredentials.map(
-                                                                (credential, index) =>
-                                                                    index === rowIndex
-                                                                        ? {
-                                                                              ...credential,
-                                                                              isExpanded:
-                                                                                  !credential.isExpanded
-                                                                          }
-                                                                        : credential
-                                                            );
-                                                        setGroupedUserCredentials(rows);
+                                                        setExpandedKeys(prev => {
+                                                            const next = new Set(prev);
+                                                            if (
+                                                                next.has(
+                                                                    groupedCredential.key
+                                                                )
+                                                            ) {
+                                                                next.delete(
+                                                                    groupedCredential.key
+                                                                );
+                                                            } else {
+                                                                next.add(
+                                                                    groupedCredential.key
+                                                                );
+                                                            }
+                                                            return next;
+                                                        });
                                                     }}
                                                 >
                                                     {groupedCredential.isExpanded

@@ -9,7 +9,9 @@ import {
     KeycloakSpinner as Spinner,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { importFromUrl } from "../../../api/identity-providers";
+
+const hiddenStyle = { display: "none" } as const;
 
 type DiscoveryEndpointFieldProps = {
     id: string;
@@ -22,7 +24,6 @@ export const DiscoveryEndpointField = ({
     fileUpload,
     children
 }: DiscoveryEndpointFieldProps) => {
-    const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
     const {
@@ -41,7 +42,7 @@ export const DiscoveryEndpointField = ({
     const discover = async (fromUrl: string) => {
         setDiscovering(true);
         try {
-            const result = await adminClient.identityProviders.importFromUrl({
+            const result = await importFromUrl({
                 providerId: id,
                 fromUrl
             });
@@ -88,7 +89,7 @@ export const DiscoveryEndpointField = ({
             </div>
             {discovery && (
                 <>
-                    <div style={{ display: "none" }} data-testid="playwright-result">
+                    <div style={hiddenStyle} data-testid="playwright-result">
                         {errors.discoveryError || errors.discoveryEndpoint
                             ? "error"
                             : !discoveryResult

@@ -25,7 +25,7 @@ import {
     useParams as useRouterParams
 } from "@tanstack/react-router";
 import { cloneDeep, sortBy } from "lodash-es";
-import { Fragment, isValidElement, useEffect, useMemo, useState } from "react";
+import { Fragment, isValidElement, memo, useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -33,13 +33,14 @@ import {
     getErrorMessage,
     KeycloakSpinner
 } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useIsAdminPermissionsClient } from "../../shared/lib/useIsAdminPermissionsClient";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import type { ClientParams } from "../../shared/lib/routes/clients";
+import { toClientRole, toClients, toCreateRole } from "../../shared/lib/routes/clients";
+import { useIsAdminPermissionsClient } from "../../shared/lib/use-is-admin-permissions-client";
+import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { useParams } from "../../shared/lib/use-params";
+import { useToggle } from "../../shared/lib/use-toggle";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
@@ -57,7 +58,10 @@ import { RolesList } from "../../shared/ui/roles-list/roles-list";
 import { AdminEvents } from "../events/admin-events";
 import { UserEvents } from "../events/user-events";
 import { AdvancedTab } from "./advanced-tab";
-import { useClient } from "./api/use-client";
+import { useClient } from "./hooks/use-client";
+import { useDeleteClient } from "./hooks/use-delete-client";
+import { useListClientRoles } from "./hooks/use-client-roles";
+import { useUpdateClient } from "./hooks/use-update-client";
 import { AuthorizationEvaluate } from "./authorization/authorization-evaluate";
 import { AuthorizationExport } from "./authorization/authorization-export";
 import { AuthorizationPermissions } from "./authorization/permissions";
@@ -70,10 +74,6 @@ import { ClientSettings } from "./client-settings";
 import { Credentials } from "./credentials/credentials";
 import { Keys } from "./keys/keys";
 import { SamlKeys } from "./keys/saml-keys";
-import type { ClientParams } from "../../shared/lib/routes/clients";
-import { toClientRole } from "../../shared/lib/routes/clients";
-import { toClients } from "../../shared/lib/routes/clients";
-import { toCreateRole } from "../../shared/lib/routes/clients";
 import { ClientScopes } from "./scopes/client-scopes";
 import { EvaluateScopes } from "./scopes/evaluate-scopes";
 import { ServiceAccount } from "./service-account/service-account";
@@ -88,157 +88,159 @@ type ClientDetailHeaderProps = {
     toggleDeleteDialog: () => void;
 };
 
-const ClientDetailHeader = ({
-    onChange,
-    value,
-    save,
-    client,
-    toggleDownloadDialog,
-    toggleDeleteDialog
-}: ClientDetailHeaderProps) => {
-    const { t } = useTranslation();
-    const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
-        titleKey: "disableConfirmClientTitle",
-        messageKey: "disableConfirmClient",
-        continueButtonLabel: "disable",
-        onConfirm: () => {
-            onChange(!value);
-            save();
-        }
-    });
+const ClientDetailHeader = memo(
+    ({
+        onChange,
+        value,
+        save,
+        client,
+        toggleDownloadDialog,
+        toggleDeleteDialog
+    }: ClientDetailHeaderProps) => {
+        const { t } = useTranslation();
+        const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
+            titleKey: "disableConfirmClientTitle",
+            messageKey: "disableConfirmClient",
+            continueButtonLabel: "disable",
+            onConfirm: () => {
+                onChange(!value);
+                save();
+            }
+        });
 
-    const badges = useMemo<
-        { id?: string; text?: string | React.ReactNode; readonly?: boolean }[]
-    >(() => {
-        const protocol = client.protocol ?? "openid-connect";
-        const label =
-            protocol === "openid-connect"
-                ? "OIDC"
-                : protocol === "saml"
-                  ? "SAML"
-                  : protocol === "oid4vc"
-                    ? "OID4VC"
-                    : (protocol ?? "");
+        const badges = useMemo<
+            { id?: string; text?: string | React.ReactNode; readonly?: boolean }[]
+        >(() => {
+            const protocol = client.protocol ?? "openid-connect";
+            const label =
+                protocol === "openid-connect"
+                    ? "OIDC"
+                    : protocol === "saml"
+                      ? "SAML"
+                      : protocol === "oid4vc"
+                        ? "OID4VC"
+                        : (protocol ?? "");
 
-        const text = client.bearerOnly ? (
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span
-                            data-testid="bearer-only-explainer-label"
-                            className="inline-flex items-center gap-1"
-                        >
-                            <Info className="size-4" />
-                            <Badge
-                                variant="secondary"
-                                className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
+            const text = client.bearerOnly ? (
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span
+                                data-testid="bearer-only-explainer-label"
+                                className="inline-flex items-center gap-1"
                             >
-                                {label}
-                            </Badge>
-                        </span>
-                    </TooltipTrigger>
-                    <TooltipContent data-testid="bearer-only-explainer-tooltip">
-                        {t("explainBearerOnly")}
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-        ) : (
-            <Badge
-                variant="secondary"
-                className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
-            >
-                {label}
-            </Badge>
-        );
-
-        return [{ text }];
-    }, [client, t]);
-
-    const { hasAccess } = useAccess();
-    const isManager = hasAccess("manage-clients") || client.access?.configure;
-
-    const dropdownItems = [
-        <DropdownMenuItem key="download" onClick={toggleDownloadDialog}>
-            {t("downloadAdapterConfig")}
-        </DropdownMenuItem>,
-        <DropdownMenuItem key="export" onClick={() => exportClient(client)}>
-            {t("export")}
-        </DropdownMenuItem>,
-        ...(!isRealmClient(client) && isManager
-            ? [
-                  <Separator key="divider" />,
-                  <DropdownMenuItem
-                      data-testid="delete-client"
-                      key="delete"
-                      onClick={toggleDeleteDialog}
-                  >
-                      {t("delete")}
-                  </DropdownMenuItem>
-              ]
-            : [])
-    ];
-
-    return (
-        <>
-            <DisableConfirm />
-            <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap items-center gap-2">
-                    {badges.map((badge, index) => (
-                        <Fragment key={index}>
-                            {!isValidElement(badge.text) && (
+                                <Info className="size-4" />
                                 <Badge
-                                    data-testid={badge.id}
-                                    variant={badge.readonly ? "secondary" : "default"}
+                                    variant="secondary"
+                                    className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
                                 >
-                                    {badge.text}
+                                    {label}
                                 </Badge>
-                            )}
-                            {isValidElement(badge.text) && badge.text}
-                        </Fragment>
-                    ))}
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 mr-4">
-                        <Label
-                            htmlFor={`${client.clientId!.replace(/\s/g, "-")}-switch`}
-                            className="text-sm"
-                        >
-                            {t("enabled")}
-                        </Label>
-                        <Switch
-                            id={`${client.clientId!.replace(/\s/g, "-")}-switch`}
-                            data-testid={`${client.clientId!}-switch`}
-                            disabled={!isManager}
-                            checked={value}
-                            aria-label={t("enabled")}
-                            onCheckedChange={value => {
-                                if (!value) {
-                                    toggleDisableDialog();
-                                } else {
-                                    onChange(value);
-                                    save();
-                                }
-                            }}
-                        />
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent data-testid="bearer-only-explainer-tooltip">
+                            {t("explainBearerOnly")}
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            ) : (
+                <Badge
+                    variant="secondary"
+                    className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
+                >
+                    {label}
+                </Badge>
+            );
+
+            return [{ text }];
+        }, [client, t]);
+
+        const { hasAccess } = useAccess();
+        const isManager = hasAccess("manage-clients") || client.access?.configure;
+
+        const dropdownItems = [
+            <DropdownMenuItem key="download" onClick={toggleDownloadDialog}>
+                {t("downloadAdapterConfig")}
+            </DropdownMenuItem>,
+            <DropdownMenuItem key="export" onClick={() => exportClient(client)}>
+                {t("export")}
+            </DropdownMenuItem>,
+            ...(!isRealmClient(client) && isManager
+                ? [
+                      <Separator key="divider" />,
+                      <DropdownMenuItem
+                          data-testid="delete-client"
+                          key="delete"
+                          onClick={toggleDeleteDialog}
+                      >
+                          {t("delete")}
+                      </DropdownMenuItem>
+                  ]
+                : [])
+        ];
+
+        return (
+            <>
+                <DisableConfirm />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        {badges.map((badge, index) => (
+                            <Fragment key={index}>
+                                {!isValidElement(badge.text) && (
+                                    <Badge
+                                        data-testid={badge.id}
+                                        variant={badge.readonly ? "secondary" : "default"}
+                                    >
+                                        {badge.text}
+                                    </Badge>
+                                )}
+                                {isValidElement(badge.text) && badge.text}
+                            </Fragment>
+                        ))}
                     </div>
-                    {dropdownItems.length > 0 && (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                data-testid="action-dropdown"
-                                className={buttonVariants()}
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mr-4">
+                            <Label
+                                htmlFor={`${client.clientId!.replace(/\s/g, "-")}-switch`}
+                                className="text-sm"
                             >
-                                {t("action")}
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                {dropdownItems}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    )}
+                                {t("enabled")}
+                            </Label>
+                            <Switch
+                                id={`${client.clientId!.replace(/\s/g, "-")}-switch`}
+                                data-testid={`${client.clientId!}-switch`}
+                                disabled={!isManager}
+                                checked={value}
+                                aria-label={t("enabled")}
+                                onCheckedChange={value => {
+                                    if (!value) {
+                                        toggleDisableDialog();
+                                    } else {
+                                        onChange(value);
+                                        save();
+                                    }
+                                }}
+                            />
+                        </div>
+                        {dropdownItems.length > 0 && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger
+                                    data-testid="action-dropdown"
+                                    className={buttonVariants()}
+                                >
+                                    {t("action")}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    {dropdownItems}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </>
-    );
-};
+            </>
+        );
+    }
+);
 
 export type SaveOptions = {
     confirmed?: boolean;
@@ -250,8 +252,7 @@ export type FormFields = Omit<
     "authorizationSettings" | "resources"
 >;
 
-export default function ClientDetails() {
-    const { adminClient } = useAdminClient();
+export function ClientDetails() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -287,22 +288,22 @@ export default function ClientDetails() {
 
     const [client, setClient] = useState<ClientRepresentation>();
     const { data: fetchedClient, refetch } = useClient(clientId);
+    const { mutateAsync: deleteClientMutation } = useDeleteClient();
+    const { mutateAsync: updateClientMutation } = useUpdateClient();
+    const { mutateAsync: listRoles } = useListClientRoles();
     const refresh = () => {
         refetch();
     };
 
     useEffect(() => {
         if (fetchedClient) {
-            if (!fetchedClient) {
-                throw new Error(t("notFound"));
-            }
             setClient(cloneDeep(fetchedClient));
             setupForm(fetchedClient);
         }
     }, [fetchedClient]);
 
     const loader = async () => {
-        const roles = await adminClient.clients.listRoles({ id: clientId });
+        const roles = await listRoles(clientId);
         return sortBy(roles, role => role.name?.toUpperCase());
     };
 
@@ -323,7 +324,7 @@ export default function ClientDetails() {
         continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                await adminClient.clients.del({ id: clientId });
+                await deleteClientMutation(clientId);
                 toast.success(t("clientDeletedSuccess"));
                 navigate({ to: toClients({ realm }) as string });
             } catch (error) {
@@ -389,7 +390,7 @@ export default function ClientDetails() {
 
             newClient.clientId = newClient.clientId?.trim();
 
-            await adminClient.clients.update({ id: clientId }, newClient);
+            await updateClientMutation({ clientId, client: newClient });
             setupForm(newClient);
             setClient(newClient);
             toast.success(t(messageKey));
@@ -496,11 +497,7 @@ export default function ClientDetails() {
                     (hasViewClients ||
                         client.access?.configure ||
                         client.access?.view) ? (
-                    <Credentials
-                        client={client}
-                        save={save}
-                        refresh={refresh}
-                    />
+                    <Credentials client={client} save={save} refresh={refresh} />
                 ) : null;
             case "roles":
                 return (

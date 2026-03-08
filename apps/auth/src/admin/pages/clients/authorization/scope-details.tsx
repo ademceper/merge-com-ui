@@ -16,23 +16,24 @@ import {
     getErrorMessage,
     TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { useParams } from "../../../shared/lib/useParams";
-import useToggle from "../../../shared/lib/useToggle";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import { useUpdateAuthorizationScope, useCreateAuthorizationScope } from "./hooks/use-authorization-mutations";
 import type { ScopeDetailsParams } from "../../../shared/lib/routes/clients";
-import { useScopeDetails as useScopeDetailsQuery } from "./api/use-scope-details";
+import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import { useParams } from "../../../shared/lib/use-params";
+import { useToggle } from "../../../shared/lib/use-toggle";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useScopeDetails as useScopeDetailsQuery } from "./hooks/use-scope-details";
 import { DeleteScopeDialog } from "./delete-scope-dialog";
 
 type FormFields = Omit<ScopeRepresentation, "resources">;
 
-export default function ScopeDetails() {
-    const { adminClient } = useAdminClient();
+export function ScopeDetails() {
 
     const { t } = useTranslation();
     const { id, scopeId, realm } = useParams<ScopeDetailsParams>();
     const navigate = useNavigate();
+    const { mutateAsync: updateScopeMutation } = useUpdateAuthorizationScope();
+    const { mutateAsync: createScopeMutation } = useCreateAuthorizationScope();
     const [deleteDialog, toggleDeleteDialog] = useToggle();
     const [scope, setScope] = useState<ScopeRepresentation>();
     const form = useForm<FormFields>({
@@ -52,20 +53,21 @@ export default function ScopeDetails() {
     const onSubmit = async (scope: ScopeRepresentation) => {
         try {
             if (scopeId) {
-                await adminClient.clients.updateAuthorizationScope(
-                    { id, scopeId },
+                await updateScopeMutation({
+                    clientId: id,
+                    scopeId,
                     scope
-                );
+                });
                 setScope(scope);
             } else {
-                await adminClient.clients.createAuthorizationScope(
-                    { id },
-                    {
+                await createScopeMutation({
+                    clientId: id,
+                    scope: {
                         name: scope.name!,
                         displayName: scope.displayName,
                         iconUri: scope.iconUri
                     }
-                );
+                });
                 navigate({
                     to: toAuthorizationTab({
                         realm,
