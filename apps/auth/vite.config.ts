@@ -6,6 +6,9 @@ import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
+    optimizeDeps: {
+        exclude: ["react-router-dom", "use-react-router-breadcrumbs"],
+    },
     plugins: [
         react(),
         tailwindcss(),

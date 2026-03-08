@@ -58,8 +58,8 @@ export function createI18n(options: CreateI18nOptions): i18n {
 		interpolation: {
 			escapeValue: false,
 		},
-		ns: options.ns,
-		defaultNS: options.defaultNS,
+		...(options.ns != null && { ns: options.ns }),
+		...(options.defaultNS != null && { defaultNS: options.defaultNS }),
 		backend: {
 			loadPath: options.loadPath,
 			parse: parseKeyValueMessages,

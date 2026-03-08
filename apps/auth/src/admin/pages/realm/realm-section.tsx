@@ -44,7 +44,7 @@ import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
 import NewRealmForm from "./add/new-realm-form";
 import { toRealm } from "./realm-routes";
-import { toDashboard } from "../dashboard/routes/dashboard";
+import { toDashboard } from "../../shared/lib/route-helpers";
 
 export type RealmNameRepresentation = {
     name: string;

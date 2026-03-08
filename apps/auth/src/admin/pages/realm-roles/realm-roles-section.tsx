@@ -24,7 +24,7 @@ import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../
 import { toast } from "sonner";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toRealmSettings } from "../realm-settings/routes/realm-settings";
+import { toRealmSettings } from "../../shared/lib/route-helpers";
 import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
 import { toRealmRole } from "./routes/realm-role";

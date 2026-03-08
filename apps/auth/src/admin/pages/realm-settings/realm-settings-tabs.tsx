@@ -36,7 +36,7 @@ import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-conv
 
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toDashboard } from "../dashboard/routes/dashboard";
+import { toDashboard } from "../../shared/lib/route-helpers";
 import type { Environment } from "../../app/environment";
 import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
 import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
@@ -59,8 +59,8 @@ import { KeysTab } from "./keys/keys-tab";
 import { LocalizationTab } from "./localization/localization-tab";
 import { toClientPolicies } from "./routes/client-policies";
 import type { ClientPoliciesTab } from "./routes/client-policies";
-import { toRealmSettings } from "./routes/realm-settings";
-import type { RealmSettingsTab } from "./routes/realm-settings";
+import { toRealmSettings } from "../../shared/lib/route-helpers";
+import type { RealmSettingsTab } from "../../shared/lib/route-helpers";
 import { SecurityDefenses } from "./security-defences/security-defenses";
 import { UserProfileTab } from "./user-profile/user-profile-tab";
 

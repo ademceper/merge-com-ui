@@ -18,7 +18,7 @@ import { useParams } from "../../../../shared/lib/useParams";
 import { toAuthorizationTab } from "../../routes/authentication-tab";
 import { PolicyDetailsParams, toPolicyDetails } from "../../routes/policy-details";
 import { useIsAdminPermissionsClient } from "../../../../shared/lib/useIsAdminPermissionsClient";
-import { toPermissionsConfigurationTabs } from "../../../permissions-configuration/routes/permissions-configuration-tabs";
+import { toPermissionsConfigurationTabs } from "../../../../shared/lib/route-helpers";
 import { NewPermissionPolicyDetailsParams } from "../../../permissions-configuration/routes/new-permission-policy";
 import { toPermissionPolicyDetails } from "../../../permissions-configuration/routes/permission-policy-details";
 import { Aggregate } from "./aggregate";

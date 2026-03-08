@@ -17,7 +17,7 @@ import {
     PermissionConfigurationDetailsParams,
     toPermissionConfigurationDetails
 } from "../routes/permission-configuration-details";
-import { toPermissionsConfigurationTabs } from "../routes/permissions-configuration-tabs";
+import { toPermissionsConfigurationTabs } from "../../../shared/lib/route-helpers";
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { AssignedPolicies } from "./assigned-policies";
 import { ScopePicker } from "../../clients/authorization/scope-picker";

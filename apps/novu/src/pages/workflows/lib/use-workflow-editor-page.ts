@@ -6,7 +6,7 @@ export const useWorkflowEditorPage = () => {
 	const location = useLocation();
 
 	// Check if we're on any edit workflow subpage by matching the pattern
-	// /env/:environmentSlug/workflows/:workflowSlug/*
+	// /:environmentSlug/workflows/:workflowSlug/*
 	const editWorkflowPattern = /^\/env\/[^/]+\/workflows\/[^/]+(?:\/|$)/;
 	const isOnEditWorkflowPage = editWorkflowPattern.test(location.pathname);
 

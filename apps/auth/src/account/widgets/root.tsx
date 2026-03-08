@@ -9,21 +9,30 @@
 
 // @ts-nocheck
 
+import { useMemo } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "../routeTree.gen";
 import { environment } from "../app/environment";
 
-const router = createRouter({
-    routeTree,
-    basepath: decodeURIComponent(new URL(environment.baseUrl).pathname),
-});
+function getBasepath() {
+    try {
+        return decodeURIComponent(new URL(environment.baseUrl).pathname);
+    } catch {
+        return decodeURIComponent(environment.baseUrl);
+    }
+}
 
 declare module "@tanstack/react-router" {
     interface Register {
-        router: typeof router;
+        router: ReturnType<typeof createRouter>;
     }
 }
 
 export const Root = () => {
+    const router = useMemo(
+        () => createRouter({ routeTree, basepath: getBasepath() }),
+        [],
+    );
+
     return <RouterProvider router={router} />;
 };

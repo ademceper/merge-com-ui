@@ -19,50 +19,50 @@ import { Route as OnboardingInboxSuccessRouteImport } from './routes/onboarding/
 import { Route as OnboardingInboxEmbedRouteImport } from './routes/onboarding/inbox/embed'
 import { Route as DashboardSidebarIntegrationsRouteImport } from './routes/_dashboard/_sidebar/integrations'
 import { Route as DashboardSidebarIntegrationsConnectRouteImport } from './routes/_dashboard/_sidebar/integrations/connect'
+import { Route as DashboardSidebarEnvironmentSlugWorkflowsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/workflows'
+import { Route as DashboardSidebarEnvironmentSlugWelcomeRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/welcome'
+import { Route as DashboardSidebarEnvironmentSlugWebhooksRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/webhooks'
+import { Route as DashboardSidebarEnvironmentSlugTranslationsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/translations'
+import { Route as DashboardSidebarEnvironmentSlugTopicsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/topics'
+import { Route as DashboardSidebarEnvironmentSlugSubscribersRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/subscribers'
+import { Route as DashboardSidebarEnvironmentSlugLayoutsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/layouts'
+import { Route as DashboardSidebarEnvironmentSlugEnvironmentsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/environments'
+import { Route as DashboardSidebarEnvironmentSlugContextsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/contexts'
+import { Route as DashboardSidebarEnvironmentSlugApiKeysRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/api-keys'
+import { Route as DashboardSidebarEnvironmentSlugAnalyticsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/analytics'
+import { Route as DashboardSidebarEnvironmentSlugActivityFeedRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/activity-feed'
 import { Route as DashboardSidebarIntegrationsConnectProviderIdRouteImport } from './routes/_dashboard/_sidebar/integrations/connect/$providerId'
 import { Route as DashboardSidebarIntegrationsIntegrationIdUpdateRouteImport } from './routes/_dashboard/_sidebar/integrations/$integrationId/update'
-import { Route as DashboardSidebarEnvEnvironmentSlugWorkflowsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/workflows'
-import { Route as DashboardSidebarEnvEnvironmentSlugWelcomeRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/welcome'
-import { Route as DashboardSidebarEnvEnvironmentSlugWebhooksRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/webhooks'
-import { Route as DashboardSidebarEnvEnvironmentSlugTranslationsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/translations'
-import { Route as DashboardSidebarEnvEnvironmentSlugTopicsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/topics'
-import { Route as DashboardSidebarEnvEnvironmentSlugSubscribersRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/subscribers'
-import { Route as DashboardSidebarEnvEnvironmentSlugLayoutsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/layouts'
-import { Route as DashboardSidebarEnvEnvironmentSlugEnvironmentsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/environments'
-import { Route as DashboardSidebarEnvEnvironmentSlugContextsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/contexts'
-import { Route as DashboardSidebarEnvEnvironmentSlugApiKeysRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/api-keys'
-import { Route as DashboardSidebarEnvEnvironmentSlugAnalyticsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/analytics'
-import { Route as DashboardSidebarEnvEnvironmentSlugActivityFeedRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/activity-feed'
-import { Route as DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/workflows/templates'
-import { Route as DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/workflows/create'
-import { Route as DashboardSidebarEnvEnvironmentSlugWebhooksLogsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/webhooks/logs'
-import { Route as DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/webhooks/event-catalog'
-import { Route as DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/webhooks/endpoints'
-import { Route as DashboardSidebarEnvEnvironmentSlugWebhooksActivityRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/webhooks/activity'
-import { Route as DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/translations/settings'
-import { Route as DashboardSidebarEnvEnvironmentSlugTopicsCreateRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/topics/create'
-import { Route as DashboardSidebarEnvEnvironmentSlugSubscribersCreateRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/subscribers/create'
-import { Route as DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/subscribers/$subscriberId'
-import { Route as DashboardSidebarEnvEnvironmentSlugLayoutsCreateRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/layouts/create'
-import { Route as DashboardSidebarEnvEnvironmentSlugContextsCreateRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/contexts/create'
-import { Route as DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/activity/workflow-runs'
-import { Route as DashboardSidebarEnvEnvironmentSlugActivityRequestsRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/activity/requests'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug'
-import { Route as DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/layouts/$layoutSlug'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/index'
-import { Route as DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/workflows/templates/$templateId'
-import { Route as DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/workflows/duplicate/$workflowId'
-import { Route as DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/topics/$topicKey/edit'
-import { Route as DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/layouts/duplicate/$layoutId'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/trigger'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/test'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/preferences'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/activity'
-import { Route as DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
-import { Route as DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRouteImport } from './routes/_dashboard/_sidebar/env/$environmentSlug/contexts/$type/$id/edit'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/index'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
-import { Route as DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport } from './routes/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+import { Route as DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/workflows/templates'
+import { Route as DashboardSidebarEnvironmentSlugWorkflowsCreateRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/workflows/create'
+import { Route as DashboardSidebarEnvironmentSlugWebhooksLogsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/webhooks/logs'
+import { Route as DashboardSidebarEnvironmentSlugWebhooksEventCatalogRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/webhooks/event-catalog'
+import { Route as DashboardSidebarEnvironmentSlugWebhooksEndpointsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/webhooks/endpoints'
+import { Route as DashboardSidebarEnvironmentSlugWebhooksActivityRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/webhooks/activity'
+import { Route as DashboardSidebarEnvironmentSlugTranslationsSettingsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/translations/settings'
+import { Route as DashboardSidebarEnvironmentSlugTopicsCreateRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/topics/create'
+import { Route as DashboardSidebarEnvironmentSlugSubscribersCreateRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/subscribers/create'
+import { Route as DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/subscribers/$subscriberId'
+import { Route as DashboardSidebarEnvironmentSlugLayoutsCreateRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/layouts/create'
+import { Route as DashboardSidebarEnvironmentSlugContextsCreateRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/contexts/create'
+import { Route as DashboardSidebarEnvironmentSlugActivityWorkflowRunsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/activity/workflow-runs'
+import { Route as DashboardSidebarEnvironmentSlugActivityRequestsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/activity/requests'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug'
+import { Route as DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/layouts/$layoutSlug'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/index'
+import { Route as DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/workflows/templates/$templateId'
+import { Route as DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/workflows/duplicate/$workflowId'
+import { Route as DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/topics/$topicKey/edit'
+import { Route as DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/layouts/duplicate/$layoutId'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/trigger'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/test'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/preferences'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/activity'
+import { Route as DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+import { Route as DashboardSidebarEnvironmentSlugContextsTypeIdEditRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/contexts/$type/$id/edit'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/index'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+import { Route as DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport } from './routes/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
@@ -113,6 +113,78 @@ const DashboardSidebarIntegrationsConnectRoute =
     path: '/connect',
     getParentRoute: () => DashboardSidebarIntegrationsRoute,
   } as any)
+const DashboardSidebarEnvironmentSlugWorkflowsRoute =
+  DashboardSidebarEnvironmentSlugWorkflowsRouteImport.update({
+    id: '/$environmentSlug/workflows',
+    path: '/$environmentSlug/workflows',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugWelcomeRoute =
+  DashboardSidebarEnvironmentSlugWelcomeRouteImport.update({
+    id: '/$environmentSlug/welcome',
+    path: '/$environmentSlug/welcome',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugWebhooksRoute =
+  DashboardSidebarEnvironmentSlugWebhooksRouteImport.update({
+    id: '/$environmentSlug/webhooks',
+    path: '/$environmentSlug/webhooks',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugTranslationsRoute =
+  DashboardSidebarEnvironmentSlugTranslationsRouteImport.update({
+    id: '/$environmentSlug/translations',
+    path: '/$environmentSlug/translations',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugTopicsRoute =
+  DashboardSidebarEnvironmentSlugTopicsRouteImport.update({
+    id: '/$environmentSlug/topics',
+    path: '/$environmentSlug/topics',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugSubscribersRoute =
+  DashboardSidebarEnvironmentSlugSubscribersRouteImport.update({
+    id: '/$environmentSlug/subscribers',
+    path: '/$environmentSlug/subscribers',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugLayoutsRoute =
+  DashboardSidebarEnvironmentSlugLayoutsRouteImport.update({
+    id: '/$environmentSlug/layouts',
+    path: '/$environmentSlug/layouts',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugEnvironmentsRoute =
+  DashboardSidebarEnvironmentSlugEnvironmentsRouteImport.update({
+    id: '/$environmentSlug/environments',
+    path: '/$environmentSlug/environments',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugContextsRoute =
+  DashboardSidebarEnvironmentSlugContextsRouteImport.update({
+    id: '/$environmentSlug/contexts',
+    path: '/$environmentSlug/contexts',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugApiKeysRoute =
+  DashboardSidebarEnvironmentSlugApiKeysRouteImport.update({
+    id: '/$environmentSlug/api-keys',
+    path: '/$environmentSlug/api-keys',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugAnalyticsRoute =
+  DashboardSidebarEnvironmentSlugAnalyticsRouteImport.update({
+    id: '/$environmentSlug/analytics',
+    path: '/$environmentSlug/analytics',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugActivityFeedRoute =
+  DashboardSidebarEnvironmentSlugActivityFeedRouteImport.update({
+    id: '/$environmentSlug/activity-feed',
+    path: '/$environmentSlug/activity-feed',
+    getParentRoute: () => DashboardSidebarRoute,
+  } as any)
 const DashboardSidebarIntegrationsConnectProviderIdRoute =
   DashboardSidebarIntegrationsConnectProviderIdRouteImport.update({
     id: '/$providerId',
@@ -125,287 +197,211 @@ const DashboardSidebarIntegrationsIntegrationIdUpdateRoute =
     path: '/$integrationId/update',
     getParentRoute: () => DashboardSidebarIntegrationsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWorkflowsRoute =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsRouteImport.update({
-    id: '/env/$environmentSlug/workflows',
-    path: '/env/$environmentSlug/workflows',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugWelcomeRoute =
-  DashboardSidebarEnvEnvironmentSlugWelcomeRouteImport.update({
-    id: '/env/$environmentSlug/welcome',
-    path: '/env/$environmentSlug/welcome',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugWebhooksRoute =
-  DashboardSidebarEnvEnvironmentSlugWebhooksRouteImport.update({
-    id: '/env/$environmentSlug/webhooks',
-    path: '/env/$environmentSlug/webhooks',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugTranslationsRoute =
-  DashboardSidebarEnvEnvironmentSlugTranslationsRouteImport.update({
-    id: '/env/$environmentSlug/translations',
-    path: '/env/$environmentSlug/translations',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugTopicsRoute =
-  DashboardSidebarEnvEnvironmentSlugTopicsRouteImport.update({
-    id: '/env/$environmentSlug/topics',
-    path: '/env/$environmentSlug/topics',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugSubscribersRoute =
-  DashboardSidebarEnvEnvironmentSlugSubscribersRouteImport.update({
-    id: '/env/$environmentSlug/subscribers',
-    path: '/env/$environmentSlug/subscribers',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugLayoutsRoute =
-  DashboardSidebarEnvEnvironmentSlugLayoutsRouteImport.update({
-    id: '/env/$environmentSlug/layouts',
-    path: '/env/$environmentSlug/layouts',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute =
-  DashboardSidebarEnvEnvironmentSlugEnvironmentsRouteImport.update({
-    id: '/env/$environmentSlug/environments',
-    path: '/env/$environmentSlug/environments',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugContextsRoute =
-  DashboardSidebarEnvEnvironmentSlugContextsRouteImport.update({
-    id: '/env/$environmentSlug/contexts',
-    path: '/env/$environmentSlug/contexts',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugApiKeysRoute =
-  DashboardSidebarEnvEnvironmentSlugApiKeysRouteImport.update({
-    id: '/env/$environmentSlug/api-keys',
-    path: '/env/$environmentSlug/api-keys',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugAnalyticsRoute =
-  DashboardSidebarEnvEnvironmentSlugAnalyticsRouteImport.update({
-    id: '/env/$environmentSlug/analytics',
-    path: '/env/$environmentSlug/analytics',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugActivityFeedRoute =
-  DashboardSidebarEnvEnvironmentSlugActivityFeedRouteImport.update({
-    id: '/env/$environmentSlug/activity-feed',
-    path: '/env/$environmentSlug/activity-feed',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
-const DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteImport.update({
+const DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute =
+  DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteImport.update({
     id: '/templates',
     path: '/templates',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWorkflowsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWorkflowsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRouteImport.update({
+const DashboardSidebarEnvironmentSlugWorkflowsCreateRoute =
+  DashboardSidebarEnvironmentSlugWorkflowsCreateRouteImport.update({
     id: '/create',
     path: '/create',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWorkflowsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWorkflowsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute =
-  DashboardSidebarEnvEnvironmentSlugWebhooksLogsRouteImport.update({
+const DashboardSidebarEnvironmentSlugWebhooksLogsRoute =
+  DashboardSidebarEnvironmentSlugWebhooksLogsRouteImport.update({
     id: '/logs',
     path: '/logs',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWebhooksRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWebhooksRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute =
-  DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRouteImport.update({
+const DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute =
+  DashboardSidebarEnvironmentSlugWebhooksEventCatalogRouteImport.update({
     id: '/event-catalog',
     path: '/event-catalog',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWebhooksRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWebhooksRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute =
-  DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRouteImport.update({
+const DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute =
+  DashboardSidebarEnvironmentSlugWebhooksEndpointsRouteImport.update({
     id: '/endpoints',
     path: '/endpoints',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWebhooksRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWebhooksRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute =
-  DashboardSidebarEnvEnvironmentSlugWebhooksActivityRouteImport.update({
+const DashboardSidebarEnvironmentSlugWebhooksActivityRoute =
+  DashboardSidebarEnvironmentSlugWebhooksActivityRouteImport.update({
     id: '/activity',
     path: '/activity',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWebhooksRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugWebhooksRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute =
-  DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRouteImport.update({
+const DashboardSidebarEnvironmentSlugTranslationsSettingsRoute =
+  DashboardSidebarEnvironmentSlugTranslationsSettingsRouteImport.update({
     id: '/settings',
     path: '/settings',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugTranslationsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugTranslationsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute =
-  DashboardSidebarEnvEnvironmentSlugTopicsCreateRouteImport.update({
+const DashboardSidebarEnvironmentSlugTopicsCreateRoute =
+  DashboardSidebarEnvironmentSlugTopicsCreateRouteImport.update({
     id: '/create',
     path: '/create',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugTopicsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugTopicsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute =
-  DashboardSidebarEnvEnvironmentSlugSubscribersCreateRouteImport.update({
+const DashboardSidebarEnvironmentSlugSubscribersCreateRoute =
+  DashboardSidebarEnvironmentSlugSubscribersCreateRouteImport.update({
     id: '/create',
     path: '/create',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugSubscribersRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugSubscribersRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute =
-  DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRouteImport.update({
+const DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute =
+  DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRouteImport.update({
     id: '/$subscriberId',
     path: '/$subscriberId',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugSubscribersRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugSubscribersRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute =
-  DashboardSidebarEnvEnvironmentSlugLayoutsCreateRouteImport.update({
+const DashboardSidebarEnvironmentSlugLayoutsCreateRoute =
+  DashboardSidebarEnvironmentSlugLayoutsCreateRouteImport.update({
     id: '/create',
     path: '/create',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugLayoutsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugLayoutsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugContextsCreateRoute =
-  DashboardSidebarEnvEnvironmentSlugContextsCreateRouteImport.update({
+const DashboardSidebarEnvironmentSlugContextsCreateRoute =
+  DashboardSidebarEnvironmentSlugContextsCreateRouteImport.update({
     id: '/create',
     path: '/create',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugContextsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugContextsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute =
-  DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRouteImport.update({
-    id: '/env/$environmentSlug/activity/workflow-runs',
-    path: '/env/$environmentSlug/activity/workflow-runs',
+const DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute =
+  DashboardSidebarEnvironmentSlugActivityWorkflowRunsRouteImport.update({
+    id: '/$environmentSlug/activity/workflow-runs',
+    path: '/$environmentSlug/activity/workflow-runs',
     getParentRoute: () => DashboardSidebarRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute =
-  DashboardSidebarEnvEnvironmentSlugActivityRequestsRouteImport.update({
-    id: '/env/$environmentSlug/activity/requests',
-    path: '/env/$environmentSlug/activity/requests',
+const DashboardSidebarEnvironmentSlugActivityRequestsRoute =
+  DashboardSidebarEnvironmentSlugActivityRequestsRouteImport.update({
+    id: '/$environmentSlug/activity/requests',
+    path: '/$environmentSlug/activity/requests',
     getParentRoute: () => DashboardSidebarRoute,
   } as any)
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteImport.update({
-    id: '/env/$environmentSlug/workflows/$workflowSlug',
-    path: '/env/$environmentSlug/workflows/$workflowSlug',
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteImport.update({
+    id: '/$environmentSlug/workflows/$workflowSlug',
+    path: '/$environmentSlug/workflows/$workflowSlug',
     getParentRoute: () => DashboardFullpageRoute,
   } as any)
-const DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute =
-  DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRouteImport.update({
-    id: '/env/$environmentSlug/layouts/$layoutSlug',
-    path: '/env/$environmentSlug/layouts/$layoutSlug',
+const DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute =
+  DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRouteImport.update({
+    id: '/$environmentSlug/layouts/$layoutSlug',
+    path: '/$environmentSlug/layouts/$layoutSlug',
     getParentRoute: () => DashboardFullpageRoute,
   } as any)
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport.update(
-    {
-      id: '/',
-      path: '/',
-      getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
-    } as any,
-  )
-const DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
+  } as any)
+const DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute =
+  DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport.update(
     {
       id: '/$templateId',
       path: '/$templateId',
       getParentRoute: () =>
-        DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute,
+        DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute,
     } as any,
   )
-const DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport.update(
+const DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute =
+  DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport.update(
     {
       id: '/duplicate/$workflowId',
       path: '/duplicate/$workflowId',
-      getParentRoute: () => DashboardSidebarEnvEnvironmentSlugWorkflowsRoute,
+      getParentRoute: () => DashboardSidebarEnvironmentSlugWorkflowsRoute,
     } as any,
   )
-const DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute =
-  DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRouteImport.update({
+const DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute =
+  DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRouteImport.update({
     id: '/$topicKey/edit',
     path: '/$topicKey/edit',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugTopicsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugTopicsRoute,
   } as any)
-const DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute =
-  DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport.update({
+const DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute =
+  DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport.update({
     id: '/duplicate/$layoutId',
     path: '/duplicate/$layoutId',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugLayoutsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugLayoutsRoute,
   } as any)
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport.update(
     {
       id: '/trigger',
       path: '/trigger',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport.update(
-    {
-      id: '/test',
-      path: '/test',
-      getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
-    } as any,
-  )
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport.update({
+    id: '/test',
+    path: '/test',
+    getParentRoute: () =>
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
+  } as any)
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport.update(
     {
       id: '/preferences',
       path: '/preferences',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport.update(
     {
       id: '/activity',
       path: '/activity',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
-const DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute =
-  DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport.update(
+const DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute =
+  DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport.update(
     {
       id: '/$resourceType/$resourceId/$locale',
       path: '/$resourceType/$resourceId/$locale',
-      getParentRoute: () => DashboardSidebarEnvEnvironmentSlugTranslationsRoute,
+      getParentRoute: () => DashboardSidebarEnvironmentSlugTranslationsRoute,
     } as any,
   )
-const DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute =
-  DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRouteImport.update({
+const DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute =
+  DashboardSidebarEnvironmentSlugContextsTypeIdEditRouteImport.update({
     id: '/$type/$id/edit',
     path: '/$type/$id/edit',
-    getParentRoute: () => DashboardSidebarEnvEnvironmentSlugContextsRoute,
+    getParentRoute: () => DashboardSidebarEnvironmentSlugContextsRoute,
   } as any)
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport.update(
     {
       id: '/steps/$stepSlug/',
       path: '/steps/$stepSlug/',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport.update(
     {
       id: '/steps/$stepSlug/editor',
       path: '/steps/$stepSlug/editor',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport.update(
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport.update(
     {
       id: '/steps/$stepSlug/conditions',
       path: '/steps/$stepSlug/conditions',
       getParentRoute: () =>
-        DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute,
+        DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute,
     } as any,
   )
 
@@ -416,51 +412,51 @@ export interface FileRoutesByFullPath {
   '/integrations': typeof DashboardSidebarIntegrationsRouteWithChildren
   '/onboarding/inbox/embed': typeof OnboardingInboxEmbedRoute
   '/onboarding/inbox/success': typeof OnboardingInboxSuccessRoute
+  '/$environmentSlug/activity-feed': typeof DashboardSidebarEnvironmentSlugActivityFeedRoute
+  '/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
+  '/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
+  '/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
+  '/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
+  '/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
+  '/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
+  '/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
+  '/$environmentSlug/translations': typeof DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren
+  '/$environmentSlug/webhooks': typeof DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren
+  '/$environmentSlug/welcome': typeof DashboardSidebarEnvironmentSlugWelcomeRoute
+  '/$environmentSlug/workflows': typeof DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren
   '/integrations/connect': typeof DashboardSidebarIntegrationsConnectRouteWithChildren
-  '/env/$environmentSlug/activity-feed': typeof DashboardSidebarEnvEnvironmentSlugActivityFeedRoute
-  '/env/$environmentSlug/analytics': typeof DashboardSidebarEnvEnvironmentSlugAnalyticsRoute
-  '/env/$environmentSlug/api-keys': typeof DashboardSidebarEnvEnvironmentSlugApiKeysRoute
-  '/env/$environmentSlug/contexts': typeof DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren
-  '/env/$environmentSlug/environments': typeof DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute
-  '/env/$environmentSlug/layouts': typeof DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren
-  '/env/$environmentSlug/subscribers': typeof DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren
-  '/env/$environmentSlug/topics': typeof DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren
-  '/env/$environmentSlug/translations': typeof DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren
-  '/env/$environmentSlug/webhooks': typeof DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren
-  '/env/$environmentSlug/welcome': typeof DashboardSidebarEnvEnvironmentSlugWelcomeRoute
-  '/env/$environmentSlug/workflows': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren
+  '/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute
+  '/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
+  '/$environmentSlug/activity/requests': typeof DashboardSidebarEnvironmentSlugActivityRequestsRoute
+  '/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute
+  '/$environmentSlug/contexts/create': typeof DashboardSidebarEnvironmentSlugContextsCreateRoute
+  '/$environmentSlug/layouts/create': typeof DashboardSidebarEnvironmentSlugLayoutsCreateRoute
+  '/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute
+  '/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvironmentSlugSubscribersCreateRoute
+  '/$environmentSlug/topics/create': typeof DashboardSidebarEnvironmentSlugTopicsCreateRoute
+  '/$environmentSlug/translations/settings': typeof DashboardSidebarEnvironmentSlugTranslationsSettingsRoute
+  '/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvironmentSlugWebhooksActivityRoute
+  '/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute
+  '/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute
+  '/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvironmentSlugWebhooksLogsRoute
+  '/$environmentSlug/workflows/create': typeof DashboardSidebarEnvironmentSlugWorkflowsCreateRoute
+  '/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren
   '/integrations/$integrationId/update': typeof DashboardSidebarIntegrationsIntegrationIdUpdateRoute
   '/integrations/connect/$providerId': typeof DashboardSidebarIntegrationsConnectProviderIdRoute
-  '/env/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute
-  '/env/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
-  '/env/$environmentSlug/activity/requests': typeof DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute
-  '/env/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute
-  '/env/$environmentSlug/contexts/create': typeof DashboardSidebarEnvEnvironmentSlugContextsCreateRoute
-  '/env/$environmentSlug/layouts/create': typeof DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute
-  '/env/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute
-  '/env/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute
-  '/env/$environmentSlug/topics/create': typeof DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute
-  '/env/$environmentSlug/translations/settings': typeof DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute
-  '/env/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute
-  '/env/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute
-  '/env/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute
-  '/env/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute
-  '/env/$environmentSlug/workflows/create': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute
-  '/env/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren
-  '/env/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
-  '/env/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute
-  '/env/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute
-  '/env/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
-  '/env/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
-  '/env/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute
-  '/env/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
+  '/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
+  '/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
+  '/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute
+  '/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
+  '/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute
+  '/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute
+  '/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
+  '/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
+  '/$environmentSlug/workflows/$workflowSlug/': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
+  '/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute
+  '/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof DashboardSidebarIndexRoute
@@ -469,50 +465,50 @@ export interface FileRoutesByTo {
   '/integrations': typeof DashboardSidebarIntegrationsRouteWithChildren
   '/onboarding/inbox/embed': typeof OnboardingInboxEmbedRoute
   '/onboarding/inbox/success': typeof OnboardingInboxSuccessRoute
+  '/$environmentSlug/activity-feed': typeof DashboardSidebarEnvironmentSlugActivityFeedRoute
+  '/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
+  '/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
+  '/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
+  '/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
+  '/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
+  '/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
+  '/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
+  '/$environmentSlug/translations': typeof DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren
+  '/$environmentSlug/webhooks': typeof DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren
+  '/$environmentSlug/welcome': typeof DashboardSidebarEnvironmentSlugWelcomeRoute
+  '/$environmentSlug/workflows': typeof DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren
   '/integrations/connect': typeof DashboardSidebarIntegrationsConnectRouteWithChildren
-  '/env/$environmentSlug/activity-feed': typeof DashboardSidebarEnvEnvironmentSlugActivityFeedRoute
-  '/env/$environmentSlug/analytics': typeof DashboardSidebarEnvEnvironmentSlugAnalyticsRoute
-  '/env/$environmentSlug/api-keys': typeof DashboardSidebarEnvEnvironmentSlugApiKeysRoute
-  '/env/$environmentSlug/contexts': typeof DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren
-  '/env/$environmentSlug/environments': typeof DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute
-  '/env/$environmentSlug/layouts': typeof DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren
-  '/env/$environmentSlug/subscribers': typeof DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren
-  '/env/$environmentSlug/topics': typeof DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren
-  '/env/$environmentSlug/translations': typeof DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren
-  '/env/$environmentSlug/webhooks': typeof DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren
-  '/env/$environmentSlug/welcome': typeof DashboardSidebarEnvEnvironmentSlugWelcomeRoute
-  '/env/$environmentSlug/workflows': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren
+  '/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute
+  '/$environmentSlug/activity/requests': typeof DashboardSidebarEnvironmentSlugActivityRequestsRoute
+  '/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute
+  '/$environmentSlug/contexts/create': typeof DashboardSidebarEnvironmentSlugContextsCreateRoute
+  '/$environmentSlug/layouts/create': typeof DashboardSidebarEnvironmentSlugLayoutsCreateRoute
+  '/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute
+  '/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvironmentSlugSubscribersCreateRoute
+  '/$environmentSlug/topics/create': typeof DashboardSidebarEnvironmentSlugTopicsCreateRoute
+  '/$environmentSlug/translations/settings': typeof DashboardSidebarEnvironmentSlugTranslationsSettingsRoute
+  '/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvironmentSlugWebhooksActivityRoute
+  '/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute
+  '/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute
+  '/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvironmentSlugWebhooksLogsRoute
+  '/$environmentSlug/workflows/create': typeof DashboardSidebarEnvironmentSlugWorkflowsCreateRoute
+  '/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren
   '/integrations/$integrationId/update': typeof DashboardSidebarIntegrationsIntegrationIdUpdateRoute
   '/integrations/connect/$providerId': typeof DashboardSidebarIntegrationsConnectProviderIdRoute
-  '/env/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute
-  '/env/$environmentSlug/activity/requests': typeof DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute
-  '/env/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute
-  '/env/$environmentSlug/contexts/create': typeof DashboardSidebarEnvEnvironmentSlugContextsCreateRoute
-  '/env/$environmentSlug/layouts/create': typeof DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute
-  '/env/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute
-  '/env/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute
-  '/env/$environmentSlug/topics/create': typeof DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute
-  '/env/$environmentSlug/translations/settings': typeof DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute
-  '/env/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute
-  '/env/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute
-  '/env/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute
-  '/env/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute
-  '/env/$environmentSlug/workflows/create': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute
-  '/env/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren
-  '/env/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
-  '/env/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute
-  '/env/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute
-  '/env/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
-  '/env/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
-  '/env/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
-  '/env/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute
-  '/env/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
-  '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
+  '/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
+  '/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
+  '/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute
+  '/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
+  '/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute
+  '/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute
+  '/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
+  '/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
+  '/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
+  '/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute
+  '/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
+  '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -525,51 +521,51 @@ export interface FileRoutesById {
   '/onboarding/inbox/embed': typeof OnboardingInboxEmbedRoute
   '/onboarding/inbox/success': typeof OnboardingInboxSuccessRoute
   '/_dashboard/_sidebar/': typeof DashboardSidebarIndexRoute
+  '/_dashboard/_sidebar/$environmentSlug/activity-feed': typeof DashboardSidebarEnvironmentSlugActivityFeedRoute
+  '/_dashboard/_sidebar/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
+  '/_dashboard/_sidebar/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
+  '/_dashboard/_sidebar/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
+  '/_dashboard/_sidebar/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/translations': typeof DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/webhooks': typeof DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/welcome': typeof DashboardSidebarEnvironmentSlugWelcomeRoute
+  '/_dashboard/_sidebar/$environmentSlug/workflows': typeof DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren
   '/_dashboard/_sidebar/integrations/connect': typeof DashboardSidebarIntegrationsConnectRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/activity-feed': typeof DashboardSidebarEnvEnvironmentSlugActivityFeedRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/analytics': typeof DashboardSidebarEnvEnvironmentSlugAnalyticsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/api-keys': typeof DashboardSidebarEnvEnvironmentSlugApiKeysRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/contexts': typeof DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/environments': typeof DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/layouts': typeof DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/subscribers': typeof DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/topics': typeof DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/translations': typeof DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/webhooks': typeof DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/welcome': typeof DashboardSidebarEnvEnvironmentSlugWelcomeRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/workflows': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren
+  '/_dashboard/_fullpage/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
+  '/_dashboard/_sidebar/$environmentSlug/activity/requests': typeof DashboardSidebarEnvironmentSlugActivityRequestsRoute
+  '/_dashboard/_sidebar/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute
+  '/_dashboard/_sidebar/$environmentSlug/contexts/create': typeof DashboardSidebarEnvironmentSlugContextsCreateRoute
+  '/_dashboard/_sidebar/$environmentSlug/layouts/create': typeof DashboardSidebarEnvironmentSlugLayoutsCreateRoute
+  '/_dashboard/_sidebar/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute
+  '/_dashboard/_sidebar/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvironmentSlugSubscribersCreateRoute
+  '/_dashboard/_sidebar/$environmentSlug/topics/create': typeof DashboardSidebarEnvironmentSlugTopicsCreateRoute
+  '/_dashboard/_sidebar/$environmentSlug/translations/settings': typeof DashboardSidebarEnvironmentSlugTranslationsSettingsRoute
+  '/_dashboard/_sidebar/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvironmentSlugWebhooksActivityRoute
+  '/_dashboard/_sidebar/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute
+  '/_dashboard/_sidebar/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute
+  '/_dashboard/_sidebar/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvironmentSlugWebhooksLogsRoute
+  '/_dashboard/_sidebar/$environmentSlug/workflows/create': typeof DashboardSidebarEnvironmentSlugWorkflowsCreateRoute
+  '/_dashboard/_sidebar/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren
   '/_dashboard/_sidebar/integrations/$integrationId/update': typeof DashboardSidebarIntegrationsIntegrationIdUpdateRoute
   '/_dashboard/_sidebar/integrations/connect/$providerId': typeof DashboardSidebarIntegrationsConnectProviderIdRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/layouts/$layoutSlug': typeof DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
-  '/_dashboard/_sidebar/env/$environmentSlug/activity/requests': typeof DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/activity/workflow-runs': typeof DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/contexts/create': typeof DashboardSidebarEnvEnvironmentSlugContextsCreateRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/layouts/create': typeof DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/subscribers/$subscriberId': typeof DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/subscribers/create': typeof DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/topics/create': typeof DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/translations/settings': typeof DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/webhooks/activity': typeof DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/webhooks/endpoints': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/webhooks/event-catalog': typeof DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/webhooks/logs': typeof DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/workflows/create': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute
-  '/_dashboard/_sidebar/env/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
-  '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/activity': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/preferences': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/test': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/trigger': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
+  '/_dashboard/_sidebar/$environmentSlug/layouts/duplicate/$layoutId': typeof DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute
+  '/_dashboard/_sidebar/$environmentSlug/topics/$topicKey/edit': typeof DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute
+  '/_dashboard/_sidebar/$environmentSlug/workflows/duplicate/$workflowId': typeof DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
+  '/_dashboard/_sidebar/$environmentSlug/workflows/templates/$templateId': typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
+  '/_dashboard/_sidebar/$environmentSlug/contexts/$type/$id/edit': typeof DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute
+  '/_dashboard/_sidebar/$environmentSlug/translations/$resourceType/$resourceId/$locale': typeof DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
+  '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -580,51 +576,51 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/onboarding/inbox/embed'
     | '/onboarding/inbox/success'
+    | '/$environmentSlug/activity-feed'
+    | '/$environmentSlug/analytics'
+    | '/$environmentSlug/api-keys'
+    | '/$environmentSlug/contexts'
+    | '/$environmentSlug/environments'
+    | '/$environmentSlug/layouts'
+    | '/$environmentSlug/subscribers'
+    | '/$environmentSlug/topics'
+    | '/$environmentSlug/translations'
+    | '/$environmentSlug/webhooks'
+    | '/$environmentSlug/welcome'
+    | '/$environmentSlug/workflows'
     | '/integrations/connect'
-    | '/env/$environmentSlug/activity-feed'
-    | '/env/$environmentSlug/analytics'
-    | '/env/$environmentSlug/api-keys'
-    | '/env/$environmentSlug/contexts'
-    | '/env/$environmentSlug/environments'
-    | '/env/$environmentSlug/layouts'
-    | '/env/$environmentSlug/subscribers'
-    | '/env/$environmentSlug/topics'
-    | '/env/$environmentSlug/translations'
-    | '/env/$environmentSlug/webhooks'
-    | '/env/$environmentSlug/welcome'
-    | '/env/$environmentSlug/workflows'
+    | '/$environmentSlug/layouts/$layoutSlug'
+    | '/$environmentSlug/workflows/$workflowSlug'
+    | '/$environmentSlug/activity/requests'
+    | '/$environmentSlug/activity/workflow-runs'
+    | '/$environmentSlug/contexts/create'
+    | '/$environmentSlug/layouts/create'
+    | '/$environmentSlug/subscribers/$subscriberId'
+    | '/$environmentSlug/subscribers/create'
+    | '/$environmentSlug/topics/create'
+    | '/$environmentSlug/translations/settings'
+    | '/$environmentSlug/webhooks/activity'
+    | '/$environmentSlug/webhooks/endpoints'
+    | '/$environmentSlug/webhooks/event-catalog'
+    | '/$environmentSlug/webhooks/logs'
+    | '/$environmentSlug/workflows/create'
+    | '/$environmentSlug/workflows/templates'
     | '/integrations/$integrationId/update'
     | '/integrations/connect/$providerId'
-    | '/env/$environmentSlug/layouts/$layoutSlug'
-    | '/env/$environmentSlug/workflows/$workflowSlug'
-    | '/env/$environmentSlug/activity/requests'
-    | '/env/$environmentSlug/activity/workflow-runs'
-    | '/env/$environmentSlug/contexts/create'
-    | '/env/$environmentSlug/layouts/create'
-    | '/env/$environmentSlug/subscribers/$subscriberId'
-    | '/env/$environmentSlug/subscribers/create'
-    | '/env/$environmentSlug/topics/create'
-    | '/env/$environmentSlug/translations/settings'
-    | '/env/$environmentSlug/webhooks/activity'
-    | '/env/$environmentSlug/webhooks/endpoints'
-    | '/env/$environmentSlug/webhooks/event-catalog'
-    | '/env/$environmentSlug/webhooks/logs'
-    | '/env/$environmentSlug/workflows/create'
-    | '/env/$environmentSlug/workflows/templates'
-    | '/env/$environmentSlug/workflows/$workflowSlug/activity'
-    | '/env/$environmentSlug/workflows/$workflowSlug/preferences'
-    | '/env/$environmentSlug/workflows/$workflowSlug/test'
-    | '/env/$environmentSlug/workflows/$workflowSlug/trigger'
-    | '/env/$environmentSlug/layouts/duplicate/$layoutId'
-    | '/env/$environmentSlug/topics/$topicKey/edit'
-    | '/env/$environmentSlug/workflows/duplicate/$workflowId'
-    | '/env/$environmentSlug/workflows/templates/$templateId'
-    | '/env/$environmentSlug/workflows/$workflowSlug/'
-    | '/env/$environmentSlug/contexts/$type/$id/edit'
-    | '/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
+    | '/$environmentSlug/workflows/$workflowSlug/activity'
+    | '/$environmentSlug/workflows/$workflowSlug/preferences'
+    | '/$environmentSlug/workflows/$workflowSlug/test'
+    | '/$environmentSlug/workflows/$workflowSlug/trigger'
+    | '/$environmentSlug/layouts/duplicate/$layoutId'
+    | '/$environmentSlug/topics/$topicKey/edit'
+    | '/$environmentSlug/workflows/duplicate/$workflowId'
+    | '/$environmentSlug/workflows/templates/$templateId'
+    | '/$environmentSlug/workflows/$workflowSlug/'
+    | '/$environmentSlug/contexts/$type/$id/edit'
+    | '/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -633,50 +629,50 @@ export interface FileRouteTypes {
     | '/integrations'
     | '/onboarding/inbox/embed'
     | '/onboarding/inbox/success'
+    | '/$environmentSlug/activity-feed'
+    | '/$environmentSlug/analytics'
+    | '/$environmentSlug/api-keys'
+    | '/$environmentSlug/contexts'
+    | '/$environmentSlug/environments'
+    | '/$environmentSlug/layouts'
+    | '/$environmentSlug/subscribers'
+    | '/$environmentSlug/topics'
+    | '/$environmentSlug/translations'
+    | '/$environmentSlug/webhooks'
+    | '/$environmentSlug/welcome'
+    | '/$environmentSlug/workflows'
     | '/integrations/connect'
-    | '/env/$environmentSlug/activity-feed'
-    | '/env/$environmentSlug/analytics'
-    | '/env/$environmentSlug/api-keys'
-    | '/env/$environmentSlug/contexts'
-    | '/env/$environmentSlug/environments'
-    | '/env/$environmentSlug/layouts'
-    | '/env/$environmentSlug/subscribers'
-    | '/env/$environmentSlug/topics'
-    | '/env/$environmentSlug/translations'
-    | '/env/$environmentSlug/webhooks'
-    | '/env/$environmentSlug/welcome'
-    | '/env/$environmentSlug/workflows'
+    | '/$environmentSlug/layouts/$layoutSlug'
+    | '/$environmentSlug/activity/requests'
+    | '/$environmentSlug/activity/workflow-runs'
+    | '/$environmentSlug/contexts/create'
+    | '/$environmentSlug/layouts/create'
+    | '/$environmentSlug/subscribers/$subscriberId'
+    | '/$environmentSlug/subscribers/create'
+    | '/$environmentSlug/topics/create'
+    | '/$environmentSlug/translations/settings'
+    | '/$environmentSlug/webhooks/activity'
+    | '/$environmentSlug/webhooks/endpoints'
+    | '/$environmentSlug/webhooks/event-catalog'
+    | '/$environmentSlug/webhooks/logs'
+    | '/$environmentSlug/workflows/create'
+    | '/$environmentSlug/workflows/templates'
     | '/integrations/$integrationId/update'
     | '/integrations/connect/$providerId'
-    | '/env/$environmentSlug/layouts/$layoutSlug'
-    | '/env/$environmentSlug/activity/requests'
-    | '/env/$environmentSlug/activity/workflow-runs'
-    | '/env/$environmentSlug/contexts/create'
-    | '/env/$environmentSlug/layouts/create'
-    | '/env/$environmentSlug/subscribers/$subscriberId'
-    | '/env/$environmentSlug/subscribers/create'
-    | '/env/$environmentSlug/topics/create'
-    | '/env/$environmentSlug/translations/settings'
-    | '/env/$environmentSlug/webhooks/activity'
-    | '/env/$environmentSlug/webhooks/endpoints'
-    | '/env/$environmentSlug/webhooks/event-catalog'
-    | '/env/$environmentSlug/webhooks/logs'
-    | '/env/$environmentSlug/workflows/create'
-    | '/env/$environmentSlug/workflows/templates'
-    | '/env/$environmentSlug/workflows/$workflowSlug/activity'
-    | '/env/$environmentSlug/workflows/$workflowSlug/preferences'
-    | '/env/$environmentSlug/workflows/$workflowSlug/test'
-    | '/env/$environmentSlug/workflows/$workflowSlug/trigger'
-    | '/env/$environmentSlug/layouts/duplicate/$layoutId'
-    | '/env/$environmentSlug/topics/$topicKey/edit'
-    | '/env/$environmentSlug/workflows/duplicate/$workflowId'
-    | '/env/$environmentSlug/workflows/templates/$templateId'
-    | '/env/$environmentSlug/workflows/$workflowSlug'
-    | '/env/$environmentSlug/contexts/$type/$id/edit'
-    | '/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
-    | '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug'
+    | '/$environmentSlug/workflows/$workflowSlug/activity'
+    | '/$environmentSlug/workflows/$workflowSlug/preferences'
+    | '/$environmentSlug/workflows/$workflowSlug/test'
+    | '/$environmentSlug/workflows/$workflowSlug/trigger'
+    | '/$environmentSlug/layouts/duplicate/$layoutId'
+    | '/$environmentSlug/topics/$topicKey/edit'
+    | '/$environmentSlug/workflows/duplicate/$workflowId'
+    | '/$environmentSlug/workflows/templates/$templateId'
+    | '/$environmentSlug/workflows/$workflowSlug'
+    | '/$environmentSlug/contexts/$type/$id/edit'
+    | '/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+    | '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug'
   id:
     | '__root__'
     | '/_dashboard'
@@ -688,51 +684,51 @@ export interface FileRouteTypes {
     | '/onboarding/inbox/embed'
     | '/onboarding/inbox/success'
     | '/_dashboard/_sidebar/'
+    | '/_dashboard/_sidebar/$environmentSlug/activity-feed'
+    | '/_dashboard/_sidebar/$environmentSlug/analytics'
+    | '/_dashboard/_sidebar/$environmentSlug/api-keys'
+    | '/_dashboard/_sidebar/$environmentSlug/contexts'
+    | '/_dashboard/_sidebar/$environmentSlug/environments'
+    | '/_dashboard/_sidebar/$environmentSlug/layouts'
+    | '/_dashboard/_sidebar/$environmentSlug/subscribers'
+    | '/_dashboard/_sidebar/$environmentSlug/topics'
+    | '/_dashboard/_sidebar/$environmentSlug/translations'
+    | '/_dashboard/_sidebar/$environmentSlug/webhooks'
+    | '/_dashboard/_sidebar/$environmentSlug/welcome'
+    | '/_dashboard/_sidebar/$environmentSlug/workflows'
     | '/_dashboard/_sidebar/integrations/connect'
-    | '/_dashboard/_sidebar/env/$environmentSlug/activity-feed'
-    | '/_dashboard/_sidebar/env/$environmentSlug/analytics'
-    | '/_dashboard/_sidebar/env/$environmentSlug/api-keys'
-    | '/_dashboard/_sidebar/env/$environmentSlug/contexts'
-    | '/_dashboard/_sidebar/env/$environmentSlug/environments'
-    | '/_dashboard/_sidebar/env/$environmentSlug/layouts'
-    | '/_dashboard/_sidebar/env/$environmentSlug/subscribers'
-    | '/_dashboard/_sidebar/env/$environmentSlug/topics'
-    | '/_dashboard/_sidebar/env/$environmentSlug/translations'
-    | '/_dashboard/_sidebar/env/$environmentSlug/webhooks'
-    | '/_dashboard/_sidebar/env/$environmentSlug/welcome'
-    | '/_dashboard/_sidebar/env/$environmentSlug/workflows'
+    | '/_dashboard/_fullpage/$environmentSlug/layouts/$layoutSlug'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug'
+    | '/_dashboard/_sidebar/$environmentSlug/activity/requests'
+    | '/_dashboard/_sidebar/$environmentSlug/activity/workflow-runs'
+    | '/_dashboard/_sidebar/$environmentSlug/contexts/create'
+    | '/_dashboard/_sidebar/$environmentSlug/layouts/create'
+    | '/_dashboard/_sidebar/$environmentSlug/subscribers/$subscriberId'
+    | '/_dashboard/_sidebar/$environmentSlug/subscribers/create'
+    | '/_dashboard/_sidebar/$environmentSlug/topics/create'
+    | '/_dashboard/_sidebar/$environmentSlug/translations/settings'
+    | '/_dashboard/_sidebar/$environmentSlug/webhooks/activity'
+    | '/_dashboard/_sidebar/$environmentSlug/webhooks/endpoints'
+    | '/_dashboard/_sidebar/$environmentSlug/webhooks/event-catalog'
+    | '/_dashboard/_sidebar/$environmentSlug/webhooks/logs'
+    | '/_dashboard/_sidebar/$environmentSlug/workflows/create'
+    | '/_dashboard/_sidebar/$environmentSlug/workflows/templates'
     | '/_dashboard/_sidebar/integrations/$integrationId/update'
     | '/_dashboard/_sidebar/integrations/connect/$providerId'
-    | '/_dashboard/_fullpage/env/$environmentSlug/layouts/$layoutSlug'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug'
-    | '/_dashboard/_sidebar/env/$environmentSlug/activity/requests'
-    | '/_dashboard/_sidebar/env/$environmentSlug/activity/workflow-runs'
-    | '/_dashboard/_sidebar/env/$environmentSlug/contexts/create'
-    | '/_dashboard/_sidebar/env/$environmentSlug/layouts/create'
-    | '/_dashboard/_sidebar/env/$environmentSlug/subscribers/$subscriberId'
-    | '/_dashboard/_sidebar/env/$environmentSlug/subscribers/create'
-    | '/_dashboard/_sidebar/env/$environmentSlug/topics/create'
-    | '/_dashboard/_sidebar/env/$environmentSlug/translations/settings'
-    | '/_dashboard/_sidebar/env/$environmentSlug/webhooks/activity'
-    | '/_dashboard/_sidebar/env/$environmentSlug/webhooks/endpoints'
-    | '/_dashboard/_sidebar/env/$environmentSlug/webhooks/event-catalog'
-    | '/_dashboard/_sidebar/env/$environmentSlug/webhooks/logs'
-    | '/_dashboard/_sidebar/env/$environmentSlug/workflows/create'
-    | '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/activity'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/preferences'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/test'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/trigger'
-    | '/_dashboard/_sidebar/env/$environmentSlug/layouts/duplicate/$layoutId'
-    | '/_dashboard/_sidebar/env/$environmentSlug/topics/$topicKey/edit'
-    | '/_dashboard/_sidebar/env/$environmentSlug/workflows/duplicate/$workflowId'
-    | '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates/$templateId'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/'
-    | '/_dashboard/_sidebar/env/$environmentSlug/contexts/$type/$id/edit'
-    | '/_dashboard/_sidebar/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
-    | '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/activity'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/preferences'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/test'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/trigger'
+    | '/_dashboard/_sidebar/$environmentSlug/layouts/duplicate/$layoutId'
+    | '/_dashboard/_sidebar/$environmentSlug/topics/$topicKey/edit'
+    | '/_dashboard/_sidebar/$environmentSlug/workflows/duplicate/$workflowId'
+    | '/_dashboard/_sidebar/$environmentSlug/workflows/templates/$templateId'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/'
+    | '/_dashboard/_sidebar/$environmentSlug/contexts/$type/$id/edit'
+    | '/_dashboard/_sidebar/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+    | '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -812,6 +808,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSidebarIntegrationsConnectRouteImport
       parentRoute: typeof DashboardSidebarIntegrationsRoute
     }
+    '/_dashboard/_sidebar/$environmentSlug/workflows': {
+      id: '/_dashboard/_sidebar/$environmentSlug/workflows'
+      path: '/$environmentSlug/workflows'
+      fullPath: '/$environmentSlug/workflows'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/welcome': {
+      id: '/_dashboard/_sidebar/$environmentSlug/welcome'
+      path: '/$environmentSlug/welcome'
+      fullPath: '/$environmentSlug/welcome'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWelcomeRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/webhooks': {
+      id: '/_dashboard/_sidebar/$environmentSlug/webhooks'
+      path: '/$environmentSlug/webhooks'
+      fullPath: '/$environmentSlug/webhooks'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/translations': {
+      id: '/_dashboard/_sidebar/$environmentSlug/translations'
+      path: '/$environmentSlug/translations'
+      fullPath: '/$environmentSlug/translations'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTranslationsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/topics': {
+      id: '/_dashboard/_sidebar/$environmentSlug/topics'
+      path: '/$environmentSlug/topics'
+      fullPath: '/$environmentSlug/topics'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTopicsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/subscribers': {
+      id: '/_dashboard/_sidebar/$environmentSlug/subscribers'
+      path: '/$environmentSlug/subscribers'
+      fullPath: '/$environmentSlug/subscribers'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugSubscribersRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/layouts': {
+      id: '/_dashboard/_sidebar/$environmentSlug/layouts'
+      path: '/$environmentSlug/layouts'
+      fullPath: '/$environmentSlug/layouts'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/environments': {
+      id: '/_dashboard/_sidebar/$environmentSlug/environments'
+      path: '/$environmentSlug/environments'
+      fullPath: '/$environmentSlug/environments'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugEnvironmentsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/contexts': {
+      id: '/_dashboard/_sidebar/$environmentSlug/contexts'
+      path: '/$environmentSlug/contexts'
+      fullPath: '/$environmentSlug/contexts'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugContextsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/api-keys': {
+      id: '/_dashboard/_sidebar/$environmentSlug/api-keys'
+      path: '/$environmentSlug/api-keys'
+      fullPath: '/$environmentSlug/api-keys'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugApiKeysRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/analytics': {
+      id: '/_dashboard/_sidebar/$environmentSlug/analytics'
+      path: '/$environmentSlug/analytics'
+      fullPath: '/$environmentSlug/analytics'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugAnalyticsRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
+    '/_dashboard/_sidebar/$environmentSlug/activity-feed': {
+      id: '/_dashboard/_sidebar/$environmentSlug/activity-feed'
+      path: '/$environmentSlug/activity-feed'
+      fullPath: '/$environmentSlug/activity-feed'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugActivityFeedRouteImport
+      parentRoute: typeof DashboardSidebarRoute
+    }
     '/_dashboard/_sidebar/integrations/connect/$providerId': {
       id: '/_dashboard/_sidebar/integrations/connect/$providerId'
       path: '/$providerId'
@@ -826,349 +906,265 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSidebarIntegrationsIntegrationIdUpdateRouteImport
       parentRoute: typeof DashboardSidebarIntegrationsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/workflows': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/workflows'
-      path: '/env/$environmentSlug/workflows'
-      fullPath: '/env/$environmentSlug/workflows'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/welcome': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/welcome'
-      path: '/env/$environmentSlug/welcome'
-      fullPath: '/env/$environmentSlug/welcome'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWelcomeRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/webhooks': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/webhooks'
-      path: '/env/$environmentSlug/webhooks'
-      fullPath: '/env/$environmentSlug/webhooks'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/translations': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/translations'
-      path: '/env/$environmentSlug/translations'
-      fullPath: '/env/$environmentSlug/translations'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/topics': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/topics'
-      path: '/env/$environmentSlug/topics'
-      fullPath: '/env/$environmentSlug/topics'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/subscribers': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/subscribers'
-      path: '/env/$environmentSlug/subscribers'
-      fullPath: '/env/$environmentSlug/subscribers'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/layouts': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/layouts'
-      path: '/env/$environmentSlug/layouts'
-      fullPath: '/env/$environmentSlug/layouts'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/environments': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/environments'
-      path: '/env/$environmentSlug/environments'
-      fullPath: '/env/$environmentSlug/environments'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugEnvironmentsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/contexts': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/contexts'
-      path: '/env/$environmentSlug/contexts'
-      fullPath: '/env/$environmentSlug/contexts'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/api-keys': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/api-keys'
-      path: '/env/$environmentSlug/api-keys'
-      fullPath: '/env/$environmentSlug/api-keys'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugApiKeysRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/analytics': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/analytics'
-      path: '/env/$environmentSlug/analytics'
-      fullPath: '/env/$environmentSlug/analytics'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugAnalyticsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/activity-feed': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/activity-feed'
-      path: '/env/$environmentSlug/activity-feed'
-      fullPath: '/env/$environmentSlug/activity-feed'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityFeedRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates'
+    '/_dashboard/_sidebar/$environmentSlug/workflows/templates': {
+      id: '/_dashboard/_sidebar/$environmentSlug/workflows/templates'
       path: '/templates'
-      fullPath: '/env/$environmentSlug/workflows/templates'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRoute
+      fullPath: '/$environmentSlug/workflows/templates'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/workflows/create': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/workflows/create'
+    '/_dashboard/_sidebar/$environmentSlug/workflows/create': {
+      id: '/_dashboard/_sidebar/$environmentSlug/workflows/create'
       path: '/create'
-      fullPath: '/env/$environmentSlug/workflows/create'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRoute
+      fullPath: '/$environmentSlug/workflows/create'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsCreateRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/webhooks/logs': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/webhooks/logs'
+    '/_dashboard/_sidebar/$environmentSlug/webhooks/logs': {
+      id: '/_dashboard/_sidebar/$environmentSlug/webhooks/logs'
       path: '/logs'
-      fullPath: '/env/$environmentSlug/webhooks/logs'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksLogsRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRoute
+      fullPath: '/$environmentSlug/webhooks/logs'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWebhooksLogsRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/webhooks/event-catalog': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/webhooks/event-catalog'
+    '/_dashboard/_sidebar/$environmentSlug/webhooks/event-catalog': {
+      id: '/_dashboard/_sidebar/$environmentSlug/webhooks/event-catalog'
       path: '/event-catalog'
-      fullPath: '/env/$environmentSlug/webhooks/event-catalog'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRoute
+      fullPath: '/$environmentSlug/webhooks/event-catalog'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWebhooksEventCatalogRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/webhooks/endpoints': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/webhooks/endpoints'
+    '/_dashboard/_sidebar/$environmentSlug/webhooks/endpoints': {
+      id: '/_dashboard/_sidebar/$environmentSlug/webhooks/endpoints'
       path: '/endpoints'
-      fullPath: '/env/$environmentSlug/webhooks/endpoints'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRoute
+      fullPath: '/$environmentSlug/webhooks/endpoints'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWebhooksEndpointsRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/webhooks/activity': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/webhooks/activity'
+    '/_dashboard/_sidebar/$environmentSlug/webhooks/activity': {
+      id: '/_dashboard/_sidebar/$environmentSlug/webhooks/activity'
       path: '/activity'
-      fullPath: '/env/$environmentSlug/webhooks/activity'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksActivityRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRoute
+      fullPath: '/$environmentSlug/webhooks/activity'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWebhooksActivityRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/translations/settings': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/translations/settings'
+    '/_dashboard/_sidebar/$environmentSlug/translations/settings': {
+      id: '/_dashboard/_sidebar/$environmentSlug/translations/settings'
       path: '/settings'
-      fullPath: '/env/$environmentSlug/translations/settings'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsRoute
+      fullPath: '/$environmentSlug/translations/settings'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTranslationsSettingsRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugTranslationsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/topics/create': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/topics/create'
+    '/_dashboard/_sidebar/$environmentSlug/topics/create': {
+      id: '/_dashboard/_sidebar/$environmentSlug/topics/create'
       path: '/create'
-      fullPath: '/env/$environmentSlug/topics/create'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsCreateRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsRoute
+      fullPath: '/$environmentSlug/topics/create'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTopicsCreateRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugTopicsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/subscribers/create': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/subscribers/create'
+    '/_dashboard/_sidebar/$environmentSlug/subscribers/create': {
+      id: '/_dashboard/_sidebar/$environmentSlug/subscribers/create'
       path: '/create'
-      fullPath: '/env/$environmentSlug/subscribers/create'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersCreateRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersRoute
+      fullPath: '/$environmentSlug/subscribers/create'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugSubscribersCreateRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugSubscribersRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/subscribers/$subscriberId': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/subscribers/$subscriberId'
+    '/_dashboard/_sidebar/$environmentSlug/subscribers/$subscriberId': {
+      id: '/_dashboard/_sidebar/$environmentSlug/subscribers/$subscriberId'
       path: '/$subscriberId'
-      fullPath: '/env/$environmentSlug/subscribers/$subscriberId'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersRoute
+      fullPath: '/$environmentSlug/subscribers/$subscriberId'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugSubscribersRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/layouts/create': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/layouts/create'
+    '/_dashboard/_sidebar/$environmentSlug/layouts/create': {
+      id: '/_dashboard/_sidebar/$environmentSlug/layouts/create'
       path: '/create'
-      fullPath: '/env/$environmentSlug/layouts/create'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsCreateRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsRoute
+      fullPath: '/$environmentSlug/layouts/create'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugLayoutsCreateRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/contexts/create': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/contexts/create'
+    '/_dashboard/_sidebar/$environmentSlug/contexts/create': {
+      id: '/_dashboard/_sidebar/$environmentSlug/contexts/create'
       path: '/create'
-      fullPath: '/env/$environmentSlug/contexts/create'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsCreateRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsRoute
+      fullPath: '/$environmentSlug/contexts/create'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugContextsCreateRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugContextsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/activity/workflow-runs': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/activity/workflow-runs'
-      path: '/env/$environmentSlug/activity/workflow-runs'
-      fullPath: '/env/$environmentSlug/activity/workflow-runs'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRouteImport
+    '/_dashboard/_sidebar/$environmentSlug/activity/workflow-runs': {
+      id: '/_dashboard/_sidebar/$environmentSlug/activity/workflow-runs'
+      path: '/$environmentSlug/activity/workflow-runs'
+      fullPath: '/$environmentSlug/activity/workflow-runs'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugActivityWorkflowRunsRouteImport
       parentRoute: typeof DashboardSidebarRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/activity/requests': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/activity/requests'
-      path: '/env/$environmentSlug/activity/requests'
-      fullPath: '/env/$environmentSlug/activity/requests'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityRequestsRouteImport
+    '/_dashboard/_sidebar/$environmentSlug/activity/requests': {
+      id: '/_dashboard/_sidebar/$environmentSlug/activity/requests'
+      path: '/$environmentSlug/activity/requests'
+      fullPath: '/$environmentSlug/activity/requests'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugActivityRequestsRouteImport
       parentRoute: typeof DashboardSidebarRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug'
-      path: '/env/$environmentSlug/workflows/$workflowSlug'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteImport
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug'
+      path: '/$environmentSlug/workflows/$workflowSlug'
+      fullPath: '/$environmentSlug/workflows/$workflowSlug'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteImport
       parentRoute: typeof DashboardFullpageRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/layouts/$layoutSlug': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/layouts/$layoutSlug'
-      path: '/env/$environmentSlug/layouts/$layoutSlug'
-      fullPath: '/env/$environmentSlug/layouts/$layoutSlug'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRouteImport
+    '/_dashboard/_fullpage/$environmentSlug/layouts/$layoutSlug': {
+      id: '/_dashboard/_fullpage/$environmentSlug/layouts/$layoutSlug'
+      path: '/$environmentSlug/layouts/$layoutSlug'
+      fullPath: '/$environmentSlug/layouts/$layoutSlug'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRouteImport
       parentRoute: typeof DashboardFullpageRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/'
       path: '/'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates/$templateId': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/workflows/templates/$templateId'
+    '/_dashboard/_sidebar/$environmentSlug/workflows/templates/$templateId': {
+      id: '/_dashboard/_sidebar/$environmentSlug/workflows/templates/$templateId'
       path: '/$templateId'
-      fullPath: '/env/$environmentSlug/workflows/templates/$templateId'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute
+      fullPath: '/$environmentSlug/workflows/templates/$templateId'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/workflows/duplicate/$workflowId': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/workflows/duplicate/$workflowId'
+    '/_dashboard/_sidebar/$environmentSlug/workflows/duplicate/$workflowId': {
+      id: '/_dashboard/_sidebar/$environmentSlug/workflows/duplicate/$workflowId'
       path: '/duplicate/$workflowId'
-      fullPath: '/env/$environmentSlug/workflows/duplicate/$workflowId'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRoute
+      fullPath: '/$environmentSlug/workflows/duplicate/$workflowId'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/topics/$topicKey/edit': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/topics/$topicKey/edit'
+    '/_dashboard/_sidebar/$environmentSlug/topics/$topicKey/edit': {
+      id: '/_dashboard/_sidebar/$environmentSlug/topics/$topicKey/edit'
       path: '/$topicKey/edit'
-      fullPath: '/env/$environmentSlug/topics/$topicKey/edit'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsRoute
+      fullPath: '/$environmentSlug/topics/$topicKey/edit'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugTopicsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/layouts/duplicate/$layoutId': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/layouts/duplicate/$layoutId'
+    '/_dashboard/_sidebar/$environmentSlug/layouts/duplicate/$layoutId': {
+      id: '/_dashboard/_sidebar/$environmentSlug/layouts/duplicate/$layoutId'
       path: '/duplicate/$layoutId'
-      fullPath: '/env/$environmentSlug/layouts/duplicate/$layoutId'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsRoute
+      fullPath: '/$environmentSlug/layouts/duplicate/$layoutId'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/trigger': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/trigger'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/trigger': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/trigger'
       path: '/trigger'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/trigger'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/trigger'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/test': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/test'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/test': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/test'
       path: '/test'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/test'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/test'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/preferences': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/preferences'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/preferences': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/preferences'
       path: '/preferences'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/preferences'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/preferences'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/activity': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/activity'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/activity': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/activity'
       path: '/activity'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/activity'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/activity'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/translations/$resourceType/$resourceId/$locale': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+    '/_dashboard/_sidebar/$environmentSlug/translations/$resourceType/$resourceId/$locale': {
+      id: '/_dashboard/_sidebar/$environmentSlug/translations/$resourceType/$resourceId/$locale'
       path: '/$resourceType/$resourceId/$locale'
-      fullPath: '/env/$environmentSlug/translations/$resourceType/$resourceId/$locale'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsRoute
+      fullPath: '/$environmentSlug/translations/$resourceType/$resourceId/$locale'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugTranslationsRoute
     }
-    '/_dashboard/_sidebar/env/$environmentSlug/contexts/$type/$id/edit': {
-      id: '/_dashboard/_sidebar/env/$environmentSlug/contexts/$type/$id/edit'
+    '/_dashboard/_sidebar/$environmentSlug/contexts/$type/$id/edit': {
+      id: '/_dashboard/_sidebar/$environmentSlug/contexts/$type/$id/edit'
       path: '/$type/$id/edit'
-      fullPath: '/env/$environmentSlug/contexts/$type/$id/edit'
-      preLoaderRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRouteImport
-      parentRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsRoute
+      fullPath: '/$environmentSlug/contexts/$type/$id/edit'
+      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugContextsTypeIdEditRouteImport
+      parentRoute: typeof DashboardSidebarEnvironmentSlugContextsRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
       path: '/steps/$stepSlug'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
       path: '/steps/$stepSlug/editor'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/editor'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
-    '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': {
-      id: '/_dashboard/_fullpage/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+    '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions': {
+      id: '/_dashboard/_fullpage/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
       path: '/steps/$stepSlug/conditions'
-      fullPath: '/env/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
-      preLoaderRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport
-      parentRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute
+      fullPath: '/$environmentSlug/workflows/$workflowSlug/steps/$stepSlug/conditions'
+      preLoaderRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRouteImport
+      parentRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute
     }
   }
 }
 
-interface DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteChildren {
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
+interface DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteChildren {
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute
 }
 
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteChildren: DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteChildren =
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteChildren: DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteChildren =
   {
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugActivityRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTestRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugIndexRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute,
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute:
-      DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugActivityRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugPreferencesRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTestRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugTriggerRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugIndexRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugConditionsRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugEditorRoute,
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute:
+      DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugStepsStepSlugIndexRoute,
   }
 
-const DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren =
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute._addFileChildren(
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteChildren,
+const DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren =
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute._addFileChildren(
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteChildren,
   )
 
 interface DashboardFullpageRouteChildren {
-  DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute: typeof DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute: typeof DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
+  DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute: typeof DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute: typeof DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren
 }
 
 const DashboardFullpageRouteChildren: DashboardFullpageRouteChildren = {
-  DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute:
-    DashboardFullpageEnvEnvironmentSlugLayoutsLayoutSlugRoute,
-  DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRoute:
-    DashboardFullpageEnvEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren,
+  DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute:
+    DashboardFullpageEnvironmentSlugLayoutsLayoutSlugRoute,
+  DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRoute:
+    DashboardFullpageEnvironmentSlugWorkflowsWorkflowSlugRouteWithChildren,
 }
 
 const DashboardFullpageRouteWithChildren =
@@ -1207,207 +1203,207 @@ const DashboardSidebarIntegrationsRouteWithChildren =
     DashboardSidebarIntegrationsRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugContextsRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugContextsCreateRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsCreateRoute
-  DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute
+interface DashboardSidebarEnvironmentSlugContextsRouteChildren {
+  DashboardSidebarEnvironmentSlugContextsCreateRoute: typeof DashboardSidebarEnvironmentSlugContextsCreateRoute
+  DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute: typeof DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugContextsRouteChildren: DashboardSidebarEnvEnvironmentSlugContextsRouteChildren =
+const DashboardSidebarEnvironmentSlugContextsRouteChildren: DashboardSidebarEnvironmentSlugContextsRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugContextsCreateRoute:
-      DashboardSidebarEnvEnvironmentSlugContextsCreateRoute,
-    DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute:
-      DashboardSidebarEnvEnvironmentSlugContextsTypeIdEditRoute,
+    DashboardSidebarEnvironmentSlugContextsCreateRoute:
+      DashboardSidebarEnvironmentSlugContextsCreateRoute,
+    DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute:
+      DashboardSidebarEnvironmentSlugContextsTypeIdEditRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugContextsRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugContextsRouteChildren,
+const DashboardSidebarEnvironmentSlugContextsRouteWithChildren =
+  DashboardSidebarEnvironmentSlugContextsRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugContextsRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugLayoutsRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute
-  DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute
+interface DashboardSidebarEnvironmentSlugLayoutsRouteChildren {
+  DashboardSidebarEnvironmentSlugLayoutsCreateRoute: typeof DashboardSidebarEnvironmentSlugLayoutsCreateRoute
+  DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute: typeof DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugLayoutsRouteChildren: DashboardSidebarEnvEnvironmentSlugLayoutsRouteChildren =
+const DashboardSidebarEnvironmentSlugLayoutsRouteChildren: DashboardSidebarEnvironmentSlugLayoutsRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute:
-      DashboardSidebarEnvEnvironmentSlugLayoutsCreateRoute,
-    DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute:
-      DashboardSidebarEnvEnvironmentSlugLayoutsDuplicateLayoutIdRoute,
+    DashboardSidebarEnvironmentSlugLayoutsCreateRoute:
+      DashboardSidebarEnvironmentSlugLayoutsCreateRoute,
+    DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute:
+      DashboardSidebarEnvironmentSlugLayoutsDuplicateLayoutIdRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugLayoutsRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugLayoutsRouteChildren,
+const DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren =
+  DashboardSidebarEnvironmentSlugLayoutsRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugLayoutsRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugSubscribersRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute
-  DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute
+interface DashboardSidebarEnvironmentSlugSubscribersRouteChildren {
+  DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute: typeof DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute
+  DashboardSidebarEnvironmentSlugSubscribersCreateRoute: typeof DashboardSidebarEnvironmentSlugSubscribersCreateRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugSubscribersRouteChildren: DashboardSidebarEnvEnvironmentSlugSubscribersRouteChildren =
+const DashboardSidebarEnvironmentSlugSubscribersRouteChildren: DashboardSidebarEnvironmentSlugSubscribersRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute:
-      DashboardSidebarEnvEnvironmentSlugSubscribersSubscriberIdRoute,
-    DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute:
-      DashboardSidebarEnvEnvironmentSlugSubscribersCreateRoute,
+    DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute:
+      DashboardSidebarEnvironmentSlugSubscribersSubscriberIdRoute,
+    DashboardSidebarEnvironmentSlugSubscribersCreateRoute:
+      DashboardSidebarEnvironmentSlugSubscribersCreateRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugSubscribersRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugSubscribersRouteChildren,
+const DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren =
+  DashboardSidebarEnvironmentSlugSubscribersRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugSubscribersRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugTopicsRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute
-  DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute
+interface DashboardSidebarEnvironmentSlugTopicsRouteChildren {
+  DashboardSidebarEnvironmentSlugTopicsCreateRoute: typeof DashboardSidebarEnvironmentSlugTopicsCreateRoute
+  DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute: typeof DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugTopicsRouteChildren: DashboardSidebarEnvEnvironmentSlugTopicsRouteChildren =
+const DashboardSidebarEnvironmentSlugTopicsRouteChildren: DashboardSidebarEnvironmentSlugTopicsRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute:
-      DashboardSidebarEnvEnvironmentSlugTopicsCreateRoute,
-    DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute:
-      DashboardSidebarEnvEnvironmentSlugTopicsTopicKeyEditRoute,
+    DashboardSidebarEnvironmentSlugTopicsCreateRoute:
+      DashboardSidebarEnvironmentSlugTopicsCreateRoute,
+    DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute:
+      DashboardSidebarEnvironmentSlugTopicsTopicKeyEditRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugTopicsRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugTopicsRouteChildren,
+const DashboardSidebarEnvironmentSlugTopicsRouteWithChildren =
+  DashboardSidebarEnvironmentSlugTopicsRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugTopicsRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugTranslationsRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute
-  DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
+interface DashboardSidebarEnvironmentSlugTranslationsRouteChildren {
+  DashboardSidebarEnvironmentSlugTranslationsSettingsRoute: typeof DashboardSidebarEnvironmentSlugTranslationsSettingsRoute
+  DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute: typeof DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugTranslationsRouteChildren: DashboardSidebarEnvEnvironmentSlugTranslationsRouteChildren =
+const DashboardSidebarEnvironmentSlugTranslationsRouteChildren: DashboardSidebarEnvironmentSlugTranslationsRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute:
-      DashboardSidebarEnvEnvironmentSlugTranslationsSettingsRoute,
-    DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute:
-      DashboardSidebarEnvEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute,
+    DashboardSidebarEnvironmentSlugTranslationsSettingsRoute:
+      DashboardSidebarEnvironmentSlugTranslationsSettingsRoute,
+    DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute:
+      DashboardSidebarEnvironmentSlugTranslationsResourceTypeResourceIdLocaleRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugTranslationsRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugTranslationsRouteChildren,
+const DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren =
+  DashboardSidebarEnvironmentSlugTranslationsRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugTranslationsRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugWebhooksRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute
-  DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute
-  DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute
-  DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute
+interface DashboardSidebarEnvironmentSlugWebhooksRouteChildren {
+  DashboardSidebarEnvironmentSlugWebhooksActivityRoute: typeof DashboardSidebarEnvironmentSlugWebhooksActivityRoute
+  DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute: typeof DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute
+  DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute: typeof DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute
+  DashboardSidebarEnvironmentSlugWebhooksLogsRoute: typeof DashboardSidebarEnvironmentSlugWebhooksLogsRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugWebhooksRouteChildren: DashboardSidebarEnvEnvironmentSlugWebhooksRouteChildren =
+const DashboardSidebarEnvironmentSlugWebhooksRouteChildren: DashboardSidebarEnvironmentSlugWebhooksRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute:
-      DashboardSidebarEnvEnvironmentSlugWebhooksActivityRoute,
-    DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute:
-      DashboardSidebarEnvEnvironmentSlugWebhooksEndpointsRoute,
-    DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute:
-      DashboardSidebarEnvEnvironmentSlugWebhooksEventCatalogRoute,
-    DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute:
-      DashboardSidebarEnvEnvironmentSlugWebhooksLogsRoute,
+    DashboardSidebarEnvironmentSlugWebhooksActivityRoute:
+      DashboardSidebarEnvironmentSlugWebhooksActivityRoute,
+    DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute:
+      DashboardSidebarEnvironmentSlugWebhooksEndpointsRoute,
+    DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute:
+      DashboardSidebarEnvironmentSlugWebhooksEventCatalogRoute,
+    DashboardSidebarEnvironmentSlugWebhooksLogsRoute:
+      DashboardSidebarEnvironmentSlugWebhooksLogsRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugWebhooksRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugWebhooksRouteChildren,
+const DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren =
+  DashboardSidebarEnvironmentSlugWebhooksRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugWebhooksRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
+interface DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteChildren {
+  DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteChildren: DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteChildren =
+const DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteChildren: DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute:
-      DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesTemplateIdRoute,
+    DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute:
+      DashboardSidebarEnvironmentSlugWorkflowsTemplatesTemplateIdRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteChildren,
+const DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren =
+  DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteChildren,
   )
 
-interface DashboardSidebarEnvEnvironmentSlugWorkflowsRouteChildren {
-  DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute
-  DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
+interface DashboardSidebarEnvironmentSlugWorkflowsRouteChildren {
+  DashboardSidebarEnvironmentSlugWorkflowsCreateRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsCreateRoute
+  DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren
+  DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute
 }
 
-const DashboardSidebarEnvEnvironmentSlugWorkflowsRouteChildren: DashboardSidebarEnvEnvironmentSlugWorkflowsRouteChildren =
+const DashboardSidebarEnvironmentSlugWorkflowsRouteChildren: DashboardSidebarEnvironmentSlugWorkflowsRouteChildren =
   {
-    DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute:
-      DashboardSidebarEnvEnvironmentSlugWorkflowsCreateRoute,
-    DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRoute:
-      DashboardSidebarEnvEnvironmentSlugWorkflowsTemplatesRouteWithChildren,
-    DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute:
-      DashboardSidebarEnvEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute,
+    DashboardSidebarEnvironmentSlugWorkflowsCreateRoute:
+      DashboardSidebarEnvironmentSlugWorkflowsCreateRoute,
+    DashboardSidebarEnvironmentSlugWorkflowsTemplatesRoute:
+      DashboardSidebarEnvironmentSlugWorkflowsTemplatesRouteWithChildren,
+    DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute:
+      DashboardSidebarEnvironmentSlugWorkflowsDuplicateWorkflowIdRoute,
   }
 
-const DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren =
-  DashboardSidebarEnvEnvironmentSlugWorkflowsRoute._addFileChildren(
-    DashboardSidebarEnvEnvironmentSlugWorkflowsRouteChildren,
+const DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren =
+  DashboardSidebarEnvironmentSlugWorkflowsRoute._addFileChildren(
+    DashboardSidebarEnvironmentSlugWorkflowsRouteChildren,
   )
 
 interface DashboardSidebarRouteChildren {
   DashboardSidebarIntegrationsRoute: typeof DashboardSidebarIntegrationsRouteWithChildren
   DashboardSidebarIndexRoute: typeof DashboardSidebarIndexRoute
-  DashboardSidebarEnvEnvironmentSlugActivityFeedRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityFeedRoute
-  DashboardSidebarEnvEnvironmentSlugAnalyticsRoute: typeof DashboardSidebarEnvEnvironmentSlugAnalyticsRoute
-  DashboardSidebarEnvEnvironmentSlugApiKeysRoute: typeof DashboardSidebarEnvEnvironmentSlugApiKeysRoute
-  DashboardSidebarEnvEnvironmentSlugContextsRoute: typeof DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute: typeof DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute
-  DashboardSidebarEnvEnvironmentSlugLayoutsRoute: typeof DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugSubscribersRoute: typeof DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugTopicsRoute: typeof DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugTranslationsRoute: typeof DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugWebhooksRoute: typeof DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugWelcomeRoute: typeof DashboardSidebarEnvEnvironmentSlugWelcomeRoute
-  DashboardSidebarEnvEnvironmentSlugWorkflowsRoute: typeof DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren
-  DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute
-  DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute: typeof DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute
+  DashboardSidebarEnvironmentSlugActivityFeedRoute: typeof DashboardSidebarEnvironmentSlugActivityFeedRoute
+  DashboardSidebarEnvironmentSlugAnalyticsRoute: typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
+  DashboardSidebarEnvironmentSlugApiKeysRoute: typeof DashboardSidebarEnvironmentSlugApiKeysRoute
+  DashboardSidebarEnvironmentSlugContextsRoute: typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
+  DashboardSidebarEnvironmentSlugEnvironmentsRoute: typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
+  DashboardSidebarEnvironmentSlugLayoutsRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
+  DashboardSidebarEnvironmentSlugSubscribersRoute: typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
+  DashboardSidebarEnvironmentSlugTopicsRoute: typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
+  DashboardSidebarEnvironmentSlugTranslationsRoute: typeof DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren
+  DashboardSidebarEnvironmentSlugWebhooksRoute: typeof DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren
+  DashboardSidebarEnvironmentSlugWelcomeRoute: typeof DashboardSidebarEnvironmentSlugWelcomeRoute
+  DashboardSidebarEnvironmentSlugWorkflowsRoute: typeof DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren
+  DashboardSidebarEnvironmentSlugActivityRequestsRoute: typeof DashboardSidebarEnvironmentSlugActivityRequestsRoute
+  DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute: typeof DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute
 }
 
 const DashboardSidebarRouteChildren: DashboardSidebarRouteChildren = {
   DashboardSidebarIntegrationsRoute:
     DashboardSidebarIntegrationsRouteWithChildren,
   DashboardSidebarIndexRoute: DashboardSidebarIndexRoute,
-  DashboardSidebarEnvEnvironmentSlugActivityFeedRoute:
-    DashboardSidebarEnvEnvironmentSlugActivityFeedRoute,
-  DashboardSidebarEnvEnvironmentSlugAnalyticsRoute:
-    DashboardSidebarEnvEnvironmentSlugAnalyticsRoute,
-  DashboardSidebarEnvEnvironmentSlugApiKeysRoute:
-    DashboardSidebarEnvEnvironmentSlugApiKeysRoute,
-  DashboardSidebarEnvEnvironmentSlugContextsRoute:
-    DashboardSidebarEnvEnvironmentSlugContextsRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute:
-    DashboardSidebarEnvEnvironmentSlugEnvironmentsRoute,
-  DashboardSidebarEnvEnvironmentSlugLayoutsRoute:
-    DashboardSidebarEnvEnvironmentSlugLayoutsRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugSubscribersRoute:
-    DashboardSidebarEnvEnvironmentSlugSubscribersRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugTopicsRoute:
-    DashboardSidebarEnvEnvironmentSlugTopicsRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugTranslationsRoute:
-    DashboardSidebarEnvEnvironmentSlugTranslationsRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugWebhooksRoute:
-    DashboardSidebarEnvEnvironmentSlugWebhooksRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugWelcomeRoute:
-    DashboardSidebarEnvEnvironmentSlugWelcomeRoute,
-  DashboardSidebarEnvEnvironmentSlugWorkflowsRoute:
-    DashboardSidebarEnvEnvironmentSlugWorkflowsRouteWithChildren,
-  DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute:
-    DashboardSidebarEnvEnvironmentSlugActivityRequestsRoute,
-  DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute:
-    DashboardSidebarEnvEnvironmentSlugActivityWorkflowRunsRoute,
+  DashboardSidebarEnvironmentSlugActivityFeedRoute:
+    DashboardSidebarEnvironmentSlugActivityFeedRoute,
+  DashboardSidebarEnvironmentSlugAnalyticsRoute:
+    DashboardSidebarEnvironmentSlugAnalyticsRoute,
+  DashboardSidebarEnvironmentSlugApiKeysRoute:
+    DashboardSidebarEnvironmentSlugApiKeysRoute,
+  DashboardSidebarEnvironmentSlugContextsRoute:
+    DashboardSidebarEnvironmentSlugContextsRouteWithChildren,
+  DashboardSidebarEnvironmentSlugEnvironmentsRoute:
+    DashboardSidebarEnvironmentSlugEnvironmentsRoute,
+  DashboardSidebarEnvironmentSlugLayoutsRoute:
+    DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren,
+  DashboardSidebarEnvironmentSlugSubscribersRoute:
+    DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren,
+  DashboardSidebarEnvironmentSlugTopicsRoute:
+    DashboardSidebarEnvironmentSlugTopicsRouteWithChildren,
+  DashboardSidebarEnvironmentSlugTranslationsRoute:
+    DashboardSidebarEnvironmentSlugTranslationsRouteWithChildren,
+  DashboardSidebarEnvironmentSlugWebhooksRoute:
+    DashboardSidebarEnvironmentSlugWebhooksRouteWithChildren,
+  DashboardSidebarEnvironmentSlugWelcomeRoute:
+    DashboardSidebarEnvironmentSlugWelcomeRoute,
+  DashboardSidebarEnvironmentSlugWorkflowsRoute:
+    DashboardSidebarEnvironmentSlugWorkflowsRouteWithChildren,
+  DashboardSidebarEnvironmentSlugActivityRequestsRoute:
+    DashboardSidebarEnvironmentSlugActivityRequestsRoute,
+  DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute:
+    DashboardSidebarEnvironmentSlugActivityWorkflowRunsRoute,
 }
 
 const DashboardSidebarRouteWithChildren =

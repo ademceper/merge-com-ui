@@ -8,7 +8,7 @@ export const RequestLogsEmptyState = () => {
 	const navigate = useNavigate();
 
 	const handleCreateWorkflow = () => {
-		navigate({ to: "/env/$environmentSlug/workflows" as string });
+		navigate({ to: "/$environmentSlug/workflows" as string });
 	};
 
 	return (

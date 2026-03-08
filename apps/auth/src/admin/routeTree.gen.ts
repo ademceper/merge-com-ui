@@ -13,109 +13,110 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppRealmRouteImport } from './routes/_app/$realm'
 import { Route as AppSplatRouteImport } from './routes/_app/$'
-import { Route as AppRealmWorkflowsRouteImport } from './routes/_app/$realm.workflows'
-import { Route as AppRealmUsersRouteImport } from './routes/_app/$realm.users'
-import { Route as AppRealmUserFederationRouteImport } from './routes/_app/$realm.user-federation'
-import { Route as AppRealmSessionsRouteImport } from './routes/_app/$realm.sessions'
-import { Route as AppRealmRolesRouteImport } from './routes/_app/$realm.roles'
-import { Route as AppRealmRealmSettingsRouteImport } from './routes/_app/$realm.realm-settings'
-import { Route as AppRealmPermissionsRouteImport } from './routes/_app/$realm.permissions'
-import { Route as AppRealmOrganizationsRouteImport } from './routes/_app/$realm.organizations'
-import { Route as AppRealmIdentityProvidersRouteImport } from './routes/_app/$realm.identity-providers'
-import { Route as AppRealmEventsRouteImport } from './routes/_app/$realm.events'
-import { Route as AppRealmClientsRouteImport } from './routes/_app/$realm.clients'
-import { Route as AppRealmClientScopesRouteImport } from './routes/_app/$realm.client-scopes'
-import { Route as AppRealmAuthenticationRouteImport } from './routes/_app/$realm.authentication'
-import { Route as AppRealmTabRouteImport } from './routes/_app/$realm.$tab'
-import { Route as AppRealmUsersAddUserRouteImport } from './routes/_app/$realm.users.add-user'
-import { Route as AppRealmUsersTabRouteImport } from './routes/_app/$realm.users.$tab'
-import { Route as AppRealmUserFederationLdapRouteImport } from './routes/_app/$realm.user-federation.ldap'
-import { Route as AppRealmUserFederationKerberosRouteImport } from './routes/_app/$realm.user-federation.kerberos'
-import { Route as AppRealmRolesNewRouteImport } from './routes/_app/$realm.roles.new'
-import { Route as AppRealmRealmSettingsTabRouteImport } from './routes/_app/$realm.realm-settings.$tab'
-import { Route as AppRealmPageSectionProviderIdRouteImport } from './routes/_app/$realm.page-section.$providerId'
-import { Route as AppRealmOrganizationsNewRouteImport } from './routes/_app/$realm.organizations.new'
-import { Route as AppRealmGroupsIdRouteImport } from './routes/_app/$realm.groups.$id'
-import { Route as AppRealmGroupsSplatRouteImport } from './routes/_app/$realm.groups.$'
-import { Route as AppRealmEventsTabRouteImport } from './routes/_app/$realm.events.$tab'
-import { Route as AppRealmClientsImportClientRouteImport } from './routes/_app/$realm.clients.import-client'
-import { Route as AppRealmClientsAddClientRouteImport } from './routes/_app/$realm.clients.add-client'
-import { Route as AppRealmClientScopesNewRouteImport } from './routes/_app/$realm.client-scopes.new'
-import { Route as AppRealmAuthenticationTabRouteImport } from './routes/_app/$realm.authentication.$tab'
-import { Route as AppRealmWorkflowsModeIdRouteImport } from './routes/_app/$realm.workflows.$mode.$id'
-import { Route as AppRealmUsersIdTabRouteImport } from './routes/_app/$realm.users.$id.$tab'
-import { Route as AppRealmUserFederationLdapNewRouteImport } from './routes/_app/$realm.user-federation.ldap.new'
-import { Route as AppRealmUserFederationLdapIdRouteImport } from './routes/_app/$realm.user-federation.ldap.$id'
-import { Route as AppRealmUserFederationKerberosNewRouteImport } from './routes/_app/$realm.user-federation.kerberos.new'
-import { Route as AppRealmUserFederationKerberosIdRouteImport } from './routes/_app/$realm.user-federation.kerberos.$id'
-import { Route as AppRealmUserFederationProviderIdNewRouteImport } from './routes/_app/$realm.user-federation.$providerId.new'
-import { Route as AppRealmUserFederationProviderIdIdRouteImport } from './routes/_app/$realm.user-federation.$providerId.$id'
-import { Route as AppRealmRolesIdTabRouteImport } from './routes/_app/$realm.roles.$id.$tab'
-import { Route as AppRealmRealmSettingsUserProfileTabRouteImport } from './routes/_app/$realm.realm-settings.user-profile.$tab'
-import { Route as AppRealmRealmSettingsThemesTabRouteImport } from './routes/_app/$realm.realm-settings.themes.$tab'
-import { Route as AppRealmRealmSettingsKeysTabRouteImport } from './routes/_app/$realm.realm-settings.keys.$tab'
-import { Route as AppRealmRealmSettingsClientPoliciesTabRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$tab'
-import { Route as AppRealmPermissionsPermissionClientIdPoliciesRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.policies'
-import { Route as AppRealmPermissionsPermissionClientIdTabRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.$tab'
-import { Route as AppRealmPageSectionProviderIdAddRouteImport } from './routes/_app/$realm.page-section.$providerId.add'
-import { Route as AppRealmPageSectionProviderIdIdRouteImport } from './routes/_app/$realm.page-section.$providerId.$id'
-import { Route as AppRealmOrganizationsIdTabRouteImport } from './routes/_app/$realm.organizations.$id.$tab'
-import { Route as AppRealmIdentityProvidersSpiffeAddRouteImport } from './routes/_app/$realm.identity-providers.spiffe.add'
-import { Route as AppRealmIdentityProvidersSamlAddRouteImport } from './routes/_app/$realm.identity-providers.saml.add'
-import { Route as AppRealmIdentityProvidersOidcAddRouteImport } from './routes/_app/$realm.identity-providers.oidc.add'
-import { Route as AppRealmIdentityProvidersOauth2AddRouteImport } from './routes/_app/$realm.identity-providers.oauth2.add'
-import { Route as AppRealmIdentityProvidersKubernetesAddRouteImport } from './routes/_app/$realm.identity-providers.kubernetes.add'
-import { Route as AppRealmIdentityProvidersKeycloakOidcAddRouteImport } from './routes/_app/$realm.identity-providers.keycloak-oidc.add'
-import { Route as AppRealmIdentityProvidersJwtAuthorizationGrantAddRouteImport } from './routes/_app/$realm.identity-providers.jwt-authorization-grant.add'
-import { Route as AppRealmIdentityProvidersProviderIdAddRouteImport } from './routes/_app/$realm.identity-providers.$providerId.add'
-import { Route as AppRealmClientsClientIdTabRouteImport } from './routes/_app/$realm.clients.$clientId.$tab'
-import { Route as AppRealmClientScopesIdTabRouteImport } from './routes/_app/$realm.client-scopes.$id.$tab'
-import { Route as AppRealmAuthenticationFlowsCreateRouteImport } from './routes/_app/$realm.authentication.flows.create'
-import { Route as AppRealmAuthenticationIdUsedByRouteImport } from './routes/_app/$realm.authentication.$id.$usedBy'
-import { Route as AppRealmUserFederationLdapIdTabRouteImport } from './routes/_app/$realm.user-federation.ldap.$id.$tab'
-import { Route as AppRealmRealmSettingsUserProfileAttributesGroupNewRouteImport } from './routes/_app/$realm.realm-settings.user-profile.attributesGroup.new'
-import { Route as AppRealmRealmSettingsUserProfileAttributesAddAttributeRouteImport } from './routes/_app/$realm.realm-settings.user-profile.attributes.add-attribute'
-import { Route as AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRouteImport } from './routes/_app/$realm.realm-settings.client-policies.policies.add-client-policy'
-import { Route as AppRealmRealmSettingsClientPoliciesTabAddProfileRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$tab.add-profile'
-import { Route as AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$profileName.edit-profile'
-import { Route as AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$profileName.add-executor'
-import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$policyName.edit-policy'
-import { Route as AppRealmIdentityProvidersProviderIdAliasTabRouteImport } from './routes/_app/$realm.identity-providers.$providerId.$alias.$tab'
-import { Route as AppRealmClientsClientRegistrationSubTabProviderIdRouteImport } from './routes/_app/$realm.clients.client-registration.$subTab.$providerId'
-import { Route as AppRealmClientsIdAuthorizationScopeRouteImport } from './routes/_app/$realm.clients.$id.authorization.scope'
-import { Route as AppRealmClientsIdAuthorizationResourceRouteImport } from './routes/_app/$realm.clients.$id.authorization.resource'
-import { Route as AppRealmClientsClientIdRolesNewRouteImport } from './routes/_app/$realm.clients.$clientId.roles.new'
-import { Route as AppRealmClientsClientIdClientScopesDedicatedRouteImport } from './routes/_app/$realm.clients.$clientId.clientScopes.dedicated'
-import { Route as AppRealmClientsClientIdClientScopesTabRouteImport } from './routes/_app/$realm.clients.$clientId.clientScopes.$tab'
-import { Route as AppRealmClientsClientIdAuthorizationTabRouteImport } from './routes/_app/$realm.clients.$clientId.authorization.$tab'
-import { Route as AppRealmAuthenticationIdUsedByBuiltInRouteImport } from './routes/_app/$realm.authentication.$id.$usedBy.$builtIn'
-import { Route as AppRealmUserFederationLdapIdMappersMapperIdRouteImport } from './routes/_app/$realm.user-federation.ldap.$id.mappers.$mapperId'
-import { Route as AppRealmRealmSettingsUserProfileAttributesGroupEditNameRouteImport } from './routes/_app/$realm.realm-settings.user-profile.attributesGroup.edit.$name'
-import { Route as AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRouteImport } from './routes/_app/$realm.realm-settings.user-profile.attributes.$attributeName.edit-attribute'
-import { Route as AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$profileName.edit-profile.$executorName'
-import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$policyName.edit-policy.create-condition'
-import { Route as AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.policies.new.$policyType'
-import { Route as AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.policies.$policyId.$policyType'
-import { Route as AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.permission.new.$resourceType'
-import { Route as AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRouteImport } from './routes/_app/$realm.permissions.$permissionClientId.permission.$permissionId.$resourceType'
-import { Route as AppRealmIdentityProvidersProviderIdAliasMappersIdRouteImport } from './routes/_app/$realm.identity-providers.$providerId.$alias.mappers.$id'
-import { Route as AppRealmIdentityProvidersProviderIdAliasTabCreateRouteImport } from './routes/_app/$realm.identity-providers.$providerId.$alias.$tab.create'
-import { Route as AppRealmClientsClientRegistrationSubTabProviderIdIdRouteImport } from './routes/_app/$realm.clients.client-registration.$subTab.$providerId.$id'
-import { Route as AppRealmClientsIdAuthorizationScopeNewRouteImport } from './routes/_app/$realm.clients.$id.authorization.scope.new'
-import { Route as AppRealmClientsIdAuthorizationScopeScopeIdRouteImport } from './routes/_app/$realm.clients.$id.authorization.scope.$scopeId'
-import { Route as AppRealmClientsIdAuthorizationResourceNewRouteImport } from './routes/_app/$realm.clients.$id.authorization.resource.new'
-import { Route as AppRealmClientsIdAuthorizationResourceResourceIdRouteImport } from './routes/_app/$realm.clients.$id.authorization.resource.$resourceId'
-import { Route as AppRealmClientsClientIdRolesIdTabRouteImport } from './routes/_app/$realm.clients.$clientId.roles.$id.$tab'
-import { Route as AppRealmClientsClientIdClientScopesDedicatedTabRouteImport } from './routes/_app/$realm.clients.$clientId.clientScopes.dedicated.$tab'
-import { Route as AppRealmClientScopesIdMappersMapperIdViewModeRouteImport } from './routes/_app/$realm.client-scopes.$id.mappers.$mapperId.$viewMode'
-import { Route as AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRouteImport } from './routes/_app/$realm.realm-settings.keys.providers.$id.$providerType.settings'
-import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRouteImport } from './routes/_app/$realm.realm-settings.client-policies.$policyName.edit-policy.$conditionName.edit-condition'
-import { Route as AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRouteImport } from './routes/_app/$realm.clients.$id.authorization.policy.new.$policyType'
-import { Route as AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRouteImport } from './routes/_app/$realm.clients.$id.authorization.policy.$policyId.$policyType'
-import { Route as AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteImport } from './routes/_app/$realm.clients.$id.authorization.permission.new.$permissionType'
-import { Route as AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRouteImport } from './routes/_app/$realm.clients.$id.authorization.permission.$permissionType.$permissionId'
-import { Route as AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRouteImport } from './routes/_app/$realm.clients.$id.clientScopes.dedicated.mappers.$mapperId.$viewMode'
-import { Route as AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRouteImport } from './routes/_app/$realm.clients.$id.authorization.permission.new.$permissionType.$selectedId'
+import { Route as AppRealmIndexRouteImport } from './routes/_app/$realm/index'
+import { Route as AppRealmSessionsRouteImport } from './routes/_app/$realm/sessions'
+import { Route as AppRealmTabRouteImport } from './routes/_app/$realm/$tab'
+import { Route as AppRealmWorkflowsIndexRouteImport } from './routes/_app/$realm/workflows/index'
+import { Route as AppRealmUsersIndexRouteImport } from './routes/_app/$realm/users/index'
+import { Route as AppRealmUserFederationIndexRouteImport } from './routes/_app/$realm/user-federation/index'
+import { Route as AppRealmRolesIndexRouteImport } from './routes/_app/$realm/roles/index'
+import { Route as AppRealmRealmSettingsIndexRouteImport } from './routes/_app/$realm/realm-settings/index'
+import { Route as AppRealmPermissionsIndexRouteImport } from './routes/_app/$realm/permissions/index'
+import { Route as AppRealmOrganizationsIndexRouteImport } from './routes/_app/$realm/organizations/index'
+import { Route as AppRealmIdentityProvidersIndexRouteImport } from './routes/_app/$realm/identity-providers/index'
+import { Route as AppRealmEventsIndexRouteImport } from './routes/_app/$realm/events/index'
+import { Route as AppRealmClientsIndexRouteImport } from './routes/_app/$realm/clients/index'
+import { Route as AppRealmClientScopesIndexRouteImport } from './routes/_app/$realm/client-scopes/index'
+import { Route as AppRealmAuthenticationIndexRouteImport } from './routes/_app/$realm/authentication/index'
+import { Route as AppRealmUsersAddUserRouteImport } from './routes/_app/$realm/users/add-user'
+import { Route as AppRealmUsersTabRouteImport } from './routes/_app/$realm/users/$tab'
+import { Route as AppRealmRolesNewRouteImport } from './routes/_app/$realm/roles/new'
+import { Route as AppRealmRealmSettingsTabRouteImport } from './routes/_app/$realm/realm-settings/$tab'
+import { Route as AppRealmOrganizationsNewRouteImport } from './routes/_app/$realm/organizations/new'
+import { Route as AppRealmGroupsIdRouteImport } from './routes/_app/$realm/groups/$id'
+import { Route as AppRealmGroupsSplatRouteImport } from './routes/_app/$realm/groups/$'
+import { Route as AppRealmEventsTabRouteImport } from './routes/_app/$realm/events/$tab'
+import { Route as AppRealmClientsImportClientRouteImport } from './routes/_app/$realm/clients/import-client'
+import { Route as AppRealmClientsAddClientRouteImport } from './routes/_app/$realm/clients/add-client'
+import { Route as AppRealmClientScopesNewRouteImport } from './routes/_app/$realm/client-scopes/new'
+import { Route as AppRealmAuthenticationTabRouteImport } from './routes/_app/$realm/authentication/$tab'
+import { Route as AppRealmUserFederationLdapIndexRouteImport } from './routes/_app/$realm/user-federation/ldap/index'
+import { Route as AppRealmUserFederationKerberosIndexRouteImport } from './routes/_app/$realm/user-federation/kerberos/index'
+import { Route as AppRealmPageSectionProviderIdIndexRouteImport } from './routes/_app/$realm/page-section/$providerId/index'
+import { Route as AppRealmWorkflowsModeIdRouteImport } from './routes/_app/$realm/workflows/$mode/$id'
+import { Route as AppRealmUsersIdTabRouteImport } from './routes/_app/$realm/users/$id/$tab'
+import { Route as AppRealmUserFederationLdapNewRouteImport } from './routes/_app/$realm/user-federation/ldap/new'
+import { Route as AppRealmUserFederationKerberosNewRouteImport } from './routes/_app/$realm/user-federation/kerberos/new'
+import { Route as AppRealmUserFederationKerberosIdRouteImport } from './routes/_app/$realm/user-federation/kerberos/$id'
+import { Route as AppRealmUserFederationProviderIdNewRouteImport } from './routes/_app/$realm/user-federation/$providerId/new'
+import { Route as AppRealmUserFederationProviderIdIdRouteImport } from './routes/_app/$realm/user-federation/$providerId/$id'
+import { Route as AppRealmRolesIdTabRouteImport } from './routes/_app/$realm/roles/$id/$tab'
+import { Route as AppRealmRealmSettingsUserProfileTabRouteImport } from './routes/_app/$realm/realm-settings/user-profile/$tab'
+import { Route as AppRealmRealmSettingsThemesTabRouteImport } from './routes/_app/$realm/realm-settings/themes/$tab'
+import { Route as AppRealmRealmSettingsKeysTabRouteImport } from './routes/_app/$realm/realm-settings/keys/$tab'
+import { Route as AppRealmPermissionsPermissionClientIdTabRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/$tab'
+import { Route as AppRealmPageSectionProviderIdAddRouteImport } from './routes/_app/$realm/page-section/$providerId/add'
+import { Route as AppRealmPageSectionProviderIdIdRouteImport } from './routes/_app/$realm/page-section/$providerId/$id'
+import { Route as AppRealmOrganizationsIdTabRouteImport } from './routes/_app/$realm/organizations/$id/$tab'
+import { Route as AppRealmIdentityProvidersSpiffeAddRouteImport } from './routes/_app/$realm/identity-providers/spiffe/add'
+import { Route as AppRealmIdentityProvidersSamlAddRouteImport } from './routes/_app/$realm/identity-providers/saml/add'
+import { Route as AppRealmIdentityProvidersOidcAddRouteImport } from './routes/_app/$realm/identity-providers/oidc/add'
+import { Route as AppRealmIdentityProvidersOauth2AddRouteImport } from './routes/_app/$realm/identity-providers/oauth2/add'
+import { Route as AppRealmIdentityProvidersKubernetesAddRouteImport } from './routes/_app/$realm/identity-providers/kubernetes/add'
+import { Route as AppRealmIdentityProvidersKeycloakOidcAddRouteImport } from './routes/_app/$realm/identity-providers/keycloak-oidc/add'
+import { Route as AppRealmIdentityProvidersJwtAuthorizationGrantAddRouteImport } from './routes/_app/$realm/identity-providers/jwt-authorization-grant/add'
+import { Route as AppRealmIdentityProvidersProviderIdAddRouteImport } from './routes/_app/$realm/identity-providers/$providerId/add'
+import { Route as AppRealmClientsClientIdTabRouteImport } from './routes/_app/$realm/clients/$clientId/$tab'
+import { Route as AppRealmClientScopesIdTabRouteImport } from './routes/_app/$realm/client-scopes/$id/$tab'
+import { Route as AppRealmAuthenticationFlowsCreateRouteImport } from './routes/_app/$realm/authentication/flows/create'
+import { Route as AppRealmUserFederationLdapIdIndexRouteImport } from './routes/_app/$realm/user-federation/ldap/$id/index'
+import { Route as AppRealmRealmSettingsClientPoliciesTabIndexRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$tab/index'
+import { Route as AppRealmPermissionsPermissionClientIdPoliciesIndexRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/policies/index'
+import { Route as AppRealmAuthenticationIdUsedByIndexRouteImport } from './routes/_app/$realm/authentication/$id/$usedBy/index'
+import { Route as AppRealmUserFederationLdapIdTabRouteImport } from './routes/_app/$realm/user-federation/ldap/$id/$tab'
+import { Route as AppRealmRealmSettingsUserProfileAttributesGroupNewRouteImport } from './routes/_app/$realm/realm-settings/user-profile/attributesGroup/new'
+import { Route as AppRealmRealmSettingsUserProfileAttributesAddAttributeRouteImport } from './routes/_app/$realm/realm-settings/user-profile/attributes/add-attribute'
+import { Route as AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRouteImport } from './routes/_app/$realm/realm-settings/client-policies/policies/add-client-policy'
+import { Route as AppRealmRealmSettingsClientPoliciesTabAddProfileRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$tab/add-profile'
+import { Route as AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$profileName/add-executor'
+import { Route as AppRealmClientsClientIdRolesNewRouteImport } from './routes/_app/$realm/clients/$clientId/roles/new'
+import { Route as AppRealmClientsClientIdClientScopesTabRouteImport } from './routes/_app/$realm/clients/$clientId/clientScopes/$tab'
+import { Route as AppRealmClientsClientIdAuthorizationTabRouteImport } from './routes/_app/$realm/clients/$clientId/authorization/$tab'
+import { Route as AppRealmAuthenticationIdUsedByBuiltInRouteImport } from './routes/_app/$realm/authentication/$id/$usedBy/$builtIn'
+import { Route as AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/index'
+import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/index'
+import { Route as AppRealmIdentityProvidersProviderIdAliasTabIndexRouteImport } from './routes/_app/$realm/identity-providers/$providerId/$alias/$tab/index'
+import { Route as AppRealmClientsClientRegistrationSubTabProviderIdIndexRouteImport } from './routes/_app/$realm/clients/client-registration/$subTab/$providerId/index'
+import { Route as AppRealmClientsIdAuthorizationScopeIndexRouteImport } from './routes/_app/$realm/clients/$id/authorization/scope/index'
+import { Route as AppRealmClientsIdAuthorizationResourceIndexRouteImport } from './routes/_app/$realm/clients/$id/authorization/resource/index'
+import { Route as AppRealmClientsClientIdClientScopesDedicatedIndexRouteImport } from './routes/_app/$realm/clients/$clientId/clientScopes/dedicated/index'
+import { Route as AppRealmUserFederationLdapIdMappersMapperIdRouteImport } from './routes/_app/$realm/user-federation/ldap/$id/mappers/$mapperId'
+import { Route as AppRealmRealmSettingsUserProfileAttributesGroupEditNameRouteImport } from './routes/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
+import { Route as AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRouteImport } from './routes/_app/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
+import { Route as AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/$executorName'
+import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/create-condition'
+import { Route as AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/policies/new/$policyType'
+import { Route as AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/policies/$policyId/$policyType'
+import { Route as AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/permission/new/$resourceType'
+import { Route as AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRouteImport } from './routes/_app/$realm/permissions/$permissionClientId/permission/$permissionId/$resourceType'
+import { Route as AppRealmIdentityProvidersProviderIdAliasMappersIdRouteImport } from './routes/_app/$realm/identity-providers/$providerId/$alias/mappers/$id'
+import { Route as AppRealmIdentityProvidersProviderIdAliasTabCreateRouteImport } from './routes/_app/$realm/identity-providers/$providerId/$alias/$tab/create'
+import { Route as AppRealmClientsClientRegistrationSubTabProviderIdIdRouteImport } from './routes/_app/$realm/clients/client-registration/$subTab/$providerId/$id'
+import { Route as AppRealmClientsIdAuthorizationScopeNewRouteImport } from './routes/_app/$realm/clients/$id/authorization/scope/new'
+import { Route as AppRealmClientsIdAuthorizationScopeScopeIdRouteImport } from './routes/_app/$realm/clients/$id/authorization/scope/$scopeId'
+import { Route as AppRealmClientsIdAuthorizationResourceNewRouteImport } from './routes/_app/$realm/clients/$id/authorization/resource/new'
+import { Route as AppRealmClientsIdAuthorizationResourceResourceIdRouteImport } from './routes/_app/$realm/clients/$id/authorization/resource/$resourceId'
+import { Route as AppRealmClientsClientIdRolesIdTabRouteImport } from './routes/_app/$realm/clients/$clientId/roles/$id/$tab'
+import { Route as AppRealmClientsClientIdClientScopesDedicatedTabRouteImport } from './routes/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab'
+import { Route as AppRealmClientScopesIdMappersMapperIdViewModeRouteImport } from './routes/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
+import { Route as AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRouteImport } from './routes/_app/$realm/realm-settings/keys/providers/$id/$providerType/settings'
+import { Route as AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRouteImport } from './routes/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
+import { Route as AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRouteImport } from './routes/_app/$realm/clients/$id/authorization/policy/new/$policyType'
+import { Route as AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRouteImport } from './routes/_app/$realm/clients/$id/authorization/policy/$policyId/$policyType'
+import { Route as AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRouteImport } from './routes/_app/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
+import { Route as AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRouteImport } from './routes/_app/$realm/clients/$id/authorization/permission/new/$permissionType/index'
+import { Route as AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRouteImport } from './routes/_app/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
+import { Route as AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRouteImport } from './routes/_app/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -136,19 +137,9 @@ const AppSplatRoute = AppSplatRouteImport.update({
   path: '/$',
   getParentRoute: () => AppRoute,
 } as any)
-const AppRealmWorkflowsRoute = AppRealmWorkflowsRouteImport.update({
-  id: '/workflows',
-  path: '/workflows',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmUsersRoute = AppRealmUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmUserFederationRoute = AppRealmUserFederationRouteImport.update({
-  id: '/user-federation',
-  path: '/user-federation',
+const AppRealmIndexRoute = AppRealmIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmSessionsRoute = AppRealmSessionsRouteImport.update({
@@ -156,101 +147,104 @@ const AppRealmSessionsRoute = AppRealmSessionsRouteImport.update({
   path: '/sessions',
   getParentRoute: () => AppRealmRoute,
 } as any)
-const AppRealmRolesRoute = AppRealmRolesRouteImport.update({
-  id: '/roles',
-  path: '/roles',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmRealmSettingsRoute = AppRealmRealmSettingsRouteImport.update({
-  id: '/realm-settings',
-  path: '/realm-settings',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmPermissionsRoute = AppRealmPermissionsRouteImport.update({
-  id: '/permissions',
-  path: '/permissions',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmOrganizationsRoute = AppRealmOrganizationsRouteImport.update({
-  id: '/organizations',
-  path: '/organizations',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmIdentityProvidersRoute =
-  AppRealmIdentityProvidersRouteImport.update({
-    id: '/identity-providers',
-    path: '/identity-providers',
-    getParentRoute: () => AppRealmRoute,
-  } as any)
-const AppRealmEventsRoute = AppRealmEventsRouteImport.update({
-  id: '/events',
-  path: '/events',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmClientsRoute = AppRealmClientsRouteImport.update({
-  id: '/clients',
-  path: '/clients',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmClientScopesRoute = AppRealmClientScopesRouteImport.update({
-  id: '/client-scopes',
-  path: '/client-scopes',
-  getParentRoute: () => AppRealmRoute,
-} as any)
-const AppRealmAuthenticationRoute = AppRealmAuthenticationRouteImport.update({
-  id: '/authentication',
-  path: '/authentication',
-  getParentRoute: () => AppRealmRoute,
-} as any)
 const AppRealmTabRoute = AppRealmTabRouteImport.update({
   id: '/$tab',
   path: '/$tab',
   getParentRoute: () => AppRealmRoute,
 } as any)
+const AppRealmWorkflowsIndexRoute = AppRealmWorkflowsIndexRouteImport.update({
+  id: '/workflows/',
+  path: '/workflows/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmUsersIndexRoute = AppRealmUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmUserFederationIndexRoute =
+  AppRealmUserFederationIndexRouteImport.update({
+    id: '/user-federation/',
+    path: '/user-federation/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmRolesIndexRoute = AppRealmRolesIndexRouteImport.update({
+  id: '/roles/',
+  path: '/roles/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmRealmSettingsIndexRoute =
+  AppRealmRealmSettingsIndexRouteImport.update({
+    id: '/realm-settings/',
+    path: '/realm-settings/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmPermissionsIndexRoute =
+  AppRealmPermissionsIndexRouteImport.update({
+    id: '/permissions/',
+    path: '/permissions/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmOrganizationsIndexRoute =
+  AppRealmOrganizationsIndexRouteImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmIdentityProvidersIndexRoute =
+  AppRealmIdentityProvidersIndexRouteImport.update({
+    id: '/identity-providers/',
+    path: '/identity-providers/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmEventsIndexRoute = AppRealmEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmClientsIndexRoute = AppRealmClientsIndexRouteImport.update({
+  id: '/clients/',
+  path: '/clients/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmClientScopesIndexRoute =
+  AppRealmClientScopesIndexRouteImport.update({
+    id: '/client-scopes/',
+    path: '/client-scopes/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmAuthenticationIndexRoute =
+  AppRealmAuthenticationIndexRouteImport.update({
+    id: '/authentication/',
+    path: '/authentication/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
 const AppRealmUsersAddUserRoute = AppRealmUsersAddUserRouteImport.update({
-  id: '/add-user',
-  path: '/add-user',
-  getParentRoute: () => AppRealmUsersRoute,
+  id: '/users/add-user',
+  path: '/users/add-user',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmUsersTabRoute = AppRealmUsersTabRouteImport.update({
-  id: '/$tab',
-  path: '/$tab',
-  getParentRoute: () => AppRealmUsersRoute,
+  id: '/users/$tab',
+  path: '/users/$tab',
+  getParentRoute: () => AppRealmRoute,
 } as any)
-const AppRealmUserFederationLdapRoute =
-  AppRealmUserFederationLdapRouteImport.update({
-    id: '/ldap',
-    path: '/ldap',
-    getParentRoute: () => AppRealmUserFederationRoute,
-  } as any)
-const AppRealmUserFederationKerberosRoute =
-  AppRealmUserFederationKerberosRouteImport.update({
-    id: '/kerberos',
-    path: '/kerberos',
-    getParentRoute: () => AppRealmUserFederationRoute,
-  } as any)
 const AppRealmRolesNewRoute = AppRealmRolesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AppRealmRolesRoute,
+  id: '/roles/new',
+  path: '/roles/new',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmRealmSettingsTabRoute =
   AppRealmRealmSettingsTabRouteImport.update({
-    id: '/$tab',
-    path: '/$tab',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
-  } as any)
-const AppRealmPageSectionProviderIdRoute =
-  AppRealmPageSectionProviderIdRouteImport.update({
-    id: '/page-section/$providerId',
-    path: '/page-section/$providerId',
+    id: '/realm-settings/$tab',
+    path: '/realm-settings/$tab',
     getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmOrganizationsNewRoute =
   AppRealmOrganizationsNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AppRealmOrganizationsRoute,
+    id: '/organizations/new',
+    path: '/organizations/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmGroupsIdRoute = AppRealmGroupsIdRouteImport.update({
   id: '/groups/$id',
@@ -263,497 +257,516 @@ const AppRealmGroupsSplatRoute = AppRealmGroupsSplatRouteImport.update({
   getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmEventsTabRoute = AppRealmEventsTabRouteImport.update({
-  id: '/$tab',
-  path: '/$tab',
-  getParentRoute: () => AppRealmEventsRoute,
+  id: '/events/$tab',
+  path: '/events/$tab',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmClientsImportClientRoute =
   AppRealmClientsImportClientRouteImport.update({
-    id: '/import-client',
-    path: '/import-client',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/import-client',
+    path: '/clients/import-client',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsAddClientRoute =
   AppRealmClientsAddClientRouteImport.update({
-    id: '/add-client',
-    path: '/add-client',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/add-client',
+    path: '/clients/add-client',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientScopesNewRoute = AppRealmClientScopesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AppRealmClientScopesRoute,
+  id: '/client-scopes/new',
+  path: '/client-scopes/new',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmAuthenticationTabRoute =
   AppRealmAuthenticationTabRouteImport.update({
-    id: '/$tab',
-    path: '/$tab',
-    getParentRoute: () => AppRealmAuthenticationRoute,
+    id: '/authentication/$tab',
+    path: '/authentication/$tab',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmUserFederationLdapIndexRoute =
+  AppRealmUserFederationLdapIndexRouteImport.update({
+    id: '/user-federation/ldap/',
+    path: '/user-federation/ldap/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmUserFederationKerberosIndexRoute =
+  AppRealmUserFederationKerberosIndexRouteImport.update({
+    id: '/user-federation/kerberos/',
+    path: '/user-federation/kerberos/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmPageSectionProviderIdIndexRoute =
+  AppRealmPageSectionProviderIdIndexRouteImport.update({
+    id: '/page-section/$providerId/',
+    path: '/page-section/$providerId/',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmWorkflowsModeIdRoute = AppRealmWorkflowsModeIdRouteImport.update({
-  id: '/$mode/$id',
-  path: '/$mode/$id',
-  getParentRoute: () => AppRealmWorkflowsRoute,
+  id: '/workflows/$mode/$id',
+  path: '/workflows/$mode/$id',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmUsersIdTabRoute = AppRealmUsersIdTabRouteImport.update({
-  id: '/$id/$tab',
-  path: '/$id/$tab',
-  getParentRoute: () => AppRealmUsersRoute,
+  id: '/users/$id/$tab',
+  path: '/users/$id/$tab',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmUserFederationLdapNewRoute =
   AppRealmUserFederationLdapNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AppRealmUserFederationLdapRoute,
-  } as any)
-const AppRealmUserFederationLdapIdRoute =
-  AppRealmUserFederationLdapIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AppRealmUserFederationLdapRoute,
+    id: '/user-federation/ldap/new',
+    path: '/user-federation/ldap/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationKerberosNewRoute =
   AppRealmUserFederationKerberosNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AppRealmUserFederationKerberosRoute,
+    id: '/user-federation/kerberos/new',
+    path: '/user-federation/kerberos/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationKerberosIdRoute =
   AppRealmUserFederationKerberosIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AppRealmUserFederationKerberosRoute,
+    id: '/user-federation/kerberos/$id',
+    path: '/user-federation/kerberos/$id',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationProviderIdNewRoute =
   AppRealmUserFederationProviderIdNewRouteImport.update({
-    id: '/$providerId/new',
-    path: '/$providerId/new',
-    getParentRoute: () => AppRealmUserFederationRoute,
+    id: '/user-federation/$providerId/new',
+    path: '/user-federation/$providerId/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationProviderIdIdRoute =
   AppRealmUserFederationProviderIdIdRouteImport.update({
-    id: '/$providerId/$id',
-    path: '/$providerId/$id',
-    getParentRoute: () => AppRealmUserFederationRoute,
+    id: '/user-federation/$providerId/$id',
+    path: '/user-federation/$providerId/$id',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRolesIdTabRoute = AppRealmRolesIdTabRouteImport.update({
-  id: '/$id/$tab',
-  path: '/$id/$tab',
-  getParentRoute: () => AppRealmRolesRoute,
+  id: '/roles/$id/$tab',
+  path: '/roles/$id/$tab',
+  getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmRealmSettingsUserProfileTabRoute =
   AppRealmRealmSettingsUserProfileTabRouteImport.update({
-    id: '/user-profile/$tab',
-    path: '/user-profile/$tab',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/user-profile/$tab',
+    path: '/realm-settings/user-profile/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsThemesTabRoute =
   AppRealmRealmSettingsThemesTabRouteImport.update({
-    id: '/themes/$tab',
-    path: '/themes/$tab',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/themes/$tab',
+    path: '/realm-settings/themes/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsKeysTabRoute =
   AppRealmRealmSettingsKeysTabRouteImport.update({
-    id: '/keys/$tab',
-    path: '/keys/$tab',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
-  } as any)
-const AppRealmRealmSettingsClientPoliciesTabRoute =
-  AppRealmRealmSettingsClientPoliciesTabRouteImport.update({
-    id: '/client-policies/$tab',
-    path: '/client-policies/$tab',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
-  } as any)
-const AppRealmPermissionsPermissionClientIdPoliciesRoute =
-  AppRealmPermissionsPermissionClientIdPoliciesRouteImport.update({
-    id: '/$permissionClientId/policies',
-    path: '/$permissionClientId/policies',
-    getParentRoute: () => AppRealmPermissionsRoute,
+    id: '/realm-settings/keys/$tab',
+    path: '/realm-settings/keys/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmPermissionsPermissionClientIdTabRoute =
   AppRealmPermissionsPermissionClientIdTabRouteImport.update({
-    id: '/$permissionClientId/$tab',
-    path: '/$permissionClientId/$tab',
-    getParentRoute: () => AppRealmPermissionsRoute,
+    id: '/permissions/$permissionClientId/$tab',
+    path: '/permissions/$permissionClientId/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmPageSectionProviderIdAddRoute =
   AppRealmPageSectionProviderIdAddRouteImport.update({
-    id: '/add',
-    path: '/add',
-    getParentRoute: () => AppRealmPageSectionProviderIdRoute,
+    id: '/page-section/$providerId/add',
+    path: '/page-section/$providerId/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmPageSectionProviderIdIdRoute =
   AppRealmPageSectionProviderIdIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AppRealmPageSectionProviderIdRoute,
+    id: '/page-section/$providerId/$id',
+    path: '/page-section/$providerId/$id',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmOrganizationsIdTabRoute =
   AppRealmOrganizationsIdTabRouteImport.update({
-    id: '/$id/$tab',
-    path: '/$id/$tab',
-    getParentRoute: () => AppRealmOrganizationsRoute,
+    id: '/organizations/$id/$tab',
+    path: '/organizations/$id/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersSpiffeAddRoute =
   AppRealmIdentityProvidersSpiffeAddRouteImport.update({
-    id: '/spiffe/add',
-    path: '/spiffe/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/spiffe/add',
+    path: '/identity-providers/spiffe/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersSamlAddRoute =
   AppRealmIdentityProvidersSamlAddRouteImport.update({
-    id: '/saml/add',
-    path: '/saml/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/saml/add',
+    path: '/identity-providers/saml/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersOidcAddRoute =
   AppRealmIdentityProvidersOidcAddRouteImport.update({
-    id: '/oidc/add',
-    path: '/oidc/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/oidc/add',
+    path: '/identity-providers/oidc/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersOauth2AddRoute =
   AppRealmIdentityProvidersOauth2AddRouteImport.update({
-    id: '/oauth2/add',
-    path: '/oauth2/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/oauth2/add',
+    path: '/identity-providers/oauth2/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersKubernetesAddRoute =
   AppRealmIdentityProvidersKubernetesAddRouteImport.update({
-    id: '/kubernetes/add',
-    path: '/kubernetes/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/kubernetes/add',
+    path: '/identity-providers/kubernetes/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersKeycloakOidcAddRoute =
   AppRealmIdentityProvidersKeycloakOidcAddRouteImport.update({
-    id: '/keycloak-oidc/add',
-    path: '/keycloak-oidc/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/keycloak-oidc/add',
+    path: '/identity-providers/keycloak-oidc/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute =
   AppRealmIdentityProvidersJwtAuthorizationGrantAddRouteImport.update({
-    id: '/jwt-authorization-grant/add',
-    path: '/jwt-authorization-grant/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/jwt-authorization-grant/add',
+    path: '/identity-providers/jwt-authorization-grant/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersProviderIdAddRoute =
   AppRealmIdentityProvidersProviderIdAddRouteImport.update({
-    id: '/$providerId/add',
-    path: '/$providerId/add',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/$providerId/add',
+    path: '/identity-providers/$providerId/add',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdTabRoute =
   AppRealmClientsClientIdTabRouteImport.update({
-    id: '/$clientId/$tab',
-    path: '/$clientId/$tab',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$clientId/$tab',
+    path: '/clients/$clientId/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientScopesIdTabRoute =
   AppRealmClientScopesIdTabRouteImport.update({
-    id: '/$id/$tab',
-    path: '/$id/$tab',
-    getParentRoute: () => AppRealmClientScopesRoute,
+    id: '/client-scopes/$id/$tab',
+    path: '/client-scopes/$id/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmAuthenticationFlowsCreateRoute =
   AppRealmAuthenticationFlowsCreateRouteImport.update({
-    id: '/flows/create',
-    path: '/flows/create',
-    getParentRoute: () => AppRealmAuthenticationRoute,
+    id: '/authentication/flows/create',
+    path: '/authentication/flows/create',
+    getParentRoute: () => AppRealmRoute,
   } as any)
-const AppRealmAuthenticationIdUsedByRoute =
-  AppRealmAuthenticationIdUsedByRouteImport.update({
-    id: '/$id/$usedBy',
-    path: '/$id/$usedBy',
-    getParentRoute: () => AppRealmAuthenticationRoute,
+const AppRealmUserFederationLdapIdIndexRoute =
+  AppRealmUserFederationLdapIdIndexRouteImport.update({
+    id: '/user-federation/ldap/$id/',
+    path: '/user-federation/ldap/$id/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmRealmSettingsClientPoliciesTabIndexRoute =
+  AppRealmRealmSettingsClientPoliciesTabIndexRouteImport.update({
+    id: '/realm-settings/client-policies/$tab/',
+    path: '/realm-settings/client-policies/$tab/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmPermissionsPermissionClientIdPoliciesIndexRoute =
+  AppRealmPermissionsPermissionClientIdPoliciesIndexRouteImport.update({
+    id: '/permissions/$permissionClientId/policies/',
+    path: '/permissions/$permissionClientId/policies/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmAuthenticationIdUsedByIndexRoute =
+  AppRealmAuthenticationIdUsedByIndexRouteImport.update({
+    id: '/authentication/$id/$usedBy/',
+    path: '/authentication/$id/$usedBy/',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationLdapIdTabRoute =
   AppRealmUserFederationLdapIdTabRouteImport.update({
-    id: '/$tab',
-    path: '/$tab',
-    getParentRoute: () => AppRealmUserFederationLdapIdRoute,
+    id: '/user-federation/ldap/$id/$tab',
+    path: '/user-federation/ldap/$id/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsUserProfileAttributesGroupNewRoute =
   AppRealmRealmSettingsUserProfileAttributesGroupNewRouteImport.update({
-    id: '/user-profile/attributesGroup/new',
-    path: '/user-profile/attributesGroup/new',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/user-profile/attributesGroup/new',
+    path: '/realm-settings/user-profile/attributesGroup/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute =
   AppRealmRealmSettingsUserProfileAttributesAddAttributeRouteImport.update({
-    id: '/user-profile/attributes/add-attribute',
-    path: '/user-profile/attributes/add-attribute',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/user-profile/attributes/add-attribute',
+    path: '/realm-settings/user-profile/attributes/add-attribute',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute =
   AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRouteImport.update({
-    id: '/client-policies/policies/add-client-policy',
-    path: '/client-policies/policies/add-client-policy',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/client-policies/policies/add-client-policy',
+    path: '/realm-settings/client-policies/policies/add-client-policy',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsClientPoliciesTabAddProfileRoute =
   AppRealmRealmSettingsClientPoliciesTabAddProfileRouteImport.update({
-    id: '/add-profile',
-    path: '/add-profile',
-    getParentRoute: () => AppRealmRealmSettingsClientPoliciesTabRoute,
-  } as any)
-const AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute =
-  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteImport.update({
-    id: '/client-policies/$profileName/edit-profile',
-    path: '/client-policies/$profileName/edit-profile',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/client-policies/$tab/add-profile',
+    path: '/realm-settings/client-policies/$tab/add-profile',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute =
   AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRouteImport.update({
-    id: '/client-policies/$profileName/add-executor',
-    path: '/client-policies/$profileName/add-executor',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
-  } as any)
-const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute =
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteImport.update({
-    id: '/client-policies/$policyName/edit-policy',
-    path: '/client-policies/$policyName/edit-policy',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
-  } as any)
-const AppRealmIdentityProvidersProviderIdAliasTabRoute =
-  AppRealmIdentityProvidersProviderIdAliasTabRouteImport.update({
-    id: '/$providerId/$alias/$tab',
-    path: '/$providerId/$alias/$tab',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
-  } as any)
-const AppRealmClientsClientRegistrationSubTabProviderIdRoute =
-  AppRealmClientsClientRegistrationSubTabProviderIdRouteImport.update({
-    id: '/client-registration/$subTab/$providerId',
-    path: '/client-registration/$subTab/$providerId',
-    getParentRoute: () => AppRealmClientsRoute,
-  } as any)
-const AppRealmClientsIdAuthorizationScopeRoute =
-  AppRealmClientsIdAuthorizationScopeRouteImport.update({
-    id: '/$id/authorization/scope',
-    path: '/$id/authorization/scope',
-    getParentRoute: () => AppRealmClientsRoute,
-  } as any)
-const AppRealmClientsIdAuthorizationResourceRoute =
-  AppRealmClientsIdAuthorizationResourceRouteImport.update({
-    id: '/$id/authorization/resource',
-    path: '/$id/authorization/resource',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/realm-settings/client-policies/$profileName/add-executor',
+    path: '/realm-settings/client-policies/$profileName/add-executor',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdRolesNewRoute =
   AppRealmClientsClientIdRolesNewRouteImport.update({
-    id: '/$clientId/roles/new',
-    path: '/$clientId/roles/new',
-    getParentRoute: () => AppRealmClientsRoute,
-  } as any)
-const AppRealmClientsClientIdClientScopesDedicatedRoute =
-  AppRealmClientsClientIdClientScopesDedicatedRouteImport.update({
-    id: '/$clientId/clientScopes/dedicated',
-    path: '/$clientId/clientScopes/dedicated',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$clientId/roles/new',
+    path: '/clients/$clientId/roles/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdClientScopesTabRoute =
   AppRealmClientsClientIdClientScopesTabRouteImport.update({
-    id: '/$clientId/clientScopes/$tab',
-    path: '/$clientId/clientScopes/$tab',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$clientId/clientScopes/$tab',
+    path: '/clients/$clientId/clientScopes/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdAuthorizationTabRoute =
   AppRealmClientsClientIdAuthorizationTabRouteImport.update({
-    id: '/$clientId/authorization/$tab',
-    path: '/$clientId/authorization/$tab',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$clientId/authorization/$tab',
+    path: '/clients/$clientId/authorization/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmAuthenticationIdUsedByBuiltInRoute =
   AppRealmAuthenticationIdUsedByBuiltInRouteImport.update({
-    id: '/$builtIn',
-    path: '/$builtIn',
-    getParentRoute: () => AppRealmAuthenticationIdUsedByRoute,
+    id: '/authentication/$id/$usedBy/$builtIn',
+    path: '/authentication/$id/$usedBy/$builtIn',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute =
+  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRouteImport.update(
+    {
+      id: '/realm-settings/client-policies/$profileName/edit-profile/',
+      path: '/realm-settings/client-policies/$profileName/edit-profile/',
+      getParentRoute: () => AppRealmRoute,
+    } as any,
+  )
+const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute =
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRouteImport.update(
+    {
+      id: '/realm-settings/client-policies/$policyName/edit-policy/',
+      path: '/realm-settings/client-policies/$policyName/edit-policy/',
+      getParentRoute: () => AppRealmRoute,
+    } as any,
+  )
+const AppRealmIdentityProvidersProviderIdAliasTabIndexRoute =
+  AppRealmIdentityProvidersProviderIdAliasTabIndexRouteImport.update({
+    id: '/identity-providers/$providerId/$alias/$tab/',
+    path: '/identity-providers/$providerId/$alias/$tab/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute =
+  AppRealmClientsClientRegistrationSubTabProviderIdIndexRouteImport.update({
+    id: '/clients/client-registration/$subTab/$providerId/',
+    path: '/clients/client-registration/$subTab/$providerId/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmClientsIdAuthorizationScopeIndexRoute =
+  AppRealmClientsIdAuthorizationScopeIndexRouteImport.update({
+    id: '/clients/$id/authorization/scope/',
+    path: '/clients/$id/authorization/scope/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmClientsIdAuthorizationResourceIndexRoute =
+  AppRealmClientsIdAuthorizationResourceIndexRouteImport.update({
+    id: '/clients/$id/authorization/resource/',
+    path: '/clients/$id/authorization/resource/',
+    getParentRoute: () => AppRealmRoute,
+  } as any)
+const AppRealmClientsClientIdClientScopesDedicatedIndexRoute =
+  AppRealmClientsClientIdClientScopesDedicatedIndexRouteImport.update({
+    id: '/clients/$clientId/clientScopes/dedicated/',
+    path: '/clients/$clientId/clientScopes/dedicated/',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmUserFederationLdapIdMappersMapperIdRoute =
   AppRealmUserFederationLdapIdMappersMapperIdRouteImport.update({
-    id: '/mappers/$mapperId',
-    path: '/mappers/$mapperId',
-    getParentRoute: () => AppRealmUserFederationLdapIdRoute,
+    id: '/user-federation/ldap/$id/mappers/$mapperId',
+    path: '/user-federation/ldap/$id/mappers/$mapperId',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute =
   AppRealmRealmSettingsUserProfileAttributesGroupEditNameRouteImport.update({
-    id: '/user-profile/attributesGroup/edit/$name',
-    path: '/user-profile/attributesGroup/edit/$name',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/user-profile/attributesGroup/edit/$name',
+    path: '/realm-settings/user-profile/attributesGroup/edit/$name',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute =
   AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRouteImport.update(
     {
-      id: '/user-profile/attributes/$attributeName/edit-attribute',
-      path: '/user-profile/attributes/$attributeName/edit-attribute',
-      getParentRoute: () => AppRealmRealmSettingsRoute,
+      id: '/realm-settings/user-profile/attributes/$attributeName/edit-attribute',
+      path: '/realm-settings/user-profile/attributes/$attributeName/edit-attribute',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute =
   AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRouteImport.update(
     {
-      id: '/$executorName',
-      path: '/$executorName',
-      getParentRoute: () =>
-        AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute,
+      id: '/realm-settings/client-policies/$profileName/edit-profile/$executorName',
+      path: '/realm-settings/client-policies/$profileName/edit-profile/$executorName',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute =
   AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRouteImport.update(
     {
-      id: '/create-condition',
-      path: '/create-condition',
-      getParentRoute: () =>
-        AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute,
+      id: '/realm-settings/client-policies/$policyName/edit-policy/create-condition',
+      path: '/realm-settings/client-policies/$policyName/edit-policy/create-condition',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute =
   AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRouteImport.update({
-    id: '/new/$policyType',
-    path: '/new/$policyType',
-    getParentRoute: () => AppRealmPermissionsPermissionClientIdPoliciesRoute,
+    id: '/permissions/$permissionClientId/policies/new/$policyType',
+    path: '/permissions/$permissionClientId/policies/new/$policyType',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute =
   AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRouteImport.update(
     {
-      id: '/$policyId/$policyType',
-      path: '/$policyId/$policyType',
-      getParentRoute: () => AppRealmPermissionsPermissionClientIdPoliciesRoute,
+      id: '/permissions/$permissionClientId/policies/$policyId/$policyType',
+      path: '/permissions/$permissionClientId/policies/$policyId/$policyType',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute =
   AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRouteImport.update(
     {
-      id: '/$permissionClientId/permission/new/$resourceType',
-      path: '/$permissionClientId/permission/new/$resourceType',
-      getParentRoute: () => AppRealmPermissionsRoute,
+      id: '/permissions/$permissionClientId/permission/new/$resourceType',
+      path: '/permissions/$permissionClientId/permission/new/$resourceType',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute =
   AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRouteImport.update(
     {
-      id: '/$permissionClientId/permission/$permissionId/$resourceType',
-      path: '/$permissionClientId/permission/$permissionId/$resourceType',
-      getParentRoute: () => AppRealmPermissionsRoute,
+      id: '/permissions/$permissionClientId/permission/$permissionId/$resourceType',
+      path: '/permissions/$permissionClientId/permission/$permissionId/$resourceType',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmIdentityProvidersProviderIdAliasMappersIdRoute =
   AppRealmIdentityProvidersProviderIdAliasMappersIdRouteImport.update({
-    id: '/$providerId/$alias/mappers/$id',
-    path: '/$providerId/$alias/mappers/$id',
-    getParentRoute: () => AppRealmIdentityProvidersRoute,
+    id: '/identity-providers/$providerId/$alias/mappers/$id',
+    path: '/identity-providers/$providerId/$alias/mappers/$id',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmIdentityProvidersProviderIdAliasTabCreateRoute =
   AppRealmIdentityProvidersProviderIdAliasTabCreateRouteImport.update({
-    id: '/create',
-    path: '/create',
-    getParentRoute: () => AppRealmIdentityProvidersProviderIdAliasTabRoute,
+    id: '/identity-providers/$providerId/$alias/$tab/create',
+    path: '/identity-providers/$providerId/$alias/$tab/create',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientRegistrationSubTabProviderIdIdRoute =
   AppRealmClientsClientRegistrationSubTabProviderIdIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () =>
-      AppRealmClientsClientRegistrationSubTabProviderIdRoute,
+    id: '/clients/client-registration/$subTab/$providerId/$id',
+    path: '/clients/client-registration/$subTab/$providerId/$id',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationScopeNewRoute =
   AppRealmClientsIdAuthorizationScopeNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AppRealmClientsIdAuthorizationScopeRoute,
+    id: '/clients/$id/authorization/scope/new',
+    path: '/clients/$id/authorization/scope/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationScopeScopeIdRoute =
   AppRealmClientsIdAuthorizationScopeScopeIdRouteImport.update({
-    id: '/$scopeId',
-    path: '/$scopeId',
-    getParentRoute: () => AppRealmClientsIdAuthorizationScopeRoute,
+    id: '/clients/$id/authorization/scope/$scopeId',
+    path: '/clients/$id/authorization/scope/$scopeId',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationResourceNewRoute =
   AppRealmClientsIdAuthorizationResourceNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AppRealmClientsIdAuthorizationResourceRoute,
+    id: '/clients/$id/authorization/resource/new',
+    path: '/clients/$id/authorization/resource/new',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationResourceResourceIdRoute =
   AppRealmClientsIdAuthorizationResourceResourceIdRouteImport.update({
-    id: '/$resourceId',
-    path: '/$resourceId',
-    getParentRoute: () => AppRealmClientsIdAuthorizationResourceRoute,
+    id: '/clients/$id/authorization/resource/$resourceId',
+    path: '/clients/$id/authorization/resource/$resourceId',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdRolesIdTabRoute =
   AppRealmClientsClientIdRolesIdTabRouteImport.update({
-    id: '/$clientId/roles/$id/$tab',
-    path: '/$clientId/roles/$id/$tab',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$clientId/roles/$id/$tab',
+    path: '/clients/$clientId/roles/$id/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsClientIdClientScopesDedicatedTabRoute =
   AppRealmClientsClientIdClientScopesDedicatedTabRouteImport.update({
-    id: '/$tab',
-    path: '/$tab',
-    getParentRoute: () => AppRealmClientsClientIdClientScopesDedicatedRoute,
+    id: '/clients/$clientId/clientScopes/dedicated/$tab',
+    path: '/clients/$clientId/clientScopes/dedicated/$tab',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientScopesIdMappersMapperIdViewModeRoute =
   AppRealmClientScopesIdMappersMapperIdViewModeRouteImport.update({
-    id: '/$id/mappers/$mapperId/$viewMode',
-    path: '/$id/mappers/$mapperId/$viewMode',
-    getParentRoute: () => AppRealmClientScopesRoute,
+    id: '/client-scopes/$id/mappers/$mapperId/$viewMode',
+    path: '/client-scopes/$id/mappers/$mapperId/$viewMode',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute =
   AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRouteImport.update({
-    id: '/keys/providers/$id/$providerType/settings',
-    path: '/keys/providers/$id/$providerType/settings',
-    getParentRoute: () => AppRealmRealmSettingsRoute,
+    id: '/realm-settings/keys/providers/$id/$providerType/settings',
+    path: '/realm-settings/keys/providers/$id/$providerType/settings',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute =
   AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRouteImport.update(
     {
-      id: '/$conditionName/edit-condition',
-      path: '/$conditionName/edit-condition',
-      getParentRoute: () =>
-        AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute,
+      id: '/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition',
+      path: '/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute =
   AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRouteImport.update({
-    id: '/$id/authorization/policy/new/$policyType',
-    path: '/$id/authorization/policy/new/$policyType',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$id/authorization/policy/new/$policyType',
+    path: '/clients/$id/authorization/policy/new/$policyType',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute =
   AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRouteImport.update({
-    id: '/$id/authorization/policy/$policyId/$policyType',
-    path: '/$id/authorization/policy/$policyId/$policyType',
-    getParentRoute: () => AppRealmClientsRoute,
-  } as any)
-const AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute =
-  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteImport.update({
-    id: '/$id/authorization/permission/new/$permissionType',
-    path: '/$id/authorization/permission/new/$permissionType',
-    getParentRoute: () => AppRealmClientsRoute,
+    id: '/clients/$id/authorization/policy/$policyId/$policyType',
+    path: '/clients/$id/authorization/policy/$policyId/$policyType',
+    getParentRoute: () => AppRealmRoute,
   } as any)
 const AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute =
   AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRouteImport.update(
     {
-      id: '/$id/authorization/permission/$permissionType/$permissionId',
-      path: '/$id/authorization/permission/$permissionType/$permissionId',
-      getParentRoute: () => AppRealmClientsRoute,
+      id: '/clients/$id/authorization/permission/$permissionType/$permissionId',
+      path: '/clients/$id/authorization/permission/$permissionType/$permissionId',
+      getParentRoute: () => AppRealmRoute,
+    } as any,
+  )
+const AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute =
+  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRouteImport.update(
+    {
+      id: '/clients/$id/authorization/permission/new/$permissionType/',
+      path: '/clients/$id/authorization/permission/new/$permissionType/',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute =
   AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRouteImport.update(
     {
-      id: '/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode',
-      path: '/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode',
-      getParentRoute: () => AppRealmClientsRoute,
+      id: '/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode',
+      path: '/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 const AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute =
   AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRouteImport.update(
     {
-      id: '/$selectedId',
-      path: '/$selectedId',
-      getParentRoute: () =>
-        AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute,
+      id: '/clients/$id/authorization/permission/new/$permissionType/$selectedId',
+      path: '/clients/$id/authorization/permission/new/$permissionType/$selectedId',
+      getParentRoute: () => AppRealmRoute,
     } as any,
   )
 
@@ -762,19 +775,8 @@ export interface FileRoutesByFullPath {
   '/$': typeof AppSplatRoute
   '/$realm': typeof AppRealmRouteWithChildren
   '/$realm/$tab': typeof AppRealmTabRoute
-  '/$realm/authentication': typeof AppRealmAuthenticationRouteWithChildren
-  '/$realm/client-scopes': typeof AppRealmClientScopesRouteWithChildren
-  '/$realm/clients': typeof AppRealmClientsRouteWithChildren
-  '/$realm/events': typeof AppRealmEventsRouteWithChildren
-  '/$realm/identity-providers': typeof AppRealmIdentityProvidersRouteWithChildren
-  '/$realm/organizations': typeof AppRealmOrganizationsRouteWithChildren
-  '/$realm/permissions': typeof AppRealmPermissionsRouteWithChildren
-  '/$realm/realm-settings': typeof AppRealmRealmSettingsRouteWithChildren
-  '/$realm/roles': typeof AppRealmRolesRouteWithChildren
   '/$realm/sessions': typeof AppRealmSessionsRoute
-  '/$realm/user-federation': typeof AppRealmUserFederationRouteWithChildren
-  '/$realm/users': typeof AppRealmUsersRouteWithChildren
-  '/$realm/workflows': typeof AppRealmWorkflowsRouteWithChildren
+  '/$realm/': typeof AppRealmIndexRoute
   '/$realm/authentication/$tab': typeof AppRealmAuthenticationTabRoute
   '/$realm/client-scopes/new': typeof AppRealmClientScopesNewRoute
   '/$realm/clients/add-client': typeof AppRealmClientsAddClientRoute
@@ -783,14 +785,22 @@ export interface FileRoutesByFullPath {
   '/$realm/groups/$': typeof AppRealmGroupsSplatRoute
   '/$realm/groups/$id': typeof AppRealmGroupsIdRoute
   '/$realm/organizations/new': typeof AppRealmOrganizationsNewRoute
-  '/$realm/page-section/$providerId': typeof AppRealmPageSectionProviderIdRouteWithChildren
   '/$realm/realm-settings/$tab': typeof AppRealmRealmSettingsTabRoute
   '/$realm/roles/new': typeof AppRealmRolesNewRoute
-  '/$realm/user-federation/kerberos': typeof AppRealmUserFederationKerberosRouteWithChildren
-  '/$realm/user-federation/ldap': typeof AppRealmUserFederationLdapRouteWithChildren
   '/$realm/users/$tab': typeof AppRealmUsersTabRoute
   '/$realm/users/add-user': typeof AppRealmUsersAddUserRoute
-  '/$realm/authentication/$id/$usedBy': typeof AppRealmAuthenticationIdUsedByRouteWithChildren
+  '/$realm/authentication/': typeof AppRealmAuthenticationIndexRoute
+  '/$realm/client-scopes/': typeof AppRealmClientScopesIndexRoute
+  '/$realm/clients/': typeof AppRealmClientsIndexRoute
+  '/$realm/events/': typeof AppRealmEventsIndexRoute
+  '/$realm/identity-providers/': typeof AppRealmIdentityProvidersIndexRoute
+  '/$realm/organizations/': typeof AppRealmOrganizationsIndexRoute
+  '/$realm/permissions/': typeof AppRealmPermissionsIndexRoute
+  '/$realm/realm-settings/': typeof AppRealmRealmSettingsIndexRoute
+  '/$realm/roles/': typeof AppRealmRolesIndexRoute
+  '/$realm/user-federation/': typeof AppRealmUserFederationIndexRoute
+  '/$realm/users/': typeof AppRealmUsersIndexRoute
+  '/$realm/workflows/': typeof AppRealmWorkflowsIndexRoute
   '/$realm/authentication/flows/create': typeof AppRealmAuthenticationFlowsCreateRoute
   '/$realm/client-scopes/$id/$tab': typeof AppRealmClientScopesIdTabRoute
   '/$realm/clients/$clientId/$tab': typeof AppRealmClientsClientIdTabRoute
@@ -806,8 +816,6 @@ export interface FileRoutesByFullPath {
   '/$realm/page-section/$providerId/$id': typeof AppRealmPageSectionProviderIdIdRoute
   '/$realm/page-section/$providerId/add': typeof AppRealmPageSectionProviderIdAddRoute
   '/$realm/permissions/$permissionClientId/$tab': typeof AppRealmPermissionsPermissionClientIdTabRoute
-  '/$realm/permissions/$permissionClientId/policies': typeof AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren
-  '/$realm/realm-settings/client-policies/$tab': typeof AppRealmRealmSettingsClientPoliciesTabRouteWithChildren
   '/$realm/realm-settings/keys/$tab': typeof AppRealmRealmSettingsKeysTabRoute
   '/$realm/realm-settings/themes/$tab': typeof AppRealmRealmSettingsThemesTabRoute
   '/$realm/realm-settings/user-profile/$tab': typeof AppRealmRealmSettingsUserProfileTabRoute
@@ -816,27 +824,26 @@ export interface FileRoutesByFullPath {
   '/$realm/user-federation/$providerId/new': typeof AppRealmUserFederationProviderIdNewRoute
   '/$realm/user-federation/kerberos/$id': typeof AppRealmUserFederationKerberosIdRoute
   '/$realm/user-federation/kerberos/new': typeof AppRealmUserFederationKerberosNewRoute
-  '/$realm/user-federation/ldap/$id': typeof AppRealmUserFederationLdapIdRouteWithChildren
   '/$realm/user-federation/ldap/new': typeof AppRealmUserFederationLdapNewRoute
   '/$realm/users/$id/$tab': typeof AppRealmUsersIdTabRoute
   '/$realm/workflows/$mode/$id': typeof AppRealmWorkflowsModeIdRoute
+  '/$realm/page-section/$providerId/': typeof AppRealmPageSectionProviderIdIndexRoute
+  '/$realm/user-federation/kerberos/': typeof AppRealmUserFederationKerberosIndexRoute
+  '/$realm/user-federation/ldap/': typeof AppRealmUserFederationLdapIndexRoute
   '/$realm/authentication/$id/$usedBy/$builtIn': typeof AppRealmAuthenticationIdUsedByBuiltInRoute
   '/$realm/clients/$clientId/authorization/$tab': typeof AppRealmClientsClientIdAuthorizationTabRoute
   '/$realm/clients/$clientId/clientScopes/$tab': typeof AppRealmClientsClientIdClientScopesTabRoute
-  '/$realm/clients/$clientId/clientScopes/dedicated': typeof AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren
   '/$realm/clients/$clientId/roles/new': typeof AppRealmClientsClientIdRolesNewRoute
-  '/$realm/clients/$id/authorization/resource': typeof AppRealmClientsIdAuthorizationResourceRouteWithChildren
-  '/$realm/clients/$id/authorization/scope': typeof AppRealmClientsIdAuthorizationScopeRouteWithChildren
-  '/$realm/clients/client-registration/$subTab/$providerId': typeof AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren
-  '/$realm/identity-providers/$providerId/$alias/$tab': typeof AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren
-  '/$realm/realm-settings/client-policies/$policyName/edit-policy': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren
   '/$realm/realm-settings/client-policies/$profileName/add-executor': typeof AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute
-  '/$realm/realm-settings/client-policies/$profileName/edit-profile': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren
   '/$realm/realm-settings/client-policies/$tab/add-profile': typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRoute
   '/$realm/realm-settings/client-policies/policies/add-client-policy': typeof AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute
   '/$realm/realm-settings/user-profile/attributes/add-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute
   '/$realm/realm-settings/user-profile/attributesGroup/new': typeof AppRealmRealmSettingsUserProfileAttributesGroupNewRoute
   '/$realm/user-federation/ldap/$id/$tab': typeof AppRealmUserFederationLdapIdTabRoute
+  '/$realm/authentication/$id/$usedBy/': typeof AppRealmAuthenticationIdUsedByIndexRoute
+  '/$realm/permissions/$permissionClientId/policies/': typeof AppRealmPermissionsPermissionClientIdPoliciesIndexRoute
+  '/$realm/realm-settings/client-policies/$tab/': typeof AppRealmRealmSettingsClientPoliciesTabIndexRoute
+  '/$realm/user-federation/ldap/$id/': typeof AppRealmUserFederationLdapIdIndexRoute
   '/$realm/client-scopes/$id/mappers/$mapperId/$viewMode': typeof AppRealmClientScopesIdMappersMapperIdViewModeRoute
   '/$realm/clients/$clientId/clientScopes/dedicated/$tab': typeof AppRealmClientsClientIdClientScopesDedicatedTabRoute
   '/$realm/clients/$clientId/roles/$id/$tab': typeof AppRealmClientsClientIdRolesIdTabRoute
@@ -856,33 +863,28 @@ export interface FileRoutesByFullPath {
   '/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute
   '/$realm/realm-settings/user-profile/attributesGroup/edit/$name': typeof AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute
   '/$realm/user-federation/ldap/$id/mappers/$mapperId': typeof AppRealmUserFederationLdapIdMappersMapperIdRoute
+  '/$realm/clients/$clientId/clientScopes/dedicated/': typeof AppRealmClientsClientIdClientScopesDedicatedIndexRoute
+  '/$realm/clients/$id/authorization/resource/': typeof AppRealmClientsIdAuthorizationResourceIndexRoute
+  '/$realm/clients/$id/authorization/scope/': typeof AppRealmClientsIdAuthorizationScopeIndexRoute
+  '/$realm/clients/client-registration/$subTab/$providerId/': typeof AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute
+  '/$realm/identity-providers/$providerId/$alias/$tab/': typeof AppRealmIdentityProvidersProviderIdAliasTabIndexRoute
+  '/$realm/realm-settings/client-policies/$policyName/edit-policy/': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute
+  '/$realm/realm-settings/client-policies/$profileName/edit-profile/': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute
   '/$realm/clients/$id/authorization/permission/$permissionType/$permissionId': typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute
-  '/$realm/clients/$id/authorization/permission/new/$permissionType': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren
   '/$realm/clients/$id/authorization/policy/$policyId/$policyType': typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute
   '/$realm/clients/$id/authorization/policy/new/$policyType': typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute
   '/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute
   '/$realm/realm-settings/keys/providers/$id/$providerType/settings': typeof AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute
   '/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute
   '/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode': typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute
+  '/$realm/clients/$id/authorization/permission/new/$permissionType/': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof AppSplatRoute
-  '/$realm': typeof AppRealmRouteWithChildren
   '/': typeof AppIndexRoute
   '/$realm/$tab': typeof AppRealmTabRoute
-  '/$realm/authentication': typeof AppRealmAuthenticationRouteWithChildren
-  '/$realm/client-scopes': typeof AppRealmClientScopesRouteWithChildren
-  '/$realm/clients': typeof AppRealmClientsRouteWithChildren
-  '/$realm/events': typeof AppRealmEventsRouteWithChildren
-  '/$realm/identity-providers': typeof AppRealmIdentityProvidersRouteWithChildren
-  '/$realm/organizations': typeof AppRealmOrganizationsRouteWithChildren
-  '/$realm/permissions': typeof AppRealmPermissionsRouteWithChildren
-  '/$realm/realm-settings': typeof AppRealmRealmSettingsRouteWithChildren
-  '/$realm/roles': typeof AppRealmRolesRouteWithChildren
   '/$realm/sessions': typeof AppRealmSessionsRoute
-  '/$realm/user-federation': typeof AppRealmUserFederationRouteWithChildren
-  '/$realm/users': typeof AppRealmUsersRouteWithChildren
-  '/$realm/workflows': typeof AppRealmWorkflowsRouteWithChildren
+  '/$realm': typeof AppRealmIndexRoute
   '/$realm/authentication/$tab': typeof AppRealmAuthenticationTabRoute
   '/$realm/client-scopes/new': typeof AppRealmClientScopesNewRoute
   '/$realm/clients/add-client': typeof AppRealmClientsAddClientRoute
@@ -891,14 +893,22 @@ export interface FileRoutesByTo {
   '/$realm/groups/$': typeof AppRealmGroupsSplatRoute
   '/$realm/groups/$id': typeof AppRealmGroupsIdRoute
   '/$realm/organizations/new': typeof AppRealmOrganizationsNewRoute
-  '/$realm/page-section/$providerId': typeof AppRealmPageSectionProviderIdRouteWithChildren
   '/$realm/realm-settings/$tab': typeof AppRealmRealmSettingsTabRoute
   '/$realm/roles/new': typeof AppRealmRolesNewRoute
-  '/$realm/user-federation/kerberos': typeof AppRealmUserFederationKerberosRouteWithChildren
-  '/$realm/user-federation/ldap': typeof AppRealmUserFederationLdapRouteWithChildren
   '/$realm/users/$tab': typeof AppRealmUsersTabRoute
   '/$realm/users/add-user': typeof AppRealmUsersAddUserRoute
-  '/$realm/authentication/$id/$usedBy': typeof AppRealmAuthenticationIdUsedByRouteWithChildren
+  '/$realm/authentication': typeof AppRealmAuthenticationIndexRoute
+  '/$realm/client-scopes': typeof AppRealmClientScopesIndexRoute
+  '/$realm/clients': typeof AppRealmClientsIndexRoute
+  '/$realm/events': typeof AppRealmEventsIndexRoute
+  '/$realm/identity-providers': typeof AppRealmIdentityProvidersIndexRoute
+  '/$realm/organizations': typeof AppRealmOrganizationsIndexRoute
+  '/$realm/permissions': typeof AppRealmPermissionsIndexRoute
+  '/$realm/realm-settings': typeof AppRealmRealmSettingsIndexRoute
+  '/$realm/roles': typeof AppRealmRolesIndexRoute
+  '/$realm/user-federation': typeof AppRealmUserFederationIndexRoute
+  '/$realm/users': typeof AppRealmUsersIndexRoute
+  '/$realm/workflows': typeof AppRealmWorkflowsIndexRoute
   '/$realm/authentication/flows/create': typeof AppRealmAuthenticationFlowsCreateRoute
   '/$realm/client-scopes/$id/$tab': typeof AppRealmClientScopesIdTabRoute
   '/$realm/clients/$clientId/$tab': typeof AppRealmClientsClientIdTabRoute
@@ -914,8 +924,6 @@ export interface FileRoutesByTo {
   '/$realm/page-section/$providerId/$id': typeof AppRealmPageSectionProviderIdIdRoute
   '/$realm/page-section/$providerId/add': typeof AppRealmPageSectionProviderIdAddRoute
   '/$realm/permissions/$permissionClientId/$tab': typeof AppRealmPermissionsPermissionClientIdTabRoute
-  '/$realm/permissions/$permissionClientId/policies': typeof AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren
-  '/$realm/realm-settings/client-policies/$tab': typeof AppRealmRealmSettingsClientPoliciesTabRouteWithChildren
   '/$realm/realm-settings/keys/$tab': typeof AppRealmRealmSettingsKeysTabRoute
   '/$realm/realm-settings/themes/$tab': typeof AppRealmRealmSettingsThemesTabRoute
   '/$realm/realm-settings/user-profile/$tab': typeof AppRealmRealmSettingsUserProfileTabRoute
@@ -924,27 +932,26 @@ export interface FileRoutesByTo {
   '/$realm/user-federation/$providerId/new': typeof AppRealmUserFederationProviderIdNewRoute
   '/$realm/user-federation/kerberos/$id': typeof AppRealmUserFederationKerberosIdRoute
   '/$realm/user-federation/kerberos/new': typeof AppRealmUserFederationKerberosNewRoute
-  '/$realm/user-federation/ldap/$id': typeof AppRealmUserFederationLdapIdRouteWithChildren
   '/$realm/user-federation/ldap/new': typeof AppRealmUserFederationLdapNewRoute
   '/$realm/users/$id/$tab': typeof AppRealmUsersIdTabRoute
   '/$realm/workflows/$mode/$id': typeof AppRealmWorkflowsModeIdRoute
+  '/$realm/page-section/$providerId': typeof AppRealmPageSectionProviderIdIndexRoute
+  '/$realm/user-federation/kerberos': typeof AppRealmUserFederationKerberosIndexRoute
+  '/$realm/user-federation/ldap': typeof AppRealmUserFederationLdapIndexRoute
   '/$realm/authentication/$id/$usedBy/$builtIn': typeof AppRealmAuthenticationIdUsedByBuiltInRoute
   '/$realm/clients/$clientId/authorization/$tab': typeof AppRealmClientsClientIdAuthorizationTabRoute
   '/$realm/clients/$clientId/clientScopes/$tab': typeof AppRealmClientsClientIdClientScopesTabRoute
-  '/$realm/clients/$clientId/clientScopes/dedicated': typeof AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren
   '/$realm/clients/$clientId/roles/new': typeof AppRealmClientsClientIdRolesNewRoute
-  '/$realm/clients/$id/authorization/resource': typeof AppRealmClientsIdAuthorizationResourceRouteWithChildren
-  '/$realm/clients/$id/authorization/scope': typeof AppRealmClientsIdAuthorizationScopeRouteWithChildren
-  '/$realm/clients/client-registration/$subTab/$providerId': typeof AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren
-  '/$realm/identity-providers/$providerId/$alias/$tab': typeof AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren
-  '/$realm/realm-settings/client-policies/$policyName/edit-policy': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren
   '/$realm/realm-settings/client-policies/$profileName/add-executor': typeof AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute
-  '/$realm/realm-settings/client-policies/$profileName/edit-profile': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren
   '/$realm/realm-settings/client-policies/$tab/add-profile': typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRoute
   '/$realm/realm-settings/client-policies/policies/add-client-policy': typeof AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute
   '/$realm/realm-settings/user-profile/attributes/add-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute
   '/$realm/realm-settings/user-profile/attributesGroup/new': typeof AppRealmRealmSettingsUserProfileAttributesGroupNewRoute
   '/$realm/user-federation/ldap/$id/$tab': typeof AppRealmUserFederationLdapIdTabRoute
+  '/$realm/authentication/$id/$usedBy': typeof AppRealmAuthenticationIdUsedByIndexRoute
+  '/$realm/permissions/$permissionClientId/policies': typeof AppRealmPermissionsPermissionClientIdPoliciesIndexRoute
+  '/$realm/realm-settings/client-policies/$tab': typeof AppRealmRealmSettingsClientPoliciesTabIndexRoute
+  '/$realm/user-federation/ldap/$id': typeof AppRealmUserFederationLdapIdIndexRoute
   '/$realm/client-scopes/$id/mappers/$mapperId/$viewMode': typeof AppRealmClientScopesIdMappersMapperIdViewModeRoute
   '/$realm/clients/$clientId/clientScopes/dedicated/$tab': typeof AppRealmClientsClientIdClientScopesDedicatedTabRoute
   '/$realm/clients/$clientId/roles/$id/$tab': typeof AppRealmClientsClientIdRolesIdTabRoute
@@ -964,14 +971,21 @@ export interface FileRoutesByTo {
   '/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute
   '/$realm/realm-settings/user-profile/attributesGroup/edit/$name': typeof AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute
   '/$realm/user-federation/ldap/$id/mappers/$mapperId': typeof AppRealmUserFederationLdapIdMappersMapperIdRoute
+  '/$realm/clients/$clientId/clientScopes/dedicated': typeof AppRealmClientsClientIdClientScopesDedicatedIndexRoute
+  '/$realm/clients/$id/authorization/resource': typeof AppRealmClientsIdAuthorizationResourceIndexRoute
+  '/$realm/clients/$id/authorization/scope': typeof AppRealmClientsIdAuthorizationScopeIndexRoute
+  '/$realm/clients/client-registration/$subTab/$providerId': typeof AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute
+  '/$realm/identity-providers/$providerId/$alias/$tab': typeof AppRealmIdentityProvidersProviderIdAliasTabIndexRoute
+  '/$realm/realm-settings/client-policies/$policyName/edit-policy': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute
+  '/$realm/realm-settings/client-policies/$profileName/edit-profile': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute
   '/$realm/clients/$id/authorization/permission/$permissionType/$permissionId': typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute
-  '/$realm/clients/$id/authorization/permission/new/$permissionType': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren
   '/$realm/clients/$id/authorization/policy/$policyId/$policyType': typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute
   '/$realm/clients/$id/authorization/policy/new/$policyType': typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute
   '/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute
   '/$realm/realm-settings/keys/providers/$id/$providerType/settings': typeof AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute
   '/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute
   '/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode': typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute
+  '/$realm/clients/$id/authorization/permission/new/$permissionType': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -980,19 +994,8 @@ export interface FileRoutesById {
   '/_app/$realm': typeof AppRealmRouteWithChildren
   '/_app/': typeof AppIndexRoute
   '/_app/$realm/$tab': typeof AppRealmTabRoute
-  '/_app/$realm/authentication': typeof AppRealmAuthenticationRouteWithChildren
-  '/_app/$realm/client-scopes': typeof AppRealmClientScopesRouteWithChildren
-  '/_app/$realm/clients': typeof AppRealmClientsRouteWithChildren
-  '/_app/$realm/events': typeof AppRealmEventsRouteWithChildren
-  '/_app/$realm/identity-providers': typeof AppRealmIdentityProvidersRouteWithChildren
-  '/_app/$realm/organizations': typeof AppRealmOrganizationsRouteWithChildren
-  '/_app/$realm/permissions': typeof AppRealmPermissionsRouteWithChildren
-  '/_app/$realm/realm-settings': typeof AppRealmRealmSettingsRouteWithChildren
-  '/_app/$realm/roles': typeof AppRealmRolesRouteWithChildren
   '/_app/$realm/sessions': typeof AppRealmSessionsRoute
-  '/_app/$realm/user-federation': typeof AppRealmUserFederationRouteWithChildren
-  '/_app/$realm/users': typeof AppRealmUsersRouteWithChildren
-  '/_app/$realm/workflows': typeof AppRealmWorkflowsRouteWithChildren
+  '/_app/$realm/': typeof AppRealmIndexRoute
   '/_app/$realm/authentication/$tab': typeof AppRealmAuthenticationTabRoute
   '/_app/$realm/client-scopes/new': typeof AppRealmClientScopesNewRoute
   '/_app/$realm/clients/add-client': typeof AppRealmClientsAddClientRoute
@@ -1001,14 +1004,22 @@ export interface FileRoutesById {
   '/_app/$realm/groups/$': typeof AppRealmGroupsSplatRoute
   '/_app/$realm/groups/$id': typeof AppRealmGroupsIdRoute
   '/_app/$realm/organizations/new': typeof AppRealmOrganizationsNewRoute
-  '/_app/$realm/page-section/$providerId': typeof AppRealmPageSectionProviderIdRouteWithChildren
   '/_app/$realm/realm-settings/$tab': typeof AppRealmRealmSettingsTabRoute
   '/_app/$realm/roles/new': typeof AppRealmRolesNewRoute
-  '/_app/$realm/user-federation/kerberos': typeof AppRealmUserFederationKerberosRouteWithChildren
-  '/_app/$realm/user-federation/ldap': typeof AppRealmUserFederationLdapRouteWithChildren
   '/_app/$realm/users/$tab': typeof AppRealmUsersTabRoute
   '/_app/$realm/users/add-user': typeof AppRealmUsersAddUserRoute
-  '/_app/$realm/authentication/$id/$usedBy': typeof AppRealmAuthenticationIdUsedByRouteWithChildren
+  '/_app/$realm/authentication/': typeof AppRealmAuthenticationIndexRoute
+  '/_app/$realm/client-scopes/': typeof AppRealmClientScopesIndexRoute
+  '/_app/$realm/clients/': typeof AppRealmClientsIndexRoute
+  '/_app/$realm/events/': typeof AppRealmEventsIndexRoute
+  '/_app/$realm/identity-providers/': typeof AppRealmIdentityProvidersIndexRoute
+  '/_app/$realm/organizations/': typeof AppRealmOrganizationsIndexRoute
+  '/_app/$realm/permissions/': typeof AppRealmPermissionsIndexRoute
+  '/_app/$realm/realm-settings/': typeof AppRealmRealmSettingsIndexRoute
+  '/_app/$realm/roles/': typeof AppRealmRolesIndexRoute
+  '/_app/$realm/user-federation/': typeof AppRealmUserFederationIndexRoute
+  '/_app/$realm/users/': typeof AppRealmUsersIndexRoute
+  '/_app/$realm/workflows/': typeof AppRealmWorkflowsIndexRoute
   '/_app/$realm/authentication/flows/create': typeof AppRealmAuthenticationFlowsCreateRoute
   '/_app/$realm/client-scopes/$id/$tab': typeof AppRealmClientScopesIdTabRoute
   '/_app/$realm/clients/$clientId/$tab': typeof AppRealmClientsClientIdTabRoute
@@ -1024,8 +1035,6 @@ export interface FileRoutesById {
   '/_app/$realm/page-section/$providerId/$id': typeof AppRealmPageSectionProviderIdIdRoute
   '/_app/$realm/page-section/$providerId/add': typeof AppRealmPageSectionProviderIdAddRoute
   '/_app/$realm/permissions/$permissionClientId/$tab': typeof AppRealmPermissionsPermissionClientIdTabRoute
-  '/_app/$realm/permissions/$permissionClientId/policies': typeof AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren
-  '/_app/$realm/realm-settings/client-policies/$tab': typeof AppRealmRealmSettingsClientPoliciesTabRouteWithChildren
   '/_app/$realm/realm-settings/keys/$tab': typeof AppRealmRealmSettingsKeysTabRoute
   '/_app/$realm/realm-settings/themes/$tab': typeof AppRealmRealmSettingsThemesTabRoute
   '/_app/$realm/realm-settings/user-profile/$tab': typeof AppRealmRealmSettingsUserProfileTabRoute
@@ -1034,27 +1043,26 @@ export interface FileRoutesById {
   '/_app/$realm/user-federation/$providerId/new': typeof AppRealmUserFederationProviderIdNewRoute
   '/_app/$realm/user-federation/kerberos/$id': typeof AppRealmUserFederationKerberosIdRoute
   '/_app/$realm/user-federation/kerberos/new': typeof AppRealmUserFederationKerberosNewRoute
-  '/_app/$realm/user-federation/ldap/$id': typeof AppRealmUserFederationLdapIdRouteWithChildren
   '/_app/$realm/user-federation/ldap/new': typeof AppRealmUserFederationLdapNewRoute
   '/_app/$realm/users/$id/$tab': typeof AppRealmUsersIdTabRoute
   '/_app/$realm/workflows/$mode/$id': typeof AppRealmWorkflowsModeIdRoute
+  '/_app/$realm/page-section/$providerId/': typeof AppRealmPageSectionProviderIdIndexRoute
+  '/_app/$realm/user-federation/kerberos/': typeof AppRealmUserFederationKerberosIndexRoute
+  '/_app/$realm/user-federation/ldap/': typeof AppRealmUserFederationLdapIndexRoute
   '/_app/$realm/authentication/$id/$usedBy/$builtIn': typeof AppRealmAuthenticationIdUsedByBuiltInRoute
   '/_app/$realm/clients/$clientId/authorization/$tab': typeof AppRealmClientsClientIdAuthorizationTabRoute
   '/_app/$realm/clients/$clientId/clientScopes/$tab': typeof AppRealmClientsClientIdClientScopesTabRoute
-  '/_app/$realm/clients/$clientId/clientScopes/dedicated': typeof AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren
   '/_app/$realm/clients/$clientId/roles/new': typeof AppRealmClientsClientIdRolesNewRoute
-  '/_app/$realm/clients/$id/authorization/resource': typeof AppRealmClientsIdAuthorizationResourceRouteWithChildren
-  '/_app/$realm/clients/$id/authorization/scope': typeof AppRealmClientsIdAuthorizationScopeRouteWithChildren
-  '/_app/$realm/clients/client-registration/$subTab/$providerId': typeof AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren
-  '/_app/$realm/identity-providers/$providerId/$alias/$tab': typeof AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren
-  '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren
   '/_app/$realm/realm-settings/client-policies/$profileName/add-executor': typeof AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute
-  '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren
   '/_app/$realm/realm-settings/client-policies/$tab/add-profile': typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRoute
   '/_app/$realm/realm-settings/client-policies/policies/add-client-policy': typeof AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute
   '/_app/$realm/realm-settings/user-profile/attributes/add-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute
   '/_app/$realm/realm-settings/user-profile/attributesGroup/new': typeof AppRealmRealmSettingsUserProfileAttributesGroupNewRoute
   '/_app/$realm/user-federation/ldap/$id/$tab': typeof AppRealmUserFederationLdapIdTabRoute
+  '/_app/$realm/authentication/$id/$usedBy/': typeof AppRealmAuthenticationIdUsedByIndexRoute
+  '/_app/$realm/permissions/$permissionClientId/policies/': typeof AppRealmPermissionsPermissionClientIdPoliciesIndexRoute
+  '/_app/$realm/realm-settings/client-policies/$tab/': typeof AppRealmRealmSettingsClientPoliciesTabIndexRoute
+  '/_app/$realm/user-federation/ldap/$id/': typeof AppRealmUserFederationLdapIdIndexRoute
   '/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode': typeof AppRealmClientScopesIdMappersMapperIdViewModeRoute
   '/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab': typeof AppRealmClientsClientIdClientScopesDedicatedTabRoute
   '/_app/$realm/clients/$clientId/roles/$id/$tab': typeof AppRealmClientsClientIdRolesIdTabRoute
@@ -1074,14 +1082,21 @@ export interface FileRoutesById {
   '/_app/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute': typeof AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute
   '/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name': typeof AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute
   '/_app/$realm/user-federation/ldap/$id/mappers/$mapperId': typeof AppRealmUserFederationLdapIdMappersMapperIdRoute
+  '/_app/$realm/clients/$clientId/clientScopes/dedicated/': typeof AppRealmClientsClientIdClientScopesDedicatedIndexRoute
+  '/_app/$realm/clients/$id/authorization/resource/': typeof AppRealmClientsIdAuthorizationResourceIndexRoute
+  '/_app/$realm/clients/$id/authorization/scope/': typeof AppRealmClientsIdAuthorizationScopeIndexRoute
+  '/_app/$realm/clients/client-registration/$subTab/$providerId/': typeof AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute
+  '/_app/$realm/identity-providers/$providerId/$alias/$tab/': typeof AppRealmIdentityProvidersProviderIdAliasTabIndexRoute
+  '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute
+  '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/': typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute
   '/_app/$realm/clients/$id/authorization/permission/$permissionType/$permissionId': typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute
-  '/_app/$realm/clients/$id/authorization/permission/new/$permissionType': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren
   '/_app/$realm/clients/$id/authorization/policy/$policyId/$policyType': typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute
   '/_app/$realm/clients/$id/authorization/policy/new/$policyType': typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute
   '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition': typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute
   '/_app/$realm/realm-settings/keys/providers/$id/$providerType/settings': typeof AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute
   '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute
   '/_app/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode': typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute
+  '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/': typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1090,19 +1105,8 @@ export interface FileRouteTypes {
     | '/$'
     | '/$realm'
     | '/$realm/$tab'
-    | '/$realm/authentication'
-    | '/$realm/client-scopes'
-    | '/$realm/clients'
-    | '/$realm/events'
-    | '/$realm/identity-providers'
-    | '/$realm/organizations'
-    | '/$realm/permissions'
-    | '/$realm/realm-settings'
-    | '/$realm/roles'
     | '/$realm/sessions'
-    | '/$realm/user-federation'
-    | '/$realm/users'
-    | '/$realm/workflows'
+    | '/$realm/'
     | '/$realm/authentication/$tab'
     | '/$realm/client-scopes/new'
     | '/$realm/clients/add-client'
@@ -1111,14 +1115,22 @@ export interface FileRouteTypes {
     | '/$realm/groups/$'
     | '/$realm/groups/$id'
     | '/$realm/organizations/new'
-    | '/$realm/page-section/$providerId'
     | '/$realm/realm-settings/$tab'
     | '/$realm/roles/new'
-    | '/$realm/user-federation/kerberos'
-    | '/$realm/user-federation/ldap'
     | '/$realm/users/$tab'
     | '/$realm/users/add-user'
-    | '/$realm/authentication/$id/$usedBy'
+    | '/$realm/authentication/'
+    | '/$realm/client-scopes/'
+    | '/$realm/clients/'
+    | '/$realm/events/'
+    | '/$realm/identity-providers/'
+    | '/$realm/organizations/'
+    | '/$realm/permissions/'
+    | '/$realm/realm-settings/'
+    | '/$realm/roles/'
+    | '/$realm/user-federation/'
+    | '/$realm/users/'
+    | '/$realm/workflows/'
     | '/$realm/authentication/flows/create'
     | '/$realm/client-scopes/$id/$tab'
     | '/$realm/clients/$clientId/$tab'
@@ -1134,8 +1146,6 @@ export interface FileRouteTypes {
     | '/$realm/page-section/$providerId/$id'
     | '/$realm/page-section/$providerId/add'
     | '/$realm/permissions/$permissionClientId/$tab'
-    | '/$realm/permissions/$permissionClientId/policies'
-    | '/$realm/realm-settings/client-policies/$tab'
     | '/$realm/realm-settings/keys/$tab'
     | '/$realm/realm-settings/themes/$tab'
     | '/$realm/realm-settings/user-profile/$tab'
@@ -1144,27 +1154,26 @@ export interface FileRouteTypes {
     | '/$realm/user-federation/$providerId/new'
     | '/$realm/user-federation/kerberos/$id'
     | '/$realm/user-federation/kerberos/new'
-    | '/$realm/user-federation/ldap/$id'
     | '/$realm/user-federation/ldap/new'
     | '/$realm/users/$id/$tab'
     | '/$realm/workflows/$mode/$id'
+    | '/$realm/page-section/$providerId/'
+    | '/$realm/user-federation/kerberos/'
+    | '/$realm/user-federation/ldap/'
     | '/$realm/authentication/$id/$usedBy/$builtIn'
     | '/$realm/clients/$clientId/authorization/$tab'
     | '/$realm/clients/$clientId/clientScopes/$tab'
-    | '/$realm/clients/$clientId/clientScopes/dedicated'
     | '/$realm/clients/$clientId/roles/new'
-    | '/$realm/clients/$id/authorization/resource'
-    | '/$realm/clients/$id/authorization/scope'
-    | '/$realm/clients/client-registration/$subTab/$providerId'
-    | '/$realm/identity-providers/$providerId/$alias/$tab'
-    | '/$realm/realm-settings/client-policies/$policyName/edit-policy'
     | '/$realm/realm-settings/client-policies/$profileName/add-executor'
-    | '/$realm/realm-settings/client-policies/$profileName/edit-profile'
     | '/$realm/realm-settings/client-policies/$tab/add-profile'
     | '/$realm/realm-settings/client-policies/policies/add-client-policy'
     | '/$realm/realm-settings/user-profile/attributes/add-attribute'
     | '/$realm/realm-settings/user-profile/attributesGroup/new'
     | '/$realm/user-federation/ldap/$id/$tab'
+    | '/$realm/authentication/$id/$usedBy/'
+    | '/$realm/permissions/$permissionClientId/policies/'
+    | '/$realm/realm-settings/client-policies/$tab/'
+    | '/$realm/user-federation/ldap/$id/'
     | '/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
     | '/$realm/clients/$clientId/clientScopes/dedicated/$tab'
     | '/$realm/clients/$clientId/roles/$id/$tab'
@@ -1184,20 +1193,40 @@ export interface FileRouteTypes {
     | '/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
     | '/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
     | '/$realm/user-federation/ldap/$id/mappers/$mapperId'
+    | '/$realm/clients/$clientId/clientScopes/dedicated/'
+    | '/$realm/clients/$id/authorization/resource/'
+    | '/$realm/clients/$id/authorization/scope/'
+    | '/$realm/clients/client-registration/$subTab/$providerId/'
+    | '/$realm/identity-providers/$providerId/$alias/$tab/'
+    | '/$realm/realm-settings/client-policies/$policyName/edit-policy/'
+    | '/$realm/realm-settings/client-policies/$profileName/edit-profile/'
     | '/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
-    | '/$realm/clients/$id/authorization/permission/new/$permissionType'
     | '/$realm/clients/$id/authorization/policy/$policyId/$policyType'
     | '/$realm/clients/$id/authorization/policy/new/$policyType'
     | '/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
     | '/$realm/realm-settings/keys/providers/$id/$providerType/settings'
     | '/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
     | '/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
+    | '/$realm/clients/$id/authorization/permission/new/$permissionType/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
-    | '/$realm'
     | '/'
     | '/$realm/$tab'
+    | '/$realm/sessions'
+    | '/$realm'
+    | '/$realm/authentication/$tab'
+    | '/$realm/client-scopes/new'
+    | '/$realm/clients/add-client'
+    | '/$realm/clients/import-client'
+    | '/$realm/events/$tab'
+    | '/$realm/groups/$'
+    | '/$realm/groups/$id'
+    | '/$realm/organizations/new'
+    | '/$realm/realm-settings/$tab'
+    | '/$realm/roles/new'
+    | '/$realm/users/$tab'
+    | '/$realm/users/add-user'
     | '/$realm/authentication'
     | '/$realm/client-scopes'
     | '/$realm/clients'
@@ -1207,26 +1236,9 @@ export interface FileRouteTypes {
     | '/$realm/permissions'
     | '/$realm/realm-settings'
     | '/$realm/roles'
-    | '/$realm/sessions'
     | '/$realm/user-federation'
     | '/$realm/users'
     | '/$realm/workflows'
-    | '/$realm/authentication/$tab'
-    | '/$realm/client-scopes/new'
-    | '/$realm/clients/add-client'
-    | '/$realm/clients/import-client'
-    | '/$realm/events/$tab'
-    | '/$realm/groups/$'
-    | '/$realm/groups/$id'
-    | '/$realm/organizations/new'
-    | '/$realm/page-section/$providerId'
-    | '/$realm/realm-settings/$tab'
-    | '/$realm/roles/new'
-    | '/$realm/user-federation/kerberos'
-    | '/$realm/user-federation/ldap'
-    | '/$realm/users/$tab'
-    | '/$realm/users/add-user'
-    | '/$realm/authentication/$id/$usedBy'
     | '/$realm/authentication/flows/create'
     | '/$realm/client-scopes/$id/$tab'
     | '/$realm/clients/$clientId/$tab'
@@ -1242,8 +1254,6 @@ export interface FileRouteTypes {
     | '/$realm/page-section/$providerId/$id'
     | '/$realm/page-section/$providerId/add'
     | '/$realm/permissions/$permissionClientId/$tab'
-    | '/$realm/permissions/$permissionClientId/policies'
-    | '/$realm/realm-settings/client-policies/$tab'
     | '/$realm/realm-settings/keys/$tab'
     | '/$realm/realm-settings/themes/$tab'
     | '/$realm/realm-settings/user-profile/$tab'
@@ -1252,27 +1262,26 @@ export interface FileRouteTypes {
     | '/$realm/user-federation/$providerId/new'
     | '/$realm/user-federation/kerberos/$id'
     | '/$realm/user-federation/kerberos/new'
-    | '/$realm/user-federation/ldap/$id'
     | '/$realm/user-federation/ldap/new'
     | '/$realm/users/$id/$tab'
     | '/$realm/workflows/$mode/$id'
+    | '/$realm/page-section/$providerId'
+    | '/$realm/user-federation/kerberos'
+    | '/$realm/user-federation/ldap'
     | '/$realm/authentication/$id/$usedBy/$builtIn'
     | '/$realm/clients/$clientId/authorization/$tab'
     | '/$realm/clients/$clientId/clientScopes/$tab'
-    | '/$realm/clients/$clientId/clientScopes/dedicated'
     | '/$realm/clients/$clientId/roles/new'
-    | '/$realm/clients/$id/authorization/resource'
-    | '/$realm/clients/$id/authorization/scope'
-    | '/$realm/clients/client-registration/$subTab/$providerId'
-    | '/$realm/identity-providers/$providerId/$alias/$tab'
-    | '/$realm/realm-settings/client-policies/$policyName/edit-policy'
     | '/$realm/realm-settings/client-policies/$profileName/add-executor'
-    | '/$realm/realm-settings/client-policies/$profileName/edit-profile'
     | '/$realm/realm-settings/client-policies/$tab/add-profile'
     | '/$realm/realm-settings/client-policies/policies/add-client-policy'
     | '/$realm/realm-settings/user-profile/attributes/add-attribute'
     | '/$realm/realm-settings/user-profile/attributesGroup/new'
     | '/$realm/user-federation/ldap/$id/$tab'
+    | '/$realm/authentication/$id/$usedBy'
+    | '/$realm/permissions/$permissionClientId/policies'
+    | '/$realm/realm-settings/client-policies/$tab'
+    | '/$realm/user-federation/ldap/$id'
     | '/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
     | '/$realm/clients/$clientId/clientScopes/dedicated/$tab'
     | '/$realm/clients/$clientId/roles/$id/$tab'
@@ -1292,14 +1301,21 @@ export interface FileRouteTypes {
     | '/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
     | '/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
     | '/$realm/user-federation/ldap/$id/mappers/$mapperId'
+    | '/$realm/clients/$clientId/clientScopes/dedicated'
+    | '/$realm/clients/$id/authorization/resource'
+    | '/$realm/clients/$id/authorization/scope'
+    | '/$realm/clients/client-registration/$subTab/$providerId'
+    | '/$realm/identity-providers/$providerId/$alias/$tab'
+    | '/$realm/realm-settings/client-policies/$policyName/edit-policy'
+    | '/$realm/realm-settings/client-policies/$profileName/edit-profile'
     | '/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
-    | '/$realm/clients/$id/authorization/permission/new/$permissionType'
     | '/$realm/clients/$id/authorization/policy/$policyId/$policyType'
     | '/$realm/clients/$id/authorization/policy/new/$policyType'
     | '/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
     | '/$realm/realm-settings/keys/providers/$id/$providerType/settings'
     | '/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
     | '/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
+    | '/$realm/clients/$id/authorization/permission/new/$permissionType'
   id:
     | '__root__'
     | '/_app'
@@ -1307,19 +1323,8 @@ export interface FileRouteTypes {
     | '/_app/$realm'
     | '/_app/'
     | '/_app/$realm/$tab'
-    | '/_app/$realm/authentication'
-    | '/_app/$realm/client-scopes'
-    | '/_app/$realm/clients'
-    | '/_app/$realm/events'
-    | '/_app/$realm/identity-providers'
-    | '/_app/$realm/organizations'
-    | '/_app/$realm/permissions'
-    | '/_app/$realm/realm-settings'
-    | '/_app/$realm/roles'
     | '/_app/$realm/sessions'
-    | '/_app/$realm/user-federation'
-    | '/_app/$realm/users'
-    | '/_app/$realm/workflows'
+    | '/_app/$realm/'
     | '/_app/$realm/authentication/$tab'
     | '/_app/$realm/client-scopes/new'
     | '/_app/$realm/clients/add-client'
@@ -1328,14 +1333,22 @@ export interface FileRouteTypes {
     | '/_app/$realm/groups/$'
     | '/_app/$realm/groups/$id'
     | '/_app/$realm/organizations/new'
-    | '/_app/$realm/page-section/$providerId'
     | '/_app/$realm/realm-settings/$tab'
     | '/_app/$realm/roles/new'
-    | '/_app/$realm/user-federation/kerberos'
-    | '/_app/$realm/user-federation/ldap'
     | '/_app/$realm/users/$tab'
     | '/_app/$realm/users/add-user'
-    | '/_app/$realm/authentication/$id/$usedBy'
+    | '/_app/$realm/authentication/'
+    | '/_app/$realm/client-scopes/'
+    | '/_app/$realm/clients/'
+    | '/_app/$realm/events/'
+    | '/_app/$realm/identity-providers/'
+    | '/_app/$realm/organizations/'
+    | '/_app/$realm/permissions/'
+    | '/_app/$realm/realm-settings/'
+    | '/_app/$realm/roles/'
+    | '/_app/$realm/user-federation/'
+    | '/_app/$realm/users/'
+    | '/_app/$realm/workflows/'
     | '/_app/$realm/authentication/flows/create'
     | '/_app/$realm/client-scopes/$id/$tab'
     | '/_app/$realm/clients/$clientId/$tab'
@@ -1351,8 +1364,6 @@ export interface FileRouteTypes {
     | '/_app/$realm/page-section/$providerId/$id'
     | '/_app/$realm/page-section/$providerId/add'
     | '/_app/$realm/permissions/$permissionClientId/$tab'
-    | '/_app/$realm/permissions/$permissionClientId/policies'
-    | '/_app/$realm/realm-settings/client-policies/$tab'
     | '/_app/$realm/realm-settings/keys/$tab'
     | '/_app/$realm/realm-settings/themes/$tab'
     | '/_app/$realm/realm-settings/user-profile/$tab'
@@ -1361,27 +1372,26 @@ export interface FileRouteTypes {
     | '/_app/$realm/user-federation/$providerId/new'
     | '/_app/$realm/user-federation/kerberos/$id'
     | '/_app/$realm/user-federation/kerberos/new'
-    | '/_app/$realm/user-federation/ldap/$id'
     | '/_app/$realm/user-federation/ldap/new'
     | '/_app/$realm/users/$id/$tab'
     | '/_app/$realm/workflows/$mode/$id'
+    | '/_app/$realm/page-section/$providerId/'
+    | '/_app/$realm/user-federation/kerberos/'
+    | '/_app/$realm/user-federation/ldap/'
     | '/_app/$realm/authentication/$id/$usedBy/$builtIn'
     | '/_app/$realm/clients/$clientId/authorization/$tab'
     | '/_app/$realm/clients/$clientId/clientScopes/$tab'
-    | '/_app/$realm/clients/$clientId/clientScopes/dedicated'
     | '/_app/$realm/clients/$clientId/roles/new'
-    | '/_app/$realm/clients/$id/authorization/resource'
-    | '/_app/$realm/clients/$id/authorization/scope'
-    | '/_app/$realm/clients/client-registration/$subTab/$providerId'
-    | '/_app/$realm/identity-providers/$providerId/$alias/$tab'
-    | '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy'
     | '/_app/$realm/realm-settings/client-policies/$profileName/add-executor'
-    | '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile'
     | '/_app/$realm/realm-settings/client-policies/$tab/add-profile'
     | '/_app/$realm/realm-settings/client-policies/policies/add-client-policy'
     | '/_app/$realm/realm-settings/user-profile/attributes/add-attribute'
     | '/_app/$realm/realm-settings/user-profile/attributesGroup/new'
     | '/_app/$realm/user-federation/ldap/$id/$tab'
+    | '/_app/$realm/authentication/$id/$usedBy/'
+    | '/_app/$realm/permissions/$permissionClientId/policies/'
+    | '/_app/$realm/realm-settings/client-policies/$tab/'
+    | '/_app/$realm/user-federation/ldap/$id/'
     | '/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
     | '/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab'
     | '/_app/$realm/clients/$clientId/roles/$id/$tab'
@@ -1401,14 +1411,21 @@ export interface FileRouteTypes {
     | '/_app/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
     | '/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
     | '/_app/$realm/user-federation/ldap/$id/mappers/$mapperId'
+    | '/_app/$realm/clients/$clientId/clientScopes/dedicated/'
+    | '/_app/$realm/clients/$id/authorization/resource/'
+    | '/_app/$realm/clients/$id/authorization/scope/'
+    | '/_app/$realm/clients/client-registration/$subTab/$providerId/'
+    | '/_app/$realm/identity-providers/$providerId/$alias/$tab/'
+    | '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/'
+    | '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/'
     | '/_app/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
-    | '/_app/$realm/clients/$id/authorization/permission/new/$permissionType'
     | '/_app/$realm/clients/$id/authorization/policy/$policyId/$policyType'
     | '/_app/$realm/clients/$id/authorization/policy/new/$policyType'
     | '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
     | '/_app/$realm/realm-settings/keys/providers/$id/$providerType/settings'
     | '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
     | '/_app/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
+    | '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1445,25 +1462,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSplatRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/$realm/workflows': {
-      id: '/_app/$realm/workflows'
-      path: '/workflows'
-      fullPath: '/$realm/workflows'
-      preLoaderRoute: typeof AppRealmWorkflowsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/users': {
-      id: '/_app/$realm/users'
-      path: '/users'
-      fullPath: '/$realm/users'
-      preLoaderRoute: typeof AppRealmUsersRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/user-federation': {
-      id: '/_app/$realm/user-federation'
-      path: '/user-federation'
-      fullPath: '/$realm/user-federation'
-      preLoaderRoute: typeof AppRealmUserFederationRouteImport
+    '/_app/$realm/': {
+      id: '/_app/$realm/'
+      path: '/'
+      fullPath: '/$realm/'
+      preLoaderRoute: typeof AppRealmIndexRouteImport
       parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/sessions': {
@@ -1473,69 +1476,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRealmSessionsRouteImport
       parentRoute: typeof AppRealmRoute
     }
-    '/_app/$realm/roles': {
-      id: '/_app/$realm/roles'
-      path: '/roles'
-      fullPath: '/$realm/roles'
-      preLoaderRoute: typeof AppRealmRolesRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/realm-settings': {
-      id: '/_app/$realm/realm-settings'
-      path: '/realm-settings'
-      fullPath: '/$realm/realm-settings'
-      preLoaderRoute: typeof AppRealmRealmSettingsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/permissions': {
-      id: '/_app/$realm/permissions'
-      path: '/permissions'
-      fullPath: '/$realm/permissions'
-      preLoaderRoute: typeof AppRealmPermissionsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/organizations': {
-      id: '/_app/$realm/organizations'
-      path: '/organizations'
-      fullPath: '/$realm/organizations'
-      preLoaderRoute: typeof AppRealmOrganizationsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/identity-providers': {
-      id: '/_app/$realm/identity-providers'
-      path: '/identity-providers'
-      fullPath: '/$realm/identity-providers'
-      preLoaderRoute: typeof AppRealmIdentityProvidersRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/events': {
-      id: '/_app/$realm/events'
-      path: '/events'
-      fullPath: '/$realm/events'
-      preLoaderRoute: typeof AppRealmEventsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/clients': {
-      id: '/_app/$realm/clients'
-      path: '/clients'
-      fullPath: '/$realm/clients'
-      preLoaderRoute: typeof AppRealmClientsRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/client-scopes': {
-      id: '/_app/$realm/client-scopes'
-      path: '/client-scopes'
-      fullPath: '/$realm/client-scopes'
-      preLoaderRoute: typeof AppRealmClientScopesRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
-    '/_app/$realm/authentication': {
-      id: '/_app/$realm/authentication'
-      path: '/authentication'
-      fullPath: '/$realm/authentication'
-      preLoaderRoute: typeof AppRealmAuthenticationRouteImport
-      parentRoute: typeof AppRealmRoute
-    }
     '/_app/$realm/$tab': {
       id: '/_app/$realm/$tab'
       path: '/$tab'
@@ -1543,61 +1483,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRealmTabRouteImport
       parentRoute: typeof AppRealmRoute
     }
+    '/_app/$realm/workflows/': {
+      id: '/_app/$realm/workflows/'
+      path: '/workflows'
+      fullPath: '/$realm/workflows/'
+      preLoaderRoute: typeof AppRealmWorkflowsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/users/': {
+      id: '/_app/$realm/users/'
+      path: '/users'
+      fullPath: '/$realm/users/'
+      preLoaderRoute: typeof AppRealmUsersIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/user-federation/': {
+      id: '/_app/$realm/user-federation/'
+      path: '/user-federation'
+      fullPath: '/$realm/user-federation/'
+      preLoaderRoute: typeof AppRealmUserFederationIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/roles/': {
+      id: '/_app/$realm/roles/'
+      path: '/roles'
+      fullPath: '/$realm/roles/'
+      preLoaderRoute: typeof AppRealmRolesIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/realm-settings/': {
+      id: '/_app/$realm/realm-settings/'
+      path: '/realm-settings'
+      fullPath: '/$realm/realm-settings/'
+      preLoaderRoute: typeof AppRealmRealmSettingsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/permissions/': {
+      id: '/_app/$realm/permissions/'
+      path: '/permissions'
+      fullPath: '/$realm/permissions/'
+      preLoaderRoute: typeof AppRealmPermissionsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/organizations/': {
+      id: '/_app/$realm/organizations/'
+      path: '/organizations'
+      fullPath: '/$realm/organizations/'
+      preLoaderRoute: typeof AppRealmOrganizationsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/identity-providers/': {
+      id: '/_app/$realm/identity-providers/'
+      path: '/identity-providers'
+      fullPath: '/$realm/identity-providers/'
+      preLoaderRoute: typeof AppRealmIdentityProvidersIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/events/': {
+      id: '/_app/$realm/events/'
+      path: '/events'
+      fullPath: '/$realm/events/'
+      preLoaderRoute: typeof AppRealmEventsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/': {
+      id: '/_app/$realm/clients/'
+      path: '/clients'
+      fullPath: '/$realm/clients/'
+      preLoaderRoute: typeof AppRealmClientsIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/client-scopes/': {
+      id: '/_app/$realm/client-scopes/'
+      path: '/client-scopes'
+      fullPath: '/$realm/client-scopes/'
+      preLoaderRoute: typeof AppRealmClientScopesIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/authentication/': {
+      id: '/_app/$realm/authentication/'
+      path: '/authentication'
+      fullPath: '/$realm/authentication/'
+      preLoaderRoute: typeof AppRealmAuthenticationIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
     '/_app/$realm/users/add-user': {
       id: '/_app/$realm/users/add-user'
-      path: '/add-user'
+      path: '/users/add-user'
       fullPath: '/$realm/users/add-user'
       preLoaderRoute: typeof AppRealmUsersAddUserRouteImport
-      parentRoute: typeof AppRealmUsersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/users/$tab': {
       id: '/_app/$realm/users/$tab'
-      path: '/$tab'
+      path: '/users/$tab'
       fullPath: '/$realm/users/$tab'
       preLoaderRoute: typeof AppRealmUsersTabRouteImport
-      parentRoute: typeof AppRealmUsersRoute
-    }
-    '/_app/$realm/user-federation/ldap': {
-      id: '/_app/$realm/user-federation/ldap'
-      path: '/ldap'
-      fullPath: '/$realm/user-federation/ldap'
-      preLoaderRoute: typeof AppRealmUserFederationLdapRouteImport
-      parentRoute: typeof AppRealmUserFederationRoute
-    }
-    '/_app/$realm/user-federation/kerberos': {
-      id: '/_app/$realm/user-federation/kerberos'
-      path: '/kerberos'
-      fullPath: '/$realm/user-federation/kerberos'
-      preLoaderRoute: typeof AppRealmUserFederationKerberosRouteImport
-      parentRoute: typeof AppRealmUserFederationRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/roles/new': {
       id: '/_app/$realm/roles/new'
-      path: '/new'
+      path: '/roles/new'
       fullPath: '/$realm/roles/new'
       preLoaderRoute: typeof AppRealmRolesNewRouteImport
-      parentRoute: typeof AppRealmRolesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/$tab': {
       id: '/_app/$realm/realm-settings/$tab'
-      path: '/$tab'
+      path: '/realm-settings/$tab'
       fullPath: '/$realm/realm-settings/$tab'
       preLoaderRoute: typeof AppRealmRealmSettingsTabRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
-    }
-    '/_app/$realm/page-section/$providerId': {
-      id: '/_app/$realm/page-section/$providerId'
-      path: '/page-section/$providerId'
-      fullPath: '/$realm/page-section/$providerId'
-      preLoaderRoute: typeof AppRealmPageSectionProviderIdRouteImport
       parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/organizations/new': {
       id: '/_app/$realm/organizations/new'
-      path: '/new'
+      path: '/organizations/new'
       fullPath: '/$realm/organizations/new'
       preLoaderRoute: typeof AppRealmOrganizationsNewRouteImport
-      parentRoute: typeof AppRealmOrganizationsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/groups/$id': {
       id: '/_app/$realm/groups/$id'
@@ -1615,774 +1618,612 @@ declare module '@tanstack/react-router' {
     }
     '/_app/$realm/events/$tab': {
       id: '/_app/$realm/events/$tab'
-      path: '/$tab'
+      path: '/events/$tab'
       fullPath: '/$realm/events/$tab'
       preLoaderRoute: typeof AppRealmEventsTabRouteImport
-      parentRoute: typeof AppRealmEventsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/import-client': {
       id: '/_app/$realm/clients/import-client'
-      path: '/import-client'
+      path: '/clients/import-client'
       fullPath: '/$realm/clients/import-client'
       preLoaderRoute: typeof AppRealmClientsImportClientRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/add-client': {
       id: '/_app/$realm/clients/add-client'
-      path: '/add-client'
+      path: '/clients/add-client'
       fullPath: '/$realm/clients/add-client'
       preLoaderRoute: typeof AppRealmClientsAddClientRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/client-scopes/new': {
       id: '/_app/$realm/client-scopes/new'
-      path: '/new'
+      path: '/client-scopes/new'
       fullPath: '/$realm/client-scopes/new'
       preLoaderRoute: typeof AppRealmClientScopesNewRouteImport
-      parentRoute: typeof AppRealmClientScopesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/authentication/$tab': {
       id: '/_app/$realm/authentication/$tab'
-      path: '/$tab'
+      path: '/authentication/$tab'
       fullPath: '/$realm/authentication/$tab'
       preLoaderRoute: typeof AppRealmAuthenticationTabRouteImport
-      parentRoute: typeof AppRealmAuthenticationRoute
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/user-federation/ldap/': {
+      id: '/_app/$realm/user-federation/ldap/'
+      path: '/user-federation/ldap'
+      fullPath: '/$realm/user-federation/ldap/'
+      preLoaderRoute: typeof AppRealmUserFederationLdapIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/user-federation/kerberos/': {
+      id: '/_app/$realm/user-federation/kerberos/'
+      path: '/user-federation/kerberos'
+      fullPath: '/$realm/user-federation/kerberos/'
+      preLoaderRoute: typeof AppRealmUserFederationKerberosIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/page-section/$providerId/': {
+      id: '/_app/$realm/page-section/$providerId/'
+      path: '/page-section/$providerId'
+      fullPath: '/$realm/page-section/$providerId/'
+      preLoaderRoute: typeof AppRealmPageSectionProviderIdIndexRouteImport
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/workflows/$mode/$id': {
       id: '/_app/$realm/workflows/$mode/$id'
-      path: '/$mode/$id'
+      path: '/workflows/$mode/$id'
       fullPath: '/$realm/workflows/$mode/$id'
       preLoaderRoute: typeof AppRealmWorkflowsModeIdRouteImport
-      parentRoute: typeof AppRealmWorkflowsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/users/$id/$tab': {
       id: '/_app/$realm/users/$id/$tab'
-      path: '/$id/$tab'
+      path: '/users/$id/$tab'
       fullPath: '/$realm/users/$id/$tab'
       preLoaderRoute: typeof AppRealmUsersIdTabRouteImport
-      parentRoute: typeof AppRealmUsersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/ldap/new': {
       id: '/_app/$realm/user-federation/ldap/new'
-      path: '/new'
+      path: '/user-federation/ldap/new'
       fullPath: '/$realm/user-federation/ldap/new'
       preLoaderRoute: typeof AppRealmUserFederationLdapNewRouteImport
-      parentRoute: typeof AppRealmUserFederationLdapRoute
-    }
-    '/_app/$realm/user-federation/ldap/$id': {
-      id: '/_app/$realm/user-federation/ldap/$id'
-      path: '/$id'
-      fullPath: '/$realm/user-federation/ldap/$id'
-      preLoaderRoute: typeof AppRealmUserFederationLdapIdRouteImport
-      parentRoute: typeof AppRealmUserFederationLdapRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/kerberos/new': {
       id: '/_app/$realm/user-federation/kerberos/new'
-      path: '/new'
+      path: '/user-federation/kerberos/new'
       fullPath: '/$realm/user-federation/kerberos/new'
       preLoaderRoute: typeof AppRealmUserFederationKerberosNewRouteImport
-      parentRoute: typeof AppRealmUserFederationKerberosRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/kerberos/$id': {
       id: '/_app/$realm/user-federation/kerberos/$id'
-      path: '/$id'
+      path: '/user-federation/kerberos/$id'
       fullPath: '/$realm/user-federation/kerberos/$id'
       preLoaderRoute: typeof AppRealmUserFederationKerberosIdRouteImport
-      parentRoute: typeof AppRealmUserFederationKerberosRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/$providerId/new': {
       id: '/_app/$realm/user-federation/$providerId/new'
-      path: '/$providerId/new'
+      path: '/user-federation/$providerId/new'
       fullPath: '/$realm/user-federation/$providerId/new'
       preLoaderRoute: typeof AppRealmUserFederationProviderIdNewRouteImport
-      parentRoute: typeof AppRealmUserFederationRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/$providerId/$id': {
       id: '/_app/$realm/user-federation/$providerId/$id'
-      path: '/$providerId/$id'
+      path: '/user-federation/$providerId/$id'
       fullPath: '/$realm/user-federation/$providerId/$id'
       preLoaderRoute: typeof AppRealmUserFederationProviderIdIdRouteImport
-      parentRoute: typeof AppRealmUserFederationRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/roles/$id/$tab': {
       id: '/_app/$realm/roles/$id/$tab'
-      path: '/$id/$tab'
+      path: '/roles/$id/$tab'
       fullPath: '/$realm/roles/$id/$tab'
       preLoaderRoute: typeof AppRealmRolesIdTabRouteImport
-      parentRoute: typeof AppRealmRolesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/user-profile/$tab': {
       id: '/_app/$realm/realm-settings/user-profile/$tab'
-      path: '/user-profile/$tab'
+      path: '/realm-settings/user-profile/$tab'
       fullPath: '/$realm/realm-settings/user-profile/$tab'
       preLoaderRoute: typeof AppRealmRealmSettingsUserProfileTabRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/themes/$tab': {
       id: '/_app/$realm/realm-settings/themes/$tab'
-      path: '/themes/$tab'
+      path: '/realm-settings/themes/$tab'
       fullPath: '/$realm/realm-settings/themes/$tab'
       preLoaderRoute: typeof AppRealmRealmSettingsThemesTabRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/keys/$tab': {
       id: '/_app/$realm/realm-settings/keys/$tab'
-      path: '/keys/$tab'
+      path: '/realm-settings/keys/$tab'
       fullPath: '/$realm/realm-settings/keys/$tab'
       preLoaderRoute: typeof AppRealmRealmSettingsKeysTabRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
-    }
-    '/_app/$realm/realm-settings/client-policies/$tab': {
-      id: '/_app/$realm/realm-settings/client-policies/$tab'
-      path: '/client-policies/$tab'
-      fullPath: '/$realm/realm-settings/client-policies/$tab'
-      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesTabRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
-    }
-    '/_app/$realm/permissions/$permissionClientId/policies': {
-      id: '/_app/$realm/permissions/$permissionClientId/policies'
-      path: '/$permissionClientId/policies'
-      fullPath: '/$realm/permissions/$permissionClientId/policies'
-      preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesRouteImport
-      parentRoute: typeof AppRealmPermissionsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/permissions/$permissionClientId/$tab': {
       id: '/_app/$realm/permissions/$permissionClientId/$tab'
-      path: '/$permissionClientId/$tab'
+      path: '/permissions/$permissionClientId/$tab'
       fullPath: '/$realm/permissions/$permissionClientId/$tab'
       preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdTabRouteImport
-      parentRoute: typeof AppRealmPermissionsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/page-section/$providerId/add': {
       id: '/_app/$realm/page-section/$providerId/add'
-      path: '/add'
+      path: '/page-section/$providerId/add'
       fullPath: '/$realm/page-section/$providerId/add'
       preLoaderRoute: typeof AppRealmPageSectionProviderIdAddRouteImport
-      parentRoute: typeof AppRealmPageSectionProviderIdRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/page-section/$providerId/$id': {
       id: '/_app/$realm/page-section/$providerId/$id'
-      path: '/$id'
+      path: '/page-section/$providerId/$id'
       fullPath: '/$realm/page-section/$providerId/$id'
       preLoaderRoute: typeof AppRealmPageSectionProviderIdIdRouteImport
-      parentRoute: typeof AppRealmPageSectionProviderIdRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/organizations/$id/$tab': {
       id: '/_app/$realm/organizations/$id/$tab'
-      path: '/$id/$tab'
+      path: '/organizations/$id/$tab'
       fullPath: '/$realm/organizations/$id/$tab'
       preLoaderRoute: typeof AppRealmOrganizationsIdTabRouteImport
-      parentRoute: typeof AppRealmOrganizationsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/spiffe/add': {
       id: '/_app/$realm/identity-providers/spiffe/add'
-      path: '/spiffe/add'
+      path: '/identity-providers/spiffe/add'
       fullPath: '/$realm/identity-providers/spiffe/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersSpiffeAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/saml/add': {
       id: '/_app/$realm/identity-providers/saml/add'
-      path: '/saml/add'
+      path: '/identity-providers/saml/add'
       fullPath: '/$realm/identity-providers/saml/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersSamlAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/oidc/add': {
       id: '/_app/$realm/identity-providers/oidc/add'
-      path: '/oidc/add'
+      path: '/identity-providers/oidc/add'
       fullPath: '/$realm/identity-providers/oidc/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersOidcAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/oauth2/add': {
       id: '/_app/$realm/identity-providers/oauth2/add'
-      path: '/oauth2/add'
+      path: '/identity-providers/oauth2/add'
       fullPath: '/$realm/identity-providers/oauth2/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersOauth2AddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/kubernetes/add': {
       id: '/_app/$realm/identity-providers/kubernetes/add'
-      path: '/kubernetes/add'
+      path: '/identity-providers/kubernetes/add'
       fullPath: '/$realm/identity-providers/kubernetes/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersKubernetesAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/keycloak-oidc/add': {
       id: '/_app/$realm/identity-providers/keycloak-oidc/add'
-      path: '/keycloak-oidc/add'
+      path: '/identity-providers/keycloak-oidc/add'
       fullPath: '/$realm/identity-providers/keycloak-oidc/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersKeycloakOidcAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/jwt-authorization-grant/add': {
       id: '/_app/$realm/identity-providers/jwt-authorization-grant/add'
-      path: '/jwt-authorization-grant/add'
+      path: '/identity-providers/jwt-authorization-grant/add'
       fullPath: '/$realm/identity-providers/jwt-authorization-grant/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersJwtAuthorizationGrantAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/$providerId/add': {
       id: '/_app/$realm/identity-providers/$providerId/add'
-      path: '/$providerId/add'
+      path: '/identity-providers/$providerId/add'
       fullPath: '/$realm/identity-providers/$providerId/add'
       preLoaderRoute: typeof AppRealmIdentityProvidersProviderIdAddRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/$tab': {
       id: '/_app/$realm/clients/$clientId/$tab'
-      path: '/$clientId/$tab'
+      path: '/clients/$clientId/$tab'
       fullPath: '/$realm/clients/$clientId/$tab'
       preLoaderRoute: typeof AppRealmClientsClientIdTabRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/client-scopes/$id/$tab': {
       id: '/_app/$realm/client-scopes/$id/$tab'
-      path: '/$id/$tab'
+      path: '/client-scopes/$id/$tab'
       fullPath: '/$realm/client-scopes/$id/$tab'
       preLoaderRoute: typeof AppRealmClientScopesIdTabRouteImport
-      parentRoute: typeof AppRealmClientScopesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/authentication/flows/create': {
       id: '/_app/$realm/authentication/flows/create'
-      path: '/flows/create'
+      path: '/authentication/flows/create'
       fullPath: '/$realm/authentication/flows/create'
       preLoaderRoute: typeof AppRealmAuthenticationFlowsCreateRouteImport
-      parentRoute: typeof AppRealmAuthenticationRoute
+      parentRoute: typeof AppRealmRoute
     }
-    '/_app/$realm/authentication/$id/$usedBy': {
-      id: '/_app/$realm/authentication/$id/$usedBy'
-      path: '/$id/$usedBy'
-      fullPath: '/$realm/authentication/$id/$usedBy'
-      preLoaderRoute: typeof AppRealmAuthenticationIdUsedByRouteImport
-      parentRoute: typeof AppRealmAuthenticationRoute
+    '/_app/$realm/user-federation/ldap/$id/': {
+      id: '/_app/$realm/user-federation/ldap/$id/'
+      path: '/user-federation/ldap/$id'
+      fullPath: '/$realm/user-federation/ldap/$id/'
+      preLoaderRoute: typeof AppRealmUserFederationLdapIdIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/realm-settings/client-policies/$tab/': {
+      id: '/_app/$realm/realm-settings/client-policies/$tab/'
+      path: '/realm-settings/client-policies/$tab'
+      fullPath: '/$realm/realm-settings/client-policies/$tab/'
+      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesTabIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/permissions/$permissionClientId/policies/': {
+      id: '/_app/$realm/permissions/$permissionClientId/policies/'
+      path: '/permissions/$permissionClientId/policies'
+      fullPath: '/$realm/permissions/$permissionClientId/policies/'
+      preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/authentication/$id/$usedBy/': {
+      id: '/_app/$realm/authentication/$id/$usedBy/'
+      path: '/authentication/$id/$usedBy'
+      fullPath: '/$realm/authentication/$id/$usedBy/'
+      preLoaderRoute: typeof AppRealmAuthenticationIdUsedByIndexRouteImport
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/ldap/$id/$tab': {
       id: '/_app/$realm/user-federation/ldap/$id/$tab'
-      path: '/$tab'
+      path: '/user-federation/ldap/$id/$tab'
       fullPath: '/$realm/user-federation/ldap/$id/$tab'
       preLoaderRoute: typeof AppRealmUserFederationLdapIdTabRouteImport
-      parentRoute: typeof AppRealmUserFederationLdapIdRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/user-profile/attributesGroup/new': {
       id: '/_app/$realm/realm-settings/user-profile/attributesGroup/new'
-      path: '/user-profile/attributesGroup/new'
+      path: '/realm-settings/user-profile/attributesGroup/new'
       fullPath: '/$realm/realm-settings/user-profile/attributesGroup/new'
       preLoaderRoute: typeof AppRealmRealmSettingsUserProfileAttributesGroupNewRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/user-profile/attributes/add-attribute': {
       id: '/_app/$realm/realm-settings/user-profile/attributes/add-attribute'
-      path: '/user-profile/attributes/add-attribute'
+      path: '/realm-settings/user-profile/attributes/add-attribute'
       fullPath: '/$realm/realm-settings/user-profile/attributes/add-attribute'
       preLoaderRoute: typeof AppRealmRealmSettingsUserProfileAttributesAddAttributeRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/policies/add-client-policy': {
       id: '/_app/$realm/realm-settings/client-policies/policies/add-client-policy'
-      path: '/client-policies/policies/add-client-policy'
+      path: '/realm-settings/client-policies/policies/add-client-policy'
       fullPath: '/$realm/realm-settings/client-policies/policies/add-client-policy'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/$tab/add-profile': {
       id: '/_app/$realm/realm-settings/client-policies/$tab/add-profile'
-      path: '/add-profile'
+      path: '/realm-settings/client-policies/$tab/add-profile'
       fullPath: '/$realm/realm-settings/client-policies/$tab/add-profile'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRouteImport
-      parentRoute: typeof AppRealmRealmSettingsClientPoliciesTabRoute
-    }
-    '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile': {
-      id: '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile'
-      path: '/client-policies/$profileName/edit-profile'
-      fullPath: '/$realm/realm-settings/client-policies/$profileName/edit-profile'
-      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/$profileName/add-executor': {
       id: '/_app/$realm/realm-settings/client-policies/$profileName/add-executor'
-      path: '/client-policies/$profileName/add-executor'
+      path: '/realm-settings/client-policies/$profileName/add-executor'
       fullPath: '/$realm/realm-settings/client-policies/$profileName/add-executor'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
-    }
-    '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy': {
-      id: '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy'
-      path: '/client-policies/$policyName/edit-policy'
-      fullPath: '/$realm/realm-settings/client-policies/$policyName/edit-policy'
-      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
-    }
-    '/_app/$realm/identity-providers/$providerId/$alias/$tab': {
-      id: '/_app/$realm/identity-providers/$providerId/$alias/$tab'
-      path: '/$providerId/$alias/$tab'
-      fullPath: '/$realm/identity-providers/$providerId/$alias/$tab'
-      preLoaderRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
-    }
-    '/_app/$realm/clients/client-registration/$subTab/$providerId': {
-      id: '/_app/$realm/clients/client-registration/$subTab/$providerId'
-      path: '/client-registration/$subTab/$providerId'
-      fullPath: '/$realm/clients/client-registration/$subTab/$providerId'
-      preLoaderRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdRouteImport
-      parentRoute: typeof AppRealmClientsRoute
-    }
-    '/_app/$realm/clients/$id/authorization/scope': {
-      id: '/_app/$realm/clients/$id/authorization/scope'
-      path: '/$id/authorization/scope'
-      fullPath: '/$realm/clients/$id/authorization/scope'
-      preLoaderRoute: typeof AppRealmClientsIdAuthorizationScopeRouteImport
-      parentRoute: typeof AppRealmClientsRoute
-    }
-    '/_app/$realm/clients/$id/authorization/resource': {
-      id: '/_app/$realm/clients/$id/authorization/resource'
-      path: '/$id/authorization/resource'
-      fullPath: '/$realm/clients/$id/authorization/resource'
-      preLoaderRoute: typeof AppRealmClientsIdAuthorizationResourceRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/roles/new': {
       id: '/_app/$realm/clients/$clientId/roles/new'
-      path: '/$clientId/roles/new'
+      path: '/clients/$clientId/roles/new'
       fullPath: '/$realm/clients/$clientId/roles/new'
       preLoaderRoute: typeof AppRealmClientsClientIdRolesNewRouteImport
-      parentRoute: typeof AppRealmClientsRoute
-    }
-    '/_app/$realm/clients/$clientId/clientScopes/dedicated': {
-      id: '/_app/$realm/clients/$clientId/clientScopes/dedicated'
-      path: '/$clientId/clientScopes/dedicated'
-      fullPath: '/$realm/clients/$clientId/clientScopes/dedicated'
-      preLoaderRoute: typeof AppRealmClientsClientIdClientScopesDedicatedRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/clientScopes/$tab': {
       id: '/_app/$realm/clients/$clientId/clientScopes/$tab'
-      path: '/$clientId/clientScopes/$tab'
+      path: '/clients/$clientId/clientScopes/$tab'
       fullPath: '/$realm/clients/$clientId/clientScopes/$tab'
       preLoaderRoute: typeof AppRealmClientsClientIdClientScopesTabRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/authorization/$tab': {
       id: '/_app/$realm/clients/$clientId/authorization/$tab'
-      path: '/$clientId/authorization/$tab'
+      path: '/clients/$clientId/authorization/$tab'
       fullPath: '/$realm/clients/$clientId/authorization/$tab'
       preLoaderRoute: typeof AppRealmClientsClientIdAuthorizationTabRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/authentication/$id/$usedBy/$builtIn': {
       id: '/_app/$realm/authentication/$id/$usedBy/$builtIn'
-      path: '/$builtIn'
+      path: '/authentication/$id/$usedBy/$builtIn'
       fullPath: '/$realm/authentication/$id/$usedBy/$builtIn'
       preLoaderRoute: typeof AppRealmAuthenticationIdUsedByBuiltInRouteImport
-      parentRoute: typeof AppRealmAuthenticationIdUsedByRoute
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/': {
+      id: '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/'
+      path: '/realm-settings/client-policies/$profileName/edit-profile'
+      fullPath: '/$realm/realm-settings/client-policies/$profileName/edit-profile/'
+      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/': {
+      id: '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/'
+      path: '/realm-settings/client-policies/$policyName/edit-policy'
+      fullPath: '/$realm/realm-settings/client-policies/$policyName/edit-policy/'
+      preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/identity-providers/$providerId/$alias/$tab/': {
+      id: '/_app/$realm/identity-providers/$providerId/$alias/$tab/'
+      path: '/identity-providers/$providerId/$alias/$tab'
+      fullPath: '/$realm/identity-providers/$providerId/$alias/$tab/'
+      preLoaderRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/client-registration/$subTab/$providerId/': {
+      id: '/_app/$realm/clients/client-registration/$subTab/$providerId/'
+      path: '/clients/client-registration/$subTab/$providerId'
+      fullPath: '/$realm/clients/client-registration/$subTab/$providerId/'
+      preLoaderRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/$id/authorization/scope/': {
+      id: '/_app/$realm/clients/$id/authorization/scope/'
+      path: '/clients/$id/authorization/scope'
+      fullPath: '/$realm/clients/$id/authorization/scope/'
+      preLoaderRoute: typeof AppRealmClientsIdAuthorizationScopeIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/$id/authorization/resource/': {
+      id: '/_app/$realm/clients/$id/authorization/resource/'
+      path: '/clients/$id/authorization/resource'
+      fullPath: '/$realm/clients/$id/authorization/resource/'
+      preLoaderRoute: typeof AppRealmClientsIdAuthorizationResourceIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/$clientId/clientScopes/dedicated/': {
+      id: '/_app/$realm/clients/$clientId/clientScopes/dedicated/'
+      path: '/clients/$clientId/clientScopes/dedicated'
+      fullPath: '/$realm/clients/$clientId/clientScopes/dedicated/'
+      preLoaderRoute: typeof AppRealmClientsClientIdClientScopesDedicatedIndexRouteImport
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/user-federation/ldap/$id/mappers/$mapperId': {
       id: '/_app/$realm/user-federation/ldap/$id/mappers/$mapperId'
-      path: '/mappers/$mapperId'
+      path: '/user-federation/ldap/$id/mappers/$mapperId'
       fullPath: '/$realm/user-federation/ldap/$id/mappers/$mapperId'
       preLoaderRoute: typeof AppRealmUserFederationLdapIdMappersMapperIdRouteImport
-      parentRoute: typeof AppRealmUserFederationLdapIdRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name': {
       id: '/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
-      path: '/user-profile/attributesGroup/edit/$name'
+      path: '/realm-settings/user-profile/attributesGroup/edit/$name'
       fullPath: '/$realm/realm-settings/user-profile/attributesGroup/edit/$name'
       preLoaderRoute: typeof AppRealmRealmSettingsUserProfileAttributesGroupEditNameRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute': {
       id: '/_app/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
-      path: '/user-profile/attributes/$attributeName/edit-attribute'
+      path: '/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
       fullPath: '/$realm/realm-settings/user-profile/attributes/$attributeName/edit-attribute'
       preLoaderRoute: typeof AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/$executorName': {
       id: '/_app/$realm/realm-settings/client-policies/$profileName/edit-profile/$executorName'
-      path: '/$executorName'
+      path: '/realm-settings/client-policies/$profileName/edit-profile/$executorName'
       fullPath: '/$realm/realm-settings/client-policies/$profileName/edit-profile/$executorName'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRouteImport
-      parentRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/create-condition': {
       id: '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/create-condition'
-      path: '/create-condition'
+      path: '/realm-settings/client-policies/$policyName/edit-policy/create-condition'
       fullPath: '/$realm/realm-settings/client-policies/$policyName/edit-policy/create-condition'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRouteImport
-      parentRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/permissions/$permissionClientId/policies/new/$policyType': {
       id: '/_app/$realm/permissions/$permissionClientId/policies/new/$policyType'
-      path: '/new/$policyType'
+      path: '/permissions/$permissionClientId/policies/new/$policyType'
       fullPath: '/$realm/permissions/$permissionClientId/policies/new/$policyType'
       preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRouteImport
-      parentRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/permissions/$permissionClientId/policies/$policyId/$policyType': {
       id: '/_app/$realm/permissions/$permissionClientId/policies/$policyId/$policyType'
-      path: '/$policyId/$policyType'
+      path: '/permissions/$permissionClientId/policies/$policyId/$policyType'
       fullPath: '/$realm/permissions/$permissionClientId/policies/$policyId/$policyType'
       preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRouteImport
-      parentRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/permissions/$permissionClientId/permission/new/$resourceType': {
       id: '/_app/$realm/permissions/$permissionClientId/permission/new/$resourceType'
-      path: '/$permissionClientId/permission/new/$resourceType'
+      path: '/permissions/$permissionClientId/permission/new/$resourceType'
       fullPath: '/$realm/permissions/$permissionClientId/permission/new/$resourceType'
       preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRouteImport
-      parentRoute: typeof AppRealmPermissionsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/permissions/$permissionClientId/permission/$permissionId/$resourceType': {
       id: '/_app/$realm/permissions/$permissionClientId/permission/$permissionId/$resourceType'
-      path: '/$permissionClientId/permission/$permissionId/$resourceType'
+      path: '/permissions/$permissionClientId/permission/$permissionId/$resourceType'
       fullPath: '/$realm/permissions/$permissionClientId/permission/$permissionId/$resourceType'
       preLoaderRoute: typeof AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRouteImport
-      parentRoute: typeof AppRealmPermissionsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/$providerId/$alias/mappers/$id': {
       id: '/_app/$realm/identity-providers/$providerId/$alias/mappers/$id'
-      path: '/$providerId/$alias/mappers/$id'
+      path: '/identity-providers/$providerId/$alias/mappers/$id'
       fullPath: '/$realm/identity-providers/$providerId/$alias/mappers/$id'
       preLoaderRoute: typeof AppRealmIdentityProvidersProviderIdAliasMappersIdRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/identity-providers/$providerId/$alias/$tab/create': {
       id: '/_app/$realm/identity-providers/$providerId/$alias/$tab/create'
-      path: '/create'
+      path: '/identity-providers/$providerId/$alias/$tab/create'
       fullPath: '/$realm/identity-providers/$providerId/$alias/$tab/create'
       preLoaderRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabCreateRouteImport
-      parentRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/client-registration/$subTab/$providerId/$id': {
       id: '/_app/$realm/clients/client-registration/$subTab/$providerId/$id'
-      path: '/$id'
+      path: '/clients/client-registration/$subTab/$providerId/$id'
       fullPath: '/$realm/clients/client-registration/$subTab/$providerId/$id'
       preLoaderRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdIdRouteImport
-      parentRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/scope/new': {
       id: '/_app/$realm/clients/$id/authorization/scope/new'
-      path: '/new'
+      path: '/clients/$id/authorization/scope/new'
       fullPath: '/$realm/clients/$id/authorization/scope/new'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationScopeNewRouteImport
-      parentRoute: typeof AppRealmClientsIdAuthorizationScopeRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/scope/$scopeId': {
       id: '/_app/$realm/clients/$id/authorization/scope/$scopeId'
-      path: '/$scopeId'
+      path: '/clients/$id/authorization/scope/$scopeId'
       fullPath: '/$realm/clients/$id/authorization/scope/$scopeId'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationScopeScopeIdRouteImport
-      parentRoute: typeof AppRealmClientsIdAuthorizationScopeRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/resource/new': {
       id: '/_app/$realm/clients/$id/authorization/resource/new'
-      path: '/new'
+      path: '/clients/$id/authorization/resource/new'
       fullPath: '/$realm/clients/$id/authorization/resource/new'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationResourceNewRouteImport
-      parentRoute: typeof AppRealmClientsIdAuthorizationResourceRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/resource/$resourceId': {
       id: '/_app/$realm/clients/$id/authorization/resource/$resourceId'
-      path: '/$resourceId'
+      path: '/clients/$id/authorization/resource/$resourceId'
       fullPath: '/$realm/clients/$id/authorization/resource/$resourceId'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationResourceResourceIdRouteImport
-      parentRoute: typeof AppRealmClientsIdAuthorizationResourceRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/roles/$id/$tab': {
       id: '/_app/$realm/clients/$clientId/roles/$id/$tab'
-      path: '/$clientId/roles/$id/$tab'
+      path: '/clients/$clientId/roles/$id/$tab'
       fullPath: '/$realm/clients/$clientId/roles/$id/$tab'
       preLoaderRoute: typeof AppRealmClientsClientIdRolesIdTabRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab': {
       id: '/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab'
-      path: '/$tab'
+      path: '/clients/$clientId/clientScopes/dedicated/$tab'
       fullPath: '/$realm/clients/$clientId/clientScopes/dedicated/$tab'
       preLoaderRoute: typeof AppRealmClientsClientIdClientScopesDedicatedTabRouteImport
-      parentRoute: typeof AppRealmClientsClientIdClientScopesDedicatedRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode': {
       id: '/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
-      path: '/$id/mappers/$mapperId/$viewMode'
+      path: '/client-scopes/$id/mappers/$mapperId/$viewMode'
       fullPath: '/$realm/client-scopes/$id/mappers/$mapperId/$viewMode'
       preLoaderRoute: typeof AppRealmClientScopesIdMappersMapperIdViewModeRouteImport
-      parentRoute: typeof AppRealmClientScopesRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/keys/providers/$id/$providerType/settings': {
       id: '/_app/$realm/realm-settings/keys/providers/$id/$providerType/settings'
-      path: '/keys/providers/$id/$providerType/settings'
+      path: '/realm-settings/keys/providers/$id/$providerType/settings'
       fullPath: '/$realm/realm-settings/keys/providers/$id/$providerType/settings'
       preLoaderRoute: typeof AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRouteImport
-      parentRoute: typeof AppRealmRealmSettingsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition': {
       id: '/_app/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
-      path: '/$conditionName/edit-condition'
+      path: '/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
       fullPath: '/$realm/realm-settings/client-policies/$policyName/edit-policy/$conditionName/edit-condition'
       preLoaderRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRouteImport
-      parentRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/policy/new/$policyType': {
       id: '/_app/$realm/clients/$id/authorization/policy/new/$policyType'
-      path: '/$id/authorization/policy/new/$policyType'
+      path: '/clients/$id/authorization/policy/new/$policyType'
       fullPath: '/$realm/clients/$id/authorization/policy/new/$policyType'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/policy/$policyId/$policyType': {
       id: '/_app/$realm/clients/$id/authorization/policy/$policyId/$policyType'
-      path: '/$id/authorization/policy/$policyId/$policyType'
+      path: '/clients/$id/authorization/policy/$policyId/$policyType'
       fullPath: '/$realm/clients/$id/authorization/policy/$policyId/$policyType'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRouteImport
-      parentRoute: typeof AppRealmClientsRoute
-    }
-    '/_app/$realm/clients/$id/authorization/permission/new/$permissionType': {
-      id: '/_app/$realm/clients/$id/authorization/permission/new/$permissionType'
-      path: '/$id/authorization/permission/new/$permissionType'
-      fullPath: '/$realm/clients/$id/authorization/permission/new/$permissionType'
-      preLoaderRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/permission/$permissionType/$permissionId': {
       id: '/_app/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
-      path: '/$id/authorization/permission/$permissionType/$permissionId'
+      path: '/clients/$id/authorization/permission/$permissionType/$permissionId'
       fullPath: '/$realm/clients/$id/authorization/permission/$permissionType/$permissionId'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/': {
+      id: '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/'
+      path: '/clients/$id/authorization/permission/new/$permissionType'
+      fullPath: '/$realm/clients/$id/authorization/permission/new/$permissionType/'
+      preLoaderRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRouteImport
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode': {
       id: '/_app/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
-      path: '/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
+      path: '/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
       fullPath: '/$realm/clients/$id/clientScopes/dedicated/mappers/$mapperId/$viewMode'
       preLoaderRoute: typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRouteImport
-      parentRoute: typeof AppRealmClientsRoute
+      parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId': {
       id: '/_app/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
-      path: '/$selectedId'
+      path: '/clients/$id/authorization/permission/new/$permissionType/$selectedId'
       fullPath: '/$realm/clients/$id/authorization/permission/new/$permissionType/$selectedId'
       preLoaderRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRouteImport
-      parentRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute
+      parentRoute: typeof AppRealmRoute
     }
   }
 }
 
-interface AppRealmAuthenticationIdUsedByRouteChildren {
-  AppRealmAuthenticationIdUsedByBuiltInRoute: typeof AppRealmAuthenticationIdUsedByBuiltInRoute
-}
-
-const AppRealmAuthenticationIdUsedByRouteChildren: AppRealmAuthenticationIdUsedByRouteChildren =
-  {
-    AppRealmAuthenticationIdUsedByBuiltInRoute:
-      AppRealmAuthenticationIdUsedByBuiltInRoute,
-  }
-
-const AppRealmAuthenticationIdUsedByRouteWithChildren =
-  AppRealmAuthenticationIdUsedByRoute._addFileChildren(
-    AppRealmAuthenticationIdUsedByRouteChildren,
-  )
-
-interface AppRealmAuthenticationRouteChildren {
+interface AppRealmRouteChildren {
+  AppRealmTabRoute: typeof AppRealmTabRoute
+  AppRealmSessionsRoute: typeof AppRealmSessionsRoute
+  AppRealmIndexRoute: typeof AppRealmIndexRoute
   AppRealmAuthenticationTabRoute: typeof AppRealmAuthenticationTabRoute
-  AppRealmAuthenticationIdUsedByRoute: typeof AppRealmAuthenticationIdUsedByRouteWithChildren
-  AppRealmAuthenticationFlowsCreateRoute: typeof AppRealmAuthenticationFlowsCreateRoute
-}
-
-const AppRealmAuthenticationRouteChildren: AppRealmAuthenticationRouteChildren =
-  {
-    AppRealmAuthenticationTabRoute: AppRealmAuthenticationTabRoute,
-    AppRealmAuthenticationIdUsedByRoute:
-      AppRealmAuthenticationIdUsedByRouteWithChildren,
-    AppRealmAuthenticationFlowsCreateRoute:
-      AppRealmAuthenticationFlowsCreateRoute,
-  }
-
-const AppRealmAuthenticationRouteWithChildren =
-  AppRealmAuthenticationRoute._addFileChildren(
-    AppRealmAuthenticationRouteChildren,
-  )
-
-interface AppRealmClientScopesRouteChildren {
   AppRealmClientScopesNewRoute: typeof AppRealmClientScopesNewRoute
-  AppRealmClientScopesIdTabRoute: typeof AppRealmClientScopesIdTabRoute
-  AppRealmClientScopesIdMappersMapperIdViewModeRoute: typeof AppRealmClientScopesIdMappersMapperIdViewModeRoute
-}
-
-const AppRealmClientScopesRouteChildren: AppRealmClientScopesRouteChildren = {
-  AppRealmClientScopesNewRoute: AppRealmClientScopesNewRoute,
-  AppRealmClientScopesIdTabRoute: AppRealmClientScopesIdTabRoute,
-  AppRealmClientScopesIdMappersMapperIdViewModeRoute:
-    AppRealmClientScopesIdMappersMapperIdViewModeRoute,
-}
-
-const AppRealmClientScopesRouteWithChildren =
-  AppRealmClientScopesRoute._addFileChildren(AppRealmClientScopesRouteChildren)
-
-interface AppRealmClientsClientIdClientScopesDedicatedRouteChildren {
-  AppRealmClientsClientIdClientScopesDedicatedTabRoute: typeof AppRealmClientsClientIdClientScopesDedicatedTabRoute
-}
-
-const AppRealmClientsClientIdClientScopesDedicatedRouteChildren: AppRealmClientsClientIdClientScopesDedicatedRouteChildren =
-  {
-    AppRealmClientsClientIdClientScopesDedicatedTabRoute:
-      AppRealmClientsClientIdClientScopesDedicatedTabRoute,
-  }
-
-const AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren =
-  AppRealmClientsClientIdClientScopesDedicatedRoute._addFileChildren(
-    AppRealmClientsClientIdClientScopesDedicatedRouteChildren,
-  )
-
-interface AppRealmClientsIdAuthorizationResourceRouteChildren {
-  AppRealmClientsIdAuthorizationResourceResourceIdRoute: typeof AppRealmClientsIdAuthorizationResourceResourceIdRoute
-  AppRealmClientsIdAuthorizationResourceNewRoute: typeof AppRealmClientsIdAuthorizationResourceNewRoute
-}
-
-const AppRealmClientsIdAuthorizationResourceRouteChildren: AppRealmClientsIdAuthorizationResourceRouteChildren =
-  {
-    AppRealmClientsIdAuthorizationResourceResourceIdRoute:
-      AppRealmClientsIdAuthorizationResourceResourceIdRoute,
-    AppRealmClientsIdAuthorizationResourceNewRoute:
-      AppRealmClientsIdAuthorizationResourceNewRoute,
-  }
-
-const AppRealmClientsIdAuthorizationResourceRouteWithChildren =
-  AppRealmClientsIdAuthorizationResourceRoute._addFileChildren(
-    AppRealmClientsIdAuthorizationResourceRouteChildren,
-  )
-
-interface AppRealmClientsIdAuthorizationScopeRouteChildren {
-  AppRealmClientsIdAuthorizationScopeScopeIdRoute: typeof AppRealmClientsIdAuthorizationScopeScopeIdRoute
-  AppRealmClientsIdAuthorizationScopeNewRoute: typeof AppRealmClientsIdAuthorizationScopeNewRoute
-}
-
-const AppRealmClientsIdAuthorizationScopeRouteChildren: AppRealmClientsIdAuthorizationScopeRouteChildren =
-  {
-    AppRealmClientsIdAuthorizationScopeScopeIdRoute:
-      AppRealmClientsIdAuthorizationScopeScopeIdRoute,
-    AppRealmClientsIdAuthorizationScopeNewRoute:
-      AppRealmClientsIdAuthorizationScopeNewRoute,
-  }
-
-const AppRealmClientsIdAuthorizationScopeRouteWithChildren =
-  AppRealmClientsIdAuthorizationScopeRoute._addFileChildren(
-    AppRealmClientsIdAuthorizationScopeRouteChildren,
-  )
-
-interface AppRealmClientsClientRegistrationSubTabProviderIdRouteChildren {
-  AppRealmClientsClientRegistrationSubTabProviderIdIdRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdIdRoute
-}
-
-const AppRealmClientsClientRegistrationSubTabProviderIdRouteChildren: AppRealmClientsClientRegistrationSubTabProviderIdRouteChildren =
-  {
-    AppRealmClientsClientRegistrationSubTabProviderIdIdRoute:
-      AppRealmClientsClientRegistrationSubTabProviderIdIdRoute,
-  }
-
-const AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren =
-  AppRealmClientsClientRegistrationSubTabProviderIdRoute._addFileChildren(
-    AppRealmClientsClientRegistrationSubTabProviderIdRouteChildren,
-  )
-
-interface AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteChildren {
-  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute
-}
-
-const AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteChildren: AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteChildren =
-  {
-    AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute:
-      AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute,
-  }
-
-const AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren =
-  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute._addFileChildren(
-    AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteChildren,
-  )
-
-interface AppRealmClientsRouteChildren {
   AppRealmClientsAddClientRoute: typeof AppRealmClientsAddClientRoute
   AppRealmClientsImportClientRoute: typeof AppRealmClientsImportClientRoute
-  AppRealmClientsClientIdTabRoute: typeof AppRealmClientsClientIdTabRoute
-  AppRealmClientsClientIdAuthorizationTabRoute: typeof AppRealmClientsClientIdAuthorizationTabRoute
-  AppRealmClientsClientIdClientScopesTabRoute: typeof AppRealmClientsClientIdClientScopesTabRoute
-  AppRealmClientsClientIdClientScopesDedicatedRoute: typeof AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren
-  AppRealmClientsClientIdRolesNewRoute: typeof AppRealmClientsClientIdRolesNewRoute
-  AppRealmClientsIdAuthorizationResourceRoute: typeof AppRealmClientsIdAuthorizationResourceRouteWithChildren
-  AppRealmClientsIdAuthorizationScopeRoute: typeof AppRealmClientsIdAuthorizationScopeRouteWithChildren
-  AppRealmClientsClientRegistrationSubTabProviderIdRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren
-  AppRealmClientsClientIdRolesIdTabRoute: typeof AppRealmClientsClientIdRolesIdTabRoute
-  AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute: typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute
-  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren
-  AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute: typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute
-  AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute: typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute
-  AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute: typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute
-}
-
-const AppRealmClientsRouteChildren: AppRealmClientsRouteChildren = {
-  AppRealmClientsAddClientRoute: AppRealmClientsAddClientRoute,
-  AppRealmClientsImportClientRoute: AppRealmClientsImportClientRoute,
-  AppRealmClientsClientIdTabRoute: AppRealmClientsClientIdTabRoute,
-  AppRealmClientsClientIdAuthorizationTabRoute:
-    AppRealmClientsClientIdAuthorizationTabRoute,
-  AppRealmClientsClientIdClientScopesTabRoute:
-    AppRealmClientsClientIdClientScopesTabRoute,
-  AppRealmClientsClientIdClientScopesDedicatedRoute:
-    AppRealmClientsClientIdClientScopesDedicatedRouteWithChildren,
-  AppRealmClientsClientIdRolesNewRoute: AppRealmClientsClientIdRolesNewRoute,
-  AppRealmClientsIdAuthorizationResourceRoute:
-    AppRealmClientsIdAuthorizationResourceRouteWithChildren,
-  AppRealmClientsIdAuthorizationScopeRoute:
-    AppRealmClientsIdAuthorizationScopeRouteWithChildren,
-  AppRealmClientsClientRegistrationSubTabProviderIdRoute:
-    AppRealmClientsClientRegistrationSubTabProviderIdRouteWithChildren,
-  AppRealmClientsClientIdRolesIdTabRoute:
-    AppRealmClientsClientIdRolesIdTabRoute,
-  AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute:
-    AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute,
-  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRoute:
-    AppRealmClientsIdAuthorizationPermissionNewPermissionTypeRouteWithChildren,
-  AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute:
-    AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute,
-  AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute:
-    AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute,
-  AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute:
-    AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute,
-}
-
-const AppRealmClientsRouteWithChildren = AppRealmClientsRoute._addFileChildren(
-  AppRealmClientsRouteChildren,
-)
-
-interface AppRealmEventsRouteChildren {
   AppRealmEventsTabRoute: typeof AppRealmEventsTabRoute
-}
-
-const AppRealmEventsRouteChildren: AppRealmEventsRouteChildren = {
-  AppRealmEventsTabRoute: AppRealmEventsTabRoute,
-}
-
-const AppRealmEventsRouteWithChildren = AppRealmEventsRoute._addFileChildren(
-  AppRealmEventsRouteChildren,
-)
-
-interface AppRealmIdentityProvidersProviderIdAliasTabRouteChildren {
-  AppRealmIdentityProvidersProviderIdAliasTabCreateRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabCreateRoute
-}
-
-const AppRealmIdentityProvidersProviderIdAliasTabRouteChildren: AppRealmIdentityProvidersProviderIdAliasTabRouteChildren =
-  {
-    AppRealmIdentityProvidersProviderIdAliasTabCreateRoute:
-      AppRealmIdentityProvidersProviderIdAliasTabCreateRoute,
-  }
-
-const AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren =
-  AppRealmIdentityProvidersProviderIdAliasTabRoute._addFileChildren(
-    AppRealmIdentityProvidersProviderIdAliasTabRouteChildren,
-  )
-
-interface AppRealmIdentityProvidersRouteChildren {
+  AppRealmGroupsSplatRoute: typeof AppRealmGroupsSplatRoute
+  AppRealmGroupsIdRoute: typeof AppRealmGroupsIdRoute
+  AppRealmOrganizationsNewRoute: typeof AppRealmOrganizationsNewRoute
+  AppRealmRealmSettingsTabRoute: typeof AppRealmRealmSettingsTabRoute
+  AppRealmRolesNewRoute: typeof AppRealmRolesNewRoute
+  AppRealmUsersTabRoute: typeof AppRealmUsersTabRoute
+  AppRealmUsersAddUserRoute: typeof AppRealmUsersAddUserRoute
+  AppRealmAuthenticationIndexRoute: typeof AppRealmAuthenticationIndexRoute
+  AppRealmClientScopesIndexRoute: typeof AppRealmClientScopesIndexRoute
+  AppRealmClientsIndexRoute: typeof AppRealmClientsIndexRoute
+  AppRealmEventsIndexRoute: typeof AppRealmEventsIndexRoute
+  AppRealmIdentityProvidersIndexRoute: typeof AppRealmIdentityProvidersIndexRoute
+  AppRealmOrganizationsIndexRoute: typeof AppRealmOrganizationsIndexRoute
+  AppRealmPermissionsIndexRoute: typeof AppRealmPermissionsIndexRoute
+  AppRealmRealmSettingsIndexRoute: typeof AppRealmRealmSettingsIndexRoute
+  AppRealmRolesIndexRoute: typeof AppRealmRolesIndexRoute
+  AppRealmUserFederationIndexRoute: typeof AppRealmUserFederationIndexRoute
+  AppRealmUsersIndexRoute: typeof AppRealmUsersIndexRoute
+  AppRealmWorkflowsIndexRoute: typeof AppRealmWorkflowsIndexRoute
+  AppRealmAuthenticationFlowsCreateRoute: typeof AppRealmAuthenticationFlowsCreateRoute
+  AppRealmClientScopesIdTabRoute: typeof AppRealmClientScopesIdTabRoute
+  AppRealmClientsClientIdTabRoute: typeof AppRealmClientsClientIdTabRoute
   AppRealmIdentityProvidersProviderIdAddRoute: typeof AppRealmIdentityProvidersProviderIdAddRoute
   AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute: typeof AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute
   AppRealmIdentityProvidersKeycloakOidcAddRoute: typeof AppRealmIdentityProvidersKeycloakOidcAddRoute
@@ -2391,364 +2232,239 @@ interface AppRealmIdentityProvidersRouteChildren {
   AppRealmIdentityProvidersOidcAddRoute: typeof AppRealmIdentityProvidersOidcAddRoute
   AppRealmIdentityProvidersSamlAddRoute: typeof AppRealmIdentityProvidersSamlAddRoute
   AppRealmIdentityProvidersSpiffeAddRoute: typeof AppRealmIdentityProvidersSpiffeAddRoute
-  AppRealmIdentityProvidersProviderIdAliasTabRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren
-  AppRealmIdentityProvidersProviderIdAliasMappersIdRoute: typeof AppRealmIdentityProvidersProviderIdAliasMappersIdRoute
-}
-
-const AppRealmIdentityProvidersRouteChildren: AppRealmIdentityProvidersRouteChildren =
-  {
-    AppRealmIdentityProvidersProviderIdAddRoute:
-      AppRealmIdentityProvidersProviderIdAddRoute,
-    AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute:
-      AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute,
-    AppRealmIdentityProvidersKeycloakOidcAddRoute:
-      AppRealmIdentityProvidersKeycloakOidcAddRoute,
-    AppRealmIdentityProvidersKubernetesAddRoute:
-      AppRealmIdentityProvidersKubernetesAddRoute,
-    AppRealmIdentityProvidersOauth2AddRoute:
-      AppRealmIdentityProvidersOauth2AddRoute,
-    AppRealmIdentityProvidersOidcAddRoute:
-      AppRealmIdentityProvidersOidcAddRoute,
-    AppRealmIdentityProvidersSamlAddRoute:
-      AppRealmIdentityProvidersSamlAddRoute,
-    AppRealmIdentityProvidersSpiffeAddRoute:
-      AppRealmIdentityProvidersSpiffeAddRoute,
-    AppRealmIdentityProvidersProviderIdAliasTabRoute:
-      AppRealmIdentityProvidersProviderIdAliasTabRouteWithChildren,
-    AppRealmIdentityProvidersProviderIdAliasMappersIdRoute:
-      AppRealmIdentityProvidersProviderIdAliasMappersIdRoute,
-  }
-
-const AppRealmIdentityProvidersRouteWithChildren =
-  AppRealmIdentityProvidersRoute._addFileChildren(
-    AppRealmIdentityProvidersRouteChildren,
-  )
-
-interface AppRealmOrganizationsRouteChildren {
-  AppRealmOrganizationsNewRoute: typeof AppRealmOrganizationsNewRoute
   AppRealmOrganizationsIdTabRoute: typeof AppRealmOrganizationsIdTabRoute
-}
-
-const AppRealmOrganizationsRouteChildren: AppRealmOrganizationsRouteChildren = {
-  AppRealmOrganizationsNewRoute: AppRealmOrganizationsNewRoute,
-  AppRealmOrganizationsIdTabRoute: AppRealmOrganizationsIdTabRoute,
-}
-
-const AppRealmOrganizationsRouteWithChildren =
-  AppRealmOrganizationsRoute._addFileChildren(
-    AppRealmOrganizationsRouteChildren,
-  )
-
-interface AppRealmPermissionsPermissionClientIdPoliciesRouteChildren {
-  AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute
-  AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute
-}
-
-const AppRealmPermissionsPermissionClientIdPoliciesRouteChildren: AppRealmPermissionsPermissionClientIdPoliciesRouteChildren =
-  {
-    AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute:
-      AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute,
-    AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute:
-      AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute,
-  }
-
-const AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren =
-  AppRealmPermissionsPermissionClientIdPoliciesRoute._addFileChildren(
-    AppRealmPermissionsPermissionClientIdPoliciesRouteChildren,
-  )
-
-interface AppRealmPermissionsRouteChildren {
+  AppRealmPageSectionProviderIdIdRoute: typeof AppRealmPageSectionProviderIdIdRoute
+  AppRealmPageSectionProviderIdAddRoute: typeof AppRealmPageSectionProviderIdAddRoute
   AppRealmPermissionsPermissionClientIdTabRoute: typeof AppRealmPermissionsPermissionClientIdTabRoute
-  AppRealmPermissionsPermissionClientIdPoliciesRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren
-  AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute: typeof AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute
-  AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute: typeof AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute
-}
-
-const AppRealmPermissionsRouteChildren: AppRealmPermissionsRouteChildren = {
-  AppRealmPermissionsPermissionClientIdTabRoute:
-    AppRealmPermissionsPermissionClientIdTabRoute,
-  AppRealmPermissionsPermissionClientIdPoliciesRoute:
-    AppRealmPermissionsPermissionClientIdPoliciesRouteWithChildren,
-  AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute:
-    AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute,
-  AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute:
-    AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute,
-}
-
-const AppRealmPermissionsRouteWithChildren =
-  AppRealmPermissionsRoute._addFileChildren(AppRealmPermissionsRouteChildren)
-
-interface AppRealmRealmSettingsClientPoliciesTabRouteChildren {
-  AppRealmRealmSettingsClientPoliciesTabAddProfileRoute: typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRoute
-}
-
-const AppRealmRealmSettingsClientPoliciesTabRouteChildren: AppRealmRealmSettingsClientPoliciesTabRouteChildren =
-  {
-    AppRealmRealmSettingsClientPoliciesTabAddProfileRoute:
-      AppRealmRealmSettingsClientPoliciesTabAddProfileRoute,
-  }
-
-const AppRealmRealmSettingsClientPoliciesTabRouteWithChildren =
-  AppRealmRealmSettingsClientPoliciesTabRoute._addFileChildren(
-    AppRealmRealmSettingsClientPoliciesTabRouteChildren,
-  )
-
-interface AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteChildren {
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute
-}
-
-const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteChildren: AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteChildren =
-  {
-    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute:
-      AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute,
-    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute:
-      AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute,
-  }
-
-const AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren =
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute._addFileChildren(
-    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteChildren,
-  )
-
-interface AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteChildren {
-  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute
-}
-
-const AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteChildren: AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteChildren =
-  {
-    AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute:
-      AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute,
-  }
-
-const AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren =
-  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute._addFileChildren(
-    AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteChildren,
-  )
-
-interface AppRealmRealmSettingsRouteChildren {
-  AppRealmRealmSettingsTabRoute: typeof AppRealmRealmSettingsTabRoute
-  AppRealmRealmSettingsClientPoliciesTabRoute: typeof AppRealmRealmSettingsClientPoliciesTabRouteWithChildren
   AppRealmRealmSettingsKeysTabRoute: typeof AppRealmRealmSettingsKeysTabRoute
   AppRealmRealmSettingsThemesTabRoute: typeof AppRealmRealmSettingsThemesTabRoute
   AppRealmRealmSettingsUserProfileTabRoute: typeof AppRealmRealmSettingsUserProfileTabRoute
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren
+  AppRealmRolesIdTabRoute: typeof AppRealmRolesIdTabRoute
+  AppRealmUserFederationProviderIdIdRoute: typeof AppRealmUserFederationProviderIdIdRoute
+  AppRealmUserFederationProviderIdNewRoute: typeof AppRealmUserFederationProviderIdNewRoute
+  AppRealmUserFederationKerberosIdRoute: typeof AppRealmUserFederationKerberosIdRoute
+  AppRealmUserFederationKerberosNewRoute: typeof AppRealmUserFederationKerberosNewRoute
+  AppRealmUserFederationLdapNewRoute: typeof AppRealmUserFederationLdapNewRoute
+  AppRealmUsersIdTabRoute: typeof AppRealmUsersIdTabRoute
+  AppRealmWorkflowsModeIdRoute: typeof AppRealmWorkflowsModeIdRoute
+  AppRealmPageSectionProviderIdIndexRoute: typeof AppRealmPageSectionProviderIdIndexRoute
+  AppRealmUserFederationKerberosIndexRoute: typeof AppRealmUserFederationKerberosIndexRoute
+  AppRealmUserFederationLdapIndexRoute: typeof AppRealmUserFederationLdapIndexRoute
+  AppRealmAuthenticationIdUsedByBuiltInRoute: typeof AppRealmAuthenticationIdUsedByBuiltInRoute
+  AppRealmClientsClientIdAuthorizationTabRoute: typeof AppRealmClientsClientIdAuthorizationTabRoute
+  AppRealmClientsClientIdClientScopesTabRoute: typeof AppRealmClientsClientIdClientScopesTabRoute
+  AppRealmClientsClientIdRolesNewRoute: typeof AppRealmClientsClientIdRolesNewRoute
   AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute
-  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren
+  AppRealmRealmSettingsClientPoliciesTabAddProfileRoute: typeof AppRealmRealmSettingsClientPoliciesTabAddProfileRoute
   AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute: typeof AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute
   AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute: typeof AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute
   AppRealmRealmSettingsUserProfileAttributesGroupNewRoute: typeof AppRealmRealmSettingsUserProfileAttributesGroupNewRoute
+  AppRealmUserFederationLdapIdTabRoute: typeof AppRealmUserFederationLdapIdTabRoute
+  AppRealmAuthenticationIdUsedByIndexRoute: typeof AppRealmAuthenticationIdUsedByIndexRoute
+  AppRealmPermissionsPermissionClientIdPoliciesIndexRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesIndexRoute
+  AppRealmRealmSettingsClientPoliciesTabIndexRoute: typeof AppRealmRealmSettingsClientPoliciesTabIndexRoute
+  AppRealmUserFederationLdapIdIndexRoute: typeof AppRealmUserFederationLdapIdIndexRoute
+  AppRealmClientScopesIdMappersMapperIdViewModeRoute: typeof AppRealmClientScopesIdMappersMapperIdViewModeRoute
+  AppRealmClientsClientIdClientScopesDedicatedTabRoute: typeof AppRealmClientsClientIdClientScopesDedicatedTabRoute
+  AppRealmClientsClientIdRolesIdTabRoute: typeof AppRealmClientsClientIdRolesIdTabRoute
+  AppRealmClientsIdAuthorizationResourceResourceIdRoute: typeof AppRealmClientsIdAuthorizationResourceResourceIdRoute
+  AppRealmClientsIdAuthorizationResourceNewRoute: typeof AppRealmClientsIdAuthorizationResourceNewRoute
+  AppRealmClientsIdAuthorizationScopeScopeIdRoute: typeof AppRealmClientsIdAuthorizationScopeScopeIdRoute
+  AppRealmClientsIdAuthorizationScopeNewRoute: typeof AppRealmClientsIdAuthorizationScopeNewRoute
+  AppRealmClientsClientRegistrationSubTabProviderIdIdRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdIdRoute
+  AppRealmIdentityProvidersProviderIdAliasTabCreateRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabCreateRoute
+  AppRealmIdentityProvidersProviderIdAliasMappersIdRoute: typeof AppRealmIdentityProvidersProviderIdAliasMappersIdRoute
+  AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute: typeof AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute
+  AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute: typeof AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute
+  AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute
+  AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute: typeof AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute
+  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute
   AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute: typeof AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute
   AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute: typeof AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute
+  AppRealmUserFederationLdapIdMappersMapperIdRoute: typeof AppRealmUserFederationLdapIdMappersMapperIdRoute
+  AppRealmClientsClientIdClientScopesDedicatedIndexRoute: typeof AppRealmClientsClientIdClientScopesDedicatedIndexRoute
+  AppRealmClientsIdAuthorizationResourceIndexRoute: typeof AppRealmClientsIdAuthorizationResourceIndexRoute
+  AppRealmClientsIdAuthorizationScopeIndexRoute: typeof AppRealmClientsIdAuthorizationScopeIndexRoute
+  AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute: typeof AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute
+  AppRealmIdentityProvidersProviderIdAliasTabIndexRoute: typeof AppRealmIdentityProvidersProviderIdAliasTabIndexRoute
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute
+  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute: typeof AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute
+  AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute: typeof AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute
+  AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute: typeof AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute
+  AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute: typeof AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute: typeof AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute
   AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute: typeof AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute
+  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute
+  AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute: typeof AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute
+  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute: typeof AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute
 }
 
-const AppRealmRealmSettingsRouteChildren: AppRealmRealmSettingsRouteChildren = {
+const AppRealmRouteChildren: AppRealmRouteChildren = {
+  AppRealmTabRoute: AppRealmTabRoute,
+  AppRealmSessionsRoute: AppRealmSessionsRoute,
+  AppRealmIndexRoute: AppRealmIndexRoute,
+  AppRealmAuthenticationTabRoute: AppRealmAuthenticationTabRoute,
+  AppRealmClientScopesNewRoute: AppRealmClientScopesNewRoute,
+  AppRealmClientsAddClientRoute: AppRealmClientsAddClientRoute,
+  AppRealmClientsImportClientRoute: AppRealmClientsImportClientRoute,
+  AppRealmEventsTabRoute: AppRealmEventsTabRoute,
+  AppRealmGroupsSplatRoute: AppRealmGroupsSplatRoute,
+  AppRealmGroupsIdRoute: AppRealmGroupsIdRoute,
+  AppRealmOrganizationsNewRoute: AppRealmOrganizationsNewRoute,
   AppRealmRealmSettingsTabRoute: AppRealmRealmSettingsTabRoute,
-  AppRealmRealmSettingsClientPoliciesTabRoute:
-    AppRealmRealmSettingsClientPoliciesTabRouteWithChildren,
+  AppRealmRolesNewRoute: AppRealmRolesNewRoute,
+  AppRealmUsersTabRoute: AppRealmUsersTabRoute,
+  AppRealmUsersAddUserRoute: AppRealmUsersAddUserRoute,
+  AppRealmAuthenticationIndexRoute: AppRealmAuthenticationIndexRoute,
+  AppRealmClientScopesIndexRoute: AppRealmClientScopesIndexRoute,
+  AppRealmClientsIndexRoute: AppRealmClientsIndexRoute,
+  AppRealmEventsIndexRoute: AppRealmEventsIndexRoute,
+  AppRealmIdentityProvidersIndexRoute: AppRealmIdentityProvidersIndexRoute,
+  AppRealmOrganizationsIndexRoute: AppRealmOrganizationsIndexRoute,
+  AppRealmPermissionsIndexRoute: AppRealmPermissionsIndexRoute,
+  AppRealmRealmSettingsIndexRoute: AppRealmRealmSettingsIndexRoute,
+  AppRealmRolesIndexRoute: AppRealmRolesIndexRoute,
+  AppRealmUserFederationIndexRoute: AppRealmUserFederationIndexRoute,
+  AppRealmUsersIndexRoute: AppRealmUsersIndexRoute,
+  AppRealmWorkflowsIndexRoute: AppRealmWorkflowsIndexRoute,
+  AppRealmAuthenticationFlowsCreateRoute:
+    AppRealmAuthenticationFlowsCreateRoute,
+  AppRealmClientScopesIdTabRoute: AppRealmClientScopesIdTabRoute,
+  AppRealmClientsClientIdTabRoute: AppRealmClientsClientIdTabRoute,
+  AppRealmIdentityProvidersProviderIdAddRoute:
+    AppRealmIdentityProvidersProviderIdAddRoute,
+  AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute:
+    AppRealmIdentityProvidersJwtAuthorizationGrantAddRoute,
+  AppRealmIdentityProvidersKeycloakOidcAddRoute:
+    AppRealmIdentityProvidersKeycloakOidcAddRoute,
+  AppRealmIdentityProvidersKubernetesAddRoute:
+    AppRealmIdentityProvidersKubernetesAddRoute,
+  AppRealmIdentityProvidersOauth2AddRoute:
+    AppRealmIdentityProvidersOauth2AddRoute,
+  AppRealmIdentityProvidersOidcAddRoute: AppRealmIdentityProvidersOidcAddRoute,
+  AppRealmIdentityProvidersSamlAddRoute: AppRealmIdentityProvidersSamlAddRoute,
+  AppRealmIdentityProvidersSpiffeAddRoute:
+    AppRealmIdentityProvidersSpiffeAddRoute,
+  AppRealmOrganizationsIdTabRoute: AppRealmOrganizationsIdTabRoute,
+  AppRealmPageSectionProviderIdIdRoute: AppRealmPageSectionProviderIdIdRoute,
+  AppRealmPageSectionProviderIdAddRoute: AppRealmPageSectionProviderIdAddRoute,
+  AppRealmPermissionsPermissionClientIdTabRoute:
+    AppRealmPermissionsPermissionClientIdTabRoute,
   AppRealmRealmSettingsKeysTabRoute: AppRealmRealmSettingsKeysTabRoute,
   AppRealmRealmSettingsThemesTabRoute: AppRealmRealmSettingsThemesTabRoute,
   AppRealmRealmSettingsUserProfileTabRoute:
     AppRealmRealmSettingsUserProfileTabRoute,
-  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRoute:
-    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyRouteWithChildren,
+  AppRealmRolesIdTabRoute: AppRealmRolesIdTabRoute,
+  AppRealmUserFederationProviderIdIdRoute:
+    AppRealmUserFederationProviderIdIdRoute,
+  AppRealmUserFederationProviderIdNewRoute:
+    AppRealmUserFederationProviderIdNewRoute,
+  AppRealmUserFederationKerberosIdRoute: AppRealmUserFederationKerberosIdRoute,
+  AppRealmUserFederationKerberosNewRoute:
+    AppRealmUserFederationKerberosNewRoute,
+  AppRealmUserFederationLdapNewRoute: AppRealmUserFederationLdapNewRoute,
+  AppRealmUsersIdTabRoute: AppRealmUsersIdTabRoute,
+  AppRealmWorkflowsModeIdRoute: AppRealmWorkflowsModeIdRoute,
+  AppRealmPageSectionProviderIdIndexRoute:
+    AppRealmPageSectionProviderIdIndexRoute,
+  AppRealmUserFederationKerberosIndexRoute:
+    AppRealmUserFederationKerberosIndexRoute,
+  AppRealmUserFederationLdapIndexRoute: AppRealmUserFederationLdapIndexRoute,
+  AppRealmAuthenticationIdUsedByBuiltInRoute:
+    AppRealmAuthenticationIdUsedByBuiltInRoute,
+  AppRealmClientsClientIdAuthorizationTabRoute:
+    AppRealmClientsClientIdAuthorizationTabRoute,
+  AppRealmClientsClientIdClientScopesTabRoute:
+    AppRealmClientsClientIdClientScopesTabRoute,
+  AppRealmClientsClientIdRolesNewRoute: AppRealmClientsClientIdRolesNewRoute,
   AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute:
     AppRealmRealmSettingsClientPoliciesProfileNameAddExecutorRoute,
-  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRoute:
-    AppRealmRealmSettingsClientPoliciesProfileNameEditProfileRouteWithChildren,
+  AppRealmRealmSettingsClientPoliciesTabAddProfileRoute:
+    AppRealmRealmSettingsClientPoliciesTabAddProfileRoute,
   AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute:
     AppRealmRealmSettingsClientPoliciesPoliciesAddClientPolicyRoute,
   AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute:
     AppRealmRealmSettingsUserProfileAttributesAddAttributeRoute,
   AppRealmRealmSettingsUserProfileAttributesGroupNewRoute:
     AppRealmRealmSettingsUserProfileAttributesGroupNewRoute,
+  AppRealmUserFederationLdapIdTabRoute: AppRealmUserFederationLdapIdTabRoute,
+  AppRealmAuthenticationIdUsedByIndexRoute:
+    AppRealmAuthenticationIdUsedByIndexRoute,
+  AppRealmPermissionsPermissionClientIdPoliciesIndexRoute:
+    AppRealmPermissionsPermissionClientIdPoliciesIndexRoute,
+  AppRealmRealmSettingsClientPoliciesTabIndexRoute:
+    AppRealmRealmSettingsClientPoliciesTabIndexRoute,
+  AppRealmUserFederationLdapIdIndexRoute:
+    AppRealmUserFederationLdapIdIndexRoute,
+  AppRealmClientScopesIdMappersMapperIdViewModeRoute:
+    AppRealmClientScopesIdMappersMapperIdViewModeRoute,
+  AppRealmClientsClientIdClientScopesDedicatedTabRoute:
+    AppRealmClientsClientIdClientScopesDedicatedTabRoute,
+  AppRealmClientsClientIdRolesIdTabRoute:
+    AppRealmClientsClientIdRolesIdTabRoute,
+  AppRealmClientsIdAuthorizationResourceResourceIdRoute:
+    AppRealmClientsIdAuthorizationResourceResourceIdRoute,
+  AppRealmClientsIdAuthorizationResourceNewRoute:
+    AppRealmClientsIdAuthorizationResourceNewRoute,
+  AppRealmClientsIdAuthorizationScopeScopeIdRoute:
+    AppRealmClientsIdAuthorizationScopeScopeIdRoute,
+  AppRealmClientsIdAuthorizationScopeNewRoute:
+    AppRealmClientsIdAuthorizationScopeNewRoute,
+  AppRealmClientsClientRegistrationSubTabProviderIdIdRoute:
+    AppRealmClientsClientRegistrationSubTabProviderIdIdRoute,
+  AppRealmIdentityProvidersProviderIdAliasTabCreateRoute:
+    AppRealmIdentityProvidersProviderIdAliasTabCreateRoute,
+  AppRealmIdentityProvidersProviderIdAliasMappersIdRoute:
+    AppRealmIdentityProvidersProviderIdAliasMappersIdRoute,
+  AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute:
+    AppRealmPermissionsPermissionClientIdPermissionPermissionIdResourceTypeRoute,
+  AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute:
+    AppRealmPermissionsPermissionClientIdPermissionNewResourceTypeRoute,
+  AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute:
+    AppRealmPermissionsPermissionClientIdPoliciesPolicyIdPolicyTypeRoute,
+  AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute:
+    AppRealmPermissionsPermissionClientIdPoliciesNewPolicyTypeRoute,
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute:
+    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyCreateConditionRoute,
+  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute:
+    AppRealmRealmSettingsClientPoliciesProfileNameEditProfileExecutorNameRoute,
   AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute:
     AppRealmRealmSettingsUserProfileAttributesAttributeNameEditAttributeRoute,
   AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute:
     AppRealmRealmSettingsUserProfileAttributesGroupEditNameRoute,
+  AppRealmUserFederationLdapIdMappersMapperIdRoute:
+    AppRealmUserFederationLdapIdMappersMapperIdRoute,
+  AppRealmClientsClientIdClientScopesDedicatedIndexRoute:
+    AppRealmClientsClientIdClientScopesDedicatedIndexRoute,
+  AppRealmClientsIdAuthorizationResourceIndexRoute:
+    AppRealmClientsIdAuthorizationResourceIndexRoute,
+  AppRealmClientsIdAuthorizationScopeIndexRoute:
+    AppRealmClientsIdAuthorizationScopeIndexRoute,
+  AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute:
+    AppRealmClientsClientRegistrationSubTabProviderIdIndexRoute,
+  AppRealmIdentityProvidersProviderIdAliasTabIndexRoute:
+    AppRealmIdentityProvidersProviderIdAliasTabIndexRoute,
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute:
+    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyIndexRoute,
+  AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute:
+    AppRealmRealmSettingsClientPoliciesProfileNameEditProfileIndexRoute,
+  AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute:
+    AppRealmClientsIdAuthorizationPermissionPermissionTypePermissionIdRoute,
+  AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute:
+    AppRealmClientsIdAuthorizationPolicyPolicyIdPolicyTypeRoute,
+  AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute:
+    AppRealmClientsIdAuthorizationPolicyNewPolicyTypeRoute,
+  AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute:
+    AppRealmRealmSettingsClientPoliciesPolicyNameEditPolicyConditionNameEditConditionRoute,
   AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute:
     AppRealmRealmSettingsKeysProvidersIdProviderTypeSettingsRoute,
-}
-
-const AppRealmRealmSettingsRouteWithChildren =
-  AppRealmRealmSettingsRoute._addFileChildren(
-    AppRealmRealmSettingsRouteChildren,
-  )
-
-interface AppRealmRolesRouteChildren {
-  AppRealmRolesNewRoute: typeof AppRealmRolesNewRoute
-  AppRealmRolesIdTabRoute: typeof AppRealmRolesIdTabRoute
-}
-
-const AppRealmRolesRouteChildren: AppRealmRolesRouteChildren = {
-  AppRealmRolesNewRoute: AppRealmRolesNewRoute,
-  AppRealmRolesIdTabRoute: AppRealmRolesIdTabRoute,
-}
-
-const AppRealmRolesRouteWithChildren = AppRealmRolesRoute._addFileChildren(
-  AppRealmRolesRouteChildren,
-)
-
-interface AppRealmUserFederationKerberosRouteChildren {
-  AppRealmUserFederationKerberosIdRoute: typeof AppRealmUserFederationKerberosIdRoute
-  AppRealmUserFederationKerberosNewRoute: typeof AppRealmUserFederationKerberosNewRoute
-}
-
-const AppRealmUserFederationKerberosRouteChildren: AppRealmUserFederationKerberosRouteChildren =
-  {
-    AppRealmUserFederationKerberosIdRoute:
-      AppRealmUserFederationKerberosIdRoute,
-    AppRealmUserFederationKerberosNewRoute:
-      AppRealmUserFederationKerberosNewRoute,
-  }
-
-const AppRealmUserFederationKerberosRouteWithChildren =
-  AppRealmUserFederationKerberosRoute._addFileChildren(
-    AppRealmUserFederationKerberosRouteChildren,
-  )
-
-interface AppRealmUserFederationLdapIdRouteChildren {
-  AppRealmUserFederationLdapIdTabRoute: typeof AppRealmUserFederationLdapIdTabRoute
-  AppRealmUserFederationLdapIdMappersMapperIdRoute: typeof AppRealmUserFederationLdapIdMappersMapperIdRoute
-}
-
-const AppRealmUserFederationLdapIdRouteChildren: AppRealmUserFederationLdapIdRouteChildren =
-  {
-    AppRealmUserFederationLdapIdTabRoute: AppRealmUserFederationLdapIdTabRoute,
-    AppRealmUserFederationLdapIdMappersMapperIdRoute:
-      AppRealmUserFederationLdapIdMappersMapperIdRoute,
-  }
-
-const AppRealmUserFederationLdapIdRouteWithChildren =
-  AppRealmUserFederationLdapIdRoute._addFileChildren(
-    AppRealmUserFederationLdapIdRouteChildren,
-  )
-
-interface AppRealmUserFederationLdapRouteChildren {
-  AppRealmUserFederationLdapIdRoute: typeof AppRealmUserFederationLdapIdRouteWithChildren
-  AppRealmUserFederationLdapNewRoute: typeof AppRealmUserFederationLdapNewRoute
-}
-
-const AppRealmUserFederationLdapRouteChildren: AppRealmUserFederationLdapRouteChildren =
-  {
-    AppRealmUserFederationLdapIdRoute:
-      AppRealmUserFederationLdapIdRouteWithChildren,
-    AppRealmUserFederationLdapNewRoute: AppRealmUserFederationLdapNewRoute,
-  }
-
-const AppRealmUserFederationLdapRouteWithChildren =
-  AppRealmUserFederationLdapRoute._addFileChildren(
-    AppRealmUserFederationLdapRouteChildren,
-  )
-
-interface AppRealmUserFederationRouteChildren {
-  AppRealmUserFederationKerberosRoute: typeof AppRealmUserFederationKerberosRouteWithChildren
-  AppRealmUserFederationLdapRoute: typeof AppRealmUserFederationLdapRouteWithChildren
-  AppRealmUserFederationProviderIdIdRoute: typeof AppRealmUserFederationProviderIdIdRoute
-  AppRealmUserFederationProviderIdNewRoute: typeof AppRealmUserFederationProviderIdNewRoute
-}
-
-const AppRealmUserFederationRouteChildren: AppRealmUserFederationRouteChildren =
-  {
-    AppRealmUserFederationKerberosRoute:
-      AppRealmUserFederationKerberosRouteWithChildren,
-    AppRealmUserFederationLdapRoute:
-      AppRealmUserFederationLdapRouteWithChildren,
-    AppRealmUserFederationProviderIdIdRoute:
-      AppRealmUserFederationProviderIdIdRoute,
-    AppRealmUserFederationProviderIdNewRoute:
-      AppRealmUserFederationProviderIdNewRoute,
-  }
-
-const AppRealmUserFederationRouteWithChildren =
-  AppRealmUserFederationRoute._addFileChildren(
-    AppRealmUserFederationRouteChildren,
-  )
-
-interface AppRealmUsersRouteChildren {
-  AppRealmUsersTabRoute: typeof AppRealmUsersTabRoute
-  AppRealmUsersAddUserRoute: typeof AppRealmUsersAddUserRoute
-  AppRealmUsersIdTabRoute: typeof AppRealmUsersIdTabRoute
-}
-
-const AppRealmUsersRouteChildren: AppRealmUsersRouteChildren = {
-  AppRealmUsersTabRoute: AppRealmUsersTabRoute,
-  AppRealmUsersAddUserRoute: AppRealmUsersAddUserRoute,
-  AppRealmUsersIdTabRoute: AppRealmUsersIdTabRoute,
-}
-
-const AppRealmUsersRouteWithChildren = AppRealmUsersRoute._addFileChildren(
-  AppRealmUsersRouteChildren,
-)
-
-interface AppRealmWorkflowsRouteChildren {
-  AppRealmWorkflowsModeIdRoute: typeof AppRealmWorkflowsModeIdRoute
-}
-
-const AppRealmWorkflowsRouteChildren: AppRealmWorkflowsRouteChildren = {
-  AppRealmWorkflowsModeIdRoute: AppRealmWorkflowsModeIdRoute,
-}
-
-const AppRealmWorkflowsRouteWithChildren =
-  AppRealmWorkflowsRoute._addFileChildren(AppRealmWorkflowsRouteChildren)
-
-interface AppRealmPageSectionProviderIdRouteChildren {
-  AppRealmPageSectionProviderIdIdRoute: typeof AppRealmPageSectionProviderIdIdRoute
-  AppRealmPageSectionProviderIdAddRoute: typeof AppRealmPageSectionProviderIdAddRoute
-}
-
-const AppRealmPageSectionProviderIdRouteChildren: AppRealmPageSectionProviderIdRouteChildren =
-  {
-    AppRealmPageSectionProviderIdIdRoute: AppRealmPageSectionProviderIdIdRoute,
-    AppRealmPageSectionProviderIdAddRoute:
-      AppRealmPageSectionProviderIdAddRoute,
-  }
-
-const AppRealmPageSectionProviderIdRouteWithChildren =
-  AppRealmPageSectionProviderIdRoute._addFileChildren(
-    AppRealmPageSectionProviderIdRouteChildren,
-  )
-
-interface AppRealmRouteChildren {
-  AppRealmTabRoute: typeof AppRealmTabRoute
-  AppRealmAuthenticationRoute: typeof AppRealmAuthenticationRouteWithChildren
-  AppRealmClientScopesRoute: typeof AppRealmClientScopesRouteWithChildren
-  AppRealmClientsRoute: typeof AppRealmClientsRouteWithChildren
-  AppRealmEventsRoute: typeof AppRealmEventsRouteWithChildren
-  AppRealmIdentityProvidersRoute: typeof AppRealmIdentityProvidersRouteWithChildren
-  AppRealmOrganizationsRoute: typeof AppRealmOrganizationsRouteWithChildren
-  AppRealmPermissionsRoute: typeof AppRealmPermissionsRouteWithChildren
-  AppRealmRealmSettingsRoute: typeof AppRealmRealmSettingsRouteWithChildren
-  AppRealmRolesRoute: typeof AppRealmRolesRouteWithChildren
-  AppRealmSessionsRoute: typeof AppRealmSessionsRoute
-  AppRealmUserFederationRoute: typeof AppRealmUserFederationRouteWithChildren
-  AppRealmUsersRoute: typeof AppRealmUsersRouteWithChildren
-  AppRealmWorkflowsRoute: typeof AppRealmWorkflowsRouteWithChildren
-  AppRealmGroupsSplatRoute: typeof AppRealmGroupsSplatRoute
-  AppRealmGroupsIdRoute: typeof AppRealmGroupsIdRoute
-  AppRealmPageSectionProviderIdRoute: typeof AppRealmPageSectionProviderIdRouteWithChildren
-}
-
-const AppRealmRouteChildren: AppRealmRouteChildren = {
-  AppRealmTabRoute: AppRealmTabRoute,
-  AppRealmAuthenticationRoute: AppRealmAuthenticationRouteWithChildren,
-  AppRealmClientScopesRoute: AppRealmClientScopesRouteWithChildren,
-  AppRealmClientsRoute: AppRealmClientsRouteWithChildren,
-  AppRealmEventsRoute: AppRealmEventsRouteWithChildren,
-  AppRealmIdentityProvidersRoute: AppRealmIdentityProvidersRouteWithChildren,
-  AppRealmOrganizationsRoute: AppRealmOrganizationsRouteWithChildren,
-  AppRealmPermissionsRoute: AppRealmPermissionsRouteWithChildren,
-  AppRealmRealmSettingsRoute: AppRealmRealmSettingsRouteWithChildren,
-  AppRealmRolesRoute: AppRealmRolesRouteWithChildren,
-  AppRealmSessionsRoute: AppRealmSessionsRoute,
-  AppRealmUserFederationRoute: AppRealmUserFederationRouteWithChildren,
-  AppRealmUsersRoute: AppRealmUsersRouteWithChildren,
-  AppRealmWorkflowsRoute: AppRealmWorkflowsRouteWithChildren,
-  AppRealmGroupsSplatRoute: AppRealmGroupsSplatRoute,
-  AppRealmGroupsIdRoute: AppRealmGroupsIdRoute,
-  AppRealmPageSectionProviderIdRoute:
-    AppRealmPageSectionProviderIdRouteWithChildren,
+  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute:
+    AppRealmClientsIdAuthorizationPermissionNewPermissionTypeSelectedIdRoute,
+  AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute:
+    AppRealmClientsIdClientScopesDedicatedMappersMapperIdViewModeRoute,
+  AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute:
+    AppRealmClientsIdAuthorizationPermissionNewPermissionTypeIndexRoute,
 }
 
 const AppRealmRouteWithChildren = AppRealmRoute._addFileChildren(

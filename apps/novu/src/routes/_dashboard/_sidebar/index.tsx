@@ -32,10 +32,10 @@ function CatchAllComponent() {
 		if (
 			typeof routePath === "string" &&
 			routePath.includes("$environmentSlug") &&
-			routePath.startsWith("/env/$environmentSlug/") &&
-			!routePath.includes("/", "/env/$environmentSlug/".length)
+			routePath.startsWith("/$environmentSlug/") &&
+			!routePath.includes("/", "/$environmentSlug/".length)
 		) {
-			const routeName = routePath.replace("/env/$environmentSlug/", "");
+			const routeName = routePath.replace("/$environmentSlug/", "");
 
 			if (path === routeName) {
 				const targetPath = buildRoute(routePath, {

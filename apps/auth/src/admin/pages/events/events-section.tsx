@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { useParams } from "../../shared/lib/useParams";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toRealmSettings } from "../realm-settings/routes/realm-settings";
+import { toRealmSettings } from "../../shared/lib/route-helpers";
 import { AdminEvents } from "./admin-events";
 import { toEvents } from "./routes/events";
 import type { EventsTab } from "./routes/events";
