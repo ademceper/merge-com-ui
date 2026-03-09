@@ -37,9 +37,6 @@
       "project": ["src/**/*.{ts,tsx}"],
       "tsup": false
     },
-    "packages/lint-cfg": {
-      "project": ["*.js"]
-    },
     "packages/ts-cfg": {
       "entry": ["base.json", "nextjs.json", "vite-react.json", "react-lib.json"],
       "ignoreDependencies": ["next"]

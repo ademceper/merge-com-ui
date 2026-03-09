@@ -5,8 +5,7 @@
   "private": false,
   "sideEffects": false,
   "scripts": {
-    "build": "tsup",
-    "lint": "eslint . --max-warnings 0"
+    "build": "tsup"
   },
   "files": [
     "dist",
@@ -43,13 +42,11 @@
     }
   },
   "devDependencies": {
-    "@merge/lint-cfg": "workspace:*",
     "@merge/ts-cfg": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^20.19.9",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
-    "eslint": "^9.32.0",
     "tailwindcss": "^4.1.11",
     "tsup": "^8.5.1",
     "typescript": "^5.9.2"

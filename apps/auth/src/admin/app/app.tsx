@@ -36,7 +36,7 @@ const queryClient = new QueryClient({
         queries: {
             refetchOnWindowFocus: false,
             retry: false,
-            staleTime: 30_000
+            staleTime: 5 * 60_000
         }
     }
 });
@@ -117,7 +117,7 @@ export const App = () => {
                                 <AdminHeader />
                                 <SidebarPage id={mainPageContentId}>
                                     <ErrorBoundaryFallback fallback={ErrorRenderer}>
-                                        <Suspense fallback={<KeycloakSpinner />}>
+                                        <Suspense>
                                             <AuthWall>
                                                 <Outlet />
                                             </AuthWall>

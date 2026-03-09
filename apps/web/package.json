@@ -7,8 +7,6 @@
     "dev": "rm -f .next/dev/lock && next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -24,9 +22,7 @@
     "@types/node": "^20.19.25",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@merge/lint-cfg": "workspace:^",
     "@merge/ts-cfg": "workspace:*",
-    "eslint": "^9.39.1",
     "typescript": "^5.9.3"
   }
 }

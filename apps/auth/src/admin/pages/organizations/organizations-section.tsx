@@ -173,47 +173,47 @@ export function OrganizationSection() {
             </AlertDialog>
 
             <Drawer open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-                <DrawerContent>
-                    <FormProvider {...createForm}>
-                        <DrawerHeader>
-                            <DrawerTitle>{t("createOrganization")}</DrawerTitle>
-                        </DrawerHeader>
-                        <div className="flex-1 overflow-y-auto px-4">
-                            <FormAccess
-                                id="create-org-form"
-                                role="anyone"
-                                onSubmit={createForm.handleSubmit(onCreateSave)}
-                                isHorizontal
-                            >
-                                <OrganizationForm />
-                            </FormAccess>
-                        </div>
-                        <DrawerFooter>
-                            <Button
-                                type="submit"
-                                form="create-org-form"
-                                data-testid="save"
-                                disabled={
-                                    !createForm.formState.isValid ||
-                                    !createForm.formState.isDirty ||
-                                    createForm.formState.isLoading ||
-                                    createForm.formState.isValidating ||
-                                    createForm.formState.isSubmitting
-                                }
-                            >
-                                {t("save")}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => setCreateDialogOpen(false)}
-                            >
-                                {t("cancel")}
-                            </Button>
-                        </DrawerFooter>
-                    </FormProvider>
-                </DrawerContent>
-            </Drawer>
+                    <DrawerContent>
+                        <FormProvider {...createForm}>
+                            <DrawerHeader>
+                                <DrawerTitle>{t("createOrganization")}</DrawerTitle>
+                            </DrawerHeader>
+                            <div className="flex-1 overflow-y-auto px-4">
+                                <FormAccess
+                                    id="create-org-form"
+                                    role="anyone"
+                                    onSubmit={createForm.handleSubmit(onCreateSave)}
+                                    isHorizontal
+                                >
+                                    <OrganizationForm />
+                                </FormAccess>
+                            </div>
+                            <DrawerFooter>
+                                <Button
+                                    type="submit"
+                                    form="create-org-form"
+                                    data-testid="save"
+                                    disabled={
+                                        !createForm.formState.isValid ||
+                                        !createForm.formState.isDirty ||
+                                        createForm.formState.isLoading ||
+                                        createForm.formState.isValidating ||
+                                        createForm.formState.isSubmitting
+                                    }
+                                >
+                                    {t("save")}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setCreateDialogOpen(false)}
+                                >
+                                    {t("cancel")}
+                                </Button>
+                            </DrawerFooter>
+                        </FormProvider>
+                    </DrawerContent>
+                </Drawer>
 
             <div className="flex h-full w-full flex-col">
                 <div className="flex items-center justify-between gap-2 py-2.5">
