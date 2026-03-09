@@ -6,6 +6,14 @@ import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
+    server: {
+        watch: {
+            ignored: [
+                "**/.keycloakify/**",
+                "**/node_modules/.cache/keycloakify/**"
+            ]
+        }
+    },
     optimizeDeps: {
         exclude: ["react-router-dom", "use-react-router-breadcrumbs"],
     },

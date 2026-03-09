@@ -1949,6 +1949,19 @@
       "types": []
     },
     {
+      "alias": "github",
+      "displayName": "",
+      "enabled": true,
+      "internalId": "f87358ab-170c-401c-a315-ed113f19f1f6",
+      "providerId": "github",
+      "config": {
+        "clientId": "adad",
+        "clientSecret": "asdad",
+        "githubJsonFormat": "false"
+      },
+      "types": []
+    },
+    {
       "alias": "google",
       "displayName": "Google",
       "enabled": true,
@@ -1987,14 +2000,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-full-name-mapper",
-            "saml-role-list-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "oidc-address-mapper",
-            "oidc-usermodel-property-mapper"
+            "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper",
+            "oidc-full-name-mapper",
+            "saml-user-property-mapper",
+            "oidc-address-mapper"
           ]
         }
       },
@@ -2026,14 +2039,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-address-mapper",
-            "saml-user-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-full-name-mapper",
             "saml-role-list-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-full-name-mapper"
+            "saml-user-property-mapper",
+            "oidc-address-mapper"
           ]
         }
       },
@@ -2853,6 +2866,110 @@
   "verifiableCredentialsEnabled": false,
   "organizations": [
     {
+      "alias": "1",
+      "description": "",
+      "enabled": true,
+      "id": "aff263b7-1790-4c07-8b81-600bb1058b6d",
+      "name": "1",
+      "attributes": {}
+    },
+    {
+      "alias": "11",
+      "description": "",
+      "enabled": true,
+      "id": "5cab6e17-110a-4d06-9dc6-47c16e9135ae",
+      "name": "11",
+      "attributes": {}
+    },
+    {
+      "alias": "111",
+      "description": "",
+      "enabled": true,
+      "id": "342b0000-1d09-4da5-ad43-5cfa52565fc1",
+      "name": "111",
+      "attributes": {}
+    },
+    {
+      "alias": "1111",
+      "description": "",
+      "enabled": true,
+      "id": "33df749f-c541-46de-8891-16f6854492ca",
+      "name": "1111",
+      "attributes": {}
+    },
+    {
+      "alias": "11111",
+      "description": "",
+      "enabled": true,
+      "id": "5ed721be-a210-41b3-8b0d-5e3b5816c34e",
+      "name": "11111",
+      "attributes": {}
+    },
+    {
+      "alias": "1111111111",
+      "description": "",
+      "enabled": true,
+      "id": "3ac94309-e27f-4809-b88a-be0372d9fcc3",
+      "name": "1111111111",
+      "attributes": {}
+    },
+    {
+      "alias": "1a",
+      "description": "",
+      "enabled": true,
+      "id": "bb048987-77e5-4af9-b76c-231b2352625e",
+      "name": "1a",
+      "attributes": {}
+    },
+    {
+      "alias": "2",
+      "description": "",
+      "enabled": true,
+      "id": "bf5b1712-5684-4b89-8824-666575c6d5be",
+      "name": "2",
+      "attributes": {}
+    },
+    {
+      "alias": "22",
+      "description": "",
+      "enabled": true,
+      "id": "e0bb6d74-952c-483f-a0df-ecae3cefb2ad",
+      "name": "22",
+      "attributes": {}
+    },
+    {
+      "alias": "222",
+      "description": "",
+      "enabled": true,
+      "id": "0a57fed7-f0b0-4d9d-9a24-24e3436fdcd5",
+      "name": "222",
+      "attributes": {}
+    },
+    {
+      "alias": "2222",
+      "description": "",
+      "enabled": true,
+      "id": "93286fa8-412e-4376-9f86-a78d916d3a20",
+      "name": "2222",
+      "attributes": {}
+    },
+    {
+      "alias": "3",
+      "description": "",
+      "enabled": true,
+      "id": "6db7a5e5-0fad-46b1-bc59-0aa400fba7f4",
+      "name": "3",
+      "attributes": {}
+    },
+    {
+      "alias": "33",
+      "description": "",
+      "enabled": true,
+      "id": "d9292a02-d485-48b6-89c4-a49ab541689a",
+      "name": "33",
+      "attributes": {}
+    },
+    {
       "alias": "a",
       "description": "",
       "enabled": true,
@@ -2954,6 +3071,14 @@
       "enabled": true,
       "id": "1ed555a7-afcc-435d-8beb-38d7e555acd3",
       "name": "adadadasdadasd",
+      "attributes": {}
+    },
+    {
+      "alias": "adem111111",
+      "description": "",
+      "enabled": true,
+      "id": "d8897f58-69c5-473d-88a7-09eb073c4f7c",
+      "name": "adem111111",
       "attributes": {}
     },
     {

@@ -64,7 +64,7 @@ export const KeycloakProvider = <T extends BaseEnvironment>({
             keycloak.init({
                 onLoad: "login-required",
                 pkceMethod: "S256",
-
+                enableLogging: false,
                 scope: environment.scope
             });
 

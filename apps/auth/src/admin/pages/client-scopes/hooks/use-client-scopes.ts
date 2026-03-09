@@ -1,10 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { findClientScopes } from "@/admin/api/client-scopes";
 import { clientScopeKeys } from "./keys";
 
-export function useClientScopes() {
-    return useQuery({
+export const clientScopesQueryOptions = () =>
+    queryOptions({
         queryKey: clientScopeKeys.lists(),
         queryFn: () => findClientScopes()
     });
+
+export function useClientScopes() {
+    return useSuspenseQuery(clientScopesQueryOptions());
 }

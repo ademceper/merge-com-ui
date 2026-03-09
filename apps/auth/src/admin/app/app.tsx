@@ -4,7 +4,7 @@ import {
     SidebarPage,
     SidebarProvider
 } from "@merge-rd/ui/components/sidebar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, useMatches } from "@tanstack/react-router";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import {
@@ -31,15 +31,7 @@ import { SubGroups } from "./providers/sub-groups/sub-groups-context";
 import { WhoAmIContextProvider } from "./providers/whoami/who-am-i";
 import { AuthWall } from "./root/auth-wall";
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            refetchOnWindowFocus: false,
-            retry: false,
-            staleTime: 5 * 60_000
-        }
-    }
-});
+import { queryClient } from "./query-client";
 
 /**
  * Provider hierarchy with parallel fetching:
@@ -117,7 +109,7 @@ export const App = () => {
                                 <AdminHeader />
                                 <SidebarPage id={mainPageContentId}>
                                     <ErrorBoundaryFallback fallback={ErrorRenderer}>
-                                        <Suspense>
+                                        <Suspense fallback={<KeycloakSpinner />}>
                                             <AuthWall>
                                                 <Outlet />
                                             </AuthWall>

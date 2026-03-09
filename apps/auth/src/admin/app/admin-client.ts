@@ -25,12 +25,10 @@ export async function initAdminClient(keycloak: Keycloak, environment: Environme
     client.baseUrl = environment.adminBaseUrl;
     client.registerTokenProvider({
         async getAccessToken() {
-            try {
-                await keycloak.updateToken(5);
-            } catch {
-                await keycloak.login();
-            }
-
+            // oidc-spa handles token refresh internally (including redirects on failure).
+            // Do NOT call keycloak.login() as a fallback — it causes a double-redirect
+            // that manifests as a full page refresh.
+            await keycloak.updateToken(5);
             return keycloak.token;
         }
     });

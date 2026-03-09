@@ -1,6 +1,8 @@
 import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { DetailSkeleton } from "../../../../../../shared/ui/skeletons/detail-skeleton";
 
 export const Route = createFileRoute("/_app/$realm/user-federation/ldap/$id/")({
+    pendingComponent: DetailSkeleton,
     component: lazyRouteComponent(
         () =>
             import(
