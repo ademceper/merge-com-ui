@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addMultipleProtocolMappers, delProtocolMapper } from "../../../api/clients";
+import { addMultipleProtocolMappers, delProtocolMapper } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useAddMultipleProtocolMappers() {

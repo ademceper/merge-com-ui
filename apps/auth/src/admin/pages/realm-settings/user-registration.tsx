@@ -7,10 +7,10 @@ import {
     FormPanel,
     getErrorDescription,
     getErrorMessage
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateCompositeRole } from "./hooks/use-create-composite-role";
-import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
+import { RoleMapping } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { DefaultGroupsTab } from "./default-groups-tab";
 
 export const UserRegistration = () => {

@@ -28,15 +28,15 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useSaveClientProfiles } from "./hooks/use-save-client-profiles";
 import {
     toAddClientProfile,
     toClientProfile
-} from "../../shared/lib/routes/realm-settings";
-import { prettyPrintJSON } from "../../shared/lib/util";
-import { CodeEditor } from "../../shared/ui/form/code-editor";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
+import { CodeEditor } from "@/admin/shared/ui/form/code-editor";
 import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ClientProfile = ClientProfileRepresentation & {

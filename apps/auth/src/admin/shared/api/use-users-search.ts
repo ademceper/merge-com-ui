@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchUsers } from "../../api/shared";
+import { searchUsers } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useUsersSearch(search: string) {

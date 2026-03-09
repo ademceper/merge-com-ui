@@ -1,9 +1,9 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@tanstack/react-router";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toCustomUserFederation } from "../../shared/lib/routes/user-federation";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toCustomUserFederation } from "@/admin/shared/lib/routes/user-federation";
 import { useFederationComponent } from "./hooks/use-federation-component";
 
 type FederatedUserLinkProps = {

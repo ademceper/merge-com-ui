@@ -40,27 +40,27 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     ScrollForm
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     type IdentityProviderParams,
     toIdentityProvider,
     toIdentityProviderAddMapper,
     toIdentityProviderEditMapper,
     toIdentityProviders
-} from "../../../shared/lib/routes/identity-providers";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
-import { useParams, useParams as useRouterParams } from "../../../shared/lib/use-params";
-import { toUpperCase } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { PermissionsTab } from "../../../shared/ui/permission-tab/permission-tab";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { AdminEvents } from "../../events/admin-events";
+} from "@/admin/shared/lib/routes/identity-providers";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useParams, useParams as useRouterParams } from "@/admin/shared/lib/use-params";
+import { toUpperCase } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { PermissionsTab } from "@/admin/shared/ui/permission-tab/permission-tab";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { AdminEvents } from "@/admin/pages/events/admin-events";
 import { idpKeys } from "../hooks/keys";
 import { useDeleteIdentityProvider } from "../hooks/use-delete-identity-provider";
 import { useDeleteIdentityProviderMapper } from "../hooks/use-delete-identity-provider-mapper";

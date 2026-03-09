@@ -5,7 +5,7 @@ import {
     createNamedContext,
     useRequiredContext,
     useStoredState
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { fetchAdminUI } from "./auth/admin-ui-endpoint";
 import { useRealm } from "./realm-context/realm-context";
 

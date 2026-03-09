@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateRequiredAction } from "../../../api/authentication";
-import type { DataType } from "../../../api/authentication";
+import { updateRequiredAction } from "@/admin/api/authentication";
+import type { DataType } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useUpdateRequiredAction() {

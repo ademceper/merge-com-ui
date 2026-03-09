@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { sortBy } from "lodash-es";
-import { fetchUserConsents } from "../../../api/users";
+import { fetchUserConsents } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserConsents(id: string) {

@@ -21,22 +21,22 @@ import {
     getErrorMessage,
     SelectField,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreatePolicy } from "../hooks/use-create-policy";
-import { Aggregate } from "../../clients/authorization/policy/aggregate";
-import { Client } from "../../clients/authorization/policy/client";
+import { Aggregate } from "@/admin/pages/clients/authorization/policy/aggregate";
+import { Client } from "@/admin/pages/clients/authorization/policy/client";
 import {
     ClientScope,
     type RequiredIdValue
-} from "../../clients/authorization/policy/client-scope";
-import { Group, type GroupValue } from "../../clients/authorization/policy/group";
-import { JavaScript } from "../../clients/authorization/policy/java-script";
-import { LogicSelector } from "../../clients/authorization/policy/logic-selector";
-import { Regex } from "../../clients/authorization/policy/regex";
-import { Role } from "../../clients/authorization/policy/role";
-import { Time } from "../../clients/authorization/policy/time";
-import { User } from "../../clients/authorization/policy/user";
+} from "@/admin/pages/clients/authorization/policy/client-scope";
+import { Group, type GroupValue } from "@/admin/pages/clients/authorization/policy/group";
+import { JavaScript } from "@/admin/pages/clients/authorization/policy/java-script";
+import { LogicSelector } from "@/admin/pages/clients/authorization/policy/logic-selector";
+import { Regex } from "@/admin/pages/clients/authorization/policy/regex";
+import { Role } from "@/admin/pages/clients/authorization/policy/role";
+import { Time } from "@/admin/pages/clients/authorization/policy/time";
+import { User } from "@/admin/pages/clients/authorization/policy/user";
 
 type Policy = Omit<PolicyRepresentation, "roles"> & {
     groups?: GroupValue[];

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deletePageComponent } from "../../../api/page-components";
+import { deletePageComponent } from "@/admin/api/page-components";
 import { pageKeys } from "./keys";
 
 export function useDeletePageComponent() {

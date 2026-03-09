@@ -14,8 +14,8 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDownloadKey } from "../hooks/use-key-operations";
 import { getFileExtension, KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";

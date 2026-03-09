@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findGroupDetails } from "../../../api/permissions";
+import { findGroupDetails } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function useGroupDetails(ids: string[]) {

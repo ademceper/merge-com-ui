@@ -13,10 +13,10 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useExportRealm } from "./hooks/use-export-realm";
-import { prettyPrintJSON } from "../../shared/lib/util";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
 
 type PartialExportDialogProps = {
     isOpen: boolean;

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findComponent } from "../../../api/realm-settings";
+import { findComponent } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useComponent(id?: string) {

@@ -12,7 +12,7 @@ const RouterLink = Link as ComponentType<LinkProps>;
 
 import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { TextAreaControl, TextControl } from "@/shared/keycloak-ui-shared";
 import { FormAccess } from "../form/form-access";
 import type { AttributeForm } from "../key-value-form/attribute-form";
 

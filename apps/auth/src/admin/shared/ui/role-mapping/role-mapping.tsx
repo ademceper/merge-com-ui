@@ -26,8 +26,8 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { translationFormatter } from "../../lib/translation-formatter";
+} from "@/shared/keycloak-ui-shared";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
 import {
     AddRoleButton,
     AddRoleMappingModal,

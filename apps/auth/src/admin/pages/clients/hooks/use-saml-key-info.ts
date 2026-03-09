@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchSamlKeyInfo } from "../../../api/clients";
+import { fetchSamlKeyInfo } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useSamlKeyInfo(clientId: string) {

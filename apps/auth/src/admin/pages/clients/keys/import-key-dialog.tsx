@@ -8,8 +8,8 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { FileUploadControl, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { FileUploadControl, SelectField } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { StoreSettings } from "./store-settings";
 
 type ImportKeyDialogProps = {

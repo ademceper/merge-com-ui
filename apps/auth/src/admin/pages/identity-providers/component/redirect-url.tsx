@@ -3,9 +3,9 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Copy } from "@phosphor-icons/react";
-import { HelpItem, useEnvironment } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { addTrailingSlash } from "../../../shared/lib/util";
+import { HelpItem, useEnvironment } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { addTrailingSlash } from "@/admin/shared/lib/util";
 
 export const RedirectUrl = ({ id }: { id: string }) => {
     const { environment } = useEnvironment();

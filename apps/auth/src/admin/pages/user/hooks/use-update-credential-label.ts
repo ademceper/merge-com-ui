@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateCredentialLabel } from "../../../api/users";
+import { updateCredentialLabel } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUpdateCredentialLabel(userId: string) {

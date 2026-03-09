@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import type { FormFields } from "../client-details";
 
 export const X509 = () => {

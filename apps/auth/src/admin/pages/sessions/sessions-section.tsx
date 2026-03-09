@@ -16,9 +16,9 @@ import {
 import { DotsThreeVertical, ProhibitInset, SignOut } from "@phosphor-icons/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useLogoutAllSessions } from "./hooks/use-logout-all-sessions";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useSessions as useSessionsQuery } from "./hooks/use-sessions";
 import { RevocationModal } from "./revocation-modal";
 import { SessionsTable } from "./sessions-table";

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { findCurrentUser } from "../../api/shared";
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
+import { findCurrentUser } from "@/admin/api/shared";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
 import { sharedKeys } from "./keys";
 
 export function useCurrentUser() {

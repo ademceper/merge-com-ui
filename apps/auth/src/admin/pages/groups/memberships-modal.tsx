@@ -21,8 +21,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { Question } from "@phosphor-icons/react";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { GroupPath } from "../../shared/ui/group/group-path";
+import { useHelp } from "@/shared/keycloak-ui-shared";
+import { GroupPath } from "@/admin/shared/ui/group/group-path";
 import { useUserMemberships } from "./hooks/use-user-memberships";
 
 type CredentialDataDialogProps = {

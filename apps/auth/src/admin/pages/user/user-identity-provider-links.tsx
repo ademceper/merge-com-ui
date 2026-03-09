@@ -14,13 +14,13 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { toIdentityProvider } from "../../shared/lib/routes/identity-providers";
-import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { toIdentityProvider } from "@/admin/shared/lib/routes/identity-providers";
+import { emptyFormatter, upperCaseFormatter } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useAvailableIdPs as useAvailableIdPsQuery } from "./hooks/use-available-idps";
 import { useFederatedIdentities } from "./hooks/use-federated-identities";
 import { useLinkedIdPs } from "./hooks/use-linked-idps";

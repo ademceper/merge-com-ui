@@ -1,7 +1,7 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Textarea } from "@merge-rd/ui/components/textarea";
-import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
+import { CopyToClipboardButton } from "@/admin/shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
 type GeneratedCodeTabProps = {
     user?: UserRepresentation;

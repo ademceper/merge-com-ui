@@ -4,7 +4,7 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 export const FileComponent = ({

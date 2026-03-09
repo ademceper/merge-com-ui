@@ -14,8 +14,8 @@ import {
     HelpItem,
     NumberControl,
     SelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+} from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { StoreSettings } from "./store-settings";
 
 type GenerateKeyDialogProps = {

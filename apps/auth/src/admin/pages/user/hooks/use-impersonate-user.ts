@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { impersonateUser } from "../../../api/users";
+import { impersonateUser } from "@/admin/api/users";
 
 export function useImpersonateUser() {
     return useMutation({

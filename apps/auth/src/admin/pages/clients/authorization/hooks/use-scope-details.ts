@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAuthorizationScope } from "../../../../api/client-authorization";
+import { getAuthorizationScope } from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useScopeDetails(clientId: string, scopeId?: string) {

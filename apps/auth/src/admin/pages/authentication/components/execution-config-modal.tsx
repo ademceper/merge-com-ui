@@ -21,9 +21,9 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+} from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
 import { useDeleteExecutionConfig } from "../hooks/use-delete-execution-config";
 import { useExecutionConfig } from "../hooks/use-execution-config";
 import { useSaveExecutionConfig } from "../hooks/use-save-execution-config";

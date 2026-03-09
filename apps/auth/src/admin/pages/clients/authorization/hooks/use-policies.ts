@@ -3,7 +3,7 @@ import {
     findPolicies,
     listDependentPolicies,
     listPolicyProviders
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function usePolicies(

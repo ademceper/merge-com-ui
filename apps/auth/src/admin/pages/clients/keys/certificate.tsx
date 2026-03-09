@@ -3,7 +3,7 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useId } from "react";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 
 type CertificateProps = Omit<CertificateDisplayProps, "id"> & {
     plain?: boolean;

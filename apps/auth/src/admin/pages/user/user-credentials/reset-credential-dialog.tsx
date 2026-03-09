@@ -6,10 +6,10 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useExecuteActionsEmail } from "../hooks/use-execute-actions-email";
-import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { ConfirmDialogModal } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { LifespanField } from "./lifespan-field";
 import { RequiredActionMultiSelect } from "./required-action-multi-select";
 

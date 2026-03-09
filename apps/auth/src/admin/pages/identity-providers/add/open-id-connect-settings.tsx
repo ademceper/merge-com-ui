@@ -1,9 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { importFromUrlFormData } from "../../../api/identity-providers";
-import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
+import { FormErrorText, HelpItem } from "@/shared/keycloak-ui-shared";
+import { importFromUrlFormData } from "@/admin/api/identity-providers";
+import { JsonFileUpload } from "@/admin/shared/ui/json-file-upload/json-file-upload";
 import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
 import { DiscoverySettings } from "./discovery-settings";
 

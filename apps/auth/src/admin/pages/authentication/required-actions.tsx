@@ -17,8 +17,8 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { toKey } from "../../shared/lib/util";
+} from "@/shared/keycloak-ui-shared";
+import { toKey } from "@/admin/shared/lib/util";
 import { useRequiredActions as useRequiredActionsQuery } from "./hooks/use-required-actions";
 import { useUpdateRequiredAction } from "./hooks/use-update-required-action";
 import { RequiredActionConfigModal } from "./components/required-action-config-modal";

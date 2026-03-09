@@ -8,17 +8,17 @@ import {
     HelpItem,
     TextControl,
     useEnvironment
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 
 import {
     getAdminClientBaseUrl,
     getAdminClientAccessToken
-} from "../../../api/identity-providers";
-import type { Environment } from "../../../app/environment";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../../shared/lib/get-authorization-headers";
-import { addTrailingSlash } from "../../../shared/lib/util";
-import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
+} from "@/admin/api/identity-providers";
+import type { Environment } from "@/admin/app/environment";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { getAuthorizationHeaders } from "@/admin/shared/lib/get-authorization-headers";
+import { addTrailingSlash } from "@/admin/shared/lib/util";
+import { FileUploadForm } from "@/admin/shared/ui/json-file-upload/file-upload-form";
 import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
 import { DescriptorSettings } from "./descriptor-settings";
 

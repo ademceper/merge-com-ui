@@ -18,15 +18,15 @@ import {
     HelpItem,
     KeycloakSpinner,
     TextControl
-} from "../../../../../shared/keycloak-ui-shared";
-import type { AttributeParams } from "../../../../shared/lib/routes/realm-settings";
-import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
-import { useParams } from "../../../../shared/lib/use-params";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
-import { useClientScopes } from "../../hooks/use-client-scopes";
-import { useUserProfileConfigGlobal } from "../../hooks/use-user-profile-config-global";
-import { USERNAME_EMAIL } from "../../new-attribute-settings";
+} from "@/shared/keycloak-ui-shared";
+import type { AttributeParams } from "@/admin/shared/lib/routes/realm-settings";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { useClientScopes } from "@/admin/pages/realm-settings/hooks/use-client-scopes";
+import { useUserProfileConfigGlobal } from "@/admin/pages/realm-settings/hooks/use-user-profile-config-global";
+import { USERNAME_EMAIL } from "@/admin/pages/realm-settings/new-attribute-settings";
 import { TranslatableField } from "./translatable-field";
 
 const REQUIRED_FOR = [

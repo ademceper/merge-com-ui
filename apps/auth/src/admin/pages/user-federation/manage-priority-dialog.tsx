@@ -11,7 +11,7 @@ import {
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useUpdatePriorities } from "./hooks/use-update-priorities";
 
 type ManagePriorityDialogProps = {

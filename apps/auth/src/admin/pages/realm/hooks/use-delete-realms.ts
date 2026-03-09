@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteRealms } from "../../../api/realm";
+import { deleteRealms } from "@/admin/api/realm";
 import { realmKeys } from "./keys";
 
 export function useDeleteRealms() {

@@ -1,6 +1,6 @@
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addRealmRoleMappings, addClientRoleMappings } from "../../../api/groups";
+import { addRealmRoleMappings, addClientRoleMappings } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 type RowInput = {

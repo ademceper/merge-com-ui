@@ -16,9 +16,9 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
-import { RoleForm } from "../../shared/ui/role-form/role-form";
+} from "@/shared/keycloak-ui-shared";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
+import { RoleForm } from "@/admin/shared/ui/role-form/role-form";
 import { useRealmRole } from "./hooks/use-realm-role";
 import { useUpdateRealmRole } from "./hooks/use-update-realm-role";
 

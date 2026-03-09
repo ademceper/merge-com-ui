@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findPolicyDetailsByType } from "../../../api/permissions";
+import { findPolicyDetailsByType } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function usePolicyDetailsByType(

@@ -1,5 +1,5 @@
-export { type FlowType } from "../../../api/authentication";
-import type { FlowType } from "../../../api/authentication";
+export { type FlowType } from "@/admin/api/authentication";
+import type { FlowType } from "@/admin/api/authentication";
 
 export const authenticationKeys = {
     all: ["authentication"] as const,

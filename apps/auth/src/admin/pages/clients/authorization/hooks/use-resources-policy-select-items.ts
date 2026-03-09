@@ -5,7 +5,7 @@ import {
     getResource,
     listPolicyProviders,
     searchResourcesOrPolicies
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { type Type, authzKeys, typeMapping } from "./keys";
 
 export function useResourcesPolicySelectItems(

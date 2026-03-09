@@ -22,8 +22,8 @@ import { Separator } from "@merge-rd/ui/components/separator";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { type KeyboardEvent, useMemo, useState } from "react";
 import { Table, TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
-import { useToggle } from "../../../../shared/lib/use-toggle";
-import { FixedButtonsGroup } from "../../../../shared/ui/form/fixed-button-group";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
 import { AuthorizationDataModal } from "../authorization-data-modal";
 import { AuthorizationEvaluateResource } from "../authorization-evaluate-resource";
 

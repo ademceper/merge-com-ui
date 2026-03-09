@@ -14,11 +14,11 @@ import {
     NumberControl,
     SelectField,
     SwitchControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useLocaleSort } from "../../../shared/lib/use-locale-sort";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
+} from "@/shared/keycloak-ui-shared";
+import { useLocaleSort } from "@/admin/shared/lib/use-locale-sort";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { TimeSelectorControl } from "@/admin/shared/ui/time-selector/time-selector-control";
 import { useUpdateRealmPolicyWithRefetch } from "../hooks/use-update-realm-policy-with-refetch";
 
 const POLICY_TYPES = ["totp", "hotp"] as const;

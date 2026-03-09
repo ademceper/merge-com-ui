@@ -5,9 +5,9 @@ import {
     createNamedContext,
     KeycloakSpinner,
     useRequiredContext
-} from "../../../../shared/keycloak-ui-shared";
-import { sortProviders } from "../../../shared/lib/util";
-import { useAdminClient } from "../../admin-client";
+} from "@/shared/keycloak-ui-shared";
+import { sortProviders } from "@/admin/shared/lib/util";
+import { useAdminClient } from "@/admin/app/admin-client";
 
 const ServerInfoContext = createNamedContext<ServerInfoRepresentation | undefined>(
     "ServerInfoContext",

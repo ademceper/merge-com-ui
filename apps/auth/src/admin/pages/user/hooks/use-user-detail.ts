@@ -6,7 +6,7 @@ import {
     fetchUserProfile,
     fetchUserUnmanagedAttributes,
     findUser
-} from "../../../api/users";
+} from "@/admin/api/users";
 import type { UIUserRepresentation } from "../form-state";
 import { type UserDetailData, userKeys } from "./keys";
 

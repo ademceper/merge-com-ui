@@ -1,11 +1,11 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toClientScope } from "../../shared/lib/routes/client-scopes";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toClientScope } from "@/admin/shared/lib/routes/client-scopes";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
 import { useCreateClientScope } from "./hooks/use-create-client-scope";
 import { ScopeForm } from "./details/scope-form";
 

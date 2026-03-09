@@ -9,8 +9,8 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
 
 const comparisonValues = ["exact", "minimum", "maximum", "better"];
 

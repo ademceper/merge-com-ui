@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toGroups } from "../../../shared/lib/routes/groups";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toGroups } from "@/admin/shared/lib/routes/groups";
 import { useSubGroups } from "../sub-groups-context";
 
 type TreeViewDataItem = {

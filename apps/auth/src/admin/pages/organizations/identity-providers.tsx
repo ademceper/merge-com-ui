@@ -27,10 +27,10 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
-import { useParams } from "../../shared/lib/use-params";
-import { useToggle } from "../../shared/lib/use-toggle";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import type { EditOrganizationParams } from "@/admin/shared/lib/routes/organizations";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { ManageOrderDialog } from "../identity-providers/manage-order-dialog";
 import { useHasIdentityProviders } from "./hooks/use-has-identity-providers";
 import { useOrganizationIdentityProviders } from "./hooks/use-organization-identity-providers";

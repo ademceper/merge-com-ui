@@ -16,14 +16,14 @@ import {
     HelpItem,
     PasswordControl,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
-import { toUser } from "../../shared/lib/routes/user";
+} from "@/shared/keycloak-ui-shared";
+import { toUser } from "@/admin/shared/lib/routes/user";
 import { useTestSMTP } from "./hooks/use-test-smtp";
-import { useCurrentUser } from "../../shared/lib/use-current-user";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { emailRegexPattern } from "../../shared/lib/util";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import { useCurrentUser } from "@/admin/shared/lib/use-current-user";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { emailRegexPattern } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 type RealmSettingsEmailTabProps = {
     realm: RealmRepresentation;

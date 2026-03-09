@@ -32,18 +32,18 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
 import {
     toAddClientPolicy,
     toClientPolicies,
     toEditClientPolicy
-} from "../../shared/lib/routes/realm-settings";
-import { translationFormatter } from "../../shared/lib/translation-formatter";
-import { prettyPrintJSON } from "../../shared/lib/util";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { CodeEditor } from "../../shared/ui/form/code-editor";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { CodeEditor } from "@/admin/shared/ui/form/code-editor";
 import { useClientPolicies } from "./hooks/use-client-policies";
 
 type ClientPolicy = ClientPolicyRepresentation & {

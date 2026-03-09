@@ -2,11 +2,11 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import type { FormFields } from "../client-details";
 import type { ClientSettingsProps } from "../client-settings";
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchExecutionConfig } from "../../../api/authentication";
+import { fetchExecutionConfig } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useExecutionConfig(execution: {

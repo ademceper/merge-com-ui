@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchStepProviders } from "../../../api/authentication";
-import type { FlowType } from "../../../api/authentication";
+import { fetchStepProviders } from "@/admin/api/authentication";
+import type { FlowType } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useStepProviders(type: FlowType) {

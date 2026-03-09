@@ -17,7 +17,7 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useAddFederatedIdentity } from "./hooks/use-add-federated-identity";
 
 type UserIdpModalProps = {

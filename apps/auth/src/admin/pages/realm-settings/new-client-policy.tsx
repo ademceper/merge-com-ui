@@ -23,10 +23,10 @@ import {
     HelpItem,
     KeycloakSpinner,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     type EditClientPolicyParams,
     toClientPolicies,
@@ -34,10 +34,10 @@ import {
     toEditClientPolicy,
     toEditClientPolicyCondition,
     toNewClientPolicyCondition
-} from "../../shared/lib/routes/realm-settings";
-import { useParams } from "../../shared/lib/use-params";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { AddClientProfileModal } from "./add-client-profile-modal";
 import { useClientPolicies } from "./hooks/use-client-policies";
 import { useClientProfiles } from "./hooks/use-client-profiles";

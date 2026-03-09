@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { revokeUserConsent } from "../../../api/users";
+import { revokeUserConsent } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useRevokeConsent(userId: string) {

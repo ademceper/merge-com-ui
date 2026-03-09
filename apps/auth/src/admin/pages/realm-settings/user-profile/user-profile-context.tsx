@@ -8,9 +8,9 @@ import {
     getErrorDescription,
     getErrorMessage,
     useRequiredContext
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { updateUserProfile } from "../../../api/realm-settings";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { updateUserProfile } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "../hooks/keys";
 import { useUserProfileConfig } from "../hooks/use-user-profile-config";
 

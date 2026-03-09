@@ -8,10 +8,10 @@ import { capitalize } from "lodash-es";
 import { useState } from "react";
 import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
 
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import type { ClientParams } from "../../../shared/lib/routes/clients";
-import { toPermissionDetails, toPolicyDetails } from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { ClientParams } from "@/admin/shared/lib/routes/clients";
+import { toPermissionDetails, toPolicyDetails } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
 
 type Props = {
     idx: number;

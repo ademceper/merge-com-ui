@@ -25,12 +25,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUser } from "../../shared/lib/routes/user";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { emptyFormatter } from "../../shared/lib/util";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUser } from "@/admin/shared/lib/routes/user";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { emptyFormatter } from "@/admin/shared/lib/util";
 import { useAddGroupMembers } from "./hooks/use-add-group-members";
 import { useGroup } from "./hooks/use-group";
 import { useGroupMembers } from "./hooks/use-group-members";

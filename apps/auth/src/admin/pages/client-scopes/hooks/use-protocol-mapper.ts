@@ -10,8 +10,8 @@ import {
     findProtocolMapper,
     updateClientProtocolMapper,
     updateProtocolMapper
-} from "../../../api/client-scopes";
-import { findClientDetail } from "../../../api/realm-roles";
+} from "@/admin/api/client-scopes";
+import { findClientDetail } from "@/admin/api/realm-roles";
 import { clientScopeKeys } from "./keys";
 
 export function useProtocolMapper(

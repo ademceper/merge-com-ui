@@ -1,7 +1,7 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { removeDefaultGroup } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { removeDefaultGroup } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useRemoveDefaultGroup() {

@@ -13,7 +13,7 @@ import {
     addClientRoleMappings,
     findAllClients,
     findSubGroups
-} from "../../../api/groups";
+} from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 type RoleMappingPayload = {

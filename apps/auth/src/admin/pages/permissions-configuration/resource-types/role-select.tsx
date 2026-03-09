@@ -15,13 +15,13 @@ import {
     FormErrorText,
     FormLabel,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import {
     AddRoleButton,
     AddRoleMappingModal,
     type FilterType
-} from "../../../shared/ui/role-mapping/add-role-mapping-modal";
-import { type Row, ServiceRole } from "../../../shared/ui/role-mapping/role-mapping";
+} from "@/admin/shared/ui/role-mapping/add-role-mapping-modal";
+import { type Row, ServiceRole } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { useRoleDetails } from "../hooks/use-role-details";
 
 type RoleSelectorProps = {

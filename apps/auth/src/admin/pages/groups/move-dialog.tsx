@@ -1,8 +1,8 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useMoveGroup } from "./hooks/use-move-group";
 
 type MoveDialogProps = {

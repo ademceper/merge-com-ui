@@ -8,12 +8,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../../shared/lib/use-toggle";
+} from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useGenerateAndDownloadKey, useUploadCertificate } from "../hooks/use-key-operations";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { useClientKeyInfo } from "../hooks/use-client-key-info";
 import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";

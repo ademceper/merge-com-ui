@@ -5,8 +5,8 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
-import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { KEY_PROVIDER_TYPE } from "@/admin/shared/lib/util";
 
 type KeyProvidersPickerProps = {
     onConfirm: (provider: string) => void;

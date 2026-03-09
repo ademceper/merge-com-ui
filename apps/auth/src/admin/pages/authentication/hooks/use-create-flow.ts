@@ -1,6 +1,6 @@
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFlow } from "../../../api/authentication";
+import { createFlow } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useCreateFlow() {

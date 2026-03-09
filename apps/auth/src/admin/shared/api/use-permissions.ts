@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPermissions } from "../../api/shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { fetchPermissions } from "@/admin/api/shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import type { PermissionScreenType } from "./keys";
 import { sharedKeys } from "./keys";
 

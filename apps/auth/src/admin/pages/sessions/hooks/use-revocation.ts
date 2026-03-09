@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { pushRevocation, updateRealmNotBefore } from "../../../api/sessions";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { pushRevocation, updateRealmNotBefore } from "@/admin/api/sessions";
 
 export function useSetNotBeforeToNow() {
     const { realm } = useRealm();

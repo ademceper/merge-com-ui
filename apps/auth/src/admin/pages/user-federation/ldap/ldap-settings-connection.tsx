@@ -21,11 +21,11 @@ import {
     HelpItem,
     PasswordControl,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useTestLdapConnection } from "../hooks/use-test-ldap-connection";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { WizardSectionHeader } from "@/admin/shared/ui/wizard-section-header/wizard-section-header";
 
 type LdapSettingsConnectionProps = {
     form: UseFormReturn;

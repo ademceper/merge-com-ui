@@ -17,16 +17,16 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     useHelp
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { ClientScopeParams } from "../../shared/lib/routes/client-scopes";
-import { toClientScopes, toMapper } from "../../shared/lib/routes/client-scopes";
-import { useParams } from "../../shared/lib/use-params";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { ClientScopeParams } from "@/admin/shared/lib/routes/client-scopes";
+import { toClientScopes, toMapper } from "@/admin/shared/lib/routes/client-scopes";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { RoleMapping, type Row } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { AdminEvents } from "../events/admin-events";
 import { useAddProtocolMappers } from "./hooks/use-add-protocol-mappers";
 import { useAssignScopeRoles } from "./hooks/use-assign-scope-roles";

@@ -24,7 +24,7 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { AddMapperDialog } from "../add/mapper-dialog";
 
 type MapperListProps = {

@@ -1,4 +1,4 @@
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
 
 export const FORMAT_DATE_AND_TIME: Intl.DateTimeFormatOptions = {
     dateStyle: "long",

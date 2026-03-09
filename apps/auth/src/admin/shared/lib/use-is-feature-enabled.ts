@@ -1,5 +1,5 @@
-import { useAccess } from "../../app/providers/access/access";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 
 export enum Feature {
     AdminFineGrainedAuthz = "ADMIN_FINE_GRAINED_AUTHZ",

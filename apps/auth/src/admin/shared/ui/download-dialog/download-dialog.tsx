@@ -10,10 +10,10 @@ import {
 import { Textarea } from "@merge-rd/ui/components/textarea";
 import { saveAs } from "file-saver";
 import { useMemo, useState } from "react";
-import { HelpItem, useHelp } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useInstallationSnippet } from "../../api/use-installation-snippet";
+import { HelpItem, useHelp } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useInstallationSnippet } from "@/admin/shared/api/use-installation-snippet";
 import { ConfirmDialogModal } from "../confirm-dialog/confirm-dialog";
 
 type DownloadDialogProps = {

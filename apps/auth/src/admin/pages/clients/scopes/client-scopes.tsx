@@ -20,17 +20,17 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useClientAssignedScopes } from "../hooks/use-client-assigned-scopes";
 
 const RouterLink = Link as ComponentType<LinkProps>;
 
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toDedicatedScope } from "../../../shared/lib/routes/clients";
-import { translationFormatter } from "../../../shared/lib/translation-formatter";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
-import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toDedicatedScope } from "@/admin/shared/lib/routes/clients";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 import {
     AllClientScopes,
     type AllClientScopeType,
@@ -39,9 +39,9 @@ import {
     ClientScope,
     changeClientScope,
     removeClientScope
-} from "../../../shared/ui/client-scope/client-scope-types";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { ChangeTypeDropdown } from "../../client-scopes/change-type-dropdown";
+} from "@/admin/shared/ui/client-scope/client-scope-types";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { ChangeTypeDropdown } from "@/admin/pages/client-scopes/change-type-dropdown";
 import { PROTOCOL_OID4VC, PROTOCOL_OIDC } from "../constants";
 import { AddScopeDialog } from "./add-scope-dialog";
 

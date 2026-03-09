@@ -7,13 +7,13 @@ import {
     MultiSelectField,
     SelectField,
     SwitchControl
-} from "../../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { localeToDisplayName } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { FormPanel } from "@/shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { localeToDisplayName } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { EffectiveMessageBundles } from "./effective-message-bundles";
 import { RealmOverrides } from "./realm-overrides";
 

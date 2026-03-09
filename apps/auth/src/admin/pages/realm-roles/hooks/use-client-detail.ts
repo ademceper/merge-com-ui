@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findClientDetail } from "../../../api/realm-roles";
+import { findClientDetail } from "@/admin/api/realm-roles";
 import { roleKeys } from "./keys";
 
 export function useClientDetail(clientId?: string) {

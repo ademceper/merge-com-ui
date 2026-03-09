@@ -1,5 +1,5 @@
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
-import { convertAttributeNameToForm } from "../../lib/util";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
 import {
     COMPONENTS,
     type ComponentLayoutOptions,

@@ -1,6 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addUserToGroup } from "../../../api/users";
+import { addUserToGroup } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useAddUserToGroups(userId: string) {

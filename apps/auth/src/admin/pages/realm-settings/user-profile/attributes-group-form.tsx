@@ -11,16 +11,16 @@ import {
     getErrorMessage,
     HelpItem,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type EditAttributesGroupParams,
     toUserProfile
-} from "../../../shared/lib/routes/realm-settings";
-import { useParams } from "../../../shared/lib/use-params";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
-import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { KeyValueInput } from "@/admin/shared/ui/key-value-form/key-value-input";
 import {
     saveTranslations,
     TranslatableField,

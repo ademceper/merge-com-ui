@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteInvitation } from "../../../api/organizations";
+import { deleteInvitation } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useDeleteInvitations(orgId: string) {

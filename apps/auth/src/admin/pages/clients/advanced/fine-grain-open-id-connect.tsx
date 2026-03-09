@@ -4,11 +4,11 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertAttributeNameToForm, sortProviders } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import { HelpItem, SelectField } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { convertAttributeNameToForm, sortProviders } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
 import type { FormFields } from "../client-details";
 import { ApplicationUrls } from "./application-urls";
 

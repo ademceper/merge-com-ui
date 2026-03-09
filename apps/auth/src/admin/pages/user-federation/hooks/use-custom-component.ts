@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findCustomComponent } from "../../../api/user-federation";
+import { findCustomComponent } from "@/admin/api/user-federation";
 import { federationKeys } from "./keys";
 
 export function useCustomComponent(id: string | undefined) {

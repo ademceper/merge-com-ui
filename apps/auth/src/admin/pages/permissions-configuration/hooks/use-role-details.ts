@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findRoleDetails } from "../../../api/permissions";
+import { findRoleDetails } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function useRoleDetails(ids: string[]) {

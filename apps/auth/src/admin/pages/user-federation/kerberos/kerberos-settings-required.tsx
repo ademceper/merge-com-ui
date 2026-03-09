@@ -8,10 +8,10 @@ import {
     HelpItem,
     SelectField,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { WizardSectionHeader } from "@/admin/shared/ui/wizard-section-header/wizard-section-header";
 
 type KerberosSettingsRequiredProps = {
     form: UseFormReturn;

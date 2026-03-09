@@ -16,19 +16,19 @@ import {
     SelectField,
     TextControl,
     useEnvironment
-} from "../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+} from "@/shared/keycloak-ui-shared";
+import { FormPanel } from "@/shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import {
     addTrailingSlash,
     convertAttributeNameToForm,
     convertToFormValues
-} from "../../shared/lib/util";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { KeyValueInput } from "../../shared/ui/key-value-form/key-value-input";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+} from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { KeyValueInput } from "@/admin/shared/ui/key-value-form/key-value-input";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { SIGNATURE_ALGORITHMS } from "../clients/add/saml-signature";
 import { useUserProfileConfig } from "./hooks/use-user-profile-config";
 import type { UIRealmRepresentation } from "./realm-settings-tabs";

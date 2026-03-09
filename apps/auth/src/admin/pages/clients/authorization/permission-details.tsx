@@ -24,18 +24,18 @@ import {
     SelectVariant,
     TextAreaControl,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useUpdatePermission, useCreatePermission, useDeletePermissionMutation } from "./hooks/use-authorization-mutations";
-import type { NewPermissionParams } from "../../../shared/lib/routes/clients";
+import type { NewPermissionParams } from "@/admin/shared/lib/routes/clients";
 import {
     type PermissionDetailsParams,
     toAuthorizationTab,
     toPermissionDetails
-} from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { usePermissionDetails as usePermissionDetailsQuery } from "./hooks/use-permission-details";
 import { ResourcesPolicySelect } from "./resources-policy-select";
 import { ScopeSelect } from "./scope-select";

@@ -32,29 +32,29 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { ClientParams } from "../../shared/lib/routes/clients";
-import { toClientRole, toClients, toCreateRole } from "../../shared/lib/routes/clients";
-import { useIsAdminPermissionsClient } from "../../shared/lib/use-is-admin-permissions-client";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useParams } from "../../shared/lib/use-params";
-import { useToggle } from "../../shared/lib/use-toggle";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { ClientParams } from "@/admin/shared/lib/routes/clients";
+import { toClientRole, toClients, toCreateRole } from "@/admin/shared/lib/routes/clients";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
     convertToFormValues,
     exportClient
-} from "../../shared/lib/util";
+} from "@/admin/shared/lib/util";
 import {
     ConfirmDialogModal,
     useConfirmDialog
-} from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { DownloadDialog } from "../../shared/ui/download-dialog/download-dialog";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
-import { RolesList } from "../../shared/ui/roles-list/roles-list";
+} from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DownloadDialog } from "@/admin/shared/ui/download-dialog/download-dialog";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { PermissionsTab } from "@/admin/shared/ui/permission-tab/permission-tab";
+import { RolesList } from "@/admin/shared/ui/roles-list/roles-list";
 import { AdminEvents } from "../events/admin-events";
 import { UserEvents } from "../events/user-events";
 import { AdvancedTab } from "./advanced-tab";

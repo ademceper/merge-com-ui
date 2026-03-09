@@ -12,13 +12,13 @@ import {
     getErrorMessage,
     HelpItem,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useImportResource, useUpdateResourceServer } from "./hooks/use-authorization-mutations";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { useResourceServer } from "./hooks/use-resource-server";
 import { DecisionStrategySelect } from "./decision-strategy-select";
 import { ImportDialog } from "./import-dialog";

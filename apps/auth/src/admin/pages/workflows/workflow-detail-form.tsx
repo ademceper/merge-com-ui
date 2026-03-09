@@ -11,18 +11,18 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateWorkflow } from "./hooks/use-create-workflow";
 import { useUpdateWorkflow } from "./hooks/use-update-workflow";
 import {
     toWorkflowDetail,
     toWorkflows,
     type WorkflowDetailParams
-} from "../../shared/lib/routes/workflows";
-import { useParams } from "../../shared/lib/use-params";
-import { CodeEditor } from "../../shared/ui/form/code-editor";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/workflows";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { CodeEditor } from "@/admin/shared/ui/form/code-editor";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useWorkflow } from "./hooks/use-workflow";
 
 type AttributeForm = {

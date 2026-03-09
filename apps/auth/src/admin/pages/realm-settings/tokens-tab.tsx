@@ -2,8 +2,8 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { useTranslation } from "@merge-rd/i18n";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import { ScrollForm } from "../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+import { ScrollForm } from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import { TokensTabAccessSection } from "./tokens-tab-access-section";
 import { TokensTabActionSection } from "./tokens-tab-action-section";
 import { TokensTabGeneralSection } from "./tokens-tab-general-section";

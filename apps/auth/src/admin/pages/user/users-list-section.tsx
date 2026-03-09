@@ -21,11 +21,11 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUser } from "../../shared/lib/routes/user";
-import { emptyFormatter } from "../../shared/lib/util";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUser } from "@/admin/shared/lib/routes/user";
+import { emptyFormatter } from "@/admin/shared/lib/util";
 import { AddUserDialog } from "./add-user-dialog";
 import { userKeys } from "./hooks/keys";
 import { useDeleteUser } from "./hooks/use-delete-user";

@@ -9,7 +9,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import {
     formInputWrapperClassName,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 
 function stringToMultiline(value?: string): string[] {
     return typeof value === "string" ? value.split("##") : [value || ""];

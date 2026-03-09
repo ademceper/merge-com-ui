@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { togglePermissionEnabled } from "../../api/shared";
+import { togglePermissionEnabled } from "@/admin/api/shared";
 import type { PermissionScreenType } from "./keys";
 import { sharedKeys } from "./keys";
 

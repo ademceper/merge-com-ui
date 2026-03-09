@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchClientKeyInfo } from "../../../api/clients";
+import { fetchClientKeyInfo } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useClientKeyInfo(clientId: string, attr: string) {

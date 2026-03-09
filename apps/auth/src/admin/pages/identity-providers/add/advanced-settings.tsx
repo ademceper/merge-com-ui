@@ -16,8 +16,8 @@ import {
     FormErrorText,
     HelpItem,
     SelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+} from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import { useAuthenticationFlows } from "../hooks/use-authentication-flows";
 import type { FieldProps } from "../component/form-group-field";
 import { FormGroupField } from "../component/form-group-field";

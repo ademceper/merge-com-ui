@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteClientScope as apiDeleteClientScope } from "../../../api/client-scopes";
-import { removeScope } from "../../../shared/ui/client-scope/client-scope-types";
-import type { ClientScopeDefaultOptionalType } from "../../../shared/ui/client-scope/client-scope-types";
+import { deleteClientScope as apiDeleteClientScope } from "@/admin/api/client-scopes";
+import { removeScope } from "@/admin/shared/ui/client-scope/client-scope-types";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
 import { clientScopeKeys } from "./keys";
 
 export function useDeleteClientScope() {

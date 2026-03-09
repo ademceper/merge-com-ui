@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findIdentityProviderMappers } from "../../../api/identity-providers";
+import { findIdentityProviderMappers } from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useIdentityProviderMappers(alias: string) {

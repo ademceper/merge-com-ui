@@ -29,10 +29,10 @@ import { Separator } from "@merge-rd/ui/components/separator";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { usePartialImport } from "./hooks/use-partial-import";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { JsonFileUpload } from "../../shared/ui/json-file-upload/json-file-upload";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { JsonFileUpload } from "@/admin/shared/ui/json-file-upload/json-file-upload";
 
 type PartialImportProps = {
     open: boolean;

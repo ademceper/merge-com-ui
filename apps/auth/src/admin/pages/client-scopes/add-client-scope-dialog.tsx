@@ -11,9 +11,9 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
 import { useCreateClientScope } from "./hooks/use-create-client-scope";
 import { ScopeForm } from "./details/scope-form";
 

@@ -5,7 +5,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 import { GroupPickerDialog } from "../group/group-picker-dialog";
 import type { ComponentProps } from "./components";
 

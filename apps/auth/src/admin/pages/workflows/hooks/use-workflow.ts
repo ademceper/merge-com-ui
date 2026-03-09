@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchWorkflow } from "../../../api/workflows";
+import { fetchWorkflow } from "@/admin/api/workflows";
 import { workflowKeys } from "./keys";
 
 export function useWorkflow(id: string, enabled = true) {

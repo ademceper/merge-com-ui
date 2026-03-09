@@ -8,8 +8,8 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, type SubmitHandler, type UseFormReturn } from "react-hook-form";
-import { TextControl } from "../../../shared/keycloak-ui-shared";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
 
 type AddTranslationModalProps = {
     id?: string;

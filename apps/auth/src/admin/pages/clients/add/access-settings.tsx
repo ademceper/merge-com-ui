@@ -1,8 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext } from "react-hook-form";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
 import type { ClientSettingsProps } from "../client-settings";
 import { LoginSettings } from "./login-settings";

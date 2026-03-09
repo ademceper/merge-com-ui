@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchIdentityProviders } from "../../api/shared";
+import { searchIdentityProviders } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useIdentityProviders(

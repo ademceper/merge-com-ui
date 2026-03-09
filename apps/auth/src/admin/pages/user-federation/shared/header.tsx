@@ -25,13 +25,13 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeleteComponent } from "../hooks/use-delete-component";
-import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
-import { toUserFederation } from "../../../shared/lib/routes/user-federation";
-import { useParams } from "../../../shared/lib/use-params";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import type { CustomUserFederationRouteParams } from "@/admin/shared/lib/routes/user-federation";
+import { toUserFederation } from "@/admin/shared/lib/routes/user-federation";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 
 type HeaderProps = {
     provider: string;

@@ -2,8 +2,8 @@ import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useUserProfile } from "../../api/use-user-profile";
+import { FormErrorText, HelpItem } from "@/shared/keycloak-ui-shared";
+import { useUserProfile } from "@/admin/shared/api/use-user-profile";
 import { KeySelect } from "../key-select";
 import type { ComponentProps } from "./components";
 

@@ -2,7 +2,7 @@ import { useTranslation } from "@merge-rd/i18n";
 import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
 import { useLocation } from "@tanstack/react-router";
 import { useCallback, useMemo, useRef } from "react";
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import { useEnvironment } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import {
     avatarInitials,

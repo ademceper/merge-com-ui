@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { fetchAuthenticationFlows } from "../../../api/authentication";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { fetchAuthenticationFlows } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useAuthenticationFlows(enabled = true) {

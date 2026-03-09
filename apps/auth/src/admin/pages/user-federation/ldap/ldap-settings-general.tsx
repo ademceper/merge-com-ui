@@ -9,10 +9,10 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, type UseFormReturn } from "react-hook-form";
-import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+import { FormLabel, HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { WizardSectionHeader } from "@/admin/shared/ui/wizard-section-header/wizard-section-header";
 
 type LdapSettingsGeneralProps = {
     form: UseFormReturn<ComponentRepresentation>;

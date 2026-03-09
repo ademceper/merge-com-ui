@@ -16,11 +16,11 @@ import {
     FormPanel,
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useUpdateRealmPolicy } from "../hooks/use-update-realm-policy";
 import { PolicyRow } from "./policy-row";
 import { parsePolicy, type SubmittedValues, serializePolicy } from "./util";

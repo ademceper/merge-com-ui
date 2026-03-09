@@ -16,9 +16,9 @@ import {
     FormErrorText,
     FormLabel,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import type { ComponentProps } from "../../../shared/ui/dynamic/components";
-import { GroupPickerDialog } from "../../../shared/ui/group/group-picker-dialog";
+} from "@/shared/keycloak-ui-shared";
+import type { ComponentProps } from "@/admin/shared/ui/dynamic/components";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useGroupDetails } from "../hooks/use-group-details";
 
 type GroupSelectProps = Omit<ComponentProps, "convertToName"> & {

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { createWorkflow } from "../../../api/workflows";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { createWorkflow } from "@/admin/api/workflows";
 import { workflowKeys } from "./keys";
 
 export function useCreateWorkflow() {

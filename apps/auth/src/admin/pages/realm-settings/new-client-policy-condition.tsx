@@ -20,17 +20,17 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useUpdateClientPolicy } from "./hooks/use-update-client-policy";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     type EditClientPolicyConditionParams,
     toEditClientPolicy
-} from "../../shared/lib/routes/realm-settings";
-import { useParams } from "../../shared/lib/use-params";
-import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useClientPolicies } from "./hooks/use-client-policies";
 
 export type ItemType = { value: string };

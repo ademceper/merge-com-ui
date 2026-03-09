@@ -14,7 +14,7 @@ import {
 } from "react";
 import { Controller } from "react-hook-form";
 
-import { useAccess } from "../../../app/providers/access/access";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { FixedButtonsGroup } from "./fixed-button-group";
 
 type FormAccessProps = FormProps & {

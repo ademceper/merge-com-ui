@@ -1,6 +1,6 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { findClientsByValues } from "../../api/shared";
+import { findClientsByValues } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useClientsByValues(

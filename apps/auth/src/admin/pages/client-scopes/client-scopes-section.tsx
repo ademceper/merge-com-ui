@@ -18,15 +18,15 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useLocaleSort, mapByKey } from "../../shared/lib/use-locale-sort";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 import { useDeleteClientScope } from "./hooks/use-delete-client-scope";
 import {
     type AllClientScopeType,
     CellDropdown,
     type ClientScopeDefaultOptionalType,
     changeScope
-} from "../../shared/ui/client-scope/client-scope-types";
+} from "@/admin/shared/ui/client-scope/client-scope-types";
 import type { Row } from "../clients/scopes/client-scopes";
 import { getProtocolName } from "../clients/utils";
 import { AddClientScopeDialog } from "./add-client-scope-dialog";

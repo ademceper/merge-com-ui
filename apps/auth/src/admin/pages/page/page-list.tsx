@@ -18,17 +18,17 @@ import {
     DataTableRowActions,
     type Row
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeletePageComponent } from "./hooks/use-delete-page-component";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     addDetailPage,
     type PageListParams,
     toDetailPage
-} from "../../shared/lib/routes/page";
-import { useParams } from "../../shared/lib/use-params";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/page";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { usePageComponents } from "./hooks/use-page-components";
 import { PAGE_PROVIDER } from "./constants";
 

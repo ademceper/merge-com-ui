@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findClientById, findRoleById } from "../../../../api/client-authorization";
+import { findClientById, findRoleById } from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useRolesById(ids: string[]) {

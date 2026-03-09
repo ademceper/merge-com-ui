@@ -3,13 +3,13 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     toEditOrganization,
     toOrganizations
-} from "../../shared/lib/routes/organizations";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/organizations";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useCreateOrganization } from "./hooks/use-create-organization";
 import {
     convertToOrg,

@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { PasswordControl, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { PasswordControl, TextControl } from "@/shared/keycloak-ui-shared";
 
 export const StoreSettings = ({
     hidePassword = false,

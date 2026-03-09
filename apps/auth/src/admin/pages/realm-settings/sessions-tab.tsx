@@ -3,11 +3,11 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { FormPanel, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { FormGroup } from "../../shared/ui/form/form-group";
-import { TimeSelector } from "../../shared/ui/time-selector/time-selector";
+import { FormPanel, HelpItem } from "@/shared/keycloak-ui-shared";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { FormGroup } from "@/admin/shared/ui/form/form-group";
+import { TimeSelector } from "@/admin/shared/ui/time-selector/time-selector";
 
 type RealmSettingsSessionsTabProps = {
     realm: RealmRepresentation;

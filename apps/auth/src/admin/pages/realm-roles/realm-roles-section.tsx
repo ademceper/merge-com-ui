@@ -24,14 +24,14 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useDeleteRealmRole } from "./hooks/use-delete-realm-role";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toRealmSettings } from "../../shared/lib/route-helpers";
-import { toRealmRole } from "../../shared/lib/routes/realm-roles";
-import { translationFormatter } from "../../shared/lib/translation-formatter";
-import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toRealmSettings } from "@/admin/shared/lib/route-helpers";
+import { toRealmRole } from "@/admin/shared/lib/routes/realm-roles";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { emptyFormatter, upperCaseFormatter } from "@/admin/shared/lib/util";
 import { AddRealmRoleDialog } from "./add-realm-role-dialog";
 import { useRealmRoles } from "./hooks/use-realm-roles";
 import { EditRealmRoleDialog } from "./edit-realm-role-dialog";

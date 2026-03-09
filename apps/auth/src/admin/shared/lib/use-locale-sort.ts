@@ -1,4 +1,4 @@
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
 
 type ValueMapperFn<T> = (item: T) => string | undefined;
 

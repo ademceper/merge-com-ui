@@ -3,8 +3,8 @@ import { Badge } from "@merge-rd/ui/components/badge";
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../lib/use-toggle";
+import { FormErrorText, HelpItem } from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import {
     AddRoleButton,
     AddRoleMappingModal,

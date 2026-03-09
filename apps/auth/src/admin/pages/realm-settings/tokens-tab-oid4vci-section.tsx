@@ -5,13 +5,13 @@ import { Textarea } from "@merge-rd/ui/components/textarea";
 import { memo } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { HelpItem, NumberControl, SelectField } from "../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { convertAttributeNameToForm } from "../../shared/lib/util";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
-import { TimeSelectorControl } from "../../shared/ui/time-selector/time-selector-control";
+import { HelpItem, NumberControl, SelectField } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { TimeSelectorControl } from "@/admin/shared/ui/time-selector/time-selector-control";
 
 type TokensTabOid4vciSectionProps = {
     realm: RealmRepresentation;

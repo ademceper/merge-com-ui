@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { listResources } from "../../../../api/client-authorization";
+import { listResources } from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useResources(

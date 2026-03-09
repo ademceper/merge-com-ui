@@ -34,16 +34,16 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeletePermissionMutation } from "./hooks/use-authorization-mutations";
 import {
     toNewPermission,
     toPermissionDetails,
     toPolicyDetails
-} from "../../../shared/lib/routes/clients";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/clients";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { usePermissionProviders } from "./hooks/use-permission-providers";
 import { usePermissions } from "./hooks/use-permissions";
 import { DetailDescriptionLink } from "./detail-description";

@@ -8,10 +8,10 @@ import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { useUsersByIds } from "../../api/use-users-by-ids";
-import { useUsersSearch } from "../../api/use-users-search";
-import { useToggle } from "../../lib/use-toggle";
+import { FormLabel } from "@/shared/keycloak-ui-shared";
+import { useUsersByIds } from "@/admin/shared/api/use-users-by-ids";
+import { useUsersSearch } from "@/admin/shared/api/use-users-search";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import type { ComponentProps } from "../dynamic/components";
 
 type UserSelectVariant = "typeaheadMulti" | "typeahead";

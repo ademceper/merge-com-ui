@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useAuthFlows } from "../hooks/use-auth-flows";
 
 type AuthenticationOverridesProps = {

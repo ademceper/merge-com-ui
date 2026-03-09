@@ -1,10 +1,10 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { beerify, debeerify } from "../../shared/lib/util";
+import { beerify, debeerify } from "@/admin/shared/lib/util";
 import {
     arrayToKeyValue,
     type KeyValueType,
     keyValueToArray
-} from "../../shared/ui/key-value-form/key-value-convert";
+} from "@/admin/shared/ui/key-value-form/key-value-convert";
 
 export type UserFormFields = Omit<
     UIUserRepresentation,

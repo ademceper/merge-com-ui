@@ -22,7 +22,7 @@ import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 import { type KeyboardEvent, useEffect, useState } from "react";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { useGroupPicker } from "../../api/use-group-picker";
+import { useGroupPicker } from "@/admin/shared/api/use-group-picker";
 import { GroupPath } from "./group-path";
 
 type GroupPickerDialogProps = {

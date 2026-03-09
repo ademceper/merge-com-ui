@@ -3,10 +3,10 @@ import { useTranslation } from "@merge-rd/i18n";
 import { useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useClientsByValues } from "../../api/use-clients-by-values";
-import { useClientsSearch } from "../../api/use-clients-search";
-import type { PermissionsConfigurationTabsParams } from "../../lib/route-helpers";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { useClientsByValues } from "@/admin/shared/api/use-clients-by-values";
+import { useClientsSearch } from "@/admin/shared/api/use-clients-search";
+import type { PermissionsConfigurationTabsParams } from "@/admin/shared/lib/route-helpers";
 import type { ComponentProps } from "../dynamic/components";
 
 type ClientSelectProps = Omit<ComponentProps, "convertToName"> & {

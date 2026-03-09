@@ -1,8 +1,8 @@
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useEffect, useState } from "react";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toPermissionDetails, toScopeDetails } from "../../../shared/lib/routes/clients";
+import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toPermissionDetails, toScopeDetails } from "@/admin/shared/lib/routes/clients";
 import { useDetailCell } from "./hooks/use-detail-cell";
 import { DetailDescription, DetailDescriptionLink } from "./detail-description";
 

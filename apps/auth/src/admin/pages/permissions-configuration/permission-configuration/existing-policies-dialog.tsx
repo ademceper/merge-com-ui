@@ -25,8 +25,8 @@ import {
 import { CaretDown, Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { capitalizeFirstLetterFormatter } from "../../../shared/lib/util";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { capitalizeFirstLetterFormatter } from "@/admin/shared/lib/util";
 import { usePoliciesList } from "../hooks/use-policies-list";
 import { usePolicyProviders } from "../hooks/use-policy-providers";
 

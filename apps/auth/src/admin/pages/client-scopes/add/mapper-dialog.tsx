@@ -20,8 +20,8 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { useEffect, useMemo, useState } from "react";
 import { DataTable } from "@/admin/shared/ui/data-table";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 
 type Row = {
     id: string;

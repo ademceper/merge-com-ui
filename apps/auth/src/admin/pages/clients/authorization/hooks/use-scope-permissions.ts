@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     listAllPermissionsByScope,
     listAllResourcesByScope
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useScopePermissions(clientId: string, scopeId: string, enabled: boolean) {

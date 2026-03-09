@@ -1,7 +1,7 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useQuery } from "@tanstack/react-query";
 import { differenceBy } from "lodash-es";
-import { findUsers } from "../../../api/groups";
+import { findUsers } from "@/admin/api/groups";
 
 /**
  * Fetch users available to add (not yet members).

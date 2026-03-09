@@ -24,10 +24,10 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useAccess } from "../../../app/providers/access/access";
-import { useAvailableRoleMappings } from "../../api/use-available-role-mappings";
-import { translationFormatter } from "../../lib/translation-formatter";
-import { useLocaleSort } from "../../lib/use-locale-sort";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useAvailableRoleMappings } from "@/admin/shared/api/use-available-role-mappings";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { useLocaleSort } from "@/admin/shared/lib/use-locale-sort";
 import type { ResourcesKey, Row } from "./role-mapping";
 
 type AddRoleMappingModalProps = {

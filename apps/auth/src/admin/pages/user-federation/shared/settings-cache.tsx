@@ -5,9 +5,9 @@ import {
     NumberControl,
     type SelectControlOption,
     SelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+} from "@/shared/keycloak-ui-shared";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { WizardSectionHeader } from "@/admin/shared/ui/wizard-section-header/wizard-section-header";
 
 type SettingsCacheProps = {
     form: UseFormReturn;

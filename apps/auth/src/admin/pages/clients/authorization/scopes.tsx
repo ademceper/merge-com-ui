@@ -33,16 +33,16 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     toNewPermission,
     toNewScope,
     toPermissionDetails,
     toResourceDetails,
     toScopeDetails
-} from "../../../shared/lib/routes/clients";
-import { useToggle } from "../../../shared/lib/use-toggle";
+} from "@/admin/shared/lib/routes/clients";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useScopePermissions } from "./hooks/use-scope-permissions";
 import { useScopes as useScopesQuery } from "./hooks/use-scopes";
 import { DeleteScopeDialog } from "./delete-scope-dialog";

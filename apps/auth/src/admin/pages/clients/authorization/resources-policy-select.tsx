@@ -21,16 +21,16 @@ import {
     useFormContext,
     useWatch
 } from "react-hook-form";
-import { SelectVariant } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { SelectVariant } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     toCreatePolicy,
     toPolicyDetails,
     toResourceDetails
-} from "../../../shared/lib/routes/clients";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/clients";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useResourcesPolicySelectItems } from "./hooks/use-resources-policy-select-items";
 import { useSelectedItems } from "./hooks/use-selected-items";
 import { NewPolicyDialog } from "./new-policy-dialog";

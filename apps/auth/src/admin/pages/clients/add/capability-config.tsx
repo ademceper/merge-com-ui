@@ -5,13 +5,13 @@ import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { IdentityProviderSelect } from "../../../shared/ui/identity-provider/identity-provider-select";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { HelpItem, SelectField } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { IdentityProviderSelect } from "@/admin/shared/ui/identity-provider/identity-provider-select";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import type { FormFields } from "../client-details";
 
 type CapabilityConfigProps = {

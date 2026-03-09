@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchInstallationSnippet } from "../../api/shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { fetchInstallationSnippet } from "@/admin/api/shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { sharedKeys } from "./keys";
 
 export function useInstallationSnippet(

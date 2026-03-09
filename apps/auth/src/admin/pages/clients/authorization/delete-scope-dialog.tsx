@@ -5,9 +5,9 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useDelAuthorizationScope } from "./hooks/use-authorization-mutations";
-import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { ConfirmDialogModal } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import type { PermissionScopeRepresentation } from "./scopes";
 
 type DeleteScopeDialogProps = {

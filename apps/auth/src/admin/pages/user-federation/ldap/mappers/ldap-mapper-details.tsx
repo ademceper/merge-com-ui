@@ -27,28 +27,28 @@ import {
     HelpItem,
     KeycloakSpinner,
     TextControl
-} from "../../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import { useCreateComponent } from "../../hooks/use-create-component";
-import { useDeleteComponent } from "../../hooks/use-delete-component";
-import { useSyncMappers } from "../../hooks/use-sync-mappers";
-import { useUpdateComponent } from "../../hooks/use-update-component";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useCreateComponent } from "@/admin/pages/user-federation/hooks/use-create-component";
+import { useDeleteComponent } from "@/admin/pages/user-federation/hooks/use-delete-component";
+import { useSyncMappers } from "@/admin/pages/user-federation/hooks/use-sync-mappers";
+import { useUpdateComponent } from "@/admin/pages/user-federation/hooks/use-update-component";
 import {
     toUserFederationLdap,
     type UserFederationLdapMapperParams
-} from "../../../../shared/lib/routes/user-federation";
-import { useParams } from "../../../../shared/lib/use-params";
+} from "@/admin/shared/lib/routes/user-federation";
+import { useParams } from "@/admin/shared/lib/use-params";
 import {
     convertFormValuesToObject,
     convertToFormValues
-} from "../../../../shared/lib/util";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import {
     convertToName,
     DynamicComponents
-} from "../../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { useLdapMapperDetail } from "../../hooks/use-ldap-mapper-detail";
+} from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { useLdapMapperDetail } from "@/admin/pages/user-federation/hooks/use-ldap-mapper-detail";
 
 export function LdapMapperDetails() {
 

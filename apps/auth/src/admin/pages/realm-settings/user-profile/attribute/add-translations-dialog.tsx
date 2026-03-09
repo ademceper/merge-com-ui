@@ -30,11 +30,11 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import { useWhoAmI } from "../../../../app/providers/whoami/who-am-i";
-import { useLocale } from "../../../../shared/lib/use-locale";
-import { beerify, localeToDisplayName } from "../../../../shared/lib/util";
-import { useRealmLocalizationTexts } from "../../hooks/use-realm-localization-texts";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { useLocale } from "@/admin/shared/lib/use-locale";
+import { beerify, localeToDisplayName } from "@/admin/shared/lib/util";
+import { useRealmLocalizationTexts } from "@/admin/pages/realm-settings/hooks/use-realm-localization-texts";
 import type { Translation, TranslationForm } from "./translatable-field";
 
 type AddTranslationsDialogProps = {

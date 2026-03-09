@@ -16,13 +16,13 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     useHelp
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUserFederation } from "@/admin/shared/lib/routes/user-federation";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useAddDefaultGroup } from "./hooks/use-add-default-group";
 import { useDefaultGroups } from "./hooks/use-default-groups";
 import { useRemoveDefaultGroup } from "./hooks/use-remove-default-group";

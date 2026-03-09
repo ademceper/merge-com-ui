@@ -9,7 +9,7 @@ import {
     lowerPriorityExecution,
     raisePriorityExecution,
     saveExecutionConfig
-} from "../../../api/authentication";
+} from "@/admin/api/authentication";
 import type { ExpandableExecution, IndexChange, LevelChange } from "../execution-model";
 import { authenticationKeys } from "./keys";
 

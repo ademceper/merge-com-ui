@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import {
     fetchClientRegistrationPolicyProviders,
     fetchComponent
-} from "../../../api/clients";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/admin/api/clients";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { clientKeys } from "./keys";
 
 export function useRegistrationProvider(providerId: string, id?: string) {

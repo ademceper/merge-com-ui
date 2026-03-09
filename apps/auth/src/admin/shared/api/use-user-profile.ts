@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserProfile } from "../../api/shared";
+import { fetchUserProfile } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useUserProfile() {

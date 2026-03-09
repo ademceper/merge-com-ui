@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findUsersByIds } from "../../api/shared";
+import { findUsersByIds } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useUsersByIds(ids: string[] | undefined) {

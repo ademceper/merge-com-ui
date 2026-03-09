@@ -2,8 +2,8 @@ import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/
 import type { TFunction } from "@merge-rd/i18n";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { SelectItem } from "@merge-rd/ui/components/select";
-import { adminClient } from "../../../app/admin-client";
-import { toUpperCase } from "../../lib/util";
+import { adminClient } from "@/admin/app/admin-client";
+import { toUpperCase } from "@/admin/shared/lib/util";
 
 export enum ClientScope {
     default = "default",

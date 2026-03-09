@@ -40,15 +40,15 @@ import {
     isUserProfileError,
     KeycloakSpinner,
     setUserProfileServerError
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { UserParams } from "../../shared/lib/routes/user";
-import { toUsers } from "../../shared/lib/routes/user";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useParams } from "../../shared/lib/use-params";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { UserParams } from "@/admin/shared/lib/routes/user";
+import { toUsers } from "@/admin/shared/lib/routes/user";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
 import { AdminEvents } from "../events/admin-events";
 import { UserEvents } from "../events/user-events";
 import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";

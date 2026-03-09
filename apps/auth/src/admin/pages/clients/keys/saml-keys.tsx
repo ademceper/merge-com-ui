@@ -12,12 +12,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../../shared/lib/use-toggle";
+} from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useGenerateKey } from "../hooks/use-key-operations";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useSamlKeyInfo } from "../hooks/use-saml-key-info";
 import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { syncUsers } from "../../../api/user-federation";
+import { syncUsers } from "@/admin/api/user-federation";
 
 export function useSyncUsers() {
     return useMutation({

@@ -2,9 +2,9 @@ import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUserFederation } from "@/admin/shared/lib/routes/user-federation";
 import { useCreateComponent } from "./hooks/use-create-component";
 import { ExtendedHeader } from "./shared/extended-header";
 import {

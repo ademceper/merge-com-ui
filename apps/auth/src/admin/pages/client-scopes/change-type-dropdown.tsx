@@ -7,14 +7,14 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import {
     allClientScopeTypes,
     type ClientScope,
     changeClientScope,
     changeScope,
     clientScopeTypesSelectOptions
-} from "../../shared/ui/client-scope/client-scope-types";
+} from "@/admin/shared/ui/client-scope/client-scope-types";
 import type { Row } from "../clients/scopes/client-scopes";
 
 type ChangeTypeDropdownProps = {

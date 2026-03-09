@@ -13,8 +13,8 @@ import {
     KeycloakSpinner,
     mainPageContentId,
     useEnvironment
-} from "../../shared/keycloak-ui-shared";
-import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
+} from "@/shared/keycloak-ui-shared";
+import { SessionExpirationWarningOverlay } from "@/shared/session-expiration-warning-overlay";
 import { ErrorRenderer } from "../shared/ui/error/error-renderer";
 import { AdminAppSidebar } from "../widgets/admin-app-sidebar";
 import { AdminHeader } from "../widgets/admin-header";

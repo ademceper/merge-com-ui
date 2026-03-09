@@ -16,7 +16,7 @@ import {
     updatePolicy,
     deletePolicy,
     findPermissionsByResource
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useImportResource() {

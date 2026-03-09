@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { FormProvider, useForm } from "react-hook-form";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import { ConfirmDialogModal } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 
 type FileNameDialogProps = {
     onSave: (fileName: string) => void;

@@ -1,1 +1,1 @@
-export { PageHandler } from "../../shared/ui/page-handler";
+export { PageHandler } from "@/admin/shared/ui/page-handler";

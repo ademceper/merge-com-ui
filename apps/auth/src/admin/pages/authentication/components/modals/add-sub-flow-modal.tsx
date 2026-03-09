@@ -9,8 +9,8 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { SelectField, TextControl } from "../../../../../shared/keycloak-ui-shared";
-import { useFormProviders } from "../../hooks/use-form-providers";
+import { SelectField, TextControl } from "@/shared/keycloak-ui-shared";
+import { useFormProviders } from "@/admin/pages/authentication/hooks/use-form-providers";
 
 type AddSubFlowProps = {
     name: string;

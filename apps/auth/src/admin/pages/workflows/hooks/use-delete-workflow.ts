@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteWorkflow } from "../../../api/workflows";
+import { deleteWorkflow } from "@/admin/api/workflows";
 import { workflowKeys } from "./keys";
 
 export function useDeleteWorkflow() {

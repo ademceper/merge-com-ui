@@ -5,17 +5,17 @@ import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type EditOrganizationParams,
     toEditOrganization
-} from "../../shared/lib/routes/organizations";
-import { useParams } from "../../shared/lib/use-params";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { AttributesForm } from "../../shared/ui/key-value-form/attribute-form";
-import { arrayToKeyValue } from "../../shared/ui/key-value-form/key-value-convert";
+} from "@/admin/shared/lib/routes/organizations";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { AttributesForm } from "@/admin/shared/ui/key-value-form/attribute-form";
+import { arrayToKeyValue } from "@/admin/shared/ui/key-value-form/key-value-convert";
 import { AdminEvents } from "../events/admin-events";
 import { useOrganization } from "./hooks/use-organization";
 import { useUpdateOrganization } from "./hooks/use-update-organization";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserProfileGlobal } from "../../../api/realm-settings";
+import { fetchUserProfileGlobal } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 /** User profile without realm param (global) */

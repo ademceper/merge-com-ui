@@ -3,10 +3,10 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, FormProvider, type UseFormReturn } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { TimeSelectorControl } from "@/admin/shared/ui/time-selector/time-selector-control";
 
 export type EventsType = "admin" | "user";
 

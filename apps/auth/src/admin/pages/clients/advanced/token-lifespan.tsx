@@ -10,8 +10,8 @@ import {
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { TimeSelector, type Unit } from "../../../shared/ui/time-selector/time-selector";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { TimeSelector, type Unit } from "@/admin/shared/ui/time-selector/time-selector";
 
 type TokenLifespanProps = {
     id: string;

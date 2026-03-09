@@ -11,8 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { CheckCircle } from "@phosphor-icons/react";
 import { memo } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useToggle } from "../../../shared/lib/use-toggle";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useUsedBy } from "../hooks/use-used-by";
 import { type AuthenticationType, REALM_FLOWS } from "../constants";
 

@@ -9,10 +9,10 @@ import {
     getErrorMessage,
     SelectField,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useUpdateRealmPolicyWithRefetch } from "../hooks/use-update-realm-policy-with-refetch";
 
 const CIBA_BACKHANNEL_TOKEN_DELIVERY_MODES = ["poll", "ping"] as const;

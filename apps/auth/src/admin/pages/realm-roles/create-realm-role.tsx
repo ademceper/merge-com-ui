@@ -3,12 +3,12 @@ import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateRealmRole } from "./hooks/use-create-realm-role";
-import { toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
-import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
-import { RoleForm } from "../../shared/ui/role-form/role-form";
+import { toRealmRole, toRealmRoles } from "@/admin/shared/lib/routes/realm-roles";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
+import { RoleForm } from "@/admin/shared/ui/role-form/role-form";
 
 export function CreateRealmRole() {
 

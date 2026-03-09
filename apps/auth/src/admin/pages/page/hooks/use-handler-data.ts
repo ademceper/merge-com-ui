@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findHandlerData } from "../../../api/page-components";
+import { findHandlerData } from "@/admin/api/page-components";
 import { pageKeys } from "./keys";
 
 export function useHandlerData(

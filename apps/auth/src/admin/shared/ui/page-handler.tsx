@@ -10,10 +10,10 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useHandlerData } from "../../pages/page/hooks/use-handler-data";
-import { useSavePageComponent } from "../../pages/page/hooks/use-save-page-component";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useHandlerData } from "@/admin/pages/page/hooks/use-handler-data";
+import { useSavePageComponent } from "@/admin/pages/page/hooks/use-save-page-component";
 import { type PAGE_PROVIDER, TAB_PROVIDER } from "../lib/page-constants";
 import { toPage } from "../lib/routes/page";
 import { useParams } from "../lib/use-params";

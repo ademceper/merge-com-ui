@@ -1,6 +1,6 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { savePermission } from "../../../api/permissions";
+import { savePermission } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function useSavePermission(clientId: string) {

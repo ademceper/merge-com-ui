@@ -24,16 +24,16 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeleteComponent } from "../hooks/use-delete-component";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     type ProviderType,
     toKeyProvider
-} from "../../../shared/lib/routes/realm-settings";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { KEY_PROVIDER_TYPE } from "@/admin/shared/lib/util";
 import { KeyProviderModal } from "./key-providers/key-provider-modal";
 import { KeyProvidersPicker } from "./key-providers/key-providers-picker";
 

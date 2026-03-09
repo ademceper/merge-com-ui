@@ -14,9 +14,9 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
-import { AddScopeDialog } from "../../scopes/add-scope-dialog";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { AddScopeDialog } from "@/admin/pages/clients/scopes/add-scope-dialog";
 import { useClientScopes } from "../hooks/use-client-scopes";
 
 export type RequiredIdValue = {

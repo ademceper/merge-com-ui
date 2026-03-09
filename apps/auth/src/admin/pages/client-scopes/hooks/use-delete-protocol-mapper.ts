@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteProtocolMapper } from "../../../api/client-scopes";
+import { deleteProtocolMapper } from "@/admin/api/client-scopes";
 import { clientScopeKeys } from "./keys";
 
 export function useDeleteProtocolMapper(id: string) {

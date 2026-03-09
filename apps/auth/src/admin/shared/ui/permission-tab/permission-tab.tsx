@@ -21,12 +21,12 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { HelpItem, KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { usePermissions } from "../../api/use-permissions";
-import { useTogglePermission } from "../../api/use-toggle-permission";
-import { toPermissionDetails } from "../../lib/route-helpers";
-import { useLocaleSort } from "../../lib/use-locale-sort";
+import { HelpItem, KeycloakSpinner } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { usePermissions } from "@/admin/shared/api/use-permissions";
+import { useTogglePermission } from "@/admin/shared/api/use-toggle-permission";
+import { toPermissionDetails } from "@/admin/shared/lib/route-helpers";
+import { useLocaleSort } from "@/admin/shared/lib/use-locale-sort";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
 type PermissionScreenType =

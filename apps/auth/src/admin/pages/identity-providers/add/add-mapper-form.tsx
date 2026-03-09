@@ -12,7 +12,7 @@ import {
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { FormLabel, HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
 import type { IdPMapperRepresentationWithAttributes } from "./add-mapper";
 
 type AddMapperFormProps = {

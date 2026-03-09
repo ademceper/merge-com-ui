@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     fetchMemberOrganizations,
     fetchOrganizationMembers
-} from "../../../api/users";
+} from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserOrganizations(

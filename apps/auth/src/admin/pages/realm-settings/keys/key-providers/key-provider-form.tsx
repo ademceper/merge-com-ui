@@ -9,19 +9,19 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
-import { useSaveComponent } from "../../hooks/use-save-component";
+} from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useSaveComponent } from "@/admin/pages/realm-settings/hooks/use-save-component";
 import {
     type KeyProviderParams,
     type ProviderType,
     toKeysTab
-} from "../../../../shared/lib/routes/realm-settings";
-import { useParams } from "../../../../shared/lib/use-params";
-import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
-import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { useComponent } from "../../hooks/use-component";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { KEY_PROVIDER_TYPE } from "@/admin/shared/lib/util";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { useComponent } from "@/admin/pages/realm-settings/hooks/use-component";
 
 type KeyProviderFormProps = {
     id?: string;

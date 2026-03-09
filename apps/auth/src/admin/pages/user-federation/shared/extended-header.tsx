@@ -8,12 +8,12 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useParams } from "../../../shared/lib/use-params";
+} from "@/shared/keycloak-ui-shared";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { useRemoveImportedUsers } from "../hooks/use-remove-imported-users";
 import { useSyncUsers } from "../hooks/use-sync-users";
 import { useUnlinkUsers } from "../hooks/use-unlink-users";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { Header } from "./header";
 
 type ExtendedHeaderProps = {

@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { PasswordControl } from "../../../../shared/keycloak-ui-shared";
+import { PasswordControl } from "@/shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 export const PasswordComponent = ({

@@ -7,13 +7,13 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     toIdentityProvider,
     toIdentityProviders
-} from "../../../shared/lib/routes/identity-providers";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/identity-providers";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useCreateIdentityProvider } from "../hooks/use-create-identity-provider";
 import { SpiffeSettings } from "./spiffe-settings";
 

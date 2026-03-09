@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteResource } from "../../../../api/client-authorization";
+import { deleteResource } from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useDeleteResource() {

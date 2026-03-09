@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { ConfirmDialogModal } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useDeleteGroups } from "../hooks/use-delete-groups";
 
 type DeleteConfirmProps = {

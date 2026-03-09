@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findClients } from "../../../api/clients";
+import { findClients } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useClients() {

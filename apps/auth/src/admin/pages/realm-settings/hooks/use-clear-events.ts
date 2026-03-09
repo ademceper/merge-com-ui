@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { clearEvents } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { clearEvents } from "@/admin/api/realm-settings";
 
 export function useClearEvents() {
     const { realm } = useRealm();

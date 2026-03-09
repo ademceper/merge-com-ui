@@ -3,7 +3,7 @@ import {
     findRealmRole,
     findUsersWithClientRole,
     findUsersWithRealmRole
-} from "../../../api/realm-roles";
+} from "@/admin/api/realm-roles";
 import { roleKeys } from "./keys";
 
 export function useUsersInRole(id: string, clientId?: string) {

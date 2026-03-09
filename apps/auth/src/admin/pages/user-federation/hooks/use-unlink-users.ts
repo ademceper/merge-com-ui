@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { unlinkUsers } from "../../../api/user-federation";
+import { unlinkUsers } from "@/admin/api/user-federation";
 
 export function useUnlinkUsers() {
     return useMutation({

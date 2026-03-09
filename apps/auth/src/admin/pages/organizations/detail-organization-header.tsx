@@ -22,10 +22,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toOrganizations } from "../../shared/lib/routes/organizations";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toOrganizations } from "@/admin/shared/lib/routes/organizations";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useDeleteOrganization } from "./hooks/use-delete-organization";
 
 type DetailOrganizationHeaderProps = {

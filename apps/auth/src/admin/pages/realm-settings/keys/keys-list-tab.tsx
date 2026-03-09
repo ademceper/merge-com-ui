@@ -11,10 +11,10 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toKeysTab } from "../../../shared/lib/routes/realm-settings";
-import { useFormatDate } from "../../../shared/lib/use-format-date";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toKeysTab } from "@/admin/shared/lib/routes/realm-settings";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useKeysMetadata } from "../hooks/use-keys-metadata";
 
 type KeyData = KeyMetadataRepresentation & {

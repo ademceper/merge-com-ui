@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteOrganization } from "../../../api/organizations";
+import { deleteOrganization } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useDeleteOrganization() {

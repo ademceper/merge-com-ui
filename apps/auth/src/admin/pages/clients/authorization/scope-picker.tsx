@@ -9,8 +9,8 @@ import {
     FormErrorText,
     HelpItem,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
+} from "@/shared/keycloak-ui-shared";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
 import { useScopePickerScopes } from "./hooks/use-scope-picker-scopes";
 
 type Scope = {

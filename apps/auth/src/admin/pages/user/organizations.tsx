@@ -25,17 +25,17 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { findUser } from "../../api/users";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
-import type { UserParams } from "../../shared/lib/routes/user";
-import { toUsers } from "../../shared/lib/routes/user";
-import { useParams } from "../../shared/lib/use-params";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
-import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { findUser } from "@/admin/api/users";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toEditOrganization } from "@/admin/shared/lib/routes/organizations";
+import type { UserParams } from "@/admin/shared/lib/routes/user";
+import { toUsers } from "@/admin/shared/lib/routes/user";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { CheckboxFilterComponent } from "@/admin/shared/ui/dynamic/checkbox-filter-component";
+import { SearchInputComponent } from "@/admin/shared/ui/dynamic/search-input-component";
 import { OrganizationModal } from "../organizations/organization-modal";
 import { useRemoveOrgMember, useAddOrgMember, useInviteToOrg } from "./hooks/use-org-membership";
 import { useUserOrganizations } from "./hooks/use-user-organizations";

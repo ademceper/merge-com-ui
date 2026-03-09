@@ -21,22 +21,22 @@ import {
     HelpItem,
     KeycloakSpinner,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useUpdateResource, useCreateResource, useDeleteResource } from "./hooks/use-authorization-mutations";
 import {
     type ResourceDetailsParams,
     toAuthorizationTab,
     toResourceDetails
-} from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
-import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+} from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { KeyValueInput } from "@/admin/shared/ui/key-value-form/key-value-input";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { useResourceDetails as useResourceDetailsQuery } from "./hooks/use-resource-details";
 import { ScopePicker } from "./scope-picker";
 

@@ -3,7 +3,7 @@ import {
     addRealmScopeMappings,
     addClientScopeMappings,
     updateClient
-} from "../../../api/clients";
+} from "@/admin/api/clients";
 
 export function useAssignScopeMappings() {
     return useMutation({

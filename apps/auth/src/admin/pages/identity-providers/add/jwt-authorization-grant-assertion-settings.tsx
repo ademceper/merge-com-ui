@@ -1,11 +1,11 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { sortProviders } from "../../../shared/lib/util";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
+import { HelpItem, SelectField } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { sortProviders } from "@/admin/shared/lib/util";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { TimeSelector } from "@/admin/shared/ui/time-selector/time-selector";
 
 export const JWTAuthorizationGrantAssertionSettings = () => {
     const { t } = useTranslation();

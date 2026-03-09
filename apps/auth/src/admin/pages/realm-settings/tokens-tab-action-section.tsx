@@ -2,12 +2,12 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { useTranslation } from "@merge-rd/i18n";
 import { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { beerify } from "../../shared/lib/util";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { TimeSelector } from "../../shared/ui/time-selector/time-selector";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { beerify } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { TimeSelector } from "@/admin/shared/ui/time-selector/time-selector";
 
 type TokensTabActionSectionProps = {
     realm: RealmRepresentation;

@@ -19,8 +19,8 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { uploadKey, generateKey } from "../../../api/clients";
+} from "@/shared/keycloak-ui-shared";
+import { uploadKey, generateKey } from "@/admin/api/clients";
 import { Certificate } from "./certificate";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";

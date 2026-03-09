@@ -1,9 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import { HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
 import type { FormFields } from "../client-details";
 
 type LoginSettingsProps = {

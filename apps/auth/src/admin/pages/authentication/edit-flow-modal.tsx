@@ -11,7 +11,7 @@ import {
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useEditFlow } from "./hooks/use-edit-flow";
 import { NameDescription } from "./form/name-description";
 

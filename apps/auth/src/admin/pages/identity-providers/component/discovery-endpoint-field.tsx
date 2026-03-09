@@ -8,8 +8,8 @@ import {
     HelpItem,
     KeycloakSpinner as Spinner,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { importFromUrl } from "../../../api/identity-providers";
+} from "@/shared/keycloak-ui-shared";
+import { importFromUrl } from "@/admin/api/identity-providers";
 
 const hiddenStyle = { display: "none" } as const;
 

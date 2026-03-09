@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext, useWatch } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 import { FormattedLink } from "../external-link/formatted-link";
 import type { ComponentProps } from "./components";
 

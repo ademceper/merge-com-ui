@@ -13,7 +13,7 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useInviteMember } from "./hooks/use-invite-member";
 
 type InviteMemberModalProps = {

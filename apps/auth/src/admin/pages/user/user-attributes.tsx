@@ -7,7 +7,7 @@ import { type UseFormReturn, useFormContext } from "react-hook-form";
 import {
     type AttributeForm,
     AttributesForm
-} from "../../shared/ui/key-value-form/attribute-form";
+} from "@/admin/shared/ui/key-value-form/attribute-form";
 import { toUserFormFields, type UserFormFields } from "./form-state";
 
 type UserAttributesProps = {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "../../../api/clients";
+import { createClient } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useCreateClient() {

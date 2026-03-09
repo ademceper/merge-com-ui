@@ -21,7 +21,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Info } from "@phosphor-icons/react";
 import { useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { emptyFormatter } from "../../shared/lib/util";
+import { emptyFormatter } from "@/admin/shared/lib/util";
 import { useAvailableUsers } from "./hooks/use-available-users";
 
 type MemberModalProps = {

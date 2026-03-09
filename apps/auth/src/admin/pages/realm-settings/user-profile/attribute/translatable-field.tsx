@@ -6,12 +6,12 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Globe } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { FormErrorText } from "../../../../../shared/keycloak-ui-shared";
-import { i18n } from "../../../../app/i18n";
-import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import { useToggle } from "../../../../shared/lib/use-toggle";
-import { beerify, debeerify } from "../../../../shared/lib/util";
-import { addLocalization } from "../../../../api/realm-settings";
+import { FormErrorText } from "@/shared/keycloak-ui-shared";
+import { i18n } from "@/admin/app/i18n";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { beerify, debeerify } from "@/admin/shared/lib/util";
+import { addLocalization } from "@/admin/api/realm-settings";
 import { AddTranslationsDialog } from "./add-translations-dialog";
 
 export type TranslationForm = {

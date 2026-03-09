@@ -1,8 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { TextAreaControl, TextControl } from "@/shared/keycloak-ui-shared";
 
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 
 type ClientDescriptionProps = {
     protocol?: string;

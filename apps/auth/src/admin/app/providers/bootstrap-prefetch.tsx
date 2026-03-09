@@ -2,7 +2,7 @@ import type WhoAmIRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { PropsWithChildren } from "react";
-import { KeycloakSpinner, useEnvironment } from "../../../shared/keycloak-ui-shared";
+import { KeycloakSpinner, useEnvironment } from "@/shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
 import { useRealm } from "./realm-context/realm-context";
 

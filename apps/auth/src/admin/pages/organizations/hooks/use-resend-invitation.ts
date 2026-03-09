@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { resendInvitation } from "../../../api/organizations";
+import { resendInvitation } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useResendInvitation(orgId: string) {

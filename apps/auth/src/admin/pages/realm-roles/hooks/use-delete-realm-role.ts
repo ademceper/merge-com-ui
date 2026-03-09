@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteRealmRole } from "../../../api/realm-roles";
+import { deleteRealmRole } from "@/admin/api/realm-roles";
 import { roleKeys } from "./keys";
 
 export function useDeleteRealmRole() {

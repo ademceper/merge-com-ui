@@ -10,7 +10,7 @@ import {
 import { Link, useLocation } from "@tanstack/react-router";
 import React, { useMemo } from "react";
 
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 
 interface CrumbEntry {
     label: string;

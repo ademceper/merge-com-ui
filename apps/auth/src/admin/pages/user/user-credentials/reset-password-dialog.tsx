@@ -9,16 +9,16 @@ import {
     getErrorDescription,
     getErrorMessage,
     PasswordInput
-} from "../../../../shared/keycloak-ui-shared";
-import { fetchUserCredentials } from "../../../api/users";
-import { useToggle } from "../../../shared/lib/use-toggle";
+} from "@/shared/keycloak-ui-shared";
+import { fetchUserCredentials } from "@/admin/api/users";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useResetPassword } from "../hooks/use-reset-password";
 import { useUpdateCredentialLabel } from "../hooks/use-update-credential-label";
 import {
     ConfirmDialogModal,
     useConfirmDialog
-} from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+} from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 
 type ResetPasswordDialogProps = {
     user: UserRepresentation;

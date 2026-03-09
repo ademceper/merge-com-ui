@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { CibaPolicy } from "./ciba-policy";
 import { OtpPolicy } from "./otp-policy";
 import { PasswordPolicy } from "./password-policy";

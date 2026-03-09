@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     findPermissionsByResource,
     findScopesByResource
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useDetailCell(clientId: string, resourceId: string) {

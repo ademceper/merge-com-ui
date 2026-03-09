@@ -4,7 +4,7 @@ import { sortBy } from "lodash-es";
 import {
     findIdentityProviderExists,
     findIdentityProviders
-} from "../../../api/identity-providers";
+} from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useIdentityProvidersList(hideOrgLinked: boolean) {

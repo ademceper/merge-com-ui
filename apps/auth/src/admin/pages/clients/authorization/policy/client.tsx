@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { ClientSelect } from "../../../../shared/ui/client/client-select";
+import { ClientSelect } from "@/admin/shared/ui/client/client-select";
 
 export const Client = () => {
     const { t } = useTranslation();

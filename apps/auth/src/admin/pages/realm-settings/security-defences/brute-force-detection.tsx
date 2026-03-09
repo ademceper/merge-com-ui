@@ -15,10 +15,10 @@ import {
     FormPanel,
     HelpItem,
     NumberControl
-} from "../../../../shared/keycloak-ui-shared";
-import { convertToFormValues } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { Time } from "./time";
 
 type BruteForceDetectionProps = {

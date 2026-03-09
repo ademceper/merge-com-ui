@@ -15,13 +15,13 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useUpdateAuthorizationScope, useCreateAuthorizationScope } from "./hooks/use-authorization-mutations";
-import type { ScopeDetailsParams } from "../../../shared/lib/routes/clients";
-import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { ScopeDetailsParams } from "@/admin/shared/lib/routes/clients";
+import { toAuthorizationTab } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useScopeDetails as useScopeDetailsQuery } from "./hooks/use-scope-details";
 import { DeleteScopeDialog } from "./delete-scope-dialog";
 

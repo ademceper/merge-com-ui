@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { unlinkFederatedIdentity } from "../../../api/users";
+import { unlinkFederatedIdentity } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUnlinkFederatedIdentity(userId: string) {

@@ -33,15 +33,15 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useFetchPermissionsByResource, useDeleteResource } from "./hooks/use-authorization-mutations";
 import {
     toCreateResource,
     toNewPermission,
     toResourceDetails
-} from "../../../shared/lib/routes/clients";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/clients";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useResources as useResourcesQuery } from "./hooks/use-resources";
 import { DetailCell } from "./detail-cell";
 import { MoreLabel } from "./more-label";

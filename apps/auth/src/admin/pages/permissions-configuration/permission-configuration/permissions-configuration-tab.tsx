@@ -33,16 +33,16 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeletePermission } from "../hooks/use-delete-permission";
 import {
     toCreatePermissionConfiguration,
     toPermissionConfigurationDetails
-} from "../../../shared/lib/routes/permissions";
-import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/permissions";
+import { useSortedResourceTypes } from "@/admin/shared/lib/use-sorted-resource-types";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { usePermissionsList } from "../hooks/use-permissions-list";
 import { SearchDropdown, type SearchForm } from "../resource-types/search-dropdown";
 import { AuthorizationScopesDetails } from "./authorization-scopes-details";

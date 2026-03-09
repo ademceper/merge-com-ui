@@ -10,9 +10,9 @@ import {
     isUserProfileError,
     KeycloakSpinner,
     setUserProfileServerError
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUser } from "../../shared/lib/routes/user";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUser } from "@/admin/shared/lib/routes/user";
 import { useCreateUser } from "./hooks/use-create-user";
 import { useUserProfileMetadata } from "./hooks/use-user-profile-metadata";
 import { toUserRepresentation, type UserFormFields } from "./form-state";

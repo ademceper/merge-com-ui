@@ -25,16 +25,16 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { AuthenticationTab } from "../../shared/lib/routes/authentication";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { AuthenticationTab } from "@/admin/shared/lib/routes/authentication";
 import {
     toAuthentication,
     toCreateFlow,
     toFlow
-} from "../../shared/lib/routes/authentication";
-import { useParams } from "../../shared/lib/use-params";
-import { useToggle } from "../../shared/lib/use-toggle";
+} from "@/admin/shared/lib/routes/authentication";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useDeleteFlow } from "./hooks/use-delete-flow";
 import { useFlows } from "./hooks/use-flows";
 import { BindFlowDialog } from "./bind-flow-dialog";

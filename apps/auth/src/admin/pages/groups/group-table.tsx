@@ -28,8 +28,8 @@ import {
     DataTableRowActions,
     type Row
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { groupKeys } from "./hooks/keys";
 import { useDeleteGroups } from "./hooks/use-delete-groups";
 import { useGroupsList } from "./hooks/use-groups-list";

@@ -13,10 +13,10 @@ import {
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
 import { useCreateRealmRole } from "./hooks/use-create-realm-role";
-import { RoleForm } from "../../shared/ui/role-form/role-form";
+import { RoleForm } from "@/admin/shared/ui/role-form/role-form";
 
 const FORM_ID = "add-realm-role-form";
 

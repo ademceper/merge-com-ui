@@ -17,9 +17,9 @@ import {
     getErrorMessage,
     isUserProfileError,
     setUserProfileServerError
-} from "../../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+} from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
 import { useRemoveRequiredActionConfig } from "../hooks/use-remove-required-action-config";
 import { useRequiredActionConfigData } from "../hooks/use-required-action-config-data";
 import { useSaveRequiredActionConfig } from "../hooks/use-save-required-action-config";

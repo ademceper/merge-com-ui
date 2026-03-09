@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { inviteOrganizationMember } from "../../../api/organizations";
+import { inviteOrganizationMember } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 /**

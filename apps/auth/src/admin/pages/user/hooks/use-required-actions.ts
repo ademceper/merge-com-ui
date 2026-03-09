@@ -1,6 +1,6 @@
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRequiredActions } from "../../../api/users";
+import { fetchRequiredActions } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useRequiredActions() {

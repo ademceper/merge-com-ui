@@ -28,9 +28,9 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toWorkflowDetail } from "../../shared/lib/routes/workflows";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toWorkflowDetail } from "@/admin/shared/lib/routes/workflows";
 import { useDeleteWorkflow } from "./hooks/use-delete-workflow";
 import { useUpdateWorkflow } from "./hooks/use-update-workflow";
 import { useWorkflows as useWorkflowsQuery } from "./hooks/use-workflows";

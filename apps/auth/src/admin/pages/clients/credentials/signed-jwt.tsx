@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
+import { HelpItem, SelectField } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { TimeSelector } from "@/admin/shared/ui/time-selector/time-selector";
 import type { FormFields } from "../client-details";
 
 type SignedJWTProps = {

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findUsers } from "../../../api/users";
+import { findUsers } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUsers() {

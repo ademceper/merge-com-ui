@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { importFromUrlFormData } from "../../../api/identity-providers";
+import { importFromUrlFormData } from "@/admin/api/identity-providers";
 
 /**
  * Import identity provider config from a file upload (FormData).

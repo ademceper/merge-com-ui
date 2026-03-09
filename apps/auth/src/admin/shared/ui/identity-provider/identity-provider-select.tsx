@@ -1,6 +1,6 @@
 import { IdentityProviderType } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { useState } from "react";
-import { useIdentityProviders } from "../../api/use-identity-providers";
+import { useIdentityProviders } from "@/admin/shared/api/use-identity-providers";
 import type { ComponentProps } from "../dynamic/components";
 import { MultiValuedListComponent } from "../dynamic/multivalued-list-component";
 

@@ -16,25 +16,25 @@ import {
     SelectField,
     TextAreaControl,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     useLoginProviders,
     useServerInfo
-} from "../../../app/providers/server-info/server-info-provider";
-import { toClientScopes } from "../../../shared/lib/routes/client-scopes";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+} from "@/admin/app/providers/server-info/server-info-provider";
+import { toClientScopes } from "@/admin/shared/lib/routes/client-scopes";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import {
     convertAttributeNameToForm,
     convertToFormValues
-} from "../../../shared/lib/util";
+} from "@/admin/shared/lib/util";
 import {
     allClientScopeTypes,
     type ClientScopeDefaultOptionalType
-} from "../../../shared/ui/client-scope/client-scope-types";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { getProtocolName } from "../../clients/utils";
+} from "@/admin/shared/ui/client-scope/client-scope-types";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { getProtocolName } from "@/admin/pages/clients/utils";
 import { useRealmKeys } from "../hooks/use-realm-keys";
 
 const OID4VC_PROTOCOL = "oid4vc";

@@ -14,9 +14,9 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import type { ClientScopeDefaultOptionalType } from "../../shared/ui/client-scope/client-scope-types";
+} from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
 import { useClientScope } from "./hooks/use-client-scope";
 import { useUpdateClientScope } from "./hooks/use-update-client-scope";
 import { ScopeForm } from "./details/scope-form";

@@ -1,8 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext } from "react-hook-form";
-import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { SelectField, TextControl } from "@/shared/keycloak-ui-shared";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
 import { Toggle } from "./saml-config";
 import { SamlEncryption } from "./saml-encryption";

@@ -10,12 +10,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     PasswordInput
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useInvalidateClientSecret } from "../hooks/use-invalidate-client-secret";
-import { useFormatDate } from "../../../shared/lib/use-format-date";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { CopyToClipboardButton } from "@/admin/shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
 type ClientSecretProps = {
     client: ClientRepresentation;

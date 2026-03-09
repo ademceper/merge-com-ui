@@ -1,9 +1,9 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useParams } from "../../shared/lib/use-params";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { PermissionsTab } from "@/admin/shared/ui/permission-tab/permission-tab";
 import { UsersListSection } from "./users-list-section";
 
 export function UsersSection() {

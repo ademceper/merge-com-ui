@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findClientScopes } from "../../../api/realm-settings";
+import { findClientScopes } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useClientScopes() {

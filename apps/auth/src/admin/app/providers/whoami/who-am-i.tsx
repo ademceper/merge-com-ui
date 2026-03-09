@@ -7,9 +7,9 @@ import {
     KeycloakSpinner,
     useEnvironment,
     useRequiredContext
-} from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../admin-client";
-import { i18n } from "../../i18n";
+} from "@/shared/keycloak-ui-shared";
+import { useAdminClient } from "@/admin/app/admin-client";
+import { i18n } from "@/admin/app/i18n";
 import { useRealm } from "../realm-context/realm-context";
 
 const RTL_LOCALES = [

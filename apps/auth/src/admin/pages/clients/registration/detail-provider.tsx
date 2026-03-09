@@ -27,17 +27,17 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateComponent, useUpdateComponent, useDeleteComponent } from "../hooks/use-component-operations";
 import {
     type RegistrationProviderParams,
     toClientRegistration,
     toRegistrationProvider
-} from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useRegistrationProvider } from "../hooks/use-registration-provider";
 
 export function DetailProvider() {

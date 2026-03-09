@@ -13,14 +13,14 @@ import {
     getErrorMessage,
     HelpItem,
     SelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+} from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { useRegenerateClientSecret } from "../hooks/use-regenerate-client-secret";
 import { useRegenerateAccessToken } from "../hooks/use-regenerate-access-token";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useClientCredentials } from "../hooks/use-client-credentials";
 import type { FormFields } from "../client-details";
 import { ClientSecret } from "./client-secret";

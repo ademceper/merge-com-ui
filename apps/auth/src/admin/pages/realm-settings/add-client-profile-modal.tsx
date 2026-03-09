@@ -20,8 +20,8 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { useEffect, useMemo, useState } from "react";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { translationFormatter } from "../../shared/lib/translation-formatter";
+import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
 import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ClientProfile = ClientProfileRepresentation & {

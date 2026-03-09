@@ -1,8 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
 import type { FormFields } from "../client-details";
 
 export const SamlEncryption = () => {

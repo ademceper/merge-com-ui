@@ -3,7 +3,7 @@ import { type PropsWithChildren, useMemo } from "react";
 import {
     createNamedContext,
     useRequiredContext
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useRealm } from "../realm-context/realm-context";
 import { useWhoAmI } from "../whoami/who-am-i";
 

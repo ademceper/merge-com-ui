@@ -14,16 +14,16 @@ import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Table, TableBody } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type FlowParams,
     toAuthentication,
     toFlow
-} from "../../shared/lib/routes/authentication";
-import { useParams } from "../../shared/lib/use-params";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/authentication";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useAddExecutionToFlow } from "./hooks/use-add-execution-to-flow";
 import { useAddFlowToFlow } from "./hooks/use-add-flow-to-flow";
 import { useDeleteExecution } from "./hooks/use-delete-execution";

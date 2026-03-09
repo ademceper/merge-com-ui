@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useLoginProviders } from "../../../app/providers/server-info/server-info-provider";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { useLoginProviders } from "@/admin/app/providers/server-info/server-info-provider";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { ClientDescription } from "../client-description";
 import { getProtocolName } from "../utils";
 

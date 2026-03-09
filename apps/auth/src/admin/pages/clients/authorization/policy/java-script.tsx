@@ -2,8 +2,8 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import type { ComponentType } from "react";
 import { Controller, type ControllerProps, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { CodeEditor } from "../../../../shared/ui/form/code-editor";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { CodeEditor } from "@/admin/shared/ui/form/code-editor";
 
 const FormController = Controller as ComponentType<ControllerProps>;
 

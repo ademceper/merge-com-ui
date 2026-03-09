@@ -6,10 +6,10 @@ import {
     FormErrorText,
     TextAreaControl,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
-import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
-import { keyValueToArray } from "../../shared/ui/key-value-form/key-value-convert";
-import { MultiLineInput } from "../../shared/ui/multi-line-input/multi-line-input";
+} from "@/shared/keycloak-ui-shared";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
+import { keyValueToArray } from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
 
 export type OrganizationFormType = AttributeForm &
     Omit<OrganizationRepresentation, "domains" | "attributes"> & {

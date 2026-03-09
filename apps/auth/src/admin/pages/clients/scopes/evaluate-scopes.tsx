@@ -13,20 +13,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { HelpItem, SelectVariant, useHelp } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectVariant, useHelp } from "@/shared/keycloak-ui-shared";
 import {
     evaluatePermission,
     evaluateListProtocolMapper,
     evaluateGenerateAccessToken,
     evaluateGenerateUserInfo,
     evaluateGenerateIdToken
-} from "../../../api/clients";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { prettyPrintJSON } from "../../../shared/lib/util";
-import { ClientSelect } from "../../../shared/ui/client/client-select";
-import { UserSelect } from "../../../shared/ui/users/user-select";
+} from "@/admin/api/clients";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
+import { ClientSelect } from "@/admin/shared/ui/client/client-select";
+import { UserSelect } from "@/admin/shared/ui/users/user-select";
 import { useClientAssignedScopes } from "../hooks/use-client-assigned-scopes";
 import { GeneratedCodeTab } from "./generated-code-tab";
 

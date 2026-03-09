@@ -20,14 +20,14 @@ import {
     getErrorDescription,
     getErrorMessage,
     SelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useEvaluateResource } from "../hooks/use-evaluate-resource";
-import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { UserSelect } from "../../../shared/ui/users/user-select";
-import { ForbiddenSection } from "../../forbidden-section";
+import { useSortedResourceTypes } from "@/admin/shared/lib/use-sorted-resource-types";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { UserSelect } from "@/admin/shared/ui/users/user-select";
+import { ForbiddenSection } from "@/admin/pages/forbidden-section";
 import { COMPONENTS } from "../resource-types/resource-type";
 import { PermissionEvaluationResult } from "./permission-evaluation-result";
 

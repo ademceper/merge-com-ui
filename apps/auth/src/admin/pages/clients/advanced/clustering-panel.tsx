@@ -17,12 +17,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useDeleteClusterNode, useTestNodesAvailable } from "../hooks/use-cluster-nodes";
-import { useFormatDate, FORMAT_DATE_AND_TIME } from "../../../shared/lib/use-format-date";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { TimeSelectorForm } from "../../../shared/ui/time-selector/time-selector-form";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "@/admin/shared/lib/use-format-date";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { TimeSelectorForm } from "@/admin/shared/ui/time-selector/time-selector-form";
 import { type AdvancedProps, parseResult } from "../advanced-tab";
 import { AddHostDialog } from "./add-host-dialog";
 

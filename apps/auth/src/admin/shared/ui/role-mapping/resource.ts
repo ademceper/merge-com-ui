@@ -1,5 +1,5 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { fetchAdminUI } from "../../../app/providers/auth/admin-ui-endpoint";
+import { fetchAdminUI } from "@/admin/app/providers/auth/admin-ui-endpoint";
 
 type IDQuery = {
     id: string;

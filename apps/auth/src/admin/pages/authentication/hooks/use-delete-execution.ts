@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteExecution } from "../../../api/authentication";
+import { deleteExecution } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useDeleteExecution() {

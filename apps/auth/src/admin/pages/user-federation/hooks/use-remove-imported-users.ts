@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { removeImportedUsers } from "../../../api/user-federation";
+import { removeImportedUsers } from "@/admin/api/user-federation";
 
 export function useRemoveImportedUsers() {
     return useMutation({

@@ -4,10 +4,10 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toAuthentication, toFlow } from "../../../shared/lib/routes/authentication";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toAuthentication, toFlow } from "@/admin/shared/lib/routes/authentication";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useCreateFlow } from "../hooks/use-create-flow";
 import { NameDescription } from "./name-description";
 

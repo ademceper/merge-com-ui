@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { moveCredentialPositionDown, moveCredentialPositionUp } from "../../../api/users";
+import { moveCredentialPositionDown, moveCredentialPositionUp } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useMoveCredentialDown(userId: string) {

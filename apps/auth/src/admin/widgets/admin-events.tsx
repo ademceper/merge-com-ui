@@ -27,8 +27,8 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { TextControl } from "../../shared/keycloak-ui-shared";
-import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/multi-select-field";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import { MultiSelectField } from "@/shared/keycloak-ui-shared/controls/multi-select-field";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../app/providers/server-info/server-info-provider";
 import { useAdminEvents } from "../pages/events/hooks/use-admin-events";

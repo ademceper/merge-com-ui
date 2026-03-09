@@ -1,7 +1,7 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useQuery } from "@tanstack/react-query";
 import { sortBy } from "lodash-es";
-import { fetchUserGroups } from "../../../api/users";
+import { fetchUserGroups } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserGroups(userId: string, isDirectMembership: boolean) {

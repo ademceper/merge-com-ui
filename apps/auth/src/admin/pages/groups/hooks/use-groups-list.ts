@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findGroups, findSubGroups } from "../../../api/groups";
+import { findGroups, findSubGroups } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 /**

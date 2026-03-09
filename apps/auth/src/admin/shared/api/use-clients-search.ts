@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchClients } from "../../api/shared";
+import { searchClients } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useClientsSearch(search: string) {

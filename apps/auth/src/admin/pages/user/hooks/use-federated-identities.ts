@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFederatedIdentities } from "../../../api/users";
+import { fetchFederatedIdentities } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useFederatedIdentities(userId: string) {

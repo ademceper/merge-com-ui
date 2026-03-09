@@ -1,11 +1,11 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     toUserProfile,
     type UserProfileTab as UserProfileTabType
-} from "../../../shared/lib/routes/realm-settings";
+} from "@/admin/shared/lib/routes/realm-settings";
 import { AttributesGroupTab } from "./attributes-group-tab";
 import { AttributesTab } from "./attributes-tab";
 import { JsonEditorTab } from "./json-editor-tab";

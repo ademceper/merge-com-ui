@@ -2,13 +2,13 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { useTranslation } from "@merge-rd/i18n";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertToFormValues } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { SelectField } from "@/shared/keycloak-ui-shared";
+import { FormPanel } from "@/shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 
 type ThemeSettingsTabProps = {
     realm: RealmRepresentation;

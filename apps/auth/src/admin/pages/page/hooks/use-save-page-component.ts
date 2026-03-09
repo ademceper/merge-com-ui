@@ -1,6 +1,6 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { savePageComponent } from "../../../api/page-components";
+import { savePageComponent } from "@/admin/api/page-components";
 import { pageKeys } from "./keys";
 
 export function useSavePageComponent() {

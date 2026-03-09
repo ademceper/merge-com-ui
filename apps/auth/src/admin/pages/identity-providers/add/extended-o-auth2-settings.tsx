@@ -5,7 +5,7 @@ import {
     CollapsibleTrigger
 } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
-import { NumberControl, SelectField } from "../../../../shared/keycloak-ui-shared";
+import { NumberControl, SelectField } from "@/shared/keycloak-ui-shared";
 import { SwitchField } from "../component/switch-field";
 import { TextField } from "../component/text-field";
 

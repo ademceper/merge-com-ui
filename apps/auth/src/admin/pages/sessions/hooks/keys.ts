@@ -1,4 +1,4 @@
-import { type FilterType } from "../../../api/sessions";
+import { type FilterType } from "@/admin/api/sessions";
 
 export const sessionKeys = {
     all: ["sessions"] as const,

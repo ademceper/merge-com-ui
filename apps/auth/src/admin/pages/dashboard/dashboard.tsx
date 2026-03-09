@@ -13,11 +13,11 @@ import {
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
 import { useMemo } from "react";
-import { HelpItem, KeycloakSpinner, label } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { useLocaleSort, mapByKey } from "../../shared/lib/use-locale-sort";
-import { useParams } from "../../shared/lib/use-params";
+import { HelpItem, KeycloakSpinner, label } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { ProviderInfo } from "./provider-info";
 
 const EmptyDashboard = () => {

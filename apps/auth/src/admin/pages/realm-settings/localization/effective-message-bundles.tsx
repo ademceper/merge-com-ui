@@ -23,13 +23,13 @@ import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { findEffectiveMessageBundles } from "../../../api/realm-settings";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
-import { localeToDisplayName } from "../../../shared/lib/util";
+import { FormPanel } from "@/shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { findEffectiveMessageBundles } from "@/admin/api/realm-settings";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { localeToDisplayName } from "@/admin/shared/lib/util";
 
 type EffectiveMessageBundlesProps = {
     defaultSupportedLocales: string[];

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { importFromUrl } from "../../../api/identity-providers";
+import { importFromUrl } from "@/admin/api/identity-providers";
 
 export function useImportFromUrl() {
     return useMutation({

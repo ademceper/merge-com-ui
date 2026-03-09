@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { UserParams } from "../../shared/lib/routes/user";
-import { useParams } from "../../shared/lib/use-params";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { UserParams } from "@/admin/shared/lib/routes/user";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { SessionsTable } from "../sessions/sessions-table";
 import { useUserSessions } from "./hooks/use-user-sessions";
 

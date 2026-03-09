@@ -14,8 +14,8 @@ import {
     getErrorDescription,
     getErrorMessage,
     SelectField
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useBindFlow } from "./hooks/use-bind-flow";
 import { REALM_FLOWS } from "./constants";
 

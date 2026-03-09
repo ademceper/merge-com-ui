@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { fetchKeyProviderComponents } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { fetchKeyProviderComponents } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useKeyProviderComponents() {

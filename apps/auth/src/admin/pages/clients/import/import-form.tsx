@@ -10,19 +10,19 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateClient } from "../hooks/use-create-client";
-import { getAdminClientBaseUrl, getAdminClientAccessToken } from "../../../api/clients";
-import { getAuthorizationHeaders } from "../../../shared/lib/get-authorization-headers";
-import { toClient, toClients } from "../../../shared/lib/routes/clients";
+import { getAdminClientBaseUrl, getAdminClientAccessToken } from "@/admin/api/clients";
+import { getAuthorizationHeaders } from "@/admin/shared/lib/get-authorization-headers";
+import { toClient, toClients } from "@/admin/shared/lib/routes/clients";
 import {
     addTrailingSlash,
     convertFormValuesToObject,
     convertToFormValues
-} from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
+} from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { FileUploadForm } from "@/admin/shared/ui/json-file-upload/file-upload-form";
 import { CapabilityConfig } from "../add/capability-config";
 import { ClientDescription } from "../client-description";
 import type { FormFields } from "../client-details";

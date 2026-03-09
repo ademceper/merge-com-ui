@@ -3,12 +3,12 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
 import JSZip from "jszip";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type ThemesTabType,
     toThemesTab
-} from "../../../shared/lib/routes/realm-settings";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import { LogoContext } from "./logo-context";
 import { ThemeColors } from "./theme-colors";
 import { ThemeSettingsTab } from "./theme-settings";

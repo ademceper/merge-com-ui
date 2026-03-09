@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchRealmNames } from "../../../api/realm";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { fetchRealmNames } from "@/admin/api/realm";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { realmKeys } from "./keys";
 
 export function useRealmNames() {

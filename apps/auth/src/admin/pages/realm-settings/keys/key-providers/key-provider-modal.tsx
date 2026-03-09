@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import type { ProviderType } from "../../../../shared/lib/routes/realm-settings";
+import type { ProviderType } from "@/admin/shared/lib/routes/realm-settings";
 import { KeyProviderForm } from "./key-provider-form";
 
 type KeyProviderModalProps = {

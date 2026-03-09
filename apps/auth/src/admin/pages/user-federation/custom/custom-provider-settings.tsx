@@ -10,15 +10,15 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
-import { toUserFederation } from "../../../shared/lib/routes/user-federation";
-import { useParams } from "../../../shared/lib/use-params";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import type { CustomUserFederationRouteParams } from "@/admin/shared/lib/routes/user-federation";
+import { toUserFederation } from "@/admin/shared/lib/routes/user-federation";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useCreateComponent } from "../hooks/use-create-component";
 import { useCustomComponent } from "../hooks/use-custom-component";
 import { useUpdateComponent } from "../hooks/use-update-component";

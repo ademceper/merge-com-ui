@@ -1,5 +1,5 @@
 import type { TFunction } from "@merge-rd/i18n";
-import { label } from "../../../shared/keycloak-ui-shared";
+import { label } from "@/shared/keycloak-ui-shared";
 
 type IFormatterValueType = string | number | boolean | null | undefined;
 /** Compatible with KeycloakDataTable IFormatter (value: unknown) => unknown */

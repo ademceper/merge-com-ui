@@ -1,4 +1,4 @@
-import { generateEncodedPath } from "../../shared/lib/generateEncodedPath";
+import { generateEncodedPath } from "@/admin/shared/lib/generateEncodedPath";
 
 type RealmParams = { realm: string };
 

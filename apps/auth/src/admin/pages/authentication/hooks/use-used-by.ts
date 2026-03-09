@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUsedBy } from "../../../shared/ui/role-mapping/resource";
+import { fetchUsedBy } from "@/admin/shared/ui/role-mapping/resource";
 import { authenticationKeys } from "./keys";
 
 export function useUsedBy(id: string, isSpecificClient: boolean) {

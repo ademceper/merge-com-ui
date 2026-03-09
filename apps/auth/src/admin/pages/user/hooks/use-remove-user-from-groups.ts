@@ -1,6 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { removeUserFromGroup } from "../../../api/users";
+import { removeUserFromGroup } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useRemoveUserFromGroups(userId: string) {

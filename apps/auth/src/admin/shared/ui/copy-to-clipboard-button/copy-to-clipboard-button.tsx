@@ -8,9 +8,9 @@ import {
 } from "@merge-rd/ui/components/tooltip";
 import { Copy } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { useSetTimeout } from "../../../../shared/keycloak-ui-shared";
+import { useSetTimeout } from "@/shared/keycloak-ui-shared";
 
-import { useQueryPermission } from "../../lib/use-query-permission";
+import { useQueryPermission } from "@/admin/shared/lib/use-query-permission";
 
 enum CopyState {
     Ready,

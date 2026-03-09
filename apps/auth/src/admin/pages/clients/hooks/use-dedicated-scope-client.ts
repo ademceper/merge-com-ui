@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchDedicatedScopeClient } from "../../../api/clients";
+import { fetchDedicatedScopeClient } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useDedicatedScopeClient(clientId: string) {

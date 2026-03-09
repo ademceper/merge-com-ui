@@ -1,6 +1,6 @@
 import { sortBy } from "lodash-es";
 import { useMemo } from "react";
-import { useResourceServer } from "../../../shared/api/use-resource-server";
+import { useResourceServer } from "@/admin/shared/api/use-resource-server";
 
 export function useSortedResourceTypesQuery(clientId: string) {
     const { data: resourceServer } = useResourceServer(clientId);

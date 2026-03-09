@@ -12,11 +12,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { Question } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { ClientRoleParams } from "../../shared/lib/routes/clients";
-import { useParams } from "../../shared/lib/use-params";
-import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
+import { useHelp } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { ClientRoleParams } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { emptyFormatter, upperCaseFormatter } from "@/admin/shared/lib/util";
 import { useUsersInRole } from "./hooks/use-users-in-role";
 
 export const UsersInRoleTab = () => {

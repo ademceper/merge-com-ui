@@ -2,8 +2,8 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 const Permissions = ({ name }: { name: string }) => {
     const { t } = useTranslation();

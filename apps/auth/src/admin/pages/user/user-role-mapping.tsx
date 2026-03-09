@@ -1,8 +1,8 @@
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { RoleMapping, type Row } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { useAssignRoleMappings } from "./hooks/use-assign-role-mappings";
 
 type UserRoleMappingProps = {

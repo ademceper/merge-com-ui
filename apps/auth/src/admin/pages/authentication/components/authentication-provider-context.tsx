@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import {
     createNamedContext,
     useRequiredContext
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useAuthenticationProviders } from "../hooks/use-authentication-providers";
 
 const AuthenticationProviderContext = createNamedContext<

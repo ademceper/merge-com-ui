@@ -4,7 +4,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormErrorText, HelpItem } from "../../../../../shared/keycloak-ui-shared";
+import { FormErrorText, HelpItem } from "@/shared/keycloak-ui-shared";
 
 const DATE_TIME_FORMAT = /(\d\d\d\d-\d\d-\d\d)? (\d\d?):(\d\d?)/;
 const padDateSegment = (value: number) => value.toString().padStart(2, "0");

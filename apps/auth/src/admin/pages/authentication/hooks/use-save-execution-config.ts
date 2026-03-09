@@ -1,6 +1,6 @@
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveExecutionConfig } from "../../../api/authentication";
+import { saveExecutionConfig } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useSaveExecutionConfig() {

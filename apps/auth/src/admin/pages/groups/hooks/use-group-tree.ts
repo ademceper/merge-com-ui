@@ -1,6 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchGroupChildren, fetchGroupTree } from "../../../api/groups";
+import { fetchGroupChildren, fetchGroupTree } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 /**

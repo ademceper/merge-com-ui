@@ -11,9 +11,9 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toFlow } from "../../shared/lib/routes/authentication";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toFlow } from "@/admin/shared/lib/routes/authentication";
 import { useDuplicateFlow } from "./hooks/use-duplicate-flow";
 import { NameDescription } from "./form/name-description";
 

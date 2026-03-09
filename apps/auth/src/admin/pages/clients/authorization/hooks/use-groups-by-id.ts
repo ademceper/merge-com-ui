@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findGroupById } from "../../../../api/client-authorization";
+import { findGroupById } from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function useGroupsById(ids: string[]) {

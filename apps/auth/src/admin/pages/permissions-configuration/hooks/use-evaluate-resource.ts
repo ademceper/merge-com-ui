@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { evaluateResource } from "../../../api/permissions";
+import { evaluateResource } from "@/admin/api/permissions";
 
 export function useEvaluateResource() {
     return useMutation({

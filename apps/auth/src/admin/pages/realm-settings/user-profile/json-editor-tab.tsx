@@ -5,10 +5,10 @@ import {
     FormPanel,
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { prettyPrintJSON } from "../../../shared/lib/util";
-import { CodeEditor } from "../../../shared/ui/form/code-editor";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+} from "@/shared/keycloak-ui-shared";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
+import { CodeEditor } from "@/admin/shared/ui/form/code-editor";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
 import { useUserProfile } from "./user-profile-context";
 
 export const JsonEditorTab = () => {

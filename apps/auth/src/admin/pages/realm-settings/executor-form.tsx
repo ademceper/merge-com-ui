@@ -19,17 +19,17 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+} from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { useSaveClientProfiles } from "./hooks/use-save-client-profiles";
 import {
     type ClientProfileParams,
     type ExecutorParams,
     toClientProfile
-} from "../../shared/lib/routes/realm-settings";
-import { useParams } from "../../shared/lib/use-params";
-import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useClientProfiles } from "./hooks/use-client-profiles";
 
 type ExecutorForm = {

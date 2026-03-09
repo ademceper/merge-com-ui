@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findUserFederationList } from "../../../api/user-federation";
+import { findUserFederationList } from "@/admin/api/user-federation";
 import { federationKeys } from "./keys";
 
 export function useUserFederationList(parentId: string | undefined) {

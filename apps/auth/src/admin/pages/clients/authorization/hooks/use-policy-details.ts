@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     findOnePolicyWithType,
     getAssociatedPolicies
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function usePolicyDetails(

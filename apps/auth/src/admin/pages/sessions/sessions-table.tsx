@@ -17,15 +17,15 @@ import {
     getErrorDescription,
     getErrorMessage,
     useEnvironment
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeleteSession } from "./hooks/use-delete-session";
 import { useLogoutUser } from "./hooks/use-logout-user";
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { toClient } from "../../shared/lib/routes/clients";
-import { toUser, toUsers } from "../../shared/lib/routes/user";
-import { useFormatDate } from "../../shared/lib/use-format-date";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { toClient } from "@/admin/shared/lib/routes/clients";
+import { toUser, toUsers } from "@/admin/shared/lib/routes/user";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { isLightweightUser } from "../user/utils";
 
 type ColumnName = "username" | "start" | "lastAccess" | "clients" | "type" | "ipAddress";

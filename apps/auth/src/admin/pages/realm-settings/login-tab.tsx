@@ -7,10 +7,10 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useUpdateRealm } from "./hooks/use-update-realm";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 type RealmSettingsLoginTabProps = {
     realm: RealmRepresentation;

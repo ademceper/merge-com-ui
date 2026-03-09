@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { ConfirmDialogModal } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
 import { type SamlKeysDialogForm, submitForm } from "./saml-keys-dialog";

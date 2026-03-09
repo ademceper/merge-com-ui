@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { updateRealm } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { updateRealm } from "@/admin/api/realm-settings";
 
 export function useUpdateRealm() {
     const { realm } = useRealm();

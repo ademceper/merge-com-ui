@@ -15,7 +15,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 import { FormGroupField } from "../component/form-group-field";
 import { SwitchField } from "../component/switch-field";
 import { TextField } from "../component/text-field";

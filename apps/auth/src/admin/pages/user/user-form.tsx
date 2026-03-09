@@ -32,17 +32,17 @@ import {
     SwitchControl,
     TextControl,
     UserProfileFields
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { toUsers } from "../../shared/lib/routes/user";
-import { useFormatDate } from "../../shared/lib/use-format-date";
-import { emailRegexPattern } from "../../shared/lib/util";
-import { CopyToClipboardButton } from "../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { toUsers } from "@/admin/shared/lib/routes/user";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { emailRegexPattern } from "@/admin/shared/lib/util";
+import { CopyToClipboardButton } from "@/admin/shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { FederatedUserLink } from "./federated-user-link";
 import { toUserFormFields, type UserFormFields } from "./form-state";
 import { useAddUserToGroups } from "./hooks/use-add-user-to-groups";

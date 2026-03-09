@@ -33,22 +33,22 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeletePolicyMutation } from "./hooks/use-authorization-mutations";
 import {
     toCreatePolicy,
     toPermissionDetails,
     toPolicyDetails
-} from "../../../shared/lib/routes/clients";
+} from "@/admin/shared/lib/routes/clients";
 import {
     toCreatePermissionPolicy,
     toPermissionPolicyDetails
-} from "../../../shared/lib/routes/permissions";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/use-is-admin-permissions-client";
-import { useToggle } from "../../../shared/lib/use-toggle";
-import { toUpperCase } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/permissions";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { toUpperCase } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { usePolicies as usePoliciesQuery } from "./hooks/use-policies";
 import { DetailDescriptionLink } from "./detail-description";
 import { MoreLabel } from "./more-label";

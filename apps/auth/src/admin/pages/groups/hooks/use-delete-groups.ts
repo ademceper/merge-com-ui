@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteGroup } from "../../../api/groups";
+import { deleteGroup } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 /**

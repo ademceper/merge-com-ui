@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateClientScope } from "../../../api/client-scopes";
+import { updateClientScope } from "@/admin/api/client-scopes";
 import {
     type AllClientScopeType,
     changeScope
-} from "../../../shared/ui/client-scope/client-scope-types";
-import type { ClientScopeDefaultOptionalType } from "../../../shared/ui/client-scope/client-scope-types";
+} from "@/admin/shared/ui/client-scope/client-scope-types";
+import type { ClientScopeDefaultOptionalType } from "@/admin/shared/ui/client-scope/client-scope-types";
 import { clientScopeKeys } from "./keys";
 
 export function useUpdateClientScope(id: string) {

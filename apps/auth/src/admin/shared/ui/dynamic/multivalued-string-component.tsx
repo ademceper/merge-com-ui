@@ -1,6 +1,6 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
 import { MultiLineInput } from "../multi-line-input/multi-line-input";
 import type { ComponentProps } from "./components";
 

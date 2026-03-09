@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { executeActionsEmail } from "../../../api/users";
+import { executeActionsEmail } from "@/admin/api/users";
 
 export function useExecuteActionsEmail() {
     return useMutation({

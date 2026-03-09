@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFormProviders } from "../../../api/authentication";
+import { fetchFormProviders } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useFormProviders() {

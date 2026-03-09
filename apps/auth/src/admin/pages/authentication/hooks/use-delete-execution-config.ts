@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteExecutionConfig } from "../../../api/authentication";
+import { deleteExecutionConfig } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useDeleteExecutionConfig() {

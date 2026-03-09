@@ -1,6 +1,6 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { removeCompositeRoles } from "../../../api/realm-roles";
+import { removeCompositeRoles } from "@/admin/api/realm-roles";
 import { roleKeys } from "./keys";
 
 export function useRemoveCompositeRoles() {

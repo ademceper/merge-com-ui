@@ -18,10 +18,10 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useFormatDate } from "../../shared/lib/use-format-date";
-import { useParams } from "../../shared/lib/use-params";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useRevokeConsent } from "./hooks/use-revoke-consent";
 import { useUserConsents as useUserConsentsQuery } from "./hooks/use-user-consents";
 

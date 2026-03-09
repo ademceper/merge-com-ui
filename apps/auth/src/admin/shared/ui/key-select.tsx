@@ -9,7 +9,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { type UseControllerProps, useController } from "react-hook-form";
-import type { SelectControlOption } from "../../../shared/keycloak-ui-shared";
+import type { SelectControlOption } from "@/shared/keycloak-ui-shared";
 import { useToggle } from "../lib/use-toggle";
 
 type KeySelectProp = UseControllerProps & {

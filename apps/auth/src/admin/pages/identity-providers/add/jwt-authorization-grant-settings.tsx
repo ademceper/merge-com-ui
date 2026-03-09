@@ -1,8 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { NumberControl, TextControl } from "../../../../shared/keycloak-ui-shared";
-import type { IdentityProviderParams } from "../../../shared/lib/routes/identity-providers";
-import { useParams } from "../../../shared/lib/use-params";
+import { NumberControl, TextControl } from "@/shared/keycloak-ui-shared";
+import type { IdentityProviderParams } from "@/admin/shared/lib/routes/identity-providers";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { JwksSettings } from "./jwks-settings";
 import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
 

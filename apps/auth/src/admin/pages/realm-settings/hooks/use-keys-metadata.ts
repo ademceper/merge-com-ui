@@ -1,8 +1,8 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { fetchKeysMetadata } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { fetchKeysMetadata } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 type KeyData = KeyMetadataRepresentation & {

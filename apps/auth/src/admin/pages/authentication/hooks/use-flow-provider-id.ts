@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFlowProviderId } from "../../../api/authentication";
+import { fetchFlowProviderId } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useFlowProviderId(flowId: string | undefined) {

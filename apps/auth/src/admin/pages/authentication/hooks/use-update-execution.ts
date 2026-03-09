@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateExecution } from "../../../api/authentication";
+import { updateExecution } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useUpdateExecution() {

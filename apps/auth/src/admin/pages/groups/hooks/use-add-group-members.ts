@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addUserToGroup } from "../../../api/groups";
+import { addUserToGroup } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 /**

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findClientScope } from "../../../api/client-scopes";
+import { findClientScope } from "@/admin/api/client-scopes";
 import { clientScopeKeys } from "./keys";
 
 export function useClientScope(id: string) {

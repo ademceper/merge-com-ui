@@ -8,11 +8,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useLdapServerCapabilities } from "../hooks/use-ldap-server-capabilities";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { WizardSectionHeader } from "@/admin/shared/ui/wizard-section-header/wizard-section-header";
 import { convertFormToSettings } from "./ldap-settings-connection";
 
 type LdapSettingsAdvancedProps = {

@@ -15,24 +15,24 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 
 const RouterLink = Link as ComponentType<LinkProps>;
 
-import { KeycloakSpinner } from "../../../../../shared/keycloak-ui-shared";
+import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
 import { useUpdatePolicy, useCreatePolicy, useDeletePolicyMutation } from "../hooks/use-authorization-mutations";
-import { toPermissionsConfigurationTabs } from "../../../../shared/lib/route-helpers";
+import { toPermissionsConfigurationTabs } from "@/admin/shared/lib/route-helpers";
 import {
     type PolicyDetailsParams,
     toAuthorizationTab,
     toPolicyDetails
-} from "../../../../shared/lib/routes/clients";
-import type { NewPermissionPolicyDetailsParams } from "../../../../shared/lib/routes/permissions";
-import { toPermissionPolicyDetails } from "../../../../shared/lib/routes/permissions";
-import { useIsAdminPermissionsClient } from "../../../../shared/lib/use-is-admin-permissions-client";
-import { useParams } from "../../../../shared/lib/use-params";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../../shared/ui/form/form-access";
+} from "@/admin/shared/lib/routes/clients";
+import type { NewPermissionPolicyDetailsParams } from "@/admin/shared/lib/routes/permissions";
+import { toPermissionPolicyDetails } from "@/admin/shared/lib/routes/permissions";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { usePolicyDetails as usePolicyDetailsQuery } from "../hooks/use-policy-details";
 import { Aggregate } from "./aggregate";
 import { Client } from "./client";

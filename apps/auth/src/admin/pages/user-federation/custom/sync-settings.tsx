@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, FormProvider, useFormContext } from "react-hook-form";
-import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { FormLabel, HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
 
 export const SyncSettings = () => {
     const { t } = useTranslation();

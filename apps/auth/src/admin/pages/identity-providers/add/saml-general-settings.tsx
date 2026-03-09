@@ -5,10 +5,10 @@ import {
     HelpItem,
     TextControl,
     useEnvironment
-} from "../../../../shared/keycloak-ui-shared";
-import type { Environment } from "../../../app/environment";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { FormattedLink } from "../../../shared/ui/external-link/formatted-link";
+} from "@/shared/keycloak-ui-shared";
+import type { Environment } from "@/admin/app/environment";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { FormattedLink } from "@/admin/shared/ui/external-link/formatted-link";
 import { DisplayOrder } from "../component/display-order";
 import { RedirectUrl } from "../component/redirect-url";
 

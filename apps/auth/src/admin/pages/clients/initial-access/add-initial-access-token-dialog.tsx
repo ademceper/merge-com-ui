@@ -18,12 +18,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateInitialAccessToken } from "../hooks/use-create-initial-access-token";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
-import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
+import { TimeSelector } from "@/admin/shared/ui/time-selector/time-selector";
 import { AccessTokenDialog } from "./access-token-dialog";
 
 type AddInitialAccessTokenDialogProps = {

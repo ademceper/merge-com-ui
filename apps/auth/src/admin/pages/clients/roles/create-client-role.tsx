@@ -6,13 +6,13 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateClientRole } from "../hooks/use-client-roles";
-import type { NewRoleParams } from "../../../shared/lib/routes/clients";
-import { toClient, toClientRole } from "../../../shared/lib/routes/clients";
-import type { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
-import { RoleForm } from "../../../shared/ui/role-form/role-form";
+import type { NewRoleParams } from "@/admin/shared/lib/routes/clients";
+import { toClient, toClientRole } from "@/admin/shared/lib/routes/clients";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
+import { RoleForm } from "@/admin/shared/ui/role-form/role-form";
 
 export function CreateClientRole() {
 

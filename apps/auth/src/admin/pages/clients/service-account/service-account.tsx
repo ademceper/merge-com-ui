@@ -9,12 +9,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useAssignServiceAccountRoles } from "../hooks/use-service-account-roles";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toUser } from "../../../shared/lib/routes/user";
-import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUser } from "@/admin/shared/lib/routes/user";
+import { RoleMapping, type Row } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { useServiceAccountUser } from "../hooks/use-service-account-user";
 
 const TransComponent = Trans as ComponentType<Record<string, unknown>>;

@@ -12,14 +12,14 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { FormLabel, HelpItem } from "../../../../../shared/keycloak-ui-shared";
+import { FormLabel, HelpItem } from "@/shared/keycloak-ui-shared";
 import {
     AddRoleButton,
     AddRoleMappingModal,
     type FilterType
-} from "../../../../shared/ui/role-mapping/add-role-mapping-modal";
-import { type Row, ServiceRole } from "../../../../shared/ui/role-mapping/role-mapping";
-import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
+} from "@/admin/shared/ui/role-mapping/add-role-mapping-modal";
+import { type Row, ServiceRole } from "@/admin/shared/ui/role-mapping/role-mapping";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { useRolesById } from "../hooks/use-roles-by-id";
 import type { RequiredIdValue } from "./client-scope";
 

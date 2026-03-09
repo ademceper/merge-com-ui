@@ -1,7 +1,7 @@
 import type { RealmEventsConfigRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/realmEventsConfigRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { saveEventsConfig } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { saveEventsConfig } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useSaveEventsConfig() {

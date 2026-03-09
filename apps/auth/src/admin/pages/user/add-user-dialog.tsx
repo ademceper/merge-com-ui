@@ -13,11 +13,11 @@ import {
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { TextControl } from "../../../shared/keycloak-ui-shared/controls/text-control";
-import { emailRegexPattern } from "../../shared/lib/util";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { TextControl } from "@/shared/keycloak-ui-shared/controls/text-control";
+import { emailRegexPattern } from "@/admin/shared/lib/util";
 import { useCreateUser } from "./hooks/use-create-user";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 const FORM_ID = "add-user-form";
 

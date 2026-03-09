@@ -1,6 +1,6 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveComponent } from "../../../api/realm-settings";
+import { saveComponent } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useSaveComponent() {

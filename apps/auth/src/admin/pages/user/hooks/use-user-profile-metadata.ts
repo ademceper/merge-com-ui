@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserProfileMetadata } from "../../../api/users";
+import { fetchUserProfileMetadata } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserProfileMetadata(realm: string) {

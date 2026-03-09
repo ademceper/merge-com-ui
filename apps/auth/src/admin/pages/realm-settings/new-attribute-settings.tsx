@@ -13,14 +13,14 @@ import {
     getErrorDescription,
     getErrorMessage,
     ScrollForm
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import {
     type AttributeParams,
     toUserProfile
-} from "../../shared/lib/routes/realm-settings";
-import { useParams } from "../../shared/lib/use-params";
-import { convertToFormValues } from "../../shared/lib/util";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
 import type { TranslationForm } from "./add-translation-modal";
 import { useUpdateUserProfile } from "./hooks/use-update-user-profile";
 import { useUserProfileConfigGlobal } from "./hooks/use-user-profile-config-global";

@@ -5,7 +5,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import {
     type FallbackProps,
     useEnvironment
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 
 export const ErrorRenderer = ({ error }: FallbackProps) => {
     const { keycloak } = useEnvironment();

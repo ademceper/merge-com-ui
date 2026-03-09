@@ -9,11 +9,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import type { ClientParams } from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { prettyPrintJSON } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import type { ClientParams } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { prettyPrintJSON } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useExportResource } from "./hooks/use-export-resource";
 
 export const AuthorizationExport = () => {

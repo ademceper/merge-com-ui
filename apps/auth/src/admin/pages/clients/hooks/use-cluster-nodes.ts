@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addClusterNode, deleteClusterNode, testNodesAvailable } from "../../../api/clients";
+import { addClusterNode, deleteClusterNode, testNodesAvailable } from "@/admin/api/clients";
 
 export function useAddClusterNode() {
     return useMutation({

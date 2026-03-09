@@ -9,11 +9,11 @@ import {
     getErrorMessage,
     TextAreaControl,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../../shared/lib/use-toggle";
+} from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useUploadCertificate } from "../hooks/use-upload-certificate";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { type ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
+import { type ImportFile, ImportKeyDialog } from "@/admin/pages/clients/keys/import-key-dialog";
 
 type JwksSettingsProps = {
     readOnly?: boolean;

@@ -37,26 +37,26 @@ import {
     getErrorDescription,
     getErrorMessage,
     useEnvironment
-} from "../../../shared/keycloak-ui-shared";
-import { fetchRealmLocalizationTexts, getAdminClientBaseUrl, getAdminClientAccessToken } from "../../api/realm-settings";
+} from "@/shared/keycloak-ui-shared";
+import { fetchRealmLocalizationTexts, getAdminClientBaseUrl, getAdminClientAccessToken } from "@/admin/api/realm-settings";
 import { useDeleteRealm } from "./hooks/use-delete-realm";
-import type { Environment } from "../../app/environment";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { getAuthorizationHeaders } from "../../shared/lib/get-authorization-headers";
-import { joinPath } from "../../shared/lib/join-path";
-import type { RealmSettingsTab } from "../../shared/lib/route-helpers";
-import { toDashboard, toRealmSettings } from "../../shared/lib/route-helpers";
+import type { Environment } from "@/admin/app/environment";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { getAuthorizationHeaders } from "@/admin/shared/lib/get-authorization-headers";
+import { joinPath } from "@/admin/shared/lib/join-path";
+import type { RealmSettingsTab } from "@/admin/shared/lib/route-helpers";
+import { toDashboard, toRealmSettings } from "@/admin/shared/lib/route-helpers";
 import {
     type ClientPoliciesTab,
     toClientPolicies
-} from "../../shared/lib/routes/realm-settings";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useLocale } from "../../shared/lib/use-locale";
-import { useParams } from "../../shared/lib/use-params";
-import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useLocale } from "@/admin/shared/lib/use-locale";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
 import { RealmSettingsEmailTab } from "./email-tab";
 import { EventsTab } from "./event-config/events-tab";
 import { RealmSettingsGeneralTab } from "./general-tab";

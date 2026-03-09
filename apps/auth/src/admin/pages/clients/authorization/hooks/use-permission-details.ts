@@ -4,7 +4,7 @@ import {
     getAssociatedPolicies,
     getAssociatedResources,
     getAssociatedScopes
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function usePermissionDetails(

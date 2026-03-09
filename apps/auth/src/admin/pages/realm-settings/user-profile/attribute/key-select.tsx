@@ -1,1 +1,1 @@
-export { KeySelect } from "../../../../shared/ui/key-select";
+export { KeySelect } from "@/admin/shared/ui/key-select";

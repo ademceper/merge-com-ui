@@ -3,7 +3,7 @@ import { useMatches } from "@tanstack/react-router";
 import type React from "react";
 import { useMemo } from "react";
 
-import { ForbiddenSection } from "../../pages/forbidden-section";
+import { ForbiddenSection } from "@/admin/pages/forbidden-section";
 import { useAccess } from "../providers/access/access";
 
 function hasProp<K extends PropertyKey>(

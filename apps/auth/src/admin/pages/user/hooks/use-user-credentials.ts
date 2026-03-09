@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserCredentials } from "../../../api/users";
+import { fetchUserCredentials } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserCredentials(userId: string, enabled: boolean) {

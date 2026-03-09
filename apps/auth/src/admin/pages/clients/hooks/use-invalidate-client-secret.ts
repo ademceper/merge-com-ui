@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { invalidateClientSecret } from "../../../api/clients";
+import { invalidateClientSecret } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useInvalidateClientSecret() {

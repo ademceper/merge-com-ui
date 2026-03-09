@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext } from "react-hook-form";
-import { SelectField, TextAreaControl } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { SelectField, TextAreaControl } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import type { FormFields } from "../client-details";
 
 export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {

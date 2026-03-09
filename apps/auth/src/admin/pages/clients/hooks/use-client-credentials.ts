@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
     fetchClientAuthenticatorProviders,
     fetchClientSecret
-} from "../../../api/clients";
+} from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useClientCredentials(clientId: string) {

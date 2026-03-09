@@ -15,20 +15,20 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
-import { toPermissionsConfigurationTabs } from "../../../shared/lib/route-helpers";
+} from "@/shared/keycloak-ui-shared";
+import { toPermissionsConfigurationTabs } from "@/admin/shared/lib/route-helpers";
 import { useDeletePermission } from "../hooks/use-delete-permission";
 import { useSavePermission } from "../hooks/use-save-permission";
 import {
     type PermissionConfigurationDetailsParams,
     toPermissionConfigurationDetails
-} from "../../../shared/lib/routes/permissions";
-import { useParams } from "../../../shared/lib/use-params";
-import { useSortedResourceTypes } from "../../../shared/lib/use-sorted-resource-types";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { NameDescription } from "../../clients/authorization/policy/name-description";
-import { ScopePicker } from "../../clients/authorization/scope-picker";
+} from "@/admin/shared/lib/routes/permissions";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useSortedResourceTypes } from "@/admin/shared/lib/use-sorted-resource-types";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { NameDescription } from "@/admin/pages/clients/authorization/policy/name-description";
+import { ScopePicker } from "@/admin/pages/clients/authorization/scope-picker";
 import { usePermissionDetail } from "../hooks/use-permission-detail";
 import { useProvidersAndPolicies } from "../hooks/use-providers-and-policies";
 import { ResourceType } from "../resource-types/resource-type";

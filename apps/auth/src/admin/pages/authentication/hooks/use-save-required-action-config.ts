@@ -1,6 +1,6 @@
 import type RequiredActionConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionConfigRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveRequiredActionConfig } from "../../../api/authentication";
+import { saveRequiredActionConfig } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useSaveRequiredActionConfig() {

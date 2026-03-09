@@ -8,8 +8,8 @@ import {
 } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { SelectField, TextControl } from "@/shared/keycloak-ui-shared";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { JwksSettings } from "./jwks-settings";
 
 const PKCE_METHODS = ["plain", "S256"] as const;

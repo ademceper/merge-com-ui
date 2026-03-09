@@ -27,12 +27,12 @@ import {
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toGroups } from "../../shared/lib/routes/groups";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useToggle } from "../../shared/lib/use-toggle";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toGroups } from "@/admin/shared/lib/routes/groups";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { PermissionsTab } from "@/admin/shared/ui/permission-tab/permission-tab";
 import { AdminEvents } from "../events/admin-events";
 import { useNavigationPath } from "./hooks/use-navigation-path";
 import { DeleteGroup } from "./components/delete-group";

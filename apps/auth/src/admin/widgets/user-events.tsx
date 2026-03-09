@@ -19,7 +19,7 @@ import { pickBy } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
-import { TextControl } from "../../shared/keycloak-ui-shared";
+import { TextControl } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useEventsConfig } from "../pages/events/hooks/use-events-config";
 import { useUserEvents } from "../pages/events/hooks/use-user-events";

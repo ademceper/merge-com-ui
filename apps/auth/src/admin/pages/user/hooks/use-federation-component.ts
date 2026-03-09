@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFederationComponent, fetchStorageProviderName } from "../../../api/users";
+import { fetchFederationComponent, fetchStorageProviderName } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useFederationComponent(

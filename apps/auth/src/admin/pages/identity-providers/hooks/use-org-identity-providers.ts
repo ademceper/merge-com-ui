@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findOrgIdentityProviders } from "../../../api/identity-providers";
+import { findOrgIdentityProviders } from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useOrgIdentityProviders(orgId: string) {

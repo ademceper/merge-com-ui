@@ -4,7 +4,7 @@ import {
     findIdentityProviderByAlias,
     linkOrganizationIdp,
     updateIdentityProviderByAlias
-} from "../../../api/organizations";
+} from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 type LinkParams = {

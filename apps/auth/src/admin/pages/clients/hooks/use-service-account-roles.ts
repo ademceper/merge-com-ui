@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addUserRealmRoleMappings, addUserClientRoleMappings } from "../../../api/clients";
+import { addUserRealmRoleMappings, addUserClientRoleMappings } from "@/admin/api/clients";
 
 export function useAssignServiceAccountRoles() {
     return useMutation({

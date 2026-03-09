@@ -20,11 +20,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     useHelp
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { GroupPath } from "../../shared/ui/group/group-path";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { GroupPath } from "@/admin/shared/ui/group/group-path";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useAddUserToGroups } from "./hooks/use-add-user-to-groups";
 import { useRemoveUserFromGroups } from "./hooks/use-remove-user-from-groups";
 import { useUserGroups as useUserGroupsQuery } from "./hooks/use-user-groups";

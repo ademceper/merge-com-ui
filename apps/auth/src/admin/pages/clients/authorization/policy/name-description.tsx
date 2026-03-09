@@ -1,6 +1,6 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextAreaControl, TextControl } from "../../../../../shared/keycloak-ui-shared";
-import { useIsAdminPermissionsClient } from "../../../../shared/lib/use-is-admin-permissions-client";
+import { TextAreaControl, TextControl } from "@/shared/keycloak-ui-shared";
+import { useIsAdminPermissionsClient } from "@/admin/shared/lib/use-is-admin-permissions-client";
 
 type NameDescriptionProps = {
     isDisabled?: boolean;

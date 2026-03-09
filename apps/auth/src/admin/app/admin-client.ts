@@ -1,6 +1,6 @@
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type { Keycloak } from "oidc-spa/keycloak-js";
-import { createNamedContext, useRequiredContext } from "../../shared/keycloak-ui-shared";
+import { createNamedContext, useRequiredContext } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "./environment";
 
 // Module-level singleton – set once by initAdminClient, imported directly by API layer.

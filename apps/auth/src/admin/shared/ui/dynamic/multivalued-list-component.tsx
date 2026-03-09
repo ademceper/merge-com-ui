@@ -15,7 +15,7 @@ import {
     FormErrorText,
     HelpItem,
     SelectVariant
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 function stringToMultiline(value?: string): string[] {

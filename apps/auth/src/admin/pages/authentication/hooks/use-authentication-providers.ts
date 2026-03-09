@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAuthenticationProviders } from "../../../api/authentication";
+import { fetchAuthenticationProviders } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useAuthenticationProviders() {

@@ -20,13 +20,13 @@ import {
     FormPanel,
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { updateRealm, saveEventsConfig as saveEventsConfigApi } from "../../../api/realm-settings";
+} from "@/shared/keycloak-ui-shared";
+import { updateRealm, saveEventsConfig as saveEventsConfigApi } from "@/admin/api/realm-settings";
 import { useClearEvents } from "../hooks/use-clear-events";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { convertToFormValues } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useEventsConfig } from "../hooks/use-events-config";
 import { AddEventTypesDialog } from "./add-event-types-dialog";
 import { EventConfigForm, type EventsType } from "./event-config-form";

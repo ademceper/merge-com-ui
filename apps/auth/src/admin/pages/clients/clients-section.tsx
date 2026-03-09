@@ -24,17 +24,17 @@ import {
     DataTableRowActions,
     type Row
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { ClientRegistrationTab, ClientsTab } from "../../shared/lib/routes/clients";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { ClientRegistrationTab, ClientsTab } from "@/admin/shared/lib/routes/clients";
 import {
     toClient,
     toClientRegistration,
     toClients
-} from "../../shared/lib/routes/clients";
-import { translationFormatter } from "../../shared/lib/translation-formatter";
-import { exportClient } from "../../shared/lib/util";
+} from "@/admin/shared/lib/routes/clients";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { exportClient } from "@/admin/shared/lib/util";
 import { AddClientDialog } from "./add/add-client-dialog";
 import { useClients } from "./hooks/use-clients";
 import { useDeleteClient } from "./hooks/use-delete-client";

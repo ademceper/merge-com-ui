@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserSessions } from "../../../api/users";
+import { fetchUserSessions } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useUserSessions(id: string, realm: string) {

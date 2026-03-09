@@ -23,18 +23,18 @@ import {
     HelpItem,
     MultiSelectField,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useEvaluateResource } from "./hooks/use-authorization-mutations";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { ClientSelect } from "../../../shared/ui/client/client-select";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { ClientSelect } from "@/admin/shared/ui/client/client-select";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import {
     type KeyValueType,
     keyValueToArray
-} from "../../../shared/ui/key-value-form/key-value-convert";
-import { UserSelect } from "../../../shared/ui/users/user-select";
-import { ForbiddenSection } from "../../forbidden-section";
+} from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { UserSelect } from "@/admin/shared/ui/users/user-select";
+import { ForbiddenSection } from "@/admin/pages/forbidden-section";
 import type { FormFields } from "../client-details";
 import { defaultContextAttributes } from "../utils";
 import { useResourcesAndScopes } from "./hooks/use-resources-and-scopes";

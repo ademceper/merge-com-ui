@@ -2,10 +2,10 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { useTranslation } from "@merge-rd/i18n";
 import { memo } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { TimeSelector, toHumanFormat } from "../../shared/ui/time-selector/time-selector";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { TimeSelector, toHumanFormat } from "@/admin/shared/ui/time-selector/time-selector";
 
 type TokensTabAccessSectionProps = {
     realm: RealmRepresentation;

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deletePermission } from "../../../api/permissions";
+import { deletePermission } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function useDeletePermission(clientId: string) {

@@ -16,11 +16,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { TextControl } from "../../../shared/keycloak-ui-shared/controls/text-control";
-import { findUser, updateUser } from "../../api/users";
-import { emailRegexPattern } from "../../shared/lib/util";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { TextControl } from "@/shared/keycloak-ui-shared/controls/text-control";
+import { findUser, updateUser } from "@/admin/api/users";
+import { emailRegexPattern } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 const FORM_ID = "edit-user-form";
 

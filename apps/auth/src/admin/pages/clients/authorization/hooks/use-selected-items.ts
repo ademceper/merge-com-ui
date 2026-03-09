@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findOnePolicy, getResource } from "../../../../api/client-authorization";
+import { findOnePolicy, getResource } from "@/admin/api/client-authorization";
 import { type Type, authzKeys } from "./keys";
 
 export function useSelectedItems(clientId: string, name: Type, value: string[]) {

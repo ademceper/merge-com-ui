@@ -23,10 +23,10 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeleteInitialAccessToken } from "../hooks/use-delete-initial-access-token";
-import { useFormatDate, FORMAT_DATE_AND_TIME } from "../../../shared/lib/use-format-date";
+import { useFormatDate, FORMAT_DATE_AND_TIME } from "@/admin/shared/lib/use-format-date";
 import { clientKeys } from "../hooks/keys";
 import { useInitialAccessTokens } from "../hooks/use-initial-access-tokens";
 import { AddInitialAccessTokenDialog } from "./add-initial-access-token-dialog";

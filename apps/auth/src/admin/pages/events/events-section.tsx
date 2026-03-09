@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { EventsTab } from "../../shared/lib/routes/events";
-import { toEvents } from "../../shared/lib/routes/events";
-import { useParams } from "../../shared/lib/use-params";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { EventsTab } from "@/admin/shared/lib/routes/events";
+import { toEvents } from "@/admin/shared/lib/routes/events";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { AdminEvents } from "./admin-events";
 import { UserEvents } from "./user-events";
 

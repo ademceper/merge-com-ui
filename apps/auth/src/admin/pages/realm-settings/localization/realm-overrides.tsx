@@ -34,18 +34,18 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import {
     addLocalization,
     deleteRealmLocalizationTexts,
     fetchRealmLocalizationTexts,
     setAdminClientRealmConfig
-} from "../../../api/realm-settings";
-import { i18n } from "../../../app/i18n";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { localeToDisplayName } from "../../../shared/lib/util";
-import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
+} from "@/admin/api/realm-settings";
+import { i18n } from "@/admin/app/i18n";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { localeToDisplayName } from "@/admin/shared/lib/util";
+import type { KeyValueType } from "@/admin/shared/ui/key-value-form/key-value-convert";
 import { AddTranslationModal } from "../add-translation-modal";
 
 type RealmOverridesProps = {

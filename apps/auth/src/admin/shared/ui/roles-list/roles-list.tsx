@@ -21,15 +21,15 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useDeleteRealmRole } from "../../../pages/realm-roles/hooks/use-delete-realm-role";
-import { useRemoveCompositeRoles } from "../../../pages/realm-roles/hooks/use-remove-composite-roles";
-import { useRolesList as useRolesListQuery } from "../../api/use-roles-list";
-import { toRealmSettings } from "../../lib/route-helpers";
-import { translationFormatter } from "../../lib/translation-formatter";
-import { emptyFormatter, upperCaseFormatter } from "../../lib/util";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useDeleteRealmRole } from "@/admin/pages/realm-roles/hooks/use-delete-realm-role";
+import { useRemoveCompositeRoles } from "@/admin/pages/realm-roles/hooks/use-remove-composite-roles";
+import { useRolesList as useRolesListQuery } from "@/admin/shared/api/use-roles-list";
+import { toRealmSettings } from "@/admin/shared/lib/route-helpers";
+import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
+import { emptyFormatter, upperCaseFormatter } from "@/admin/shared/lib/util";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
 type RoleDetailLinkProps = RoleRepresentation & {

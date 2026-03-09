@@ -18,17 +18,17 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import type { MapperParams } from "../../../shared/lib/routes/client-scopes";
-import { toClientScope } from "../../../shared/lib/routes/client-scopes";
-import { toDedicatedScope } from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import type { MapperParams } from "@/admin/shared/lib/routes/client-scopes";
+import { toClientScope } from "@/admin/shared/lib/routes/client-scopes";
+import { toDedicatedScope } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { useProtocolMapper } from "../hooks/use-protocol-mapper";
 
 export function MappingDetails() {

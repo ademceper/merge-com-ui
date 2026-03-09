@@ -3,7 +3,7 @@ import {
     fetchClientScopes,
     fetchDefaultClientScopes,
     fetchOptionalClientScopes
-} from "../../../api/clients";
+} from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useClientAssignedScopes(clientId: string) {

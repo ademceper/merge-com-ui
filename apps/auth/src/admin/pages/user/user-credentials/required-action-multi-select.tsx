@@ -9,7 +9,7 @@ import {
     type FieldValues,
     useFormContext
 } from "react-hook-form";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
+import { FormLabel } from "@/shared/keycloak-ui-shared";
 import { useRequiredActions } from "../hooks/use-required-actions";
 
 type RequiredActionMultiSelectProps<

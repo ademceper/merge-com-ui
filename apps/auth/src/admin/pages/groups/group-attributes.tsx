@@ -4,13 +4,13 @@ import { useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { convertFormValuesToObject } from "../../shared/lib/util";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
 import {
     type AttributeForm,
     AttributesForm
-} from "../../shared/ui/key-value-form/attribute-form";
-import { arrayToKeyValue } from "../../shared/ui/key-value-form/key-value-convert";
+} from "@/admin/shared/ui/key-value-form/attribute-form";
+import { arrayToKeyValue } from "@/admin/shared/ui/key-value-form/key-value-convert";
 import { useGroup } from "./hooks/use-group";
 import { useUpdateGroup } from "./hooks/use-update-group";
 import { getLastId } from "./group-id-utils";

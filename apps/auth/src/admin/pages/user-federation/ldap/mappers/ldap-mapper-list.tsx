@@ -20,12 +20,12 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../../shared/keycloak-ui-shared";
-import { useLocaleSort, mapByKey } from "../../../../shared/lib/use-locale-sort";
-import { useDeleteComponent } from "../../hooks/use-delete-component";
-import { useParams } from "../../../../shared/lib/use-params";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import { useLdapMappers } from "../../hooks/use-ldap-mappers";
+} from "@/shared/keycloak-ui-shared";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { useDeleteComponent } from "@/admin/pages/user-federation/hooks/use-delete-component";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { useLdapMappers } from "@/admin/pages/user-federation/hooks/use-ldap-mappers";
 
 type LdapMapperListProps = {
     toCreate: string;

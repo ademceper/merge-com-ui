@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { SwitchControl, TextControl } from "../../../../../shared/keycloak-ui-shared";
+import { SwitchControl, TextControl } from "@/shared/keycloak-ui-shared";
 
 export const Regex = () => {
     const { t } = useTranslation();

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteUserCredential } from "../../../api/users";
+import { deleteUserCredential } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useDeleteCredential(userId: string) {

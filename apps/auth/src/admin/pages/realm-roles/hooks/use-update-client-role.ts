@@ -1,6 +1,6 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateClientRole } from "../../../api/realm-roles";
+import { updateClientRole } from "@/admin/api/realm-roles";
 import { roleKeys } from "./keys";
 
 export function useUpdateClientRole(clientId: string) {

@@ -1,6 +1,6 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserProfile } from "../../../api/realm-settings";
+import { updateUserProfile } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useUpdateUserProfile() {

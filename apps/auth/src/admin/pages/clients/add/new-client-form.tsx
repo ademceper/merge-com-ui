@@ -7,12 +7,12 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useCreateClient } from "../hooks/use-create-client";
-import { toClient, toClients } from "../../../shared/lib/routes/clients";
-import { convertFormValuesToObject } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { toClient, toClients } from "@/admin/shared/lib/routes/clients";
+import { convertFormValuesToObject } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
 import { CapabilityConfig } from "./capability-config";
 import { GeneralSettings } from "./general-settings";

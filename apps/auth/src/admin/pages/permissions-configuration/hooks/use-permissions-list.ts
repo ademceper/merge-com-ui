@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findPermissionsList } from "../../../api/permissions";
+import { findPermissionsList } from "@/admin/api/permissions";
 import { permissionsKeys } from "./keys";
 
 export function usePermissionsList(

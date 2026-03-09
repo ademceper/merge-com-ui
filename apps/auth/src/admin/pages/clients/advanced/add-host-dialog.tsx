@@ -13,7 +13,7 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useAddClusterNode } from "../hooks/use-cluster-nodes";
 
 type FormFields = {

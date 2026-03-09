@@ -1,7 +1,7 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import { adminClient } from "../../admin-client";
-import { getAuthorizationHeaders } from "../../../shared/lib/get-authorization-headers";
-import { joinPath } from "../../../shared/lib/join-path";
+import { adminClient } from "@/admin/app/admin-client";
+import { getAuthorizationHeaders } from "@/admin/shared/lib/get-authorization-headers";
+import { joinPath } from "@/admin/shared/lib/join-path";
 import type { UiRealmInfo } from "./ui-realm-info";
 
 export async function fetchAdminUI<T>(

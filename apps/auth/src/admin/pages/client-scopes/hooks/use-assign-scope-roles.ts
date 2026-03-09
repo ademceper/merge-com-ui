@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     addClientScopeMappings,
     addRealmScopeMappings
-} from "../../../api/client-scopes";
+} from "@/admin/api/client-scopes";
 import { clientScopeKeys } from "./keys";
 
 export function useAssignScopeRoles(id: string) {

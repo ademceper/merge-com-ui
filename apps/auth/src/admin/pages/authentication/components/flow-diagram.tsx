@@ -13,7 +13,7 @@ import {
     useEdgesState,
     useNodesState
 } from "reactflow";
-import { useUpdateEffect } from "../../../shared/lib/use-update-effect";
+import { useUpdateEffect } from "@/admin/shared/lib/use-update-effect";
 
 import type { ExecutionList, ExpandableExecution } from "../execution-model";
 import { providerConditionFilter } from "../flow-details";

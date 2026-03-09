@@ -1,6 +1,6 @@
 import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateOrganization } from "../../../api/organizations";
+import { updateOrganization } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useUpdateOrganization(id: string) {

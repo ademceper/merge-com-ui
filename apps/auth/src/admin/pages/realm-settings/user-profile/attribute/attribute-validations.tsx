@@ -12,10 +12,10 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { useToggle } from "../../../../shared/lib/use-toggle";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import type { DefaultValue } from "../../../../shared/ui/key-value-form/key-value-input";
-import type { IndexedValidations } from "../../new-attribute-settings";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import type { DefaultValue } from "@/admin/shared/ui/key-value-form/key-value-input";
+import type { IndexedValidations } from "@/admin/pages/realm-settings/new-attribute-settings";
 import { AddValidatorDialog } from "./add-validator-dialog";
 
 export const AttributeValidations = () => {

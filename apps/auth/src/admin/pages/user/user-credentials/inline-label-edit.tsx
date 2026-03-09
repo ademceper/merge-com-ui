@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useUpdateCredentialLabel } from "../hooks/use-update-credential-label";
 
 type UserLabelForm = {

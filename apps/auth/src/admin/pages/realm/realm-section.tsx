@@ -27,13 +27,13 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import type { RealmNameRepresentation } from "../../api/realm";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useRecentRealms } from "../../app/providers/recent-realms";
-import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { toDashboard } from "../../shared/lib/route-helpers";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import type { RealmNameRepresentation } from "@/admin/api/realm";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useRecentRealms } from "@/admin/app/providers/recent-realms";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
+import { toDashboard } from "@/admin/shared/lib/route-helpers";
+import { translationFormatter } from "@/admin/shared/lib/translationFormatter";
 import NewRealmForm from "./add/new-realm-form";
 import { useDeleteRealms } from "./hooks/use-delete-realms";
 import { useRealmNames } from "./hooks/use-realm-names";

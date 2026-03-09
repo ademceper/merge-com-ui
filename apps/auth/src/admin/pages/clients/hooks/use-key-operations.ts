@@ -5,7 +5,7 @@ import {
     generateKey,
     uploadKey,
     downloadKey
-} from "../../../api/clients";
+} from "@/admin/api/clients";
 
 export function useGenerateAndDownloadKey() {
     return useMutation({

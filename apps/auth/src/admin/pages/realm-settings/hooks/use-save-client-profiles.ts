@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveClientProfiles } from "../../../api/realm-settings";
+import { saveClientProfiles } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useSaveClientProfiles() {

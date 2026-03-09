@@ -10,12 +10,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUserFederation } from "../../shared/lib/routes/user-federation";
-import { useParams } from "../../shared/lib/use-params";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toUserFederation } from "@/admin/shared/lib/routes/user-federation";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import { KerberosSettingsRequired } from "./kerberos/kerberos-settings-required";
 import { useComponentDetail } from "./hooks/use-component-detail";
 import { useCreateComponent } from "./hooks/use-create-component";

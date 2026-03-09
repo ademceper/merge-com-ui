@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateClient } from "../../../api/clients";
+import { updateClient } from "@/admin/api/clients";
 import { clientKeys } from "./keys";
 
 export function useUpdateClient() {

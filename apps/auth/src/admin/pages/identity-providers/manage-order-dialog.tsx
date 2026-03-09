@@ -15,7 +15,7 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useIdentityProviders } from "./hooks/use-identity-providers";
 import { useUpdateIdentityProviderOrder } from "./hooks/use-update-identity-provider-order";
 import { useOrgIdentityProviders } from "./hooks/use-org-identity-providers";

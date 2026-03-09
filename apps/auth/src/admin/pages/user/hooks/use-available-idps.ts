@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAvailableIdPs } from "../../../api/users";
+import { fetchAvailableIdPs } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useAvailableIdPs() {

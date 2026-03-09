@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createCompositeRole } from "../../../api/realm-settings";
+import { createCompositeRole } from "@/admin/api/realm-settings";
 
 export function useCreateCompositeRole() {
     return useMutation({

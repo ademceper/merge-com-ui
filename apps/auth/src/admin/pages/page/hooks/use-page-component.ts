@@ -1,6 +1,6 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { findPageComponent } from "../../../api/page-components";
+import { findPageComponent } from "@/admin/api/page-components";
 import { pageKeys } from "./keys";
 
 export function usePageComponent(id: string | undefined) {

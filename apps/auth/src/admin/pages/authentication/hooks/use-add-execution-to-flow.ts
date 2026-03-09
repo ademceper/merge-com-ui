@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addExecutionToFlow } from "../../../api/authentication";
+import { addExecutionToFlow } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useAddExecutionToFlow() {

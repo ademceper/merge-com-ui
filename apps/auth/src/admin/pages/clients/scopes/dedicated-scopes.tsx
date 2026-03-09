@@ -7,12 +7,12 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import { useAddMultipleProtocolMappers, useDelProtocolMapper } from "../hooks/use-protocol-mappers";
-import type { DedicatedScopeDetailsParams } from "../../../shared/lib/routes/clients";
-import { toMapper } from "../../../shared/lib/routes/clients";
-import { useParams } from "../../../shared/lib/use-params";
-import { MapperList } from "../../client-scopes/details/mapper-list";
+import type { DedicatedScopeDetailsParams } from "@/admin/shared/lib/routes/clients";
+import { toMapper } from "@/admin/shared/lib/routes/clients";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { MapperList } from "@/admin/pages/client-scopes/details/mapper-list";
 import { useDedicatedScopeClient } from "../hooks/use-dedicated-scope-client";
 import { DedicatedScope } from "./dedicated-scope";
 

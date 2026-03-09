@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from "@merge-rd/i18n";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { FormattedLink } from "../../../shared/ui/external-link/formatted-link";
+import { TextControl } from "@/shared/keycloak-ui-shared";
+import { FormattedLink } from "@/admin/shared/ui/external-link/formatted-link";
 
 type HelpLinkTextInputProps = {
     fieldName: string;

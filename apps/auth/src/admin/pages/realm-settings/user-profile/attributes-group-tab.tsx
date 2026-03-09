@@ -19,16 +19,16 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     deleteRealmLocalizationTexts,
     fetchRealmLocalizationTexts
-} from "../../../api/realm-settings";
+} from "@/admin/api/realm-settings";
 import {
     toEditAttributesGroup,
     toNewAttributesGroup
-} from "../../../shared/lib/routes/realm-settings";
-import { useLocale } from "../../../shared/lib/use-locale";
+} from "@/admin/shared/lib/routes/realm-settings";
+import { useLocale } from "@/admin/shared/lib/use-locale";
 import { useUserProfile } from "./user-profile-context";
 
 type AttributesGroupTabProps = {

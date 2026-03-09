@@ -31,7 +31,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
-import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
+import { label, useEnvironment } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import { useAccess } from "../app/providers/access/access";
 import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";

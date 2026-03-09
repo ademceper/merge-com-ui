@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findGroupPicker } from "../../api/shared";
+import { findGroupPicker } from "@/admin/api/shared";
 import { sharedKeys } from "./keys";
 
 export function useGroupPicker(

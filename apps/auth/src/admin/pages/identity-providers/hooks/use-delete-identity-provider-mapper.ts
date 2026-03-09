@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteIdentityProviderMapper } from "../../../api/identity-providers";
+import { deleteIdentityProviderMapper } from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useDeleteIdentityProviderMapper(alias: string) {

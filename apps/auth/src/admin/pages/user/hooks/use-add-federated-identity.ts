@@ -1,6 +1,6 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addToFederatedIdentity } from "../../../api/users";
+import { addToFederatedIdentity } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 export function useAddFederatedIdentity(userId: string) {

@@ -17,13 +17,13 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
+} from "@/shared/keycloak-ui-shared";
+import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
 import { useCreateRealm } from "../hooks/use-create-realm";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { JsonFileUpload } from "@/admin/shared/ui/json-file-upload/json-file-upload";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { toRealm } from "../realm-routes";
 
 type NewRealmFormProps = {

@@ -15,13 +15,13 @@ import {
     getErrorDescription,
     getErrorMessage,
     SelectField
-} from "../../../shared/keycloak-ui-shared";
+} from "@/shared/keycloak-ui-shared";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
     convertToFormValues
-} from "../../shared/lib/util";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+} from "@/admin/shared/lib/util";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 import { useLinkIdentityProvider } from "./hooks/use-link-identity-provider";
 import { IdentityProviderSelect } from "./identity-provider-select";
 import type { OrganizationFormType } from "./organization-form";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findIdentityProviderExists } from "../../../api/identity-providers";
+import { findIdentityProviderExists } from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useIdentityProviderExists() {

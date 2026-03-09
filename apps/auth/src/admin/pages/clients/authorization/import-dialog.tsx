@@ -14,8 +14,8 @@ import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group"
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Fragment, useState } from "react";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { JsonFileUpload } from "@/admin/shared/ui/json-file-upload/json-file-upload";
 
 type ImportDialogProps = {
     onConfirm: (value: ResourceServerRepresentation) => void;

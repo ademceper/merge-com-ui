@@ -1,1 +1,1 @@
-export { UserEvents } from "../../widgets/user-events";
+export { UserEvents } from "@/admin/widgets/user-events";

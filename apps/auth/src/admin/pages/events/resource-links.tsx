@@ -2,14 +2,14 @@ import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/d
 import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 import { Link } from "@tanstack/react-router";
 import type { ReactElement } from "react";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toFlow } from "../../shared/lib/routes/authentication";
-import { toClientScope } from "../../shared/lib/routes/client-scopes";
-import { toClient } from "../../shared/lib/routes/clients";
-import { toGroups } from "../../shared/lib/routes/groups";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
-import { toRealmRole } from "../../shared/lib/routes/realm-roles";
-import { toUser } from "../../shared/lib/routes/user";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { toFlow } from "@/admin/shared/lib/routes/authentication";
+import { toClientScope } from "@/admin/shared/lib/routes/client-scopes";
+import { toClient } from "@/admin/shared/lib/routes/clients";
+import { toGroups } from "@/admin/shared/lib/routes/groups";
+import { toEditOrganization } from "@/admin/shared/lib/routes/organizations";
+import { toRealmRole } from "@/admin/shared/lib/routes/realm-roles";
+import { toUser } from "@/admin/shared/lib/routes/user";
 
 type ResourceLinkProps = {
     event: AdminEventRepresentation;

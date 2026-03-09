@@ -14,13 +14,13 @@ import {
     SwitchControl,
     TextControl,
     useHelp
-} from "../../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
-import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
+} from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { FixedButtonsGroup } from "@/admin/shared/ui/form/fixed-button-group";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { MultiLineInput } from "@/admin/shared/ui/multi-line-input/multi-line-input";
+import { TimeSelectorControl } from "@/admin/shared/ui/time-selector/time-selector-control";
 import { useUpdateRealmPolicy } from "../hooks/use-update-realm-policy";
 
 const SIGNATURE_ALGORITHMS = [

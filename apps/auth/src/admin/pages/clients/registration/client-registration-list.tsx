@@ -24,10 +24,10 @@ import {
 import {
     getErrorDescription,
     getErrorMessage
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useDeleteRegistrationPolicy } from "../hooks/use-delete-registration-policy";
-import type { ClientRegistrationParams } from "../../../shared/lib/routes/clients";
+import type { ClientRegistrationParams } from "@/admin/shared/lib/routes/clients";
 import { clientKeys } from "../hooks/keys";
 import { useClientRegistrationPolicies } from "../hooks/use-client-registration-policies";
 import { AddClientRegistrationPolicyDialog } from "./add-client-registration-policy-dialog";

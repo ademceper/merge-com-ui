@@ -7,11 +7,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import type { UserFederationLdapParams } from "../../shared/lib/routes/user-federation";
-import { toUserFederationLdapMapper } from "../../shared/lib/routes/user-federation";
-import { useParams } from "../../shared/lib/use-params";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import type { UserFederationLdapParams } from "@/admin/shared/lib/routes/user-federation";
+import { toUserFederationLdapMapper } from "@/admin/shared/lib/routes/user-federation";
+import { useParams } from "@/admin/shared/lib/use-params";
 import { useComponentDetail } from "./hooks/use-component-detail";
 import { useUpdateComponent } from "./hooks/use-update-component";
 import { LdapMapperList } from "./ldap/mappers/ldap-mapper-list";

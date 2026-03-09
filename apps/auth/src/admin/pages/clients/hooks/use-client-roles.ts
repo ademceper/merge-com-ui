@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createClientRole, findClientRole, listClientRoles } from "../../../api/clients";
+import { createClientRole, findClientRole, listClientRoles } from "@/admin/api/clients";
 
 export function useListClientRoles() {
     return useMutation({

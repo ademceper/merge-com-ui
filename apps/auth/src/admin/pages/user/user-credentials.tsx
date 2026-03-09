@@ -30,10 +30,10 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../shared/keycloak-ui-shared";
-import { useFormatDate } from "../../shared/lib/use-format-date";
-import { toUpperCase } from "../../shared/lib/util";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/shared/keycloak-ui-shared";
+import { useFormatDate } from "@/admin/shared/lib/use-format-date";
+import { toUpperCase } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import { useDeleteCredential } from "./hooks/use-delete-credential";
 import { useMoveCredentialDown, useMoveCredentialUp } from "./hooks/use-move-credential";
 import { useUserCredentials as useUserCredentialsQuery } from "./hooks/use-user-credentials";

@@ -4,8 +4,8 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { memo } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import { HelpItem } from "@/shared/keycloak-ui-shared";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 
 type TokensTabRefreshSectionProps = {
     onSubmit: () => void;

@@ -1,6 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateRoot, updateChildGroup } from "../../../api/groups";
+import { updateRoot, updateChildGroup } from "@/admin/api/groups";
 import { groupKeys } from "./keys";
 
 /**

@@ -8,9 +8,9 @@ import {
 } from "@merge-rd/ui/components/select";
 import { get } from "lodash-es";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { sortProviders } from "../../../shared/lib/util";
+import { FormLabel } from "@/shared/keycloak-ui-shared";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
+import { sortProviders } from "@/admin/shared/lib/util";
 import { ClientIdSecret } from "../component/client-id-secret";
 import { SwitchField } from "../component/switch-field";
 import { TextField } from "../component/text-field";

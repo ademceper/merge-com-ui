@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
+import { TextControl } from "@/shared/keycloak-ui-shared";
 
 type ApplicationUrlsProps = {
     isDisabled?: boolean;

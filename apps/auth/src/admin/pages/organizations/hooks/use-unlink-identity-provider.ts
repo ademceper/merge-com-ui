@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { unlinkOrganizationIdp } from "../../../api/organizations";
+import { unlinkOrganizationIdp } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useUnlinkIdentityProvider(orgId: string) {

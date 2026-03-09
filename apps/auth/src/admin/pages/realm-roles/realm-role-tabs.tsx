@@ -16,40 +16,40 @@ import {
     getErrorDescription,
     getErrorMessage,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useAddCompositeRoles } from "./hooks/use-add-composite-roles";
 import { useDeleteClientRole } from "./hooks/use-delete-client-role";
 import { useDeleteRealmRole } from "./hooks/use-delete-realm-role";
 import { useUpdateClientRole } from "./hooks/use-update-client-role";
 import { useUpdateRealmRole } from "./hooks/use-update-realm-role";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type ClientRoleParams,
     type ClientRoleTab,
     toClient,
     toClientRole
-} from "../../shared/lib/routes/clients";
+} from "@/admin/shared/lib/routes/clients";
 import {
     type RealmRoleTab,
     toRealmRole,
     toRealmRoles
-} from "../../shared/lib/routes/realm-roles";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
-import { useParams, useParams as useRouterParams } from "../../shared/lib/use-params";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+} from "@/admin/shared/lib/routes/realm-roles";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { useParams, useParams as useRouterParams } from "@/admin/shared/lib/use-params";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import {
     type AttributeForm,
     AttributesForm
-} from "../../shared/ui/key-value-form/attribute-form";
+} from "@/admin/shared/ui/key-value-form/attribute-form";
 import {
     arrayToKeyValue,
     type KeyValueType,
     keyValueToArray
-} from "../../shared/ui/key-value-form/key-value-convert";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
-import { RoleForm } from "../../shared/ui/role-form/role-form";
-import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
+} from "@/admin/shared/ui/key-value-form/key-value-convert";
+import { PermissionsTab } from "@/admin/shared/ui/permission-tab/permission-tab";
+import { RoleForm } from "@/admin/shared/ui/role-form/role-form";
+import { RoleMapping } from "@/admin/shared/ui/role-mapping/role-mapping";
 import { AdminEvents } from "../events/admin-events";
 import { useClientDetail } from "./hooks/use-client-detail";
 import { useRealmRole } from "./hooks/use-realm-role";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { findOrganizations } from "../../../api/organizations";
+import { findOrganizations } from "@/admin/api/organizations";
 import { organizationKeys } from "./keys";
 
 export function useOrganizations() {

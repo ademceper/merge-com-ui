@@ -8,8 +8,8 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../../shared/lib/use-toggle";
+import { SelectField, TextControl } from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 
 export type SearchForm = {
     name?: string;

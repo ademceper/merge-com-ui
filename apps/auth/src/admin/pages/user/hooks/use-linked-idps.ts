@@ -1,6 +1,6 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchFederatedIdentities, fetchLinkedIdPs } from "../../../api/users";
+import { fetchFederatedIdentities, fetchLinkedIdPs } from "@/admin/api/users";
 import { userKeys } from "./keys";
 
 type WithProviderId = FederatedIdentityRepresentation & {

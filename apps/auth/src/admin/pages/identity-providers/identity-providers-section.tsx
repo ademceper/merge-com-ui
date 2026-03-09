@@ -44,16 +44,16 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { type ColumnDef, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { DraggableTableRows } from "@/admin/shared/ui/table-draggable-rows";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     toIdentityProvider,
     toIdentityProviderCreate
-} from "../../shared/lib/routes/identity-providers";
-import { toEditOrganization } from "../../shared/lib/routes/organizations";
-import { upperCaseFormatter } from "../../shared/lib/util";
-import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+} from "@/admin/shared/lib/routes/identity-providers";
+import { toEditOrganization } from "@/admin/shared/lib/routes/organizations";
+import { upperCaseFormatter } from "@/admin/shared/lib/util";
+import { ClickableCard } from "@/admin/shared/ui/keycloak-card/clickable-card";
 import { idpKeys } from "./hooks/keys";
 import { useDeleteIdentityProvider } from "./hooks/use-delete-identity-provider";
 import { useIdentityProvidersList } from "./hooks/use-identity-providers-list";

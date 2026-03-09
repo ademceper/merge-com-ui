@@ -10,11 +10,11 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem
-} from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
+} from "@/shared/keycloak-ui-shared";
+import { useAccess } from "@/admin/app/providers/access/access";
 import { useAssignScopeMappings, useUpdateClientFullScope } from "../hooks/use-scope-mappings";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import { RoleMapping, type Row } from "@/admin/shared/ui/role-mapping/role-mapping";
 
 type DedicatedScopeProps = {
     client: ClientRepresentation;

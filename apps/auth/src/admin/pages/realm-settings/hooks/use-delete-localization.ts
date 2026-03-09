@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { deleteRealmLocalizationTexts } from "../../../api/realm-settings";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { deleteRealmLocalizationTexts } from "@/admin/api/realm-settings";
 import { realmSettingsKeys } from "./keys";
 
 export function useDeleteLocalization() {

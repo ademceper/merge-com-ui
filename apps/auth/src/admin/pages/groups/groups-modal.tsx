@@ -17,8 +17,8 @@ import {
     getErrorDescription,
     getErrorMessage,
     TextControl
-} from "../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../shared/lib/use-is-feature-enabled";
+} from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import { useCreateGroup } from "./hooks/use-create-group";
 import { useDuplicateGroup } from "./hooks/use-duplicate-group";
 import { useGroup } from "./hooks/use-group";

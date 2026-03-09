@@ -1,6 +1,6 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
-import { KeycloakSpinner, MultiSelectField } from "../../../../shared/keycloak-ui-shared";
+import { KeycloakSpinner, MultiSelectField } from "@/shared/keycloak-ui-shared";
 import { useAvailableEventListeners } from "../hooks/use-available-event-listeners";
 
 type EventListenersFormProps = {

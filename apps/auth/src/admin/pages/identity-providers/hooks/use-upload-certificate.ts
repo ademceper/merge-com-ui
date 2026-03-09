@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { uploadCertificate } from "../../../api/identity-providers";
+import { uploadCertificate } from "@/admin/api/identity-providers";
 
 /**
  * Upload a certificate for an identity provider.

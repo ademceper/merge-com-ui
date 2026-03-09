@@ -3,10 +3,10 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
-import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { useIsFeatureEnabled, Feature } from "../../../shared/lib/use-is-feature-enabled";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { HelpItem, SelectField } from "@/shared/keycloak-ui-shared";
+import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
+import { convertAttributeNameToForm } from "@/admin/shared/lib/util";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
 import type { FormFields } from "../client-details";
 
 type OpenIdConnectCompatibilityModesProps = {

@@ -14,8 +14,8 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { HelpItem, TextControl } from "../../../../../shared/keycloak-ui-shared";
-import { GroupPickerDialog } from "../../../../shared/ui/group/group-picker-dialog";
+import { HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
+import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useGroupsById } from "../hooks/use-groups-by-id";
 
 type GroupForm = {

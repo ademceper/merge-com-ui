@@ -3,7 +3,7 @@ import {
     listAllScopes,
     listPolicyProviders,
     listResources
-} from "../../../../api/client-authorization";
+} from "@/admin/api/client-authorization";
 import { authzKeys } from "./keys";
 
 export function usePermissionProviders(clientId: string) {

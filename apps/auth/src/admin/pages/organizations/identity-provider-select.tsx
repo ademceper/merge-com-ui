@@ -14,10 +14,10 @@ import {
     FormErrorText,
     HelpItem,
     KeycloakSpinner
-} from "../../../shared/keycloak-ui-shared";
-import { searchIdentityProviders } from "../../api/identity-providers";
-import { useToggle } from "../../shared/lib/use-toggle";
-import type { ComponentProps } from "../../shared/ui/dynamic/components";
+} from "@/shared/keycloak-ui-shared";
+import { searchIdentityProviders } from "@/admin/api/identity-providers";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
+import type { ComponentProps } from "@/admin/shared/ui/dynamic/components";
 
 type IdentityProviderSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: "typeaheadMulti" | "typeahead";

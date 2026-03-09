@@ -1,6 +1,6 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateIdentityProviderOrder } from "../../../api/identity-providers";
+import { updateIdentityProviderOrder } from "@/admin/api/identity-providers";
 import { idpKeys } from "./keys";
 
 export function useUpdateIdentityProviderOrder() {

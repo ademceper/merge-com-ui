@@ -13,8 +13,8 @@ import {
     SelectField,
     TextAreaControl,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+} from "@/shared/keycloak-ui-shared";
+import { DefaultSwitchControl } from "@/admin/shared/ui/switch-control";
 
 type DescriptorSettingsProps = {
     readOnly: boolean;

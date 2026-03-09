@@ -18,20 +18,20 @@ import {
     getErrorMessage,
     KeycloakSpinner,
     TextControl
-} from "../../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+} from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {
     type IdentityProviderEditMapperParams,
     toIdentityProvider,
     toIdentityProviderEditMapper
-} from "../../../shared/lib/routes/identity-providers";
-import { useLocaleSort, mapByKey } from "../../../shared/lib/use-locale-sort";
-import { useParams } from "../../../shared/lib/use-params";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import type { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
+} from "@/admin/shared/lib/routes/identity-providers";
+import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
+import { useParams } from "@/admin/shared/lib/use-params";
+import { convertFormValuesToObject, convertToFormValues } from "@/admin/shared/lib/util";
+import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "@/admin/shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "@/admin/shared/ui/form/form-access";
+import type { AttributeForm } from "@/admin/shared/ui/key-value-form/attribute-form";
 import { useCreateIdentityProviderMapper } from "../hooks/use-create-identity-provider-mapper";
 import { useDeleteIdentityProviderMapper } from "../hooks/use-delete-identity-provider-mapper";
 import { useIdentityProviderMapper } from "../hooks/use-identity-provider-mapper";

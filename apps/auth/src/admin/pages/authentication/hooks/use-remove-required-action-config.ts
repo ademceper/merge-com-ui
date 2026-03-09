@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { removeRequiredActionConfig } from "../../../api/authentication";
+import { removeRequiredActionConfig } from "@/admin/api/authentication";
 import { authenticationKeys } from "./keys";
 
 export function useRemoveRequiredActionConfig() {

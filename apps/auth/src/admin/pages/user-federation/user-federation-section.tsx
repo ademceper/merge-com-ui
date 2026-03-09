@@ -28,17 +28,17 @@ import {
     DataTable,
     DataTableRowActions
 } from "@/admin/shared/ui/data-table";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
+import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
+import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
+import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import {
     toCustomUserFederation,
     toNewCustomUserFederation,
     toUserFederationKerberos,
     toUserFederationLdap
-} from "../../shared/lib/routes/user-federation";
-import { toUpperCase } from "../../shared/lib/util";
-import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+} from "@/admin/shared/lib/routes/user-federation";
+import { toUpperCase } from "@/admin/shared/lib/util";
+import { ClickableCard } from "@/admin/shared/ui/keycloak-card/clickable-card";
 import { useDeleteComponent } from "./hooks/use-delete-component";
 import { useUserFederationList } from "./hooks/use-user-federation-list";
 import { ManagePriorityDialog } from "./manage-priority-dialog";

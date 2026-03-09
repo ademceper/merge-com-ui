@@ -16,8 +16,8 @@ import {
 import { PencilSimple } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useToggle } from "../../../shared/lib/use-toggle";
+import { TextAreaControl, TextControl } from "@/shared/keycloak-ui-shared";
+import { useToggle } from "@/admin/shared/lib/use-toggle";
 import type { ExpandableExecution } from "../execution-model";
 
 type EditFlowProps = {

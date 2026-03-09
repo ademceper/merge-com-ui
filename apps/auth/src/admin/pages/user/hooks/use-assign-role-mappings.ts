@@ -1,6 +1,6 @@
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useMutation } from "@tanstack/react-query";
-import { addRealmRoleMappings, addClientRoleMappings } from "../../../api/users";
+import { addRealmRoleMappings, addClientRoleMappings } from "@/admin/api/users";
 
 type AssignRoleMappingsParams = {
     userId: string;

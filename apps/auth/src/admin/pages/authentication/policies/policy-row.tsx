@@ -6,7 +6,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { MinusCircle } from "@phosphor-icons/react";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { FormErrorText, HelpItem } from "@/shared/keycloak-ui-shared";
 
 type PolicyRowProps = {
     policy: PasswordPolicyTypeRepresentation;

@@ -5,7 +5,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { generateId, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { generateId, HelpItem } from "@/shared/keycloak-ui-shared";
 import type { KeyValueType } from "../key-value-form/key-value-convert";
 import type { ComponentProps } from "./components";
 
