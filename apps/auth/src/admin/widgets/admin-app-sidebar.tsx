@@ -30,12 +30,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
-import { label, useEnvironment } from "@/shared/keycloak-ui-shared";
+import { useEnvironment } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import { useAccess } from "../app/providers/access/access";
-import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
 import { useRealm } from "../app/providers/realm-context/realm-context";
-import type { RealmNameRepresentation } from "../app/providers/recent-realms";
+import { fetchRealmNames } from "../api/realm";
 import { useServerInfo } from "../app/providers/server-info/server-info-provider";
 import { routes } from "../app/routes";
 import { toDashboard } from "../shared/lib/route-helpers";
@@ -109,13 +108,7 @@ export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.Compone
 
     const { data: realms = [] } = useQuery({
         queryKey: ["realmNames", realm],
-        queryFn: () =>
-            Promise.resolve([
-                { name: "master", displayName: "Master Realm" },
-                { name: "merge-dev", displayName: "Merge Development" },
-                { name: "merge-staging", displayName: "Merge Staging" },
-                { name: "merge-prod", displayName: "Merge Production" }
-            ] as RealmNameRepresentation[]),
+        queryFn: fetchRealmNames,
         staleTime: 5 * 60_000
     });
 
@@ -123,10 +116,10 @@ export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.Compone
         () =>
             realms.map(r => ({
                 value: r.name,
-                label: label(t, r.displayName, r.name) as string,
+                label: r.displayName || r.name,
                 description: r.name
             })),
-        [realms, t]
+        [realms]
     );
 
     const onRealmChange = useCallback(
@@ -174,7 +167,7 @@ export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.Compone
                         items={realmItems}
                         onChange={onRealmChange}
                         singleBadge={realm.slice(0, 2).toUpperCase()}
-                        onManage={() => setRealmDrawerWithScale(!realmDrawerOpen)}
+                        onManage={realm === "master" && hasAccess("manage-realm") ? () => setRealmDrawerWithScale(!realmDrawerOpen) : undefined}
                     />
                 </SidebarHeader>
                 <SidebarContent>

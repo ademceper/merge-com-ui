@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@merge-rd/ui/lib/utils"
-import { CaretUpDownIcon } from "@phosphor-icons/react"
+import { CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react"
 import {
   Popover,
   PopoverContent,
@@ -116,9 +116,7 @@ function Switcher({
       {current?.icon ? (
         <span className="shrink-0">{current.icon}</span>
       ) : (
-        <div className="flex h-5 min-w-[32px] items-center justify-center rounded-full border border-foreground/60 px-1.5 text-[10px] font-black text-foreground leading-none">
-          {singleBadge || "V2"}
-        </div>
+        <GradientAvatar name={current?.value ?? ""} />
       )}
       <span className="truncate text-[15px] font-semibold text-foreground/90 tracking-tight">
         {current?.label}
@@ -132,9 +130,12 @@ function Switcher({
         {/* Üst Satır - Seçici popover */}
         {!isSingle ? (
           <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger disabled={disabled} className="flex items-center justify-between w-full rounded-[9px] bg-sidebar px-2.5 py-2 outline-none">
+            <PopoverTrigger disabled={disabled} className="group/trigger flex items-center justify-between w-full rounded-[9px] bg-sidebar px-2.5 py-1.5 outline-none">
               {triggerContent}
-              <CaretUpDownIcon weight="bold" className="size-3.5 text-muted-foreground shrink-0" />
+              <div className="flex flex-col shrink-0 opacity-0 group-hover/trigger:opacity-100 transition-opacity duration-200 ease-out">
+                <CaretUpIcon weight="bold" className="size-2.5 text-muted-foreground -translate-y-1 group-hover/trigger:translate-y-0 transition-transform duration-200 ease-out" />
+                <CaretDownIcon weight="bold" className="size-2.5 text-muted-foreground translate-y-1 group-hover/trigger:translate-y-0 transition-transform duration-200 ease-out" />
+              </div>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-72 p-0 overflow-hidden bg-popover/50 backdrop-blur-xl divide-y divide-border">
               {groups.map((section, i) => (
@@ -160,9 +161,9 @@ function Switcher({
                         <GradientAvatar name={item.value} />
                       )}
                       <div className="flex flex-col items-start min-w-0 -space-y-0.5">
-                        <span className="truncate text-sm font-semibold text-foreground/70 dark:text-foreground/60">{item.label}</span>
+                        <span className="max-w-full truncate text-left text-sm text-foreground/70 dark:text-foreground/60">{item.label}</span>
                         {item.description && (
-                          <span className="truncate text-xs text-foreground/50 dark:text-foreground/40">{item.description}</span>
+                          <span className="max-w-full truncate text-left text-xs text-foreground/50 dark:text-foreground/40">{item.description}</span>
                         )}
                       </div>
                         </button>
@@ -174,7 +175,7 @@ function Switcher({
             </PopoverContent>
           </Popover>
         ) : (
-          <div className="flex items-center justify-between w-full rounded-[9px] px-2.5 py-2">
+          <div className="flex items-center justify-between w-full rounded-[9px] bg-sidebar px-2.5 py-1.5">
             {triggerContent}
           </div>
         )}
@@ -190,19 +191,19 @@ function Switcher({
 
         {/* Alt Satır */}
         <div className="flex items-center justify-center gap-4 px-2.5 py-1.5">
-          <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
-            Switch environment
-          </p>
-          {onManage && (
-            <button
-              type="button"
-              className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
-              onClick={onManage}
-            >
-              {manageLabel}
-            </button>
-          )}
-        </div>
+            <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
+              {onManage ? "Manage environment" : isSingle ? "Current environment" : "Switch environment"}
+            </p>
+            {onManage && (
+              <button
+                type="button"
+                className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
+                onClick={onManage}
+              >
+                {manageLabel}
+              </button>
+            )}
+          </div>
       </div>
     </div>
   )
