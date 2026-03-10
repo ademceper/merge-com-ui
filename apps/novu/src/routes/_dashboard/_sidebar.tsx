@@ -4,8 +4,9 @@ import {
 	SidebarProvider,
 } from "@merge-rd/ui/components/sidebar";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { Suspense } from "react";
+import { Suspense, useCallback, useState } from "react";
 import { HeaderNavigation } from "@/widgets/header-navigation/header-navigation";
+import { EnvironmentDrawer } from "@/widgets/environment-drawer";
 import { NovuAppSidebar } from "@/widgets/novu-app-sidebar";
 import {
 	PageHeaderProvider,
@@ -28,6 +29,15 @@ function SidebarLayoutContent() {
 }
 
 function SidebarLayout() {
+	const [envDrawerOpen, setEnvDrawerOpen] = useState(false);
+	const handleEnvDrawerChange = useCallback((open: boolean) => {
+		setEnvDrawerOpen(open);
+		const wrapper = document.querySelector("[data-scale-wrapper]");
+		if (wrapper) {
+			wrapper.setAttribute("data-scaled", open ? "true" : "false");
+		}
+	}, []);
+
 	return (
 		<PageHeaderProvider>
 			<SidebarProvider
@@ -35,9 +45,10 @@ function SidebarLayout() {
 				className="h-svh bg-sidebar overflow-hidden"
 				data-scale-wrapper
 			>
-				<NovuAppSidebar />
+				<NovuAppSidebar onEnvDrawerChange={handleEnvDrawerChange} />
 				<SidebarLayoutContent />
 			</SidebarProvider>
+			<EnvironmentDrawer open={envDrawerOpen} onOpenChange={handleEnvDrawerChange} />
 		</PageHeaderProvider>
 	);
 }

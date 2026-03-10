@@ -26,7 +26,7 @@ import { Route as DashboardSidebarEnvironmentSlugTranslationsRouteImport } from 
 import { Route as DashboardSidebarEnvironmentSlugTopicsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/topics'
 import { Route as DashboardSidebarEnvironmentSlugSubscribersRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/subscribers'
 import { Route as DashboardSidebarEnvironmentSlugLayoutsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/layouts'
-import { Route as DashboardSidebarEnvironmentSlugEnvironmentsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/environments'
+
 import { Route as DashboardSidebarEnvironmentSlugContextsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/contexts'
 import { Route as DashboardSidebarEnvironmentSlugApiKeysRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/api-keys'
 import { Route as DashboardSidebarEnvironmentSlugAnalyticsRouteImport } from './routes/_dashboard/_sidebar/$environmentSlug/analytics'
@@ -155,12 +155,7 @@ const DashboardSidebarEnvironmentSlugLayoutsRoute =
     path: '/$environmentSlug/layouts',
     getParentRoute: () => DashboardSidebarRoute,
   } as any)
-const DashboardSidebarEnvironmentSlugEnvironmentsRoute =
-  DashboardSidebarEnvironmentSlugEnvironmentsRouteImport.update({
-    id: '/$environmentSlug/environments',
-    path: '/$environmentSlug/environments',
-    getParentRoute: () => DashboardSidebarRoute,
-  } as any)
+
 const DashboardSidebarEnvironmentSlugContextsRoute =
   DashboardSidebarEnvironmentSlugContextsRouteImport.update({
     id: '/$environmentSlug/contexts',
@@ -416,7 +411,6 @@ export interface FileRoutesByFullPath {
   '/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
   '/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
   '/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
-  '/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
   '/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
   '/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
   '/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
@@ -469,7 +463,6 @@ export interface FileRoutesByTo {
   '/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
   '/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
   '/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
-  '/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
   '/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
   '/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
   '/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
@@ -525,7 +518,6 @@ export interface FileRoutesById {
   '/_dashboard/_sidebar/$environmentSlug/analytics': typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
   '/_dashboard/_sidebar/$environmentSlug/api-keys': typeof DashboardSidebarEnvironmentSlugApiKeysRoute
   '/_dashboard/_sidebar/$environmentSlug/contexts': typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
-  '/_dashboard/_sidebar/$environmentSlug/environments': typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
   '/_dashboard/_sidebar/$environmentSlug/layouts': typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
   '/_dashboard/_sidebar/$environmentSlug/subscribers': typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
   '/_dashboard/_sidebar/$environmentSlug/topics': typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
@@ -580,7 +572,6 @@ export interface FileRouteTypes {
     | '/$environmentSlug/analytics'
     | '/$environmentSlug/api-keys'
     | '/$environmentSlug/contexts'
-    | '/$environmentSlug/environments'
     | '/$environmentSlug/layouts'
     | '/$environmentSlug/subscribers'
     | '/$environmentSlug/topics'
@@ -633,7 +624,6 @@ export interface FileRouteTypes {
     | '/$environmentSlug/analytics'
     | '/$environmentSlug/api-keys'
     | '/$environmentSlug/contexts'
-    | '/$environmentSlug/environments'
     | '/$environmentSlug/layouts'
     | '/$environmentSlug/subscribers'
     | '/$environmentSlug/topics'
@@ -688,7 +678,6 @@ export interface FileRouteTypes {
     | '/_dashboard/_sidebar/$environmentSlug/analytics'
     | '/_dashboard/_sidebar/$environmentSlug/api-keys'
     | '/_dashboard/_sidebar/$environmentSlug/contexts'
-    | '/_dashboard/_sidebar/$environmentSlug/environments'
     | '/_dashboard/_sidebar/$environmentSlug/layouts'
     | '/_dashboard/_sidebar/$environmentSlug/subscribers'
     | '/_dashboard/_sidebar/$environmentSlug/topics'
@@ -855,13 +844,6 @@ declare module '@tanstack/react-router' {
       path: '/$environmentSlug/layouts'
       fullPath: '/$environmentSlug/layouts'
       preLoaderRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRouteImport
-      parentRoute: typeof DashboardSidebarRoute
-    }
-    '/_dashboard/_sidebar/$environmentSlug/environments': {
-      id: '/_dashboard/_sidebar/$environmentSlug/environments'
-      path: '/$environmentSlug/environments'
-      fullPath: '/$environmentSlug/environments'
-      preLoaderRoute: typeof DashboardSidebarEnvironmentSlugEnvironmentsRouteImport
       parentRoute: typeof DashboardSidebarRoute
     }
     '/_dashboard/_sidebar/$environmentSlug/contexts': {
@@ -1360,7 +1342,6 @@ interface DashboardSidebarRouteChildren {
   DashboardSidebarEnvironmentSlugAnalyticsRoute: typeof DashboardSidebarEnvironmentSlugAnalyticsRoute
   DashboardSidebarEnvironmentSlugApiKeysRoute: typeof DashboardSidebarEnvironmentSlugApiKeysRoute
   DashboardSidebarEnvironmentSlugContextsRoute: typeof DashboardSidebarEnvironmentSlugContextsRouteWithChildren
-  DashboardSidebarEnvironmentSlugEnvironmentsRoute: typeof DashboardSidebarEnvironmentSlugEnvironmentsRoute
   DashboardSidebarEnvironmentSlugLayoutsRoute: typeof DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren
   DashboardSidebarEnvironmentSlugSubscribersRoute: typeof DashboardSidebarEnvironmentSlugSubscribersRouteWithChildren
   DashboardSidebarEnvironmentSlugTopicsRoute: typeof DashboardSidebarEnvironmentSlugTopicsRouteWithChildren
@@ -1384,8 +1365,6 @@ const DashboardSidebarRouteChildren: DashboardSidebarRouteChildren = {
     DashboardSidebarEnvironmentSlugApiKeysRoute,
   DashboardSidebarEnvironmentSlugContextsRoute:
     DashboardSidebarEnvironmentSlugContextsRouteWithChildren,
-  DashboardSidebarEnvironmentSlugEnvironmentsRoute:
-    DashboardSidebarEnvironmentSlugEnvironmentsRoute,
   DashboardSidebarEnvironmentSlugLayoutsRoute:
     DashboardSidebarEnvironmentSlugLayoutsRouteWithChildren,
   DashboardSidebarEnvironmentSlugSubscribersRoute:

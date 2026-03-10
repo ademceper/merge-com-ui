@@ -85,7 +85,6 @@ function Switcher({
   onChange,
   className,
   disabled,
-  singleBadge,
   onManage,
   manageLabel = "Manage",
 }: SwitcherProps) {
@@ -127,7 +126,6 @@ function Switcher({
   return (
     <div className={cn("relative w-full overflow-hidden rounded-xl bg-card", className)}>
       <div className="relative z-10 flex flex-col gap-1 rounded-xl bg-card/40 backdrop-blur-xl p-[3px]">
-        {/* Üst Satır - Seçici popover */}
         {!isSingle ? (
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger disabled={disabled} className="group/trigger flex items-center justify-between w-full rounded-[9px] bg-sidebar px-2.5 py-1.5 outline-none">
@@ -180,7 +178,6 @@ function Switcher({
           </div>
         )}
 
-        {/* Arka plan gradyanı + grain doku */}
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(140deg,#d1d5db_0%,#d1d5db_40%,#0891b2_50%,#a21caf_60%,#c2410c_75%,#c2410c_100%)] opacity-60 blur-sm dark:bg-[linear-gradient(140deg,#161616_0%,#161616_40%,#0891b2_50%,#a21caf_60%,#c2410c_75%,#c2410c_100%)] dark:opacity-50" />
         <svg className="absolute inset-0 -z-10 size-full opacity-60 mix-blend-overlay" xmlns="http://www.w3.org/2000/svg">
           <filter id="switcher-noise">
@@ -189,7 +186,6 @@ function Switcher({
           <rect width="100%" height="100%" filter="url(#switcher-noise)" />
         </svg>
 
-        {/* Alt Satır */}
         <div className="flex items-center justify-center gap-4 px-2.5 py-1.5">
             <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
               {onManage ? "Manage environment" : isSingle ? "Current environment" : "Switch environment"}

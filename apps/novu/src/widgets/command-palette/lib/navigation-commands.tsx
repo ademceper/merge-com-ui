@@ -125,15 +125,7 @@ export function useNavigationCommands(
 		),
 	);
 
-	// Environments
-	commands.push(
-		createNavigationCommand(
-			"nav-environments",
-			"Environments",
-			ROUTES.ENVIRONMENTS,
-			<Database />,
-		),
-	);
+
 
 	// Layouts
 	commands.push(

@@ -17,7 +17,7 @@ import {
 	ChartBar,
 	ChartLine,
 	ChatTeardropDots,
-	Database,
+
 	Key,
 	Layout,
 	Path,
@@ -32,6 +32,7 @@ import { useEnvironment } from "@/app/context/environment/hooks";
 import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { Protect } from "@/shared/lib/protect";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { EnvironmentDrawer } from "./environment-drawer";
 import { OrganizationDropdown } from "./side-navigation/organization-dropdown";
 
 function NovuNavLink({
@@ -77,7 +78,7 @@ function NovuNavLink({
 	);
 }
 
-export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+export function NovuAppSidebar({ onEnvDrawerChange, ...props }: React.ComponentProps<typeof Sidebar> & { onEnvDrawerChange?: (open: boolean) => void }) {
 	const isWebhooksManagementEnabled = useFeatureFlag(
 		FeatureFlagsKeysEnum.IS_WEBHOOKS_MANAGEMENT_ENABLED,
 	);
@@ -98,13 +99,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 	const envItems: SwitcherItem[] = (environments ?? []).map((env) => ({
 		value: env.name,
 		label: env.name,
-		icon: (
-			<Terminal
-				weight="fill"
-				className="size-5 rounded-md"
-				style={{ color: env.color }}
-			/>
-		),
+		description: env.slug,
 		group: env._parentId ? "production" : undefined,
 	}));
 
@@ -133,6 +128,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 					value={currentEnvironment?.name}
 					items={envItems}
 					onChange={onEnvironmentChange}
+					onManage={() => onEnvDrawerChange?.(true)}
 				/>
 			</SidebarHeader>
 
@@ -310,17 +306,6 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 										/>
 									</Protect>
 								)}
-								<NovuNavLink
-									to={
-										slug
-											? buildRoute(ROUTES.ENVIRONMENTS, {
-													environmentSlug: slug,
-												})
-											: undefined
-									}
-									icon={Database}
-									label="Environments"
-								/>
 								<Protect permission={PermissionsEnum.INTEGRATION_READ}>
 									<NovuNavLink
 										to={
