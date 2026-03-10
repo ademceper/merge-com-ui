@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 export const SUBGROUP_COUNT = 50;
 
-export type UseGroupTreePaginationReturn = {
+type UseGroupTreePaginationReturn = {
     first: number;
     setFirst: (value: number) => void;
     max: number;

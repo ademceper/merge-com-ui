@@ -1,7 +1,6 @@
 import { generateEncodedPath } from "./generate-encoded-path";
 
 // Permission Details (canonical source: ./routes/clients.ts)
-export type { PermissionDetailsParams } from "./routes/clients";
 export { toPermissionDetails } from "./routes/clients";
 
 // Realm Settings
@@ -36,14 +35,6 @@ export const toRealmSettings = (params: RealmSettingsParams): string => {
 };
 
 // User - moved to ./routes/user.ts
-export type { UserParams, UserTab } from "./routes/user";
-export { toUser } from "./routes/user";
-
-// Add User
-type AddUserParams = { realm: string };
-
-export const toAddUser = (params: AddUserParams): string =>
-    generateEncodedPath("/:realm/users/add-user", params);
 
 // Permissions Configuration
 export type PermissionsConfigurationTabs = "permissions" | "policies" | "evaluation";

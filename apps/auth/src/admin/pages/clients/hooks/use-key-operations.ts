@@ -3,7 +3,6 @@ import {
     generateAndDownloadKey,
     uploadCertificate,
     generateKey,
-    uploadKey,
     downloadKey
 } from "@/admin/api/clients";
 
@@ -39,20 +38,6 @@ export function useGenerateKey() {
     return useMutation({
         mutationFn: ({ clientId, attr }: { clientId: string; attr: string }) =>
             generateKey(clientId, attr)
-    });
-}
-
-export function useUploadKey() {
-    return useMutation({
-        mutationFn: ({
-            clientId,
-            attr,
-            formData
-        }: {
-            clientId: string;
-            attr: string;
-            formData: FormData;
-        }) => uploadKey(clientId, attr, formData)
     });
 }
 

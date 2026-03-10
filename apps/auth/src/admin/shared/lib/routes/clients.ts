@@ -3,13 +3,13 @@ import { generateEncodedPath, type PathParams } from "../generate-encoded-path";
 // Clients list
 export type ClientsTab = "list" | "initial-access-token" | "client-registration";
 
-export type ClientsParams = {
+type ClientsParams = {
     realm: string;
     tab?: ClientsTab;
 };
 
-export const CLIENTS_PATH = "/:realm/clients";
-export const CLIENTS_PATH_WITH_TAB = "/:realm/clients/:tab";
+const CLIENTS_PATH = "/:realm/clients";
+const CLIENTS_PATH_WITH_TAB = "/:realm/clients/:tab";
 
 export const toClients = (params: ClientsParams): string => {
     const path = params.tab ? CLIENTS_PATH_WITH_TAB : CLIENTS_PATH;
@@ -245,7 +245,7 @@ export type ClientRegistrationParams = {
     subTab: ClientRegistrationTab;
 };
 
-export const CLIENT_REGISTRATION_PATH = "/:realm/clients/client-registration/:subTab";
+const CLIENT_REGISTRATION_PATH = "/:realm/clients/client-registration/:subTab";
 
 export const toClientRegistration = (params: ClientRegistrationParams): string =>
     generateEncodedPath(CLIENT_REGISTRATION_PATH, params);

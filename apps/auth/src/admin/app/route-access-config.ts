@@ -2,12 +2,12 @@ import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmI
 import type { TFunction } from "@merge-rd/i18n";
 import type { ComponentType, ReactNode } from "react";
 
-export type AppRouteObjectHandle = {
+type AppRouteObjectHandle = {
     access: AccessType | AccessType[];
     isNotFound?: true;
 };
 
-export interface AppRouteObject {
+interface AppRouteObject {
     path: string;
     breadcrumb?: (t: TFunction) => string | ComponentType<any>;
     handle: AppRouteObjectHandle;

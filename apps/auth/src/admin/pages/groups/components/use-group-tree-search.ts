@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export type UseGroupTreeSearchReturn = {
+type UseGroupTreeSearchReturn = {
     search: string;
     setSearch: (value: string) => void;
     searchInput: string;

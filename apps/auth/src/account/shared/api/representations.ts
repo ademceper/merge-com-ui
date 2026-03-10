@@ -47,7 +47,7 @@ interface ConsentScopeRepresentation {
     displayText: string;
 }
 
-export interface CredentialMetadataRepresentationMessage {
+interface CredentialMetadataRepresentationMessage {
     key: string;
     parameters?: string[];
 }
@@ -112,7 +112,7 @@ export type UserRepresentation = any & {
     userProfileMetadata: UserProfileMetadata;
 };
 
-export interface CredentialRepresentation {
+interface CredentialRepresentation {
     id: string;
     type: string;
     userLabel: string;

@@ -20,11 +20,11 @@ type ExtendedTreeViewDataItem = TreeViewDataItem & {
     access?: Record<string, boolean>;
 };
 
-export type UseGroupTreeNavigationParams = {
+type UseGroupTreeNavigationParams = {
     canViewDetails: boolean;
 };
 
-export type UseGroupTreeNavigationReturn = {
+type UseGroupTreeNavigationReturn = {
     activeItem: ExtendedTreeViewDataItem | undefined;
     setActiveItem: (item: ExtendedTreeViewDataItem | undefined) => void;
     nav: (item: TreeViewDataItem, treeData: ExtendedTreeViewDataItem[]) => void;

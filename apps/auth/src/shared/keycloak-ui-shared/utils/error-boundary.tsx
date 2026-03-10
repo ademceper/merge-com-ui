@@ -18,7 +18,7 @@ const ErrorBoundaryContext = createNamedContext<ErrorBoundaryContextValue | unde
     undefined
 );
 
-export const useErrorBoundary = () => useRequiredContext(ErrorBoundaryContext);
+const useErrorBoundary = () => useRequiredContext(ErrorBoundaryContext);
 
 interface ErrorBoundaryProviderProps {
     children: ReactNode;

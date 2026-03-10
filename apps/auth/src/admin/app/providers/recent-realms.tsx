@@ -16,7 +16,7 @@ const RecentRealmsContext = createNamedContext<RealmNameRepresentation[] | undef
     undefined
 );
 
-export type RealmNameRepresentation = {
+type RealmNameRepresentation = {
     name: string;
     displayName?: string;
 };
