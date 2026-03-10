@@ -4,9 +4,10 @@ import {
     SidebarPage,
     SidebarProvider
 } from "@merge-rd/ui/components/sidebar";
+import { TrayProvider } from "@merge-rd/ui/components/tray";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, useMatches } from "@tanstack/react-router";
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import {
     ErrorBoundaryFallback,
     ErrorBoundaryProvider,
@@ -18,7 +19,7 @@ import { SessionExpirationWarningOverlay } from "@/shared/session-expiration-war
 import { ErrorRenderer } from "../shared/ui/error/error-renderer";
 import { AdminAppSidebar } from "../widgets/admin-app-sidebar";
 import { AdminHeader } from "../widgets/admin-header";
-import { RealmDrawer } from "../widgets/realm-drawer";
+import { EnvironmentTray } from "../widgets/environment-tray";
 import { Banners } from "../widgets/banners";
 import { AdminClientContext, initAdminClient } from "./admin-client";
 import type { Environment } from "./environment";
@@ -86,15 +87,6 @@ export const App = () => {
         [matches]
     );
 
-    const [realmDrawerOpen, setRealmDrawerOpen] = useState(false);
-    const handleRealmDrawerChange = useCallback((open: boolean) => {
-        setRealmDrawerOpen(open);
-        const wrapper = document.querySelector("[data-scale-wrapper]");
-        if (wrapper) {
-            wrapper.setAttribute("data-scaled", open ? "true" : "false");
-        }
-    }, []);
-
     if (!adminClient) return <KeycloakSpinner />;
 
     const adminContext = { keycloak, adminClient };
@@ -109,30 +101,25 @@ export const App = () => {
                             <Outlet />
                         </div>
                     ) : (
-                        <SidebarProvider
-                            defaultOpen={true}
-                            className="h-svh bg-sidebar overflow-hidden"
-                            data-scale-wrapper
-                        >
-                            <AdminAppSidebar onRealmDrawerChange={handleRealmDrawerChange} />
-                            <SidebarInset>
-                                <AdminHeader />
-                                <SidebarPage id={mainPageContentId}>
-                                    <ErrorBoundaryFallback fallback={ErrorRenderer}>
-                                        <Suspense fallback={<KeycloakSpinner />}>
-                                            <AuthWall>
-                                                <Outlet />
-                                            </AuthWall>
-                                        </Suspense>
-                                    </ErrorBoundaryFallback>
-                                </SidebarPage>
-                            </SidebarInset>
-                        </SidebarProvider>
+                        <TrayProvider className="h-svh bg-sidebar overflow-hidden">
+                                <SidebarProvider defaultOpen={true}>
+                                    <AdminAppSidebar />
+                                    <SidebarInset>
+                                        <AdminHeader />
+                                        <SidebarPage id={mainPageContentId}>
+                                            <ErrorBoundaryFallback fallback={ErrorRenderer}>
+                                                <Suspense fallback={<KeycloakSpinner />}>
+                                                    <AuthWall>
+                                                        <Outlet />
+                                                    </AuthWall>
+                                                </Suspense>
+                                            </ErrorBoundaryFallback>
+                                        </SidebarPage>
+                                    </SidebarInset>
+                                </SidebarProvider>
+                            <EnvironmentTray />
+                        </TrayProvider>
                     )}
-                    <RealmDrawer
-                        open={realmDrawerOpen}
-                        onOpenChange={handleRealmDrawerChange}
-                    />
                     <SessionExpirationWarningOverlay
                         warnUserSecondsBeforeAutoLogout={45}
                     />

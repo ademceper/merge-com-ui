@@ -10,6 +10,7 @@ import {
 	SidebarMenuItem,
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
+import { useTray } from "@merge-rd/ui/components/tray";
 import { FeatureFlagsKeysEnum, PermissionsEnum } from "@/shared";
 import {
 	Broadcast,
@@ -32,7 +33,6 @@ import { useEnvironment } from "@/app/context/environment/hooks";
 import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { Protect } from "@/shared/lib/protect";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
-import { EnvironmentDrawer } from "./environment-drawer";
 import { OrganizationDropdown } from "./side-navigation/organization-dropdown";
 
 function NovuNavLink({
@@ -78,7 +78,8 @@ function NovuNavLink({
 	);
 }
 
-export function NovuAppSidebar({ onEnvDrawerChange, ...props }: React.ComponentProps<typeof Sidebar> & { onEnvDrawerChange?: (open: boolean) => void }) {
+export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+	const { toggle } = useTray();
 	const isWebhooksManagementEnabled = useFeatureFlag(
 		FeatureFlagsKeysEnum.IS_WEBHOOKS_MANAGEMENT_ENABLED,
 	);
@@ -128,7 +129,7 @@ export function NovuAppSidebar({ onEnvDrawerChange, ...props }: React.ComponentP
 					value={currentEnvironment?.name}
 					items={envItems}
 					onChange={onEnvironmentChange}
-					onManage={() => onEnvDrawerChange?.(true)}
+					onManage={toggle}
 				/>
 			</SidebarHeader>
 

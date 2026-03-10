@@ -120,16 +120,6 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-[data-scale-wrapper] {
-  transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-}
-[data-scale-wrapper][data-scaled="true"] {
-  scale: 0.98;
-  width: calc(100vw - 24rem) !important;
-  min-height: auto !important;
-  border-radius: 16px !important;
-  overflow: hidden !important;
-}
 
 @layer base {
   * {

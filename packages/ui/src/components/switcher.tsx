@@ -8,6 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@merge-rd/ui/components/popover"
+import { Button } from "./button"
 
 export interface SwitcherItem {
   value: string
@@ -186,18 +187,18 @@ function Switcher({
           <rect width="100%" height="100%" filter="url(#switcher-noise)" />
         </svg>
 
-        <div className="flex items-center justify-center gap-4 px-2.5 py-1.5">
+        <div className="flex items-center justify-center gap-4 px-2 py-1.5">
             <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
               {onManage ? "Manage environment" : isSingle ? "Current environment" : "Switch environment"}
             </p>
             {onManage && (
-              <button
+              <Button
                 type="button"
                 className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
                 onClick={onManage}
               >
                 {manageLabel}
-              </button>
+              </Button>
             )}
           </div>
       </div>

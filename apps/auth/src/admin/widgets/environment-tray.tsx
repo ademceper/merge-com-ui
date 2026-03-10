@@ -19,6 +19,13 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
+    Tray,
+    TrayHeader,
+    TrayContent,
+    TrayToolbar,
+    useTray,
+} from "@merge-rd/ui/components/tray";
+import {
     Table,
     TableBody,
     TableCell,
@@ -28,7 +35,7 @@ import {
     TablePaginationFooter,
     TableRow
 } from "@merge-rd/ui/components/table";
-import { DotsThree, Plus, SidebarIcon, Trash } from "@phosphor-icons/react";
+import { DotsThreeIcon, TrashIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -42,14 +49,10 @@ import { useDeleteRealms } from "@/admin/pages/realm/hooks/use-delete-realms";
 import { useRealmNames } from "@/admin/pages/realm/hooks/use-realm-names";
 import NewRealmForm from "@/admin/pages/realm/add/new-realm-form";
 
-type RealmDrawerProps = {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-};
-
 type RealmRow = RealmNameRepresentation & { id: string };
 
-export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
+export function EnvironmentTray() {
+    const { open, setOpen } = useTray();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { whoAmI } = useWhoAmI();
@@ -159,26 +162,10 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                 />
             )}
 
-            <div
-                className="fixed inset-y-2 right-0 z-30 w-100 flex flex-col rounded-l-3xl bg-transparent text-sm transition-transform duration-400 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                style={{
-                    transform: open ? "translateX(0)" : "translateX(100%)"
-                }}
-            >
-                <div className="flex items-center justify-between p-4">
-                    <h2 className="text-base font-medium text-foreground">
-                        {t("manageRealms")}
-                    </h2>
-                    <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        onClick={() => onOpenChange(false)}
-                    >
-                        <SidebarIcon className="size-4" />
-                    </Button>
-                </div>
-                <div className="flex-1 overflow-y-auto px-4 pb-4">
-                    <div className="flex items-center justify-between gap-2 py-2.5">
+            <Tray>
+                <TrayHeader>{t("manageRealms")}</TrayHeader>
+                <TrayContent>
+                    <TrayToolbar>
                         <FacetedFormFilter
                             type="text"
                             size="small"
@@ -189,16 +176,14 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                         />
                         {whoAmI.createRealm && (
                             <Button
+                                size="sm"
                                 onClick={() => setOpenNewRealm(true)}
                                 data-testid="add-realm"
-                                variant="default"
-                                size="sm"
                             >
-                                <Plus className="size-4" />
-                                <span>{t("createRealm")}</span>
+                                {t("createRealm")}
                             </Button>
                         )}
-                    </div>
+                    </TrayToolbar>
 
                     <Table className="table-fixed">
                         <TableHeader>
@@ -237,7 +222,7 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                                                             realm: data.name
                                                         }) as string
                                                     });
-                                                    onOpenChange(false);
+                                                    setOpen(false);
                                                 }
                                             }}
                                         >
@@ -265,7 +250,7 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                                                             variant="ghost"
                                                             size="icon-sm"
                                                         >
-                                                            <DotsThree
+                                                            <DotsThreeIcon
                                                                 weight="bold"
                                                                 className="size-4"
                                                             />
@@ -279,7 +264,7 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                                                             }
                                                             className="text-destructive focus:text-destructive"
                                                         >
-                                                            <Trash className="size-4 shrink-0" />
+                                                            <TrashIcon className="size-4 shrink-0" />
                                                             {t("delete")}
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
@@ -316,8 +301,8 @@ export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
                             </TableRow>
                         </TableFooter>
                     </Table>
-                </div>
-            </div>
+                </TrayContent>
+            </Tray>
         </>
     );
 }

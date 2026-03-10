@@ -10,6 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@merge-rd/ui/components/sidebar";
+import { useTray } from "@merge-rd/ui/components/tray";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
 import {
     ArrowsClockwiseIcon,
@@ -29,7 +30,7 @@ import {
 } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useEnvironment } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import { useAccess } from "../app/providers/access/access";
@@ -85,9 +86,10 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
     );
 }
 
-export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.ComponentProps<typeof Sidebar> & { onRealmDrawerChange?: (open: boolean) => void }) {
+export function AdminAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { toggle } = useTray();
     const { environment } = useEnvironment<Environment>();
     const { hasAccess, hasSomeAccess } = useAccess();
     const { componentTypes } = useServerInfo();
@@ -95,31 +97,31 @@ export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.Compone
     const pages = componentTypes?.["org.keycloak.services.ui.extend.UiPageProvider"];
     const { realm, realmRepresentation } = useRealm();
 
-    const [realmDrawerOpen, setRealmDrawerOpen] = useState(false);
-
-    const setRealmDrawerWithScale = useCallback((open: boolean) => {
-        const wrapper = document.querySelector("[data-scale-wrapper]");
-        if (wrapper) {
-            wrapper.setAttribute("data-scaled", open ? "true" : "false");
-        }
-        setRealmDrawerOpen(open);
-        onRealmDrawerChange?.(open);
-    }, [onRealmDrawerChange]);
-
     const { data: realms = [] } = useQuery({
         queryKey: ["realmNames", realm],
         queryFn: fetchRealmNames,
         staleTime: 5 * 60_000
     });
 
+    const mockRealms = [
+        { name: "master", displayName: "Master Realm" },
+        { name: "development", displayName: "Development Environment" },
+        { name: "staging", displayName: "Staging Environment" },
+        { name: "production", displayName: "Production Environment" },
+        { name: "testing", displayName: "QA & Testing" },
+    ];
+
+    const existingNames = new Set(realms.map(r => r.name));
+    const allRealms = [...realms, ...mockRealms.filter(m => !existingNames.has(m.name))];
+
     const realmItems: SwitcherItem[] = useMemo(
         () =>
-            realms.map(r => ({
+            allRealms.map(r => ({
                 value: r.name,
                 label: r.displayName || r.name,
                 description: r.name
             })),
-        [realms]
+        [allRealms]
     );
 
     const onRealmChange = useCallback(
@@ -167,7 +169,7 @@ export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.Compone
                         items={realmItems}
                         onChange={onRealmChange}
                         singleBadge={realm.slice(0, 2).toUpperCase()}
-                        onManage={realm === "master" && hasAccess("manage-realm") ? () => setRealmDrawerWithScale(!realmDrawerOpen) : undefined}
+                        onManage={toggle}
                     />
                 </SidebarHeader>
                 <SidebarContent>

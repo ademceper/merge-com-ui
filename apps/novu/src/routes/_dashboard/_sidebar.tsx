@@ -1,12 +1,13 @@
-import {
+   import {
 	SidebarInset,
 	SidebarPage,
 	SidebarProvider,
 } from "@merge-rd/ui/components/sidebar";
+import { TrayProvider } from "@merge-rd/ui/components/tray";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { Suspense, useCallback, useState } from "react";
+import { Suspense } from "react";
 import { HeaderNavigation } from "@/widgets/header-navigation/header-navigation";
-import { EnvironmentDrawer } from "@/widgets/environment-drawer";
+import { EnvironmentTray } from "@/widgets/environment-tray";
 import { NovuAppSidebar } from "@/widgets/novu-app-sidebar";
 import {
 	PageHeaderProvider,
@@ -29,26 +30,15 @@ function SidebarLayoutContent() {
 }
 
 function SidebarLayout() {
-	const [envDrawerOpen, setEnvDrawerOpen] = useState(false);
-	const handleEnvDrawerChange = useCallback((open: boolean) => {
-		setEnvDrawerOpen(open);
-		const wrapper = document.querySelector("[data-scale-wrapper]");
-		if (wrapper) {
-			wrapper.setAttribute("data-scaled", open ? "true" : "false");
-		}
-	}, []);
-
 	return (
 		<PageHeaderProvider>
-			<SidebarProvider
-				defaultOpen={true}
-				className="h-svh bg-sidebar overflow-hidden"
-				data-scale-wrapper
-			>
-				<NovuAppSidebar onEnvDrawerChange={handleEnvDrawerChange} />
-				<SidebarLayoutContent />
-			</SidebarProvider>
-			<EnvironmentDrawer open={envDrawerOpen} onOpenChange={handleEnvDrawerChange} />
+			<TrayProvider className="h-svh bg-sidebar overflow-hidden">
+					<SidebarProvider defaultOpen={true}>
+						<NovuAppSidebar />
+						<SidebarLayoutContent />
+					</SidebarProvider>
+				<EnvironmentTray />
+			</TrayProvider>
 		</PageHeaderProvider>
 	);
 }
