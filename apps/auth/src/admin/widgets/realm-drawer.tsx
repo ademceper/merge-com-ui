@@ -18,7 +18,6 @@ import {
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
 import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import {
     Table,
     TableBody,
@@ -29,53 +28,28 @@ import {
     TablePaginationFooter,
     TableRow
 } from "@merge-rd/ui/components/table";
-import { DotsThree, Trash } from "@phosphor-icons/react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { DotsThree, Plus, SidebarIcon, Trash } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import type { RealmNameRepresentation } from "@/admin/api/realm";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
-import { useRecentRealms } from "@/admin/app/providers/recent-realms";
 import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";
 import { toDashboard } from "@/admin/shared/lib/route-helpers";
 import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
-import NewRealmForm from "./add/new-realm-form";
-import { useDeleteRealms } from "./hooks/use-delete-realms";
-import { useRealmNames } from "./hooks/use-realm-names";
-import { toRealm } from "./realm-routes";
+import { useDeleteRealms } from "@/admin/pages/realm/hooks/use-delete-realms";
+import { useRealmNames } from "@/admin/pages/realm/hooks/use-realm-names";
+import NewRealmForm from "@/admin/pages/realm/add/new-realm-form";
+
+type RealmDrawerProps = {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+};
 
 type RealmRow = RealmNameRepresentation & { id: string };
 
-const RecentRealmsDropdown = () => {
-    const { t } = useTranslation();
-    const recentRealms = useRecentRealms();
-
-    if (recentRealms.length < 3) return null;
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    data-testid="kebab"
-                    aria-label="Recent realms"
-                >
-                    {t("recentRealms")}
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                {recentRealms.map(({ name }) => (
-                    <DropdownMenuItem key={name} asChild>
-                        <Link to={toDashboard({ realm: name }) as string}>{name}</Link>
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
-};
-
-export default function RealmSection() {
+export function RealmDrawer({ open, onOpenChange }: RealmDrawerProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { whoAmI } = useWhoAmI();
@@ -86,6 +60,7 @@ export default function RealmSection() {
         () => realmNames.map(r => ({ ...r, id: r.name })),
         [realmNames]
     );
+
     const [selected, setSelected] = useState<RealmRow[]>([]);
     const [openNewRealm, setOpenNewRealm] = useState(false);
     const { mutateAsync: deleteRealmsMut } = useDeleteRealms();
@@ -94,9 +69,16 @@ export default function RealmSection() {
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(0);
 
+    useEffect(() => {
+        if (open) {
+            setSearch("");
+            setCurrentPage(0);
+        }
+    }, [open]);
+
     const onDeleteConfirm = async () => {
         try {
-            if (selected.filter(({ name }) => name === "master").length > 0) {
+            if (selected.some(({ name }) => name === "master")) {
                 toast.warning(t("cantDeleteMasterRealm"));
             }
             const filtered = selected.filter(({ name }) => name !== "master");
@@ -106,8 +88,8 @@ export default function RealmSection() {
             }
             await deleteRealmsMut(filtered.map(({ name }) => name));
             toast.success(t("deletedSuccessRealmSetting"));
-            if (selected.filter(({ name }) => name === realm).length > 0) {
-                navigate({ to: toRealm({ realm: "master" }) as string });
+            if (selected.some(({ name }) => name === realm)) {
+                navigate({ to: toDashboard({ realm: "master" }) as string });
             }
             refreshRealms();
             setSelected([]);
@@ -141,7 +123,7 @@ export default function RealmSection() {
         <>
             <AlertDialog
                 open={selected.length > 0}
-                onOpenChange={open => !open && setSelected([])}
+                onOpenChange={o => !o && setSelected([])}
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -167,6 +149,7 @@ export default function RealmSection() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
             {openNewRealm && (
                 <NewRealmForm
                     onClose={() => {
@@ -175,8 +158,26 @@ export default function RealmSection() {
                     }}
                 />
             )}
-            <div className="space-y-4 py-6">
-                <div className="flex h-full w-full flex-col">
+
+            <div
+                className="fixed inset-y-2 right-0 z-30 w-100 flex flex-col rounded-l-3xl bg-transparent text-sm transition-transform duration-400 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                style={{
+                    transform: open ? "translateX(0)" : "translateX(100%)"
+                }}
+            >
+                <div className="flex items-center justify-between p-4">
+                    <h2 className="text-base font-medium text-foreground">
+                        {t("manageRealms")}
+                    </h2>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => onOpenChange(false)}
+                    >
+                        <SidebarIcon className="size-4" />
+                    </Button>
+                </div>
+                <div className="flex-1 overflow-y-auto px-4 pb-4">
                     <div className="flex items-center justify-between gap-2 py-2.5">
                         <FacetedFormFilter
                             type="text"
@@ -186,26 +187,28 @@ export default function RealmSection() {
                             onChange={value => setSearch(value)}
                             placeholder={t("search")}
                         />
-                        <div className="flex flex-wrap items-center gap-2">
-                            {whoAmI.createRealm && (
-                                <Button
-                                    onClick={() => setOpenNewRealm(true)}
-                                    data-testid="add-realm"
-                                    variant="default"
-                                    size="sm"
-                                >
-                                    {t("createRealm")}
-                                </Button>
-                            )}
-                            <RecentRealmsDropdown />
-                        </div>
+                        {whoAmI.createRealm && (
+                            <Button
+                                onClick={() => setOpenNewRealm(true)}
+                                data-testid="add-realm"
+                                variant="default"
+                                size="sm"
+                            >
+                                <Plus className="size-4" />
+                                <span>{t("createRealm")}</span>
+                            </Button>
+                        )}
                     </div>
 
                     <Table className="table-fixed">
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[35%]">{t("realmName")}</TableHead>
-                                <TableHead className="w-[55%]">{t("displayName")}</TableHead>
+                                <TableHead className="w-[35%]">
+                                    {t("realmName")}
+                                </TableHead>
+                                <TableHead className="w-[55%]">
+                                    {t("displayName")}
+                                </TableHead>
                                 <TableHead className="w-[10%]" />
                             </TableRow>
                         </TableHeader>
@@ -222,42 +225,40 @@ export default function RealmSection() {
                             ) : (
                                 paginatedRealms.map(data => {
                                     const isMaster = data.name === "master";
+                                    const isCurrent = data.name === realm;
                                     return (
-                                        <TableRow key={data.id}>
+                                        <TableRow
+                                            key={data.id}
+                                            className="cursor-pointer"
+                                            onClick={() => {
+                                                if (!isCurrent) {
+                                                    navigate({
+                                                        to: toDashboard({
+                                                            realm: data.name
+                                                        }) as string
+                                                    });
+                                                    onOpenChange(false);
+                                                }
+                                            }}
+                                        >
                                             <TableCell className="truncate">
-                                                {data.name !== realm ? (
-                                                    <Link
-                                                        to={
-                                                            toDashboard({
-                                                                realm: data.name
-                                                            }) as string
-                                                        }
-                                                        className="font-medium text-primary hover:underline"
-                                                    >
-                                                        {data.name}
-                                                    </Link>
-                                                ) : (
-                                                    <Popover>
-                                                        <PopoverTrigger asChild>
-                                                            <span className="inline-flex cursor-help items-center gap-1">
-                                                                {data.name}{" "}
-                                                                <Badge variant="secondary">
-                                                                    {t("currentRealm")}
-                                                                </Badge>
-                                                            </span>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent className="max-w-xs">
-                                                            {t("currentRealmExplain")}
-                                                        </PopoverContent>
-                                                    </Popover>
-                                                )}
+                                                <span className="inline-flex items-center gap-1">
+                                                    {data.name}
+                                                    {isCurrent && (
+                                                        <Badge variant="secondary">
+                                                            {t("currentRealm")}
+                                                        </Badge>
+                                                    )}
+                                                </span>
                                             </TableCell>
                                             <TableCell className="truncate">
                                                 {(translationFormatter(t)(
                                                     data.displayName
                                                 ) as string) ?? "-"}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell
+                                                onClick={e => e.stopPropagation()}
+                                            >
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
                                                         <Button
@@ -296,7 +297,9 @@ export default function RealmSection() {
                                         pageSize={pageSize}
                                         onPageSizeChange={setPageSize}
                                         onPreviousPage={() =>
-                                            setCurrentPage(p => Math.max(0, p - 1))
+                                            setCurrentPage(p =>
+                                                Math.max(0, p - 1)
+                                            )
                                         }
                                         onNextPage={() =>
                                             setCurrentPage(p =>
@@ -304,7 +307,9 @@ export default function RealmSection() {
                                             )
                                         }
                                         hasPreviousPage={currentPage > 0}
-                                        hasNextPage={currentPage < totalPages - 1}
+                                        hasNextPage={
+                                            currentPage < totalPages - 1
+                                        }
                                         totalCount={totalCount}
                                     />
                                 </TableCell>

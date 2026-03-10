@@ -11,15 +11,27 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { Plus, Trash } from "@phosphor-icons/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, Plus, Trash } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
@@ -56,58 +68,28 @@ export const InitialAccessTokenList = () => {
         }
     };
 
-    const columns: ColumnDef<ClientInitialAccessPresentation>[] = [
-        {
-            accessorKey: "id",
-            header: t("id"),
-            cell: ({ row }) => row.original.id || "-"
-        },
-        {
-            accessorKey: "timestamp",
-            header: t("timestamp"),
-            cell: ({ row }) =>
-                formatDate(new Date(row.original.timestamp! * 1000), FORMAT_DATE_AND_TIME)
-        },
-        {
-            id: "expiration",
-            header: t("expires"),
-            cell: ({ row }) =>
-                formatDate(
-                    new Date(
-                        row.original.timestamp! * 1000 + row.original.expiration! * 1000
-                    ),
-                    FORMAT_DATE_AND_TIME
-                )
-        },
-        {
-            accessorKey: "count",
-            header: t("count"),
-            cell: ({ row }) => row.original.count ?? "-"
-        },
-        {
-            accessorKey: "remainingCount",
-            header: t("remainingCount"),
-            cell: ({ row }) => row.original.remainingCount ?? "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => setToken(row.original)}
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredTokens = useMemo(() => {
+        if (!search) return tokens;
+        const lower = search.toLowerCase();
+        return tokens.filter(t => t.id?.toLowerCase().includes(lower));
+    }, [tokens, search]);
+
+    const totalCount = filteredTokens.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedTokens = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredTokens.slice(start, start + pageSize);
+    }, [filteredTokens, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 6;
 
     return (
         <>
@@ -136,13 +118,16 @@ export const InitialAccessTokenList = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <DataTable
-                columns={columns}
-                data={tokens}
-                searchColumnId="id"
-                searchPlaceholder={t("searchInitialAccessToken")}
-                emptyMessage={t("noTokens")}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchInitialAccessToken")}
+                    />
                     <AddInitialAccessTokenDialog
                         onSuccess={() => invalidateTokens()}
                         trigger={
@@ -160,8 +145,100 @@ export const InitialAccessTokenList = () => {
                             </Button>
                         }
                     />
-                }
-            />
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[25%]">{t("id")}</TableHead>
+                            <TableHead className="w-[18%]">{t("timestamp")}</TableHead>
+                            <TableHead className="w-[18%]">{t("expires")}</TableHead>
+                            <TableHead className="w-[12%]">{t("count")}</TableHead>
+                            <TableHead className="w-[15%]">{t("remainingCount")}</TableHead>
+                            <TableHead className="w-[12%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedTokens.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columnCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noTokens")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedTokens.map(t_token => (
+                                <TableRow key={t_token.id}>
+                                    <TableCell className="truncate">
+                                        {t_token.id || "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {formatDate(new Date(t_token.timestamp! * 1000), FORMAT_DATE_AND_TIME)}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {formatDate(
+                                            new Date(
+                                                t_token.timestamp! * 1000 + t_token.expiration! * 1000
+                                            ),
+                                            FORMAT_DATE_AND_TIME
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {t_token.count ?? "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {t_token.remainingCount ?? "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    onClick={() => setToken(t_token)}
+                                                >
+                                                    <Trash className="size-4 shrink-0" />
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={columnCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

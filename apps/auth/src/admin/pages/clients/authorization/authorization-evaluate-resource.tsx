@@ -10,7 +10,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { AuthorizationEvaluateResourcePolicies } from "./authorization-evaluate-resource-policies";
 
 type Props = {

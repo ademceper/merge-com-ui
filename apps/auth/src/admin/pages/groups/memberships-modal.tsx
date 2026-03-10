@@ -17,10 +17,18 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { Question } from "@phosphor-icons/react";
-import { useState } from "react";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useMemo, useState } from "react";
 import { useHelp } from "@/shared/keycloak-ui-shared";
 import { GroupPath } from "@/admin/shared/ui/group/group-path";
 import { useUserMemberships } from "./hooks/use-user-memberships";
@@ -34,21 +42,17 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
     const { t } = useTranslation();
     const [isDirectMembership, setDirectMembership] = useState(true);
     const { enabled } = useHelp();
+    const [search, setSearch] = useState("");
 
     const { data: groups = [] } = useUserMemberships(user.id!, isDirectMembership);
 
-    const columns: ColumnDef<GroupRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("groupMembership"),
-            cell: ({ row }) => row.original.name || "-"
-        },
-        {
-            accessorKey: "path",
-            header: t("path"),
-            cell: ({ row }) => <GroupPath group={row.original} />
-        }
-    ];
+    const filteredGroups = useMemo(() => {
+        if (!search) return groups;
+        const lower = search.toLowerCase();
+        return groups.filter((g: GroupRepresentation) =>
+            g.name?.toLowerCase().includes(lower)
+        );
+    }, [groups, search]);
 
     const emptyContent = (
         <Empty className="py-12">
@@ -60,6 +64,8 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
             </EmptyContent>
         </Empty>
     );
+
+    const colCount = 2;
 
     return (
         <Dialog
@@ -78,47 +84,75 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
                         {t("showMembershipsTitle", { username: user.username })}
                     </DialogTitle>
                 </DialogHeader>
-                <DataTable<GroupRepresentation>
-                    columns={columns}
-                    data={groups}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchGroup")}
-                    emptyContent={emptyContent}
-                    emptyMessage={t("noGroupMemberships")}
-                    className="keycloak_user-section_groups-table"
-                    toolbar={
-                        <>
-                            <div className="flex items-center gap-2 mt-2">
-                                <Checkbox
-                                    id="kc-direct-membership-checkbox"
-                                    checked={isDirectMembership}
-                                    onCheckedChange={() => {
-                                        setDirectMembership(!isDirectMembership);
-                                    }}
-                                />
-                                <label htmlFor="kc-direct-membership-checkbox">
-                                    {t("directMembership")}
-                                </label>
-                            </div>
-                            {enabled && (
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="link"
-                                            className="kc-who-will-appear-button"
-                                        >
-                                            <Question className="size-4" />
-                                            {t("whoWillAppearLinkTextUsers")}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent>
-                                        <div>{t("whoWillAppearPopoverTextUsers")}</div>
-                                    </PopoverContent>
-                                </Popover>
-                            )}
-                        </>
-                    }
-                />
+                <div className="flex items-center gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchGroup")}
+                    />
+                    <div className="flex items-center gap-2 mt-2">
+                        <Checkbox
+                            id="kc-direct-membership-checkbox"
+                            checked={isDirectMembership}
+                            onCheckedChange={() => {
+                                setDirectMembership(!isDirectMembership);
+                            }}
+                        />
+                        <label htmlFor="kc-direct-membership-checkbox">
+                            {t("directMembership")}
+                        </label>
+                    </div>
+                    {enabled && (
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="link"
+                                    className="kc-who-will-appear-button"
+                                >
+                                    <Question className="size-4" />
+                                    {t("whoWillAppearLinkTextUsers")}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <div>{t("whoWillAppearPopoverTextUsers")}</div>
+                            </PopoverContent>
+                        </Popover>
+                    )}
+                </div>
+                <Table className="table-fixed keycloak_user-section_groups-table">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[50%]">
+                                {t("groupMembership")}
+                            </TableHead>
+                            <TableHead className="w-[50%]">{t("path")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredGroups.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {emptyContent}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            filteredGroups.map((group: GroupRepresentation) => (
+                                <TableRow key={group.id}>
+                                    <TableCell>{group.name || "-"}</TableCell>
+                                    <TableCell>
+                                        <GroupPath group={group} />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
                         <Button

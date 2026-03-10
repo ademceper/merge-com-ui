@@ -8,6 +8,16 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
@@ -16,9 +26,8 @@ import {
 import { CheckCircle, Funnel, Warning } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { pickBy } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { TextControl } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useEventsConfig } from "../pages/events/hooks/use-events-config";
@@ -74,6 +83,9 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
     const [selectOpen, setSelectOpen] = useState(false);
     const [activeFilters, setActiveFilters] = useState<Partial<UserEventSearchForm>>({});
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
     const defaultValues: UserEventSearchForm = {
         client: client ?? "",
@@ -128,6 +140,32 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
         client
     );
 
+    const totalCount = eventList.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedEvents = useMemo(() => {
+        const start = currentPage * pageSize;
+        return eventList.slice(start, start + pageSize);
+    }, [eventList, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+        setExpandedRows(new Set());
+    }, [activeFilters, pageSize]);
+
+    const colCount = 3 + (!user ? 1 : 0) + (!client ? 1 : 0);
+
+    function toggleRow(index: number) {
+        setExpandedRows(prev => {
+            const next = new Set(prev);
+            if (next.has(index)) {
+                next.delete(index);
+            } else {
+                next.add(index);
+            }
+            return next;
+        });
+    }
+
     function onSubmit() {
         setSearchDropdownOpen(false);
         commitFilters();
@@ -167,79 +205,6 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
         if (client) delete newFilters.client;
         setActiveFilters(newFilters);
     }
-
-    const columns: ColumnDef<EventRepresentation>[] = [
-        {
-            accessorKey: "time",
-            header: t("time"),
-            cell: ({ row }) =>
-                formatDate(new Date(row.original.time!), FORMAT_DATE_AND_TIME)
-        },
-        ...(!user
-            ? [
-                  {
-                      accessorKey: "userId",
-                      header: t("userId"),
-                      cell: ({ row }) => {
-                          const event = row.original;
-                          return event.userId ? (
-                              <Link
-                                  to={
-                                      toUser({
-                                          realm,
-                                          id: event.userId,
-                                          tab: "settings"
-                                      }) as string
-                                  }
-                                  className="text-primary hover:underline"
-                              >
-                                  {event.userId}
-                              </Link>
-                          ) : (
-                              t("noUserDetails")
-                          );
-                      }
-                  } as ColumnDef<EventRepresentation>
-              ]
-            : []),
-        {
-            accessorKey: "type",
-            header: t("eventType"),
-            cell: ({ row }) => {
-                const event = row.original;
-                return !event.error ? (
-                    <span className="flex items-center gap-1">
-                        <CheckCircle className="size-4 text-green-600" />
-                        {event.type}
-                    </span>
-                ) : (
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <span className="flex items-center gap-1 cursor-help">
-                                    <Warning className="size-4 text-amber-600" />
-                                    {event.type}
-                                </span>
-                            </TooltipTrigger>
-                            <TooltipContent>{event.error}</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                );
-            }
-        },
-        {
-            accessorKey: "ipAddress",
-            header: t("ipAddress")
-        },
-        ...(!client
-            ? [
-                  {
-                      accessorKey: "clientId",
-                      header: t("client")
-                  } as ColumnDef<EventRepresentation>
-              ]
-            : [])
-    ];
 
     const searchToolbar = (
         <FormProvider {...form}>
@@ -498,21 +463,136 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     return (
         <>
             {!userEventsEnabled && <EventsBanners type="userEvents" />}
-            <DataTable<EventRepresentation>
-                columns={columns}
-                data={eventList}
-                searchColumnId="type"
-                searchPlaceholder={t("eventType")}
-                emptyMessage={t("emptyUserEvents")}
-                toolbar={searchToolbar}
-                getRowCanExpand={row => row.original.details !== undefined}
-                renderSubRow={row => (
-                    <DetailCell
-                        details={row.original.details}
-                        error={row.original.error}
-                    />
-                )}
-            />
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center gap-2 py-2.5">
+                    {searchToolbar}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[18%]">{t("time")}</TableHead>
+                            {!user && (
+                                <TableHead className="w-[18%]">{t("userId")}</TableHead>
+                            )}
+                            <TableHead className="w-[22%]">{t("eventType")}</TableHead>
+                            <TableHead className="w-[15%]">{t("ipAddress")}</TableHead>
+                            {!client && (
+                                <TableHead className="w-[15%]">{t("client")}</TableHead>
+                            )}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedEvents.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("emptyUserEvents")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedEvents.map((event, index) => {
+                                const rowIndex = currentPage * pageSize + index;
+                                const canExpand = event.details !== undefined;
+                                const isExpanded = expandedRows.has(rowIndex);
+                                return (
+                                    <Fragment key={rowIndex}>
+                                        <TableRow
+                                            className={canExpand ? "cursor-pointer" : undefined}
+                                            onClick={canExpand ? () => toggleRow(rowIndex) : undefined}
+                                        >
+                                            <TableCell className="truncate">
+                                                {formatDate(new Date(event.time!), FORMAT_DATE_AND_TIME)}
+                                            </TableCell>
+                                            {!user && (
+                                                <TableCell className="truncate" onClick={e => e.stopPropagation()}>
+                                                    {event.userId ? (
+                                                        <Link
+                                                            to={
+                                                                toUser({
+                                                                    realm,
+                                                                    id: event.userId,
+                                                                    tab: "settings"
+                                                                }) as string
+                                                            }
+                                                            className="text-primary hover:underline"
+                                                        >
+                                                            {event.userId}
+                                                        </Link>
+                                                    ) : (
+                                                        t("noUserDetails")
+                                                    )}
+                                                </TableCell>
+                                            )}
+                                            <TableCell className="truncate">
+                                                {!event.error ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <CheckCircle className="size-4 text-green-600" />
+                                                        {event.type}
+                                                    </span>
+                                                ) : (
+                                                    <TooltipProvider>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <span className="flex items-center gap-1 cursor-help">
+                                                                    <Warning className="size-4 text-amber-600" />
+                                                                    {event.type}
+                                                                </span>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>{event.error}</TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {event.ipAddress}
+                                            </TableCell>
+                                            {!client && (
+                                                <TableCell className="truncate">
+                                                    {event.clientId}
+                                                </TableCell>
+                                            )}
+                                        </TableRow>
+                                        {isExpanded && (
+                                            <TableRow>
+                                                <TableCell colSpan={colCount} className="bg-muted/50 p-4">
+                                                    <DetailCell
+                                                        details={event.details}
+                                                        error={event.error}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </Fragment>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

@@ -164,5 +164,5 @@ export const ROUTES = {
     PAGE: "/:realm/page-section",
 
     // Realm
-    REALM_SECTION: "/:realm/realm-section"
+    REALMS: "/:realm/realms"
 } as const;

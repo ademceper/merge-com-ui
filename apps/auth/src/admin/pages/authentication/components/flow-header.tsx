@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { DotsSixVertical } from "@phosphor-icons/react";
 import { memo } from "react";
-import { TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
+import { TableHead, TableHeader, TableRow } from "@merge-rd/ui/components/table";
 
 export const FlowHeader = memo(() => {
     const { t } = useTranslation();

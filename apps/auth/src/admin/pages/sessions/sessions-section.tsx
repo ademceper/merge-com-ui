@@ -125,7 +125,7 @@ export function SessionsSection() {
                     </DropdownMenu>
                 </div>
             </div>
-            <div className="pt-4 pb-6 px-0">
+            <div className="flex h-full w-full flex-col">
                 {revocationModalOpen && (
                     <RevocationModal
                         handleModalToggle={handleRevocationModalToggle}

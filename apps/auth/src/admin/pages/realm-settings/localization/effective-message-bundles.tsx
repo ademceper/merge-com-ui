@@ -9,6 +9,7 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import {
@@ -18,11 +19,20 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { FormPanel } from "@/shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { findEffectiveMessageBundles } from "@/admin/api/realm-settings";
@@ -67,6 +77,27 @@ export const EffectiveMessageBundles = ({
         Partial<EffectiveMessageBundlesSearchForm>
     >({});
     const themes = serverInfo.themes;
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const filteredResults = useMemo(() => {
+        if (!search) return searchResult;
+        const lower = search.toLowerCase();
+        return searchResult.filter(r => r.key.toLowerCase().includes(lower));
+    }, [searchResult, search]);
+
+    const totalCount = filteredResults.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedResults = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredResults.slice(start, start + pageSize);
+    }, [filteredResults, currentPage, pageSize]);
 
     const themeTypes = useMemo(() => {
         if (!themes) return [];
@@ -220,19 +251,6 @@ export const EffectiveMessageBundles = ({
         );
         runSearchWithFilter(next);
     };
-
-    const columns: ColumnDef<MessageBundleRow>[] = [
-        {
-            accessorKey: "key",
-            header: t("key"),
-            cell: ({ row }) => <span className="font-medium">{row.original.key}</span>
-        },
-        {
-            accessorKey: "value",
-            header: t("value"),
-            cell: ({ row }) => row.original.value
-        }
-    ];
 
     return (
         <div className="space-y-6">
@@ -532,13 +550,71 @@ export const EffectiveMessageBundles = ({
             )}
 
             {searchPerformed && (
-                <DataTable
-                    columns={columns}
-                    data={searchResult}
-                    searchColumnId="key"
-                    searchPlaceholder={t("searchForTranslation")}
-                    emptyMessage={t("noSearchResults")}
-                />
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchForTranslation")}
+                        />
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[50%]">{t("key")}</TableHead>
+                                <TableHead className="w-[50%]">{t("value")}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedResults.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={2}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("noSearchResults")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedResults.map(row => (
+                                    <TableRow key={row.key}>
+                                        <TableCell className="truncate">
+                                            <span className="font-medium">{row.key}</span>
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {row.value}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={2} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
             )}
         </div>
     );

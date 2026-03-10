@@ -15,7 +15,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 import { isValidComponentType } from "./policy/policy-details";
 

@@ -2,15 +2,26 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
-import { Plus } from "@phosphor-icons/react";
-import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, Plus } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { toKeysTab } from "@/admin/shared/lib/routes/realm-settings";
 import { useFormatDate } from "@/admin/shared/lib/use-format-date";
@@ -19,6 +30,7 @@ import { useKeysMetadata } from "../hooks/use-keys-metadata";
 
 type KeyData = KeyMetadataRepresentation & {
     provider?: string;
+    use?: string;
 };
 
 type KeysListTabProps = {
@@ -34,6 +46,27 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
     const [publicKey, setPublicKey] = useState("");
     const [certificate, setCertificate] = useState("");
     const { data: keyData = [] } = useKeysMetadata(realmComponents);
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const filteredData = useMemo(() => {
+        if (!search) return keyData;
+        const lower = search.toLowerCase();
+        return keyData.filter(k => k.kid?.toLowerCase().includes(lower));
+    }, [keyData, search]);
+
+    const totalCount = filteredData.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedData = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredData.slice(start, start + pageSize);
+    }, [filteredData, currentPage, pageSize]);
 
     const [togglePublicKeyDialog, PublicKeyDialog] = useConfirmDialog({
         titleKey: t("publicKey"),
@@ -51,92 +84,20 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
         onConfirm: () => Promise.resolve()
     });
 
-    const columns: ColumnDef<KeyData>[] = [
-        {
-            accessorKey: "algorithm",
-            header: t("algorithm")
-        },
-        {
-            accessorKey: "type",
-            header: t("type")
-        },
-        {
-            accessorKey: "kid",
-            header: t("kid")
-        },
-        {
-            accessorKey: "status",
-            header: t("status"),
-            cell: ({ row }) => t(`keysFilter.${row.original.status ?? "ACTIVE"}`)
-        },
-        {
-            accessorKey: "use",
-            header: t("use")
-        },
-        {
-            accessorKey: "provider",
-            header: t("provider"),
-            cell: ({ row }) => row.original.provider ?? "-"
-        },
-        {
-            accessorKey: "validTo",
-            header: t("validTo"),
-            cell: ({ row }) => {
-                const validTo = row.original.validTo;
-                return validTo ? formatDate(new Date(validTo)) : "-";
-            }
-        },
-        {
-            id: "publicKeyActions",
-            accessorKey: "publicKey",
-            header: "",
-            size: 60,
-            enableHiding: false,
-            enableSorting: false,
-            cell: ({ row }) => {
-                const { publicKey: pk, certificate: cert } = row.original;
-                if (!pk && !cert) return null;
-                return (
-                    <DataTableRowActions row={row}>
-                        {pk && (
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    setPublicKey(pk!);
-                                    togglePublicKeyDialog();
-                                }}
-                            >
-                                {t("publicKey")}
-                            </DropdownMenuItem>
-                        )}
-                        {cert && (
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    setCertificate(cert!);
-                                    toggleCertificateDialog();
-                                }}
-                            >
-                                {t("certificate")}
-                            </DropdownMenuItem>
-                        )}
-                    </DataTableRowActions>
-                );
-            }
-        }
-    ];
-
     return (
         <>
             <PublicKeyDialog />
             <CertificateDialog />
-            <DataTable
-                columns={columns}
-                data={keyData}
-                searchColumnId="kid"
-                searchPlaceholder={t("searchKey")}
-                emptyMessage={t("noKeys")}
-                facetFilterColumnId="status"
-                facetFilterLabel={t("selectFilterType")}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchKey")}
+                    />
                     <Button
                         type="button"
                         data-testid="addProvider"
@@ -152,8 +113,120 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
                         <Plus size={20} className="shrink-0 sm:hidden" />
                         <span className="hidden sm:inline">{t("addProvider")}</span>
                     </Button>
-                }
-            />
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("algorithm")}</TableHead>
+                            <TableHead>{t("type")}</TableHead>
+                            <TableHead>{t("kid")}</TableHead>
+                            <TableHead>{t("status")}</TableHead>
+                            <TableHead>{t("use")}</TableHead>
+                            <TableHead>{t("provider")}</TableHead>
+                            <TableHead>{t("validTo")}</TableHead>
+                            <TableHead className="w-[60px]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedData.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={8}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noKeys")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedData.map(key => (
+                                <TableRow key={key.kid}>
+                                    <TableCell className="truncate">
+                                        {key.algorithm ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {key.type ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {key.kid ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {t(`keysFilter.${key.status ?? "ACTIVE"}`)}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {key.use ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {key.provider ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {key.validTo
+                                            ? formatDate(new Date(key.validTo))
+                                            : "-"}
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        {(key.publicKey || key.certificate) ? (
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    {key.publicKey && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => {
+                                                                setPublicKey(key.publicKey!);
+                                                                togglePublicKeyDialog();
+                                                            }}
+                                                        >
+                                                            {t("publicKey")}
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    {key.certificate && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => {
+                                                                setCertificate(key.certificate!);
+                                                                toggleCertificateDialog();
+                                                            }}
+                                                        >
+                                                            {t("certificate")}
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        ) : null}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={8} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

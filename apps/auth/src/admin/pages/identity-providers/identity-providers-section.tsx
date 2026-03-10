@@ -22,9 +22,10 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Input } from "@merge-rd/ui/components/input";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
     Cube,
+    DotsThree,
     FacebookLogo,
     GithubLogo,
     GitlabLogo,
@@ -37,12 +38,12 @@ import {
     TwitterLogo
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { groupBy, sortBy } from "lodash-es";
 import type { SetStateAction } from "react";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { type ColumnDef, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { DraggableTableRows } from "@/admin/shared/ui/table-draggable-rows";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
@@ -280,16 +281,22 @@ export function IdentityProvidersSection() {
                 size: 50,
                 enableHiding: false,
                 cell: ({ row }) => (
-                    <DataTableRowActions row={row}>
-                        <button
-                            type="button"
-                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => setSelectedProvider(row.original)}
-                        >
-                            <Trash className="size-4 shrink-0" />
-                            {t("delete")}
-                        </button>
-                    </DataTableRowActions>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon-sm">
+                                <DotsThree weight="bold" className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                className="text-destructive focus:text-destructive"
+                                onClick={() => setSelectedProvider(row.original)}
+                            >
+                                <Trash className="size-4" />
+                                {t("delete")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )
             }
         ],
@@ -321,7 +328,7 @@ export function IdentityProvidersSection() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <div className="space-y-4 py-6">
+            <div className="flex h-full w-full flex-col">
                 {!hasProviders && (
                     <div className="p-6">
                         <p className="text-muted-foreground">{t("getStarted")}</p>
@@ -366,39 +373,43 @@ export function IdentityProvidersSection() {
                     </div>
                 )}
                 {hasProviders && (
-                    <div className="space-y-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <Input
-                                placeholder={t("searchForProvider")}
+                    <>
+                        <div className="flex items-center justify-between gap-2 py-2.5">
+                            <FacetedFormFilter
+                                type="text"
+                                size="small"
+                                title={t("search")}
                                 value={search}
-                                onChange={e => setSearch(e.target.value)}
-                                className="h-9 w-64"
+                                onChange={value => setSearch(value)}
+                                placeholder={t("searchForProvider")}
                             />
-                            <label className="flex cursor-pointer items-center gap-2 text-sm">
-                                <Checkbox
-                                    id="hideOrganizationLinkedIdps"
-                                    data-testid="hideOrganizationLinkedIdps"
-                                    checked={hide}
-                                    onCheckedChange={checked => {
-                                        setHide(!!checked);
-                                    }}
-                                />
-                                {t("hideOrganizationLinkedIdps")}
-                            </label>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        data-testid="addProviderDropdown"
-                                        variant="default"
-                                        size="sm"
-                                    >
-                                        {t("addProvider")}
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    {identityProviderOptions()}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <div className="flex items-center gap-2">
+                                <label className="flex cursor-pointer items-center gap-2 text-sm">
+                                    <Checkbox
+                                        id="hideOrganizationLinkedIdps"
+                                        data-testid="hideOrganizationLinkedIdps"
+                                        checked={hide}
+                                        onCheckedChange={checked => {
+                                            setHide(!!checked);
+                                        }}
+                                    />
+                                    {t("hideOrganizationLinkedIdps")}
+                                </label>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            data-testid="addProviderDropdown"
+                                            variant="default"
+                                            size="sm"
+                                        >
+                                            {t("addProvider")}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {identityProviderOptions()}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </div>
                         <DraggableTableRows<IdentityProviderRepresentation>
                             columns={columns}
@@ -407,7 +418,7 @@ export function IdentityProvidersSection() {
                             getRowId={row => row.alias ?? row.providerId ?? ""}
                             onOrderChange={handleOrderChange}
                         />
-                    </div>
+                    </>
                 )}
             </div>
         </>

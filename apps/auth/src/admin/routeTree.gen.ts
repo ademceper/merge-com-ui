@@ -20,6 +20,7 @@ import { Route as AppRealmWorkflowsIndexRouteImport } from './routes/_app/$realm
 import { Route as AppRealmUsersIndexRouteImport } from './routes/_app/$realm/users/index'
 import { Route as AppRealmUserFederationIndexRouteImport } from './routes/_app/$realm/user-federation/index'
 import { Route as AppRealmRolesIndexRouteImport } from './routes/_app/$realm/roles/index'
+import { Route as AppRealmRealmsIndexRouteImport } from './routes/_app/$realm/realms/index'
 import { Route as AppRealmRealmSettingsIndexRouteImport } from './routes/_app/$realm/realm-settings/index'
 import { Route as AppRealmPermissionsIndexRouteImport } from './routes/_app/$realm/permissions/index'
 import { Route as AppRealmOrganizationsIndexRouteImport } from './routes/_app/$realm/organizations/index'
@@ -171,6 +172,11 @@ const AppRealmUserFederationIndexRoute =
 const AppRealmRolesIndexRoute = AppRealmRolesIndexRouteImport.update({
   id: '/roles/',
   path: '/roles/',
+  getParentRoute: () => AppRealmRoute,
+} as any)
+const AppRealmRealmsIndexRoute = AppRealmRealmsIndexRouteImport.update({
+  id: '/realms/',
+  path: '/realms/',
   getParentRoute: () => AppRealmRoute,
 } as any)
 const AppRealmRealmSettingsIndexRoute =
@@ -797,6 +803,7 @@ export interface FileRoutesByFullPath {
   '/$realm/organizations/': typeof AppRealmOrganizationsIndexRoute
   '/$realm/permissions/': typeof AppRealmPermissionsIndexRoute
   '/$realm/realm-settings/': typeof AppRealmRealmSettingsIndexRoute
+  '/$realm/realms/': typeof AppRealmRealmsIndexRoute
   '/$realm/roles/': typeof AppRealmRolesIndexRoute
   '/$realm/user-federation/': typeof AppRealmUserFederationIndexRoute
   '/$realm/users/': typeof AppRealmUsersIndexRoute
@@ -905,6 +912,7 @@ export interface FileRoutesByTo {
   '/$realm/organizations': typeof AppRealmOrganizationsIndexRoute
   '/$realm/permissions': typeof AppRealmPermissionsIndexRoute
   '/$realm/realm-settings': typeof AppRealmRealmSettingsIndexRoute
+  '/$realm/realms': typeof AppRealmRealmsIndexRoute
   '/$realm/roles': typeof AppRealmRolesIndexRoute
   '/$realm/user-federation': typeof AppRealmUserFederationIndexRoute
   '/$realm/users': typeof AppRealmUsersIndexRoute
@@ -1016,6 +1024,7 @@ export interface FileRoutesById {
   '/_app/$realm/organizations/': typeof AppRealmOrganizationsIndexRoute
   '/_app/$realm/permissions/': typeof AppRealmPermissionsIndexRoute
   '/_app/$realm/realm-settings/': typeof AppRealmRealmSettingsIndexRoute
+  '/_app/$realm/realms/': typeof AppRealmRealmsIndexRoute
   '/_app/$realm/roles/': typeof AppRealmRolesIndexRoute
   '/_app/$realm/user-federation/': typeof AppRealmUserFederationIndexRoute
   '/_app/$realm/users/': typeof AppRealmUsersIndexRoute
@@ -1127,6 +1136,7 @@ export interface FileRouteTypes {
     | '/$realm/organizations/'
     | '/$realm/permissions/'
     | '/$realm/realm-settings/'
+    | '/$realm/realms/'
     | '/$realm/roles/'
     | '/$realm/user-federation/'
     | '/$realm/users/'
@@ -1235,6 +1245,7 @@ export interface FileRouteTypes {
     | '/$realm/organizations'
     | '/$realm/permissions'
     | '/$realm/realm-settings'
+    | '/$realm/realms'
     | '/$realm/roles'
     | '/$realm/user-federation'
     | '/$realm/users'
@@ -1345,6 +1356,7 @@ export interface FileRouteTypes {
     | '/_app/$realm/organizations/'
     | '/_app/$realm/permissions/'
     | '/_app/$realm/realm-settings/'
+    | '/_app/$realm/realms/'
     | '/_app/$realm/roles/'
     | '/_app/$realm/user-federation/'
     | '/_app/$realm/users/'
@@ -1509,6 +1521,13 @@ declare module '@tanstack/react-router' {
       path: '/roles'
       fullPath: '/$realm/roles/'
       preLoaderRoute: typeof AppRealmRolesIndexRouteImport
+      parentRoute: typeof AppRealmRoute
+    }
+    '/_app/$realm/realms/': {
+      id: '/_app/$realm/realms/'
+      path: '/realms'
+      fullPath: '/$realm/realms/'
+      preLoaderRoute: typeof AppRealmRealmsIndexRouteImport
       parentRoute: typeof AppRealmRoute
     }
     '/_app/$realm/realm-settings/': {
@@ -2217,6 +2236,7 @@ interface AppRealmRouteChildren {
   AppRealmOrganizationsIndexRoute: typeof AppRealmOrganizationsIndexRoute
   AppRealmPermissionsIndexRoute: typeof AppRealmPermissionsIndexRoute
   AppRealmRealmSettingsIndexRoute: typeof AppRealmRealmSettingsIndexRoute
+  AppRealmRealmsIndexRoute: typeof AppRealmRealmsIndexRoute
   AppRealmRolesIndexRoute: typeof AppRealmRolesIndexRoute
   AppRealmUserFederationIndexRoute: typeof AppRealmUserFederationIndexRoute
   AppRealmUsersIndexRoute: typeof AppRealmUsersIndexRoute
@@ -2324,6 +2344,7 @@ const AppRealmRouteChildren: AppRealmRouteChildren = {
   AppRealmOrganizationsIndexRoute: AppRealmOrganizationsIndexRoute,
   AppRealmPermissionsIndexRoute: AppRealmPermissionsIndexRoute,
   AppRealmRealmSettingsIndexRoute: AppRealmRealmSettingsIndexRoute,
+  AppRealmRealmsIndexRoute: AppRealmRealmsIndexRoute,
   AppRealmRolesIndexRoute: AppRealmRolesIndexRoute,
   AppRealmUserFederationIndexRoute: AppRealmUserFederationIndexRoute,
   AppRealmUsersIndexRoute: AppRealmUsersIndexRoute,

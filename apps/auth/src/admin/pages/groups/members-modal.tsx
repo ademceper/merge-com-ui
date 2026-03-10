@@ -17,10 +17,18 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { Info } from "@phosphor-icons/react";
-import { useState } from "react";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useMemo, useState } from "react";
 import { emptyFormatter } from "@/admin/shared/lib/util";
 import { useAvailableUsers } from "./hooks/use-available-users";
 
@@ -41,6 +49,7 @@ export const MemberModal = ({
 }: MemberModalProps) => {
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
+    const [search, setSearch] = useState("");
 
     const { data: users = [] } = useAvailableUsers(
         membersQueryKey,
@@ -55,49 +64,11 @@ export const MemberModal = ({
         );
     };
 
-    const columns: ColumnDef<UserRepresentation>[] = [
-        {
-            id: "select",
-            header: "",
-            size: 40,
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={selectedRows.some(u => u.id === row.original.id)}
-                    onCheckedChange={() => toggleSelect(row.original)}
-                />
-            )
-        },
-        {
-            accessorKey: "username",
-            header: t("username"),
-            cell: ({ row }) => (
-                <>
-                    {row.original.username}{" "}
-                    {!row.original.enabled && (
-                        <Label className="text-red-500">
-                            <Info className="size-4 inline mr-1" />
-                            {t("disabled")}
-                        </Label>
-                    )}
-                </>
-            )
-        },
-        {
-            accessorKey: "email",
-            header: t("email"),
-            cell: ({ row }) => emptyFormatter()(row.original.email) as string
-        },
-        {
-            accessorKey: "lastName",
-            header: t("lastName"),
-            cell: ({ row }) => emptyFormatter()(row.original.lastName) as string
-        },
-        {
-            accessorKey: "firstName",
-            header: t("firstName"),
-            cell: ({ row }) => emptyFormatter()(row.original.firstName) as string
-        }
-    ];
+    const filteredUsers = useMemo(() => {
+        if (!search) return users;
+        const lower = search.toLowerCase();
+        return users.filter(u => u.username?.toLowerCase().includes(lower));
+    }, [users, search]);
 
     const emptyContent = (
         <Empty className="py-12">
@@ -110,6 +81,8 @@ export const MemberModal = ({
         </Empty>
     );
 
+    const colCount = 5;
+
     return (
         <Dialog
             open
@@ -121,14 +94,70 @@ export const MemberModal = ({
                 <DialogHeader>
                     <DialogTitle>{t("addMember")}</DialogTitle>
                 </DialogHeader>
-                <DataTable<UserRepresentation>
-                    columns={columns}
-                    data={users}
-                    searchColumnId="username"
-                    searchPlaceholder={t("searchForUser")}
-                    emptyContent={emptyContent}
-                    emptyMessage={t("noUsersFound")}
-                />
+                <div className="flex items-center gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForUser")}
+                    />
+                </div>
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[5%]" />
+                            <TableHead className="w-[25%]">{t("username")}</TableHead>
+                            <TableHead className="w-[25%]">{t("email")}</TableHead>
+                            <TableHead className="w-[20%]">{t("lastName")}</TableHead>
+                            <TableHead className="w-[25%]">{t("firstName")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredUsers.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {emptyContent}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            filteredUsers.map(user => (
+                                <TableRow key={user.id}>
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={selectedRows.some(
+                                                u => u.id === user.id
+                                            )}
+                                            onCheckedChange={() => toggleSelect(user)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        {user.username}{" "}
+                                        {!user.enabled && (
+                                            <Label className="text-red-500">
+                                                <Info className="size-4 inline mr-1" />
+                                                {t("disabled")}
+                                            </Label>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.email) as string}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.lastName) as string}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.firstName) as string}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
                         <DialogClose asChild>

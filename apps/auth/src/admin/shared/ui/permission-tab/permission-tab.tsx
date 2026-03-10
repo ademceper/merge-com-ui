@@ -10,9 +10,6 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
-import { DotsThreeVertical } from "@phosphor-icons/react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -20,7 +17,10 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { HelpItem, KeycloakSpinner } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { usePermissions } from "@/admin/shared/api/use-permissions";

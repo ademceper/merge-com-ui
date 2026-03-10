@@ -10,12 +10,22 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { Question } from "@phosphor-icons/react";
 import { intersectionBy } from "lodash-es";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { DataTable } from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -109,6 +119,49 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
         refresh();
     };
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredGroups = useMemo(() => {
+        if (!search) return groups;
+        const lower = search.toLowerCase();
+        return groups.filter((g: GroupRepresentation) =>
+            g.name?.toLowerCase().includes(lower)
+        );
+    }, [groups, search]);
+
+    const totalCount = filteredGroups.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedGroups = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredGroups.slice(start, start + pageSize);
+    }, [filteredGroups, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const colCount = 4;
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader>
+                <EmptyTitle>{t("noGroups")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("noGroupsText")}</EmptyDescription>
+            </EmptyContent>
+            <Button
+                className="mt-2"
+                onClick={toggleModal}
+                disabled={!user.access?.manageGroupMembership}
+            >
+                {t("joinGroup")}
+            </Button>
+        </Empty>
+    );
+
     return (
         <>
             <DeleteConfirm />
@@ -128,111 +181,18 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                     }}
                 />
             )}
-            <DataTable<GroupRepresentation>
-                columns={[
-                    {
-                        id: "select",
-                        header: "",
-                        size: 40,
-                        cell: ({ row }) => {
-                            const disabled =
-                                !isDirectMembership &&
-                                directMembershipList.every(
-                                    item => item.id !== row.original.id
-                                );
-                            return (
-                                <Checkbox
-                                    checked={selectedGroups.some(
-                                        s => s.id === row.original.id
-                                    )}
-                                    disabled={disabled}
-                                    onCheckedChange={() => {
-                                        if (disabled) return;
-                                        setSelectedGroups(prev =>
-                                            prev.some(s => s.id === row.original.id)
-                                                ? prev.filter(
-                                                      s => s.id !== row.original.id
-                                                  )
-                                                : isDirectMembership
-                                                  ? [...prev, row.original]
-                                                  : intersectionBy(
-                                                        [...prev, row.original],
-                                                        directMembershipList,
-                                                        "id"
-                                                    )
-                                        );
-                                    }}
-                                />
-                            );
-                        }
-                    },
-                    {
-                        accessorKey: "name",
-                        header: t("groupMembership"),
-                        cell: ({ row }) => row.original.name || "-"
-                    },
-                    {
-                        accessorKey: "path",
-                        header: t("path"),
-                        cell: ({ row }) => <GroupPath group={row.original} />
-                    },
-                    {
-                        id: "leave",
-                        header: "",
-                        cell: ({ row }) => {
-                            const canLeave =
-                                directMembershipList.some(
-                                    item => item.id === row.original.id
-                                ) ||
-                                directMembershipList.length === 0 ||
-                                isDirectMembership;
-                            return canLeave ? (
-                                <Button
-                                    data-testid={`leave-${row.original.name}`}
-                                    onClick={() => leave([row.original])}
-                                    variant="link"
-                                    disabled={!user.access?.manageGroupMembership}
-                                >
-                                    {t("leave")}
-                                </Button>
-                            ) : (
-                                "-"
-                            );
-                        }
-                    }
-                ]}
-                data={groups}
-                searchColumnId="name"
-                searchPlaceholder={t("searchGroup")}
-                emptyContent={
-                    <Empty className="py-12">
-                        <EmptyHeader>
-                            <EmptyTitle>{t("noGroups")}</EmptyTitle>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <EmptyDescription>{t("noGroupsText")}</EmptyDescription>
-                        </EmptyContent>
-                        <Button
-                            className="mt-2"
-                            onClick={toggleModal}
-                            disabled={!user.access?.manageGroupMembership}
-                        >
-                            {t("joinGroup")}
-                        </Button>
-                    </Empty>
-                }
-                emptyMessage={t("noGroups")}
-                className="keycloak_user-section_groups-table"
-                toolbar={
-                    <>
-                        <Button
-                            className="kc-join-group-button"
-                            onClick={toggleModal}
-                            data-testid="add-group-button"
-                            disabled={!user.access?.manageGroupMembership}
-                        >
-                            {t("joinGroup")}
-                        </Button>
+
+            <div className="flex h-full w-full flex-col keycloak_user-section_groups-table">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <div className="flex items-center gap-2">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchGroup")}
+                        />
                         <div className="flex items-center gap-2 mt-1">
                             <Checkbox
                                 id="kc-direct-membership-checkbox"
@@ -249,15 +209,6 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                                 {t("directMembership")}
                             </label>
                         </div>
-                        <Button
-                            onClick={() => leave(selectedGroups)}
-                            data-testid="leave-group-button"
-                            variant="link"
-                            disabled={selectedGroups.length === 0}
-                            className="ml-4"
-                        >
-                            {t("leave")}
-                        </Button>
                         {enabled && (
                             <Popover>
                                 <PopoverTrigger asChild>
@@ -275,9 +226,142 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                                 </PopoverContent>
                             </Popover>
                         )}
-                    </>
-                }
-            />
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            className="kc-join-group-button"
+                            onClick={toggleModal}
+                            data-testid="add-group-button"
+                            size="sm"
+                            disabled={!user.access?.manageGroupMembership}
+                        >
+                            {t("joinGroup")}
+                        </Button>
+                        <Button
+                            onClick={() => leave(selectedGroups)}
+                            data-testid="leave-group-button"
+                            variant="link"
+                            disabled={selectedGroups.length === 0}
+                        >
+                            {t("leave")}
+                        </Button>
+                    </div>
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[5%]" />
+                            <TableHead className="w-[35%]">
+                                {t("groupMembership")}
+                            </TableHead>
+                            <TableHead className="w-[40%]">{t("path")}</TableHead>
+                            <TableHead className="w-[20%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedGroups.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {filteredGroups.length === 0 && groups.length === 0
+                                        ? emptyContent
+                                        : t("noGroups")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedGroups.map((group: GroupRepresentation) => {
+                                const disabled =
+                                    !isDirectMembership &&
+                                    directMembershipList.every(
+                                        item => item.id !== group.id
+                                    );
+                                const canLeave =
+                                    directMembershipList.some(
+                                        item => item.id === group.id
+                                    ) ||
+                                    directMembershipList.length === 0 ||
+                                    isDirectMembership;
+                                return (
+                                    <TableRow key={group.id}>
+                                        <TableCell>
+                                            <Checkbox
+                                                checked={selectedGroups.some(
+                                                    s => s.id === group.id
+                                                )}
+                                                disabled={disabled}
+                                                onCheckedChange={() => {
+                                                    if (disabled) return;
+                                                    setSelectedGroups(prev =>
+                                                        prev.some(
+                                                            s => s.id === group.id
+                                                        )
+                                                            ? prev.filter(
+                                                                  s =>
+                                                                      s.id !== group.id
+                                                              )
+                                                            : isDirectMembership
+                                                              ? [...prev, group]
+                                                              : intersectionBy(
+                                                                    [...prev, group],
+                                                                    directMembershipList,
+                                                                    "id"
+                                                                )
+                                                    );
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>{group.name || "-"}</TableCell>
+                                        <TableCell>
+                                            <GroupPath group={group} />
+                                        </TableCell>
+                                        <TableCell>
+                                            {canLeave ? (
+                                                <Button
+                                                    data-testid={`leave-${group.name}`}
+                                                    onClick={() => leave([group])}
+                                                    variant="link"
+                                                    disabled={
+                                                        !user.access
+                                                            ?.manageGroupMembership
+                                                    }
+                                                >
+                                                    {t("leave")}
+                                                </Button>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

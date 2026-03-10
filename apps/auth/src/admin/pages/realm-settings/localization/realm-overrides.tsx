@@ -11,6 +11,13 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Input } from "@merge-rd/ui/components/input";
 import {
     Select,
@@ -22,15 +29,20 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { Check, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { Check, DotsThree, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
+import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage
@@ -91,6 +103,27 @@ export const RealmOverrides = ({
     const [formValue, setFormValue] = useState("");
     const [keysToDelete, setKeysToDelete] = useState<string[]>([]);
     const translationForm = useForm<TranslationForm>({ mode: "onChange" });
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const filteredRows = useMemo(() => {
+        if (!search) return tableRows;
+        const lower = search.toLowerCase();
+        return tableRows.filter(r => r.key.toLowerCase().includes(lower));
+    }, [tableRows, search]);
+
+    const totalCount = filteredRows.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRows = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRows.slice(start, start + pageSize);
+    }, [filteredRows, currentPage, pageSize]);
 
     const refreshTable = useCallback(() => {
         setTableKey(k => k + 1);
@@ -207,98 +240,6 @@ export const RealmOverrides = ({
         setEditingKey(null);
     };
 
-    const columns: ColumnDef<TableRowData>[] = [
-        {
-            accessorKey: "key",
-            header: t("key"),
-            cell: ({ row }) => <span className="font-medium">{row.original.key}</span>
-        },
-        {
-            accessorKey: "value",
-            header: t("value"),
-            cell: ({ row }) => {
-                const isEditing = editingKey === row.original.key;
-                if (isEditing) {
-                    return (
-                        <form
-                            className="kc-form-translationValue inline-flex items-center gap-1"
-                            onSubmit={(e: FormEvent) => {
-                                e.preventDefault();
-                                void handleSaveEdit(row.original.key, formValue);
-                            }}
-                        >
-                            <Input
-                                aria-label={t("editTranslationValue")}
-                                type="text"
-                                className="w-auto min-w-[12rem]"
-                                data-testid={`editTranslationValueInput-${row.original.key}`}
-                                value={formValue}
-                                onChange={(e: FormEvent<HTMLInputElement>) =>
-                                    setFormValue(e.currentTarget.value)
-                                }
-                            />
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                data-testid={`editTranslationAcceptBtn-${row.original.key}`}
-                                type="submit"
-                                aria-label={t("acceptBtn")}
-                            >
-                                <Check className="size-4" />
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                data-testid={`editTranslationCancelBtn-${row.original.key}`}
-                                aria-label={t("cancelBtn")}
-                                type="button"
-                                onClick={() => setEditingKey(null)}
-                            >
-                                <X className="size-4" />
-                            </Button>
-                        </form>
-                    );
-                }
-                return (
-                    <div className="inline-flex items-center gap-1">
-                        <span>{row.original.value}</span>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            aria-label={t("editBtn")}
-                            data-testid={`editTranslationBtn-${row.original.key}`}
-                            onClick={() => {
-                                setFormValue(row.original.value);
-                                setEditingKey(row.original.key);
-                            }}
-                        >
-                            <PencilSimple className="size-4" />
-                        </Button>
-                    </div>
-                );
-            }
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => setKeysToDelete([row.original.key])}
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
-
     const currentLocaleLabel =
         selectMenuLocale && selectMenuLocale !== ""
             ? localeToDisplayName(selectMenuLocale, whoAmI.locale)
@@ -376,14 +317,148 @@ export const RealmOverrides = ({
                         <span className="hidden sm:inline">{t("addTranslation")}</span>
                     </Button>
                 </div>
-                <DataTable
-                    key={tableKey}
-                    columns={columns}
-                    data={tableRows}
-                    searchColumnId="key"
-                    searchPlaceholder={t("searchForTranslation")}
-                    emptyMessage={t("noTranslations")}
-                />
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchForTranslation")}
+                        />
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[35%]">{t("key")}</TableHead>
+                                <TableHead className="w-[55%]">{t("value")}</TableHead>
+                                <TableHead className="w-[10%]" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedRows.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={3}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("noTranslations")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedRows.map(row => (
+                                    <TableRow key={row.key}>
+                                        <TableCell className="truncate">
+                                            <span className="font-medium">{row.key}</span>
+                                        </TableCell>
+                                        <TableCell>
+                                            {editingKey === row.key ? (
+                                                <form
+                                                    className="kc-form-translationValue inline-flex items-center gap-1"
+                                                    onSubmit={(e: FormEvent) => {
+                                                        e.preventDefault();
+                                                        void handleSaveEdit(row.key, formValue);
+                                                    }}
+                                                >
+                                                    <Input
+                                                        aria-label={t("editTranslationValue")}
+                                                        type="text"
+                                                        className="w-auto min-w-[12rem]"
+                                                        data-testid={`editTranslationValueInput-${row.key}`}
+                                                        value={formValue}
+                                                        onChange={(e: FormEvent<HTMLInputElement>) =>
+                                                            setFormValue(e.currentTarget.value)
+                                                        }
+                                                    />
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        data-testid={`editTranslationAcceptBtn-${row.key}`}
+                                                        type="submit"
+                                                        aria-label={t("acceptBtn")}
+                                                    >
+                                                        <Check className="size-4" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        data-testid={`editTranslationCancelBtn-${row.key}`}
+                                                        aria-label={t("cancelBtn")}
+                                                        type="button"
+                                                        onClick={() => setEditingKey(null)}
+                                                    >
+                                                        <X className="size-4" />
+                                                    </Button>
+                                                </form>
+                                            ) : (
+                                                <div className="inline-flex items-center gap-1">
+                                                    <span>{row.value}</span>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        aria-label={t("editBtn")}
+                                                        data-testid={`editTranslationBtn-${row.key}`}
+                                                        onClick={() => {
+                                                            setFormValue(row.value);
+                                                            setEditingKey(row.key);
+                                                        }}
+                                                    >
+                                                        <PencilSimple className="size-4" />
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </TableCell>
+                                        <TableCell onClick={e => e.stopPropagation()}>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        className="text-destructive focus:text-destructive"
+                                                        onClick={() => setKeysToDelete([row.key])}
+                                                    >
+                                                        <Trash className="size-4" />
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={3} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
             </div>
         </>
     );

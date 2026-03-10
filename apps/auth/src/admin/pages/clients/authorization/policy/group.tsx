@@ -13,7 +13,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { HelpItem, TextControl } from "@/shared/keycloak-ui-shared";
 import { GroupPickerDialog } from "@/admin/shared/ui/group/group-picker-dialog";
 import { useGroupsById } from "../hooks/use-groups-by-id";

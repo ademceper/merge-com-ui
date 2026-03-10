@@ -17,13 +17,20 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 import { AddMapperDialog } from "../add/mapper-dialog";
 
@@ -53,7 +60,6 @@ const MapperLink = ({ id, name, detailLink }: MapperLinkProps) => (
 export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListProps) => {
     const { t } = useTranslation();
 
-    const [_mapperAction, _setMapperAction] = useState(false);
     const mapperList = model.protocolMappers;
     const mapperTypes = useServerInfo().protocolMapperTypes![model.protocol!];
 
@@ -62,6 +68,8 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
 
     const [addMapperDialogOpen, setAddMapperDialogOpen] = useState(false);
     const [filter, setFilter] = useState(model.protocolMappers);
+    const [search, setSearch] = useState("");
+
     const toggleAddMapperDialog = (buildIn: boolean) => {
         if (buildIn) {
             setFilter(mapperList || []);
@@ -86,29 +94,31 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
         return list.sort((a, b) => a.priority - b.priority);
     }, [mapperList, mapperTypes]);
 
-    const columns: ColumnDef<Row>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => <MapperLink {...row.original} detailLink={detailLink} />
-        },
-        { accessorKey: "category", header: t("category") },
-        { accessorKey: "type", header: t("type") },
-        { accessorKey: "priority", header: t("priority") },
-        {
-            id: "actions",
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <DropdownMenuItem
-                        onClick={() => onDelete(row.original)}
-                        className="text-destructive"
-                    >
-                        {t("delete")}
-                    </DropdownMenuItem>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredRows = useMemo(
+        () =>
+            search
+                ? rows.filter(row =>
+                      row.name?.toLowerCase().includes(search.toLowerCase())
+                  )
+                : rows,
+        [rows, search]
+    );
+
+    const totalCount = filteredRows.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRows = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRows.slice(start, start + pageSize);
+    }, [filteredRows, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const colSpan = 5;
 
     const emptyContent = (
         <Empty className="py-12">
@@ -145,15 +155,16 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
                 toggleDialog={() => setAddMapperDialogOpen(!addMapperDialogOpen)}
             />
 
-            <DataTable<Row>
-                key={key}
-                columns={columns}
-                data={rows}
-                searchColumnId="name"
-                searchPlaceholder={t("searchForMapper")}
-                emptyContent={emptyContent}
-                emptyMessage={t("emptyMappers")}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForMapper")}
+                    />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button id="mapperAction">{t("addMapper")}</Button>
@@ -169,8 +180,84 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                }
-            />
+                </div>
+                {totalCount === 0 && !search ? (
+                    emptyContent
+                ) : (
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[25%]">{t("name")}</TableHead>
+                                <TableHead className="w-[20%]">{t("category")}</TableHead>
+                                <TableHead className="w-[25%]">{t("type")}</TableHead>
+                                <TableHead className="w-[15%]">{t("priority")}</TableHead>
+                                <TableHead className="w-[10%]" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedRows.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={colSpan}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("emptyMappers")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedRows.map(row => (
+                                    <TableRow key={row.id ?? row.name}>
+                                        <TableCell className="truncate">
+                                            <MapperLink {...row} detailLink={detailLink} />
+                                        </TableCell>
+                                        <TableCell className="truncate">{row.category}</TableCell>
+                                        <TableCell className="truncate">{row.type}</TableCell>
+                                        <TableCell>{row.priority}</TableCell>
+                                        <TableCell>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree weight="bold" className="size-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() => onDelete(row)}
+                                                        className="text-destructive focus:text-destructive"
+                                                    >
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={colSpan} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                )}
+            </div>
         </>
     );
 };

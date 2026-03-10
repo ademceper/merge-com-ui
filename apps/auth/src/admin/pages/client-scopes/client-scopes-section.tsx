@@ -10,14 +10,28 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 import { useDeleteClientScope } from "./hooks/use-delete-client-scope";
@@ -78,6 +92,52 @@ export function ClientScopesSection() {
 
     const { mutateAsync: deleteScope } = useDeleteClientScope();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"name" | "description" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
+    const toggleSort = (column: "name" | "description") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredScopes = useMemo(() => {
+        let result = clientScopes;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(s => s.name?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [clientScopes, search, sortBy, sortDirection]);
+
+    const totalCount = filteredScopes.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedScopes = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredScopes.slice(start, start + pageSize);
+    }, [filteredScopes, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     const onDeleteConfirm = async () => {
         if (!selectedScope?.id) return;
         const currentCount = clientScopes.length;
@@ -98,79 +158,8 @@ export function ClientScopesSection() {
         }
     };
 
-    const columns: ColumnDef<Row>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => (
-                <button
-                    type="button"
-                    className="text-primary hover:underline text-left"
-                    onClick={() => setEditScopeId(row.original.id!)}
-                >
-                    {row.original.name}
-                </button>
-            )
-        },
-        {
-            accessorKey: "type",
-            header: t("assignedType"),
-            cell: ({ row }) => (
-                <TypeSelector
-                    {...row.original}
-                    refresh={refresh}
-                    className="h-8 min-h-8 w-auto min-w-[100px] border border-input bg-muted/50 py-1 px-2 text-sm"
-                />
-            )
-        },
-        {
-            accessorKey: "protocol",
-            header: t("protocol"),
-            cell: ({ row }) =>
-                getProtocolName(t, row.original.protocol ?? "openid-connect")
-        },
-        {
-            id: "displayOrder",
-            accessorFn: row => row.attributes?.["gui.order"],
-            header: t("displayOrder"),
-            cell: ({ row }) => row.original.attributes?.["gui.order"] ?? "-"
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => row.original.description || "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => setEditScopeId(row.original.id!)}
-                    >
-                        <PencilSimple className="size-4 shrink-0" />
-                        {t("edit")}
-                    </button>
-                    <div className="my-1 h-px bg-border" />
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => setSelectedScope(row.original)}
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
-
     return (
-        <div className="pt-4 pb-6 px-0">
+        <>
             <AlertDialog
                 open={!!selectedScope}
                 onOpenChange={open => !open && setSelectedScope(undefined)}
@@ -207,33 +196,164 @@ export function ClientScopesSection() {
                 onSuccess={refresh}
             />
 
-            <DataTable
-                columns={columns}
-                data={clientScopes}
-                searchColumnId="name"
-                searchPlaceholder={t("searchForClientScope")}
-                emptyMessage={t("emptyClientScopes")}
-                onRowClick={row => setEditScopeId(row.original.id!)}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForClientScope")}
+                    />
                     <AddClientScopeDialog
                         trigger={
                             <Button
                                 type="button"
                                 data-testid="createClientScope"
                                 variant="default"
-                                className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                aria-label={t("createClientScope")}
+                                size="sm"
                             >
-                                <Plus size={20} className="shrink-0 sm:hidden" />
-                                <span className="hidden sm:inline">
-                                    {t("createClientScope")}
-                                </span>
+                                <Plus className="size-4" />
+                                <span>{t("createClientScope")}</span>
                             </Button>
                         }
                         onSuccess={refresh}
                     />
-                }
-            />
-        </div>
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead
+                                className="w-[25%]"
+                                sortable
+                                sortDirection={sortBy === "name" ? sortDirection : false}
+                                onSort={() => toggleSort("name")}
+                            >
+                                {t("name")}
+                            </TableHead>
+                            <TableHead className="w-[15%]">{t("assignedType")}</TableHead>
+                            <TableHead className="w-[15%]">{t("protocol")}</TableHead>
+                            <TableHead className="w-[10%]">{t("displayOrder")}</TableHead>
+                            <TableHead
+                                className="w-[25%]"
+                                sortable
+                                sortDirection={sortBy === "description" ? sortDirection : false}
+                                onSort={() => toggleSort("description")}
+                            >
+                                {t("description")}
+                            </TableHead>
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedScopes.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={6}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("emptyClientScopes")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedScopes.map(scope => (
+                                <TableRow
+                                    key={scope.id}
+                                    className="cursor-pointer"
+                                    onClick={() => setEditScopeId(scope.id!)}
+                                >
+                                    <TableCell className="truncate">
+                                        <button
+                                            type="button"
+                                            className="text-primary hover:underline text-left"
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                setEditScopeId(scope.id!);
+                                            }}
+                                        >
+                                            {scope.name}
+                                        </button>
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        <TypeSelector
+                                            {...scope}
+                                            refresh={refresh}
+                                            className="h-8 min-h-8 w-auto min-w-[100px] border border-input bg-muted/50 py-1 px-2 text-sm"
+                                        />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {getProtocolName(
+                                            t,
+                                            scope.protocol ?? "openid-connect"
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {scope.attributes?.["gui.order"] ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {scope.description || "-"}
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={() =>
+                                                        setEditScopeId(scope.id!)
+                                                    }
+                                                >
+                                                    <PencilSimple className="size-4" />
+                                                    {t("edit")}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem
+                                                    className="text-destructive focus:text-destructive"
+                                                    onClick={() =>
+                                                        setSelectedScope(scope)
+                                                    }
+                                                >
+                                                    <Trash className="size-4" />
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={6} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
+        </>
     );
 }

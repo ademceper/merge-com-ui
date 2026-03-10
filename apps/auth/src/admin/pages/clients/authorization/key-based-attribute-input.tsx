@@ -20,7 +20,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { defaultContextAttributes } from "../utils";
 
 type AttributeType = {

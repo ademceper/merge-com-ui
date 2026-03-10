@@ -31,7 +31,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { KeycloakSpinner } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";

@@ -11,7 +11,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { FormLabel, HelpItem } from "@/shared/keycloak-ui-shared";
 import {
     AddRoleButton,

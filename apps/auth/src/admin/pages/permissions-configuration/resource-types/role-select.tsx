@@ -1,8 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { MinusCircle } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
@@ -10,7 +7,10 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
+import { MinusCircle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import {
     FormErrorText,
     FormLabel,

@@ -28,7 +28,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useWhoAmI } from "@/admin/app/providers/whoami/who-am-i";

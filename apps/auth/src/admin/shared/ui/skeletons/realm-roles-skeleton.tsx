@@ -2,8 +2,9 @@ import { TableSkeleton } from "./table-skeleton";
 
 export function RealmRolesSkeleton() {
     return (
-        <div className="pt-4 pb-6 px-0">
-            <TableSkeleton columns={3} />
-        </div>
+        <TableSkeleton
+            columns={4}
+            columnWidths={["w-[30%]", "w-[15%]", "w-[45%]", "w-[10%]"]}
+        />
     );
 }

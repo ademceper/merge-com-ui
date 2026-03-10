@@ -12,22 +12,35 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import {
     ArrowsDownUp,
     CopySimple,
+    DotsThree,
     PencilSimple,
     Plus,
     Trash
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions,
-    type Row
-} from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useAccess } from "@/admin/app/providers/access/access";
 import { groupKeys } from "./hooks/keys";
@@ -64,6 +77,10 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
     const [moveGroup, setMoveGroup] = useState<GroupRepresentation | undefined>();
     const [parentIdForCreate, setParentIdForCreate] = useState<string | undefined>();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
     const onDeleteConfirm = async () => {
         if (!groupToDelete?.id) return;
         try {
@@ -83,80 +100,25 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
         setCreateOpen(true);
     };
 
-    const columns: ColumnDef<GroupRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("groupName"),
-            enableHiding: false,
-            cell: ({ row }) => (
-                <Link
-                    to={`${location.pathname}/${row.original.id}` as string}
-                    className="text-primary hover:underline"
-                >
-                    {row.original.name}
-                </Link>
-            )
-        },
-        ...(isManager
-            ? [
-                  {
-                      id: "actions",
-                      header: "",
-                      size: 50,
-                      enableHiding: false,
-                      cell: ({ row }: { row: Row<GroupRepresentation> }) => (
-                          <DataTableRowActions row={row}>
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                  onClick={() => setEditGroup(row.original)}
-                              >
-                                  <PencilSimple className="size-4 shrink-0" />
-                                  {t("edit")}
-                              </button>
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                  onClick={() => setMoveGroup(row.original)}
-                              >
-                                  <ArrowsDownUp className="size-4 shrink-0" />
-                                  {t("moveTo")}
-                              </button>
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                  onClick={() => openCreate(row.original.id)}
-                              >
-                                  <Plus className="size-4 shrink-0" />
-                                  {t("createChildGroup")}
-                              </button>
-                              {!id && (
-                                  <button
-                                      type="button"
-                                      className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                      onClick={() => setDuplicateId(row.original.id)}
-                                  >
-                                      <CopySimple className="size-4 shrink-0" />
-                                      {t("duplicate")}
-                                  </button>
-                              )}
-                              <div className="my-1 h-px bg-border" />
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                  onClick={() => setGroupToDelete(row.original)}
-                              >
-                                  <Trash className="size-4 shrink-0" />
-                                  {t("delete")}
-                              </button>
-                          </DataTableRowActions>
-                      )
-                  } as ColumnDef<GroupRepresentation>
-              ]
-            : [])
-    ];
+    const filteredGroups = useMemo(() => {
+        if (!search) return groups;
+        const lower = search.toLowerCase();
+        return groups.filter(g => g.name?.toLowerCase().includes(lower));
+    }, [groups, search]);
+
+    const totalCount = filteredGroups.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedGroups = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredGroups.slice(start, start + pageSize);
+    }, [filteredGroups, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
 
     const emptyMessageKey = id ? `noGroupsInThisSubGroup` : `noGroupsInThisRealm`;
+    const colCount = isManager ? 2 : 1;
 
     return (
         <>
@@ -246,30 +208,144 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                 />
             )}
 
-            <DataTable
-                key={id}
-                columns={columns}
-                data={groups}
-                searchColumnId="name"
-                searchPlaceholder={t("filterGroups")}
-                emptyMessage={t(emptyMessageKey)}
-                onRowClick={row => isManager && setEditGroup(row.original)}
-                toolbar={
-                    isManager ? (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("filterGroups")}
+                    />
+                    {isManager && (
                         <Button
                             type="button"
                             data-testid="createGroup"
                             variant="default"
-                            className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                            size="sm"
                             aria-label={t("createGroup")}
                             onClick={() => openCreate()}
                         >
-                            <Plus size={20} className="shrink-0 sm:hidden" />
-                            <span className="hidden sm:inline">{t("createGroup")}</span>
+                            <Plus className="size-4" />
+                            <span>{t("createGroup")}</span>
                         </Button>
-                    ) : undefined
-                }
-            />
+                    )}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[90%]">{t("groupName")}</TableHead>
+                            {isManager && <TableHead className="w-[10%]" />}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedGroups.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t(emptyMessageKey)}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedGroups.map(group => (
+                                <TableRow
+                                    key={group.id}
+                                    className={isManager ? "cursor-pointer" : undefined}
+                                    onClick={() => isManager && setEditGroup(group)}
+                                >
+                                    <TableCell>
+                                        <Link
+                                            to={`${location.pathname}/${group.id}` as string}
+                                            className="text-primary hover:underline"
+                                        >
+                                            {group.name}
+                                        </Link>
+                                    </TableCell>
+                                    {isManager && (
+                                        <TableCell onClick={e => e.stopPropagation()}>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() => setEditGroup(group)}
+                                                    >
+                                                        <PencilSimple className="size-4" />
+                                                        {t("edit")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => setMoveGroup(group)}
+                                                    >
+                                                        <ArrowsDownUp className="size-4" />
+                                                        {t("moveTo")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => openCreate(group.id)}
+                                                    >
+                                                        <Plus className="size-4" />
+                                                        {t("createChildGroup")}
+                                                    </DropdownMenuItem>
+                                                    {!id && (
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setDuplicateId(group.id)
+                                                            }
+                                                        >
+                                                            <CopySimple className="size-4" />
+                                                            {t("duplicate")}
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        className="text-destructive focus:text-destructive"
+                                                        onClick={() =>
+                                                            setGroupToDelete(group)
+                                                        }
+                                                    >
+                                                        <Trash className="size-4" />
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

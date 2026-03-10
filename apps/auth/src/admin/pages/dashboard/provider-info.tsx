@@ -6,8 +6,6 @@ import {
     CollapsibleTrigger
 } from "@merge-rd/ui/components/collapsible";
 import { Input } from "@merge-rd/ui/components/input";
-import { CaretDown, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
 import {
     Table,
     TableBody,
@@ -15,7 +13,9 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
+import { CaretDown, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
+import { useMemo, useState } from "react";
 import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
 
 export const ProviderInfo = () => {

@@ -9,9 +9,17 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { differenceBy } from "lodash-es";
-import { useState } from "react";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useMemo, useState } from "react";
 import { useOrganizations } from "./hooks/use-organizations";
 
 type OrganizationModalProps = {
@@ -20,6 +28,8 @@ type OrganizationModalProps = {
     onAdd: (orgs: OrganizationRepresentation[]) => Promise<void>;
     onClose: () => void;
 };
+
+const COLUMN_COUNT = 3;
 
 export const OrganizationModal = ({
     isJoin = true,
@@ -31,6 +41,7 @@ export const OrganizationModal = ({
     const [selectedRows, setSelectedRows] = useState<OrganizationRepresentation[]>([]);
     const { data: allOrgs = [] } = useOrganizations();
     const orgs = differenceBy(allOrgs, existingOrgs, "id");
+    const [search, setSearch] = useState("");
 
     const toggleSelect = (org: OrganizationRepresentation) => {
         setSelectedRows(prev =>
@@ -40,31 +51,11 @@ export const OrganizationModal = ({
         );
     };
 
-    const columns: ColumnDef<OrganizationRepresentation>[] = [
-        {
-            id: "select",
-            header: "",
-            size: 40,
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={selectedRows.some(o => o.id === row.original.id)}
-                    onCheckedChange={() => toggleSelect(row.original)}
-                />
-            )
-        },
-        {
-            accessorKey: "name",
-            header: t("organizationName"),
-            cell: ({ row }) => row.original.name
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => (
-                <span className="truncate block">{row.original.description ?? ""}</span>
-            )
-        }
-    ];
+    const filteredOrgs = useMemo(() => {
+        if (!search) return orgs;
+        const lower = search.toLowerCase();
+        return orgs.filter(o => o.name?.toLowerCase().includes(lower));
+    }, [orgs, search]);
 
     return (
         <Dialog open onOpenChange={open => !open && onClose()}>
@@ -74,13 +65,60 @@ export const OrganizationModal = ({
                         {isJoin ? t("joinOrganization") : t("sendInvitation")}
                     </DialogTitle>
                 </DialogHeader>
-                <DataTable
-                    columns={columns}
-                    data={orgs}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchOrganization")}
-                    emptyMessage={t("noResults")}
+                <FacetedFormFilter
+                    type="text"
+                    size="small"
+                    title={t("search")}
+                    value={search}
+                    onChange={value => setSearch(value)}
+                    placeholder={t("searchOrganization")}
                 />
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-10" />
+                            <TableHead className="w-[45%]">
+                                {t("organizationName")}
+                            </TableHead>
+                            <TableHead className="w-[45%]">
+                                {t("description")}
+                            </TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredOrgs.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={COLUMN_COUNT}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noResults")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            filteredOrgs.map(org => (
+                                <TableRow key={org.id}>
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={selectedRows.some(
+                                                o => o.id === org.id
+                                            )}
+                                            onCheckedChange={() => toggleSelect(org)}
+                                        />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {org.name}
+                                    </TableCell>
+                                    <TableCell>
+                                        <span className="truncate block">
+                                            {org.description ?? ""}
+                                        </span>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
                 <DialogFooter>
                     <Button data-testid="cancel" variant="ghost" onClick={onClose}>
                         {t("cancel")}

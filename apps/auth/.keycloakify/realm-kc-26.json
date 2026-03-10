@@ -1949,19 +1949,6 @@
       "types": []
     },
     {
-      "alias": "github",
-      "displayName": "",
-      "enabled": true,
-      "internalId": "f87358ab-170c-401c-a315-ed113f19f1f6",
-      "providerId": "github",
-      "config": {
-        "clientId": "adad",
-        "clientSecret": "asdad",
-        "githubJsonFormat": "false"
-      },
-      "types": []
-    },
-    {
       "alias": "google",
       "displayName": "Google",
       "enabled": true,
@@ -2848,6 +2835,7 @@
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
     "acr.loa.map": "{}",
+    "darkMode": "true",
     "frontendUrl": "",
     "saml.signature.algorithm": ""
   },

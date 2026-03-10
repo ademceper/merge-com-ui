@@ -17,14 +17,21 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { findUser } from "@/admin/api/users";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
@@ -64,6 +71,10 @@ export const Organizations = ({ user }: OrganizationProps) => {
     const { mutateAsync: addOrgMemberMut } = useAddOrgMember(user.id!);
     const { mutateAsync: inviteToOrgMut } = useInviteToOrg(user.id!);
     const [isOpen, setIsOpen] = useState(false);
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const membershipOptions = [
         { value: "Managed", label: "Managed" },
@@ -143,90 +154,24 @@ export const Organizations = ({ user }: OrganizationProps) => {
         }
     });
 
-    const columns: ColumnDef<MembershipTypeRepresentation>[] = [
-        {
-            id: "select",
-            header: "",
-            size: 40,
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={selectedOrgs.some(o => o.id === row.original.id)}
-                    onCheckedChange={() => toggleSelect(row.original)}
-                />
-            )
-        },
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => (
-                <Link
-                    to={
-                        toEditOrganization({
-                            realm: realm!,
-                            id: row.original.id!,
-                            tab: "settings"
-                        }) as string
-                    }
-                    className="text-primary hover:underline truncate block"
-                >
-                    {row.original.name}
-                    {!row.original.enabled && (
-                        <Badge variant="secondary" className="ml-2">
-                            {t("disabled")}
-                        </Badge>
-                    )}
-                </Link>
-            )
-        },
-        {
-            accessorKey: "domains",
-            header: t("domains"),
-            cell: ({ row }) => (
-                <div className="flex flex-wrap gap-1">
-                    {row.original.domains?.map(dn => {
-                        const name =
-                            typeof dn === "string" ? dn : (dn as { name?: string }).name;
-                        return name ? (
-                            <Badge key={name} variant="secondary">
-                                {name}
-                            </Badge>
-                        ) : null;
-                    })}
-                </div>
-            )
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => row.original.description ?? "-"
-        },
-        {
-            accessorKey: "membershipType",
-            header: t("membershipType"),
-            cell: ({ row }) =>
-                row.original.membershipType?.filter(Boolean).join(", ") ?? "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10"
-                        onClick={() => {
-                            setSelectedOrgs([row.original]);
-                            toggleDeleteDialog();
-                        }}
-                    >
-                        {t("remove")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const filteredOrgs = useMemo(() => {
+        if (!search) return userOrgs;
+        const lower = search.toLowerCase();
+        return userOrgs.filter((o: MembershipTypeRepresentation) =>
+            o.name?.toLowerCase().includes(lower)
+        );
+    }, [userOrgs, search]);
+
+    const totalCount = filteredOrgs.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedOrgs = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredOrgs.slice(start, start + pageSize);
+    }, [filteredOrgs, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
 
     const emptyContent = (
         <Empty className="py-12">
@@ -262,6 +207,8 @@ export const Organizations = ({ user }: OrganizationProps) => {
             </EmptyContent>
         </Empty>
     );
+
+    const colCount = 6;
 
     return (
         <>
@@ -307,15 +254,18 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 />
             )}
             <DeleteConfirm />
-            <DataTable<MembershipTypeRepresentation>
-                columns={columns}
-                data={userOrgs}
-                searchColumnId="name"
-                searchPlaceholder={t("searchMembers")}
-                emptyContent={emptyContent}
-                emptyMessage={t("emptyUserOrganizations")}
-                toolbar={
+
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
                     <div className="flex flex-wrap items-center gap-2">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchMembers")}
+                        />
                         <SearchInputComponent
                             value={searchText}
                             placeholder={t("searchMembers")}
@@ -324,9 +274,23 @@ export const Organizations = ({ user }: OrganizationProps) => {
                             onClear={clearInput}
                             aria-label={t("searchMembers")}
                         />
+                        <CheckboxFilterComponent
+                            filterPlaceholderText={t("filterByMembershipType")}
+                            isOpen={isOpen}
+                            options={membershipOptions}
+                            onOpenChange={nextOpen => setIsOpen(nextOpen)}
+                            onToggleClick={onToggleClick}
+                            onSelect={onSelect}
+                            selectedItems={filteredMembershipTypes}
+                            width={"260px"}
+                        />
+                    </div>
+                    <div className="flex items-center gap-2">
                         <DropdownMenu open={joinToggle} onOpenChange={setJoinToggle}>
                             <DropdownMenuTrigger asChild>
-                                <Button id="toggle-id">{t("joinOrganization")}</Button>
+                                <Button id="toggle-id" size="sm">
+                                    {t("joinOrganization")}
+                                </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem
@@ -352,24 +316,149 @@ export const Organizations = ({ user }: OrganizationProps) => {
                         <Button
                             data-testid="removeOrganization"
                             variant="secondary"
+                            size="sm"
                             disabled={selectedOrgs.length === 0}
                             onClick={() => toggleDeleteDialog()}
                         >
                             {t("remove")}
                         </Button>
-                        <CheckboxFilterComponent
-                            filterPlaceholderText={t("filterByMembershipType")}
-                            isOpen={isOpen}
-                            options={membershipOptions}
-                            onOpenChange={nextOpen => setIsOpen(nextOpen)}
-                            onToggleClick={onToggleClick}
-                            onSelect={onSelect}
-                            selectedItems={filteredMembershipTypes}
-                            width={"260px"}
-                        />
                     </div>
-                }
-            />
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[5%]" />
+                            <TableHead className="w-[25%]">{t("name")}</TableHead>
+                            <TableHead className="w-[20%]">{t("domains")}</TableHead>
+                            <TableHead className="w-[20%]">{t("description")}</TableHead>
+                            <TableHead className="w-[15%]">
+                                {t("membershipType")}
+                            </TableHead>
+                            <TableHead className="w-[15%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedOrgs.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {filteredOrgs.length === 0 && userOrgs.length === 0
+                                        ? emptyContent
+                                        : t("emptyUserOrganizations")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedOrgs.map((org: MembershipTypeRepresentation) => (
+                                <TableRow key={org.id}>
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={selectedOrgs.some(
+                                                o => o.id === org.id
+                                            )}
+                                            onCheckedChange={() => toggleSelect(org)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Link
+                                            to={
+                                                toEditOrganization({
+                                                    realm: realm!,
+                                                    id: org.id!,
+                                                    tab: "settings"
+                                                }) as string
+                                            }
+                                            className="text-primary hover:underline truncate block"
+                                        >
+                                            {org.name}
+                                            {!org.enabled && (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="ml-2"
+                                                >
+                                                    {t("disabled")}
+                                                </Badge>
+                                            )}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-wrap gap-1">
+                                            {org.domains?.map(dn => {
+                                                const name =
+                                                    typeof dn === "string"
+                                                        ? dn
+                                                        : (dn as { name?: string }).name;
+                                                return name ? (
+                                                    <Badge
+                                                        key={name}
+                                                        variant="secondary"
+                                                    >
+                                                        {name}
+                                                    </Badge>
+                                                ) : null;
+                                            })}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {org.description ?? "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {org.membershipType
+                                            ?.filter(Boolean)
+                                            .join(", ") ?? "-"}
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    className="text-destructive focus:text-destructive"
+                                                    onClick={() => {
+                                                        setSelectedOrgs([org]);
+                                                        toggleDeleteDialog();
+                                                    }}
+                                                >
+                                                    {t("remove")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

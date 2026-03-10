@@ -13,7 +13,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { HelpItem } from "@/shared/keycloak-ui-shared";
 import { useLocaleSort, mapByKey } from "@/admin/shared/lib/use-locale-sort";
 import { AddScopeDialog } from "@/admin/pages/clients/scopes/add-scope-dialog";

@@ -11,16 +11,28 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage
@@ -68,53 +80,28 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
         }
     };
 
-    const columns: ColumnDef<ComponentRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => (
-                <button
-                    type="button"
-                    className="text-primary hover:underline text-left"
-                    onClick={() => setEditPolicy(row.original)}
-                >
-                    {row.original.name}
-                </button>
-            )
-        },
-        {
-            accessorKey: "providerId",
-            header: t("providerId"),
-            cell: ({ row }) => row.original.providerId || "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => setEditPolicy(row.original)}
-                    >
-                        <PencilSimple className="size-4 shrink-0" />
-                        {t("edit")}
-                    </button>
-                    <div className="my-1 h-px bg-border" />
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => setSelectedPolicy(row.original)}
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredPolicies = useMemo(() => {
+        if (!search) return policies;
+        const lower = search.toLowerCase();
+        return policies.filter(p => p.name?.toLowerCase().includes(lower));
+    }, [policies, search]);
+
+    const totalCount = filteredPolicies.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedPolicies = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredPolicies.slice(start, start + pageSize);
+    }, [filteredPolicies, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 3;
 
     return (
         <>
@@ -153,14 +140,16 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
                 onSuccess={refresh}
             />
 
-            <DataTable
-                columns={columns}
-                data={policies}
-                searchColumnId="name"
-                searchPlaceholder={t("searchClientRegistration")}
-                emptyMessage={t("noAccessPolicies")}
-                onRowClick={row => setEditPolicy(row.original)}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchClientRegistration")}
+                    />
                     <AddClientRegistrationPolicyDialog
                         subTab={subType}
                         onSuccess={refresh}
@@ -179,8 +168,112 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
                             </Button>
                         }
                     />
-                }
-            />
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[40%]">{t("name")}</TableHead>
+                            <TableHead className="w-[40%]">{t("providerId")}</TableHead>
+                            <TableHead className="w-[20%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedPolicies.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columnCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noAccessPolicies")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedPolicies.map(policy => (
+                                <TableRow
+                                    key={policy.id}
+                                    className="cursor-pointer"
+                                    onClick={() => setEditPolicy(policy)}
+                                >
+                                    <TableCell className="truncate">
+                                        <button
+                                            type="button"
+                                            className="text-primary hover:underline text-left"
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                setEditPolicy(policy);
+                                            }}
+                                        >
+                                            {policy.name}
+                                        </button>
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {policy.providerId || "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon-sm"
+                                                    onClick={e => e.stopPropagation()}
+                                                >
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        setEditPolicy(policy);
+                                                    }}
+                                                >
+                                                    <PencilSimple className="size-4 shrink-0" />
+                                                    {t("edit")}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        setSelectedPolicy(policy);
+                                                    }}
+                                                >
+                                                    <Trash className="size-4 shrink-0" />
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={columnCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

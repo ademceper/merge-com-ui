@@ -2,17 +2,30 @@ import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
-import { Info, ProhibitInset, SignOut } from "@phosphor-icons/react";
+import { DotsThree, Info, ProhibitInset, SignOut } from "@phosphor-icons/react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -59,6 +72,12 @@ export function SessionsTable({
     const { mutateAsync: deleteSessionMut } = useDeleteSession();
     const { mutateAsync: logoutUserMut } = useLogoutUser();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"username" | "start" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
     const [toggleLogoutDialog, LogoutConfirm] = useConfirmDialog({
         titleKey: "logoutAllSessions",
         messageKey: "logoutAllDescription",
@@ -98,151 +117,71 @@ export function SessionsTable({
         }
     };
 
-    const columns: ColumnDef<UserSessionRepresentation>[] = useMemo(() => {
-        const cols: ColumnDef<UserSessionRepresentation>[] = [
-            {
-                accessorKey: "username",
-                header: t("user"),
-                enableHiding: false,
-                cell: ({ row }) => {
-                    const r = row.original;
-                    return (
-                        <Link
-                            to={
-                                toUser({
-                                    realm,
-                                    id: r.userId!,
-                                    tab: "sessions"
-                                }) as string
-                            }
-                            className="text-primary hover:underline"
-                        >
-                            {r.username}
-                            {r.transientUser && (
-                                <>
-                                    {" "}
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Badge
-                                                variant="secondary"
-                                                data-testid="user-details-label-transient-user"
-                                                className="gap-1 cursor-help"
-                                            >
-                                                <Info className="size-3" />
-                                                {t("transientUser")}
-                                            </Badge>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {t("transientUserTooltip")}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </>
-                            )}
-                        </Link>
-                    );
-                }
-            },
-            {
-                accessorKey: "type",
-                header: t("type")
-            },
-            {
-                accessorKey: "start",
-                header: t("started"),
-                cell: ({ row }) => formatDate(new Date(row.original.start!))
-            },
-            {
-                accessorKey: "lastAccess",
-                header: t("lastAccess"),
-                cell: ({ row }) => formatDate(new Date(row.original.lastAccess!))
-            },
-            {
-                accessorKey: "ipAddress",
-                header: t("ipAddress")
-            },
-            {
-                accessorKey: "clients",
-                header: t("clients"),
-                cell: ({ row }) => (
-                    <div className="flex flex-wrap gap-x-2 gap-y-1">
-                        {Object.entries(row.original.clients ?? {}).map(
-                            ([clientId, client]) => (
-                                <Link
-                                    key={clientId}
-                                    to={
-                                        toClient({
-                                            realm,
-                                            clientId,
-                                            tab: "sessions"
-                                        }) as string
-                                    }
-                                    className="text-primary hover:underline"
-                                >
-                                    {client}
-                                </Link>
-                            )
-                        )}
-                    </div>
-                )
-            },
-            {
-                id: "actions",
-                header: "",
-                size: 50,
-                enableHiding: false,
-                cell: ({ row }) => {
-                    const session = row.original as UserSessionRepresentation & {
-                        type?: string;
-                    };
-                    const isOffline =
-                        session.type === "Offline" || session.type === "OFFLINE";
-                    return (
-                        <DataTableRowActions row={row}>
-                            {isOffline ? (
-                                <button
-                                    type="button"
-                                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                    onClick={() => onClickRevoke(session)}
-                                >
-                                    <ProhibitInset className="size-4 shrink-0" />
-                                    {t("revoke")}
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                    onClick={() => onClickSignOut(session)}
-                                >
-                                    <SignOut className="size-4 shrink-0" />
-                                    {t("signOut")}
-                                </button>
-                            )}
-                        </DataTableRowActions>
-                    );
-                }
-            }
-        ];
-        if (hiddenColumns.length === 0) return cols;
-        return cols.filter(col => {
-            const key = (
-                col as ColumnDef<UserSessionRepresentation> & { accessorKey?: string }
-            ).accessorKey;
-            return !key || !hiddenColumns.includes(key as ColumnName);
-        });
-    }, [realm, hiddenColumns, t, formatDate]);
+    const toggleSort = (column: "username" | "start") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredSessions = useMemo(() => {
+        let result = sessions;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(s => s.username?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (sortBy === "start"
+                    ? String(a.start ?? "")
+                    : (a.username ?? "").toLowerCase());
+                const bVal = (sortBy === "start"
+                    ? String(b.start ?? "")
+                    : (b.username ?? "").toLowerCase());
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [sessions, search, sortBy, sortDirection]);
+
+    const totalCount = filteredSessions.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedSessions = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredSessions.slice(start, start + pageSize);
+    }, [filteredSessions, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const isColumnVisible = (column: ColumnName) => !hiddenColumns.includes(column);
+
+    const visibleColumnCount =
+        (["username", "type", "start", "lastAccess", "ipAddress", "clients"] as ColumnName[])
+            .filter(isColumnVisible).length + 1; // +1 for actions column
 
     return (
         <>
             <LogoutConfirm />
-            <DataTable<UserSessionRepresentation>
-                columns={columns}
-                data={sessions}
-                searchColumnId="username"
-                searchPlaceholder={t("searchForSession")}
-                emptyMessage={emptyMessage ?? t("noSessions")}
-                toolbar={
-                    toolbar || logoutUser ? (
-                        <>
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForSession")}
+                    />
+                    {(toolbar || logoutUser) && (
+                        <div className="flex items-center gap-2">
                             {toolbar}
                             {logoutUser && (
                                 <Button
@@ -258,10 +197,211 @@ export function SessionsTable({
                                     </span>
                                 </Button>
                             )}
-                        </>
-                    ) : undefined
-                }
-            />
+                        </div>
+                    )}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            {isColumnVisible("username") && (
+                                <TableHead
+                                    className="w-[20%]"
+                                    sortable
+                                    sortDirection={sortBy === "username" ? sortDirection : false}
+                                    onSort={() => toggleSort("username")}
+                                >
+                                    {t("user")}
+                                </TableHead>
+                            )}
+                            {isColumnVisible("type") && (
+                                <TableHead className="w-[10%]">
+                                    {t("type")}
+                                </TableHead>
+                            )}
+                            {isColumnVisible("start") && (
+                                <TableHead
+                                    className="w-[15%]"
+                                    sortable
+                                    sortDirection={sortBy === "start" ? sortDirection : false}
+                                    onSort={() => toggleSort("start")}
+                                >
+                                    {t("started")}
+                                </TableHead>
+                            )}
+                            {isColumnVisible("lastAccess") && (
+                                <TableHead className="w-[15%]">
+                                    {t("lastAccess")}
+                                </TableHead>
+                            )}
+                            {isColumnVisible("ipAddress") && (
+                                <TableHead className="w-[12%]">
+                                    {t("ipAddress")}
+                                </TableHead>
+                            )}
+                            {isColumnVisible("clients") && (
+                                <TableHead className="w-[18%]">
+                                    {t("clients")}
+                                </TableHead>
+                            )}
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedSessions.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={visibleColumnCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {emptyMessage ?? t("noSessions")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedSessions.map(session => {
+                                const sessionWithType = session as UserSessionRepresentation & {
+                                    type?: string;
+                                };
+                                const isOffline =
+                                    sessionWithType.type === "Offline" || sessionWithType.type === "OFFLINE";
+                                return (
+                                    <TableRow key={session.id}>
+                                        {isColumnVisible("username") && (
+                                            <TableCell className="truncate">
+                                                <Link
+                                                    to={
+                                                        toUser({
+                                                            realm,
+                                                            id: session.userId!,
+                                                            tab: "sessions"
+                                                        }) as string
+                                                    }
+                                                    className="text-primary hover:underline"
+                                                >
+                                                    {session.username}
+                                                    {session.transientUser && (
+                                                        <>
+                                                            {" "}
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <Badge
+                                                                        variant="secondary"
+                                                                        data-testid="user-details-label-transient-user"
+                                                                        className="gap-1 cursor-help"
+                                                                    >
+                                                                        <Info className="size-3" />
+                                                                        {t("transientUser")}
+                                                                    </Badge>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent>
+                                                                    {t("transientUserTooltip")}
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        </>
+                                                    )}
+                                                </Link>
+                                            </TableCell>
+                                        )}
+                                        {isColumnVisible("type") && (
+                                            <TableCell className="truncate">
+                                                {sessionWithType.type}
+                                            </TableCell>
+                                        )}
+                                        {isColumnVisible("start") && (
+                                            <TableCell className="truncate">
+                                                {formatDate(new Date(session.start!))}
+                                            </TableCell>
+                                        )}
+                                        {isColumnVisible("lastAccess") && (
+                                            <TableCell className="truncate">
+                                                {formatDate(new Date(session.lastAccess!))}
+                                            </TableCell>
+                                        )}
+                                        {isColumnVisible("ipAddress") && (
+                                            <TableCell className="truncate">
+                                                {session.ipAddress}
+                                            </TableCell>
+                                        )}
+                                        {isColumnVisible("clients") && (
+                                            <TableCell>
+                                                <div className="flex flex-wrap gap-x-2 gap-y-1">
+                                                    {Object.entries(session.clients ?? {}).map(
+                                                        ([clientId, client]) => (
+                                                            <Link
+                                                                key={clientId}
+                                                                to={
+                                                                    toClient({
+                                                                        realm,
+                                                                        clientId,
+                                                                        tab: "sessions"
+                                                                    }) as string
+                                                                }
+                                                                className="text-primary hover:underline"
+                                                            >
+                                                                {client}
+                                                            </Link>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        )}
+                                        <TableCell>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    {isOffline ? (
+                                                        <DropdownMenuItem
+                                                            onClick={() => onClickRevoke(session)}
+                                                        >
+                                                            <ProhibitInset className="size-4" />
+                                                            {t("revoke")}
+                                                        </DropdownMenuItem>
+                                                    ) : (
+                                                        <DropdownMenuItem
+                                                            onClick={() => onClickSignOut(session)}
+                                                        >
+                                                            <SignOut className="size-4" />
+                                                            {t("signOut")}
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={visibleColumnCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 }

@@ -9,24 +9,29 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
-import { Funnel } from "@phosphor-icons/react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, Funnel } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import type { PropsWithChildren } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/admin/shared/ui/data-table";
 import { TextControl } from "@/shared/keycloak-ui-shared";
 import { MultiSelectField } from "@/shared/keycloak-ui-shared/controls/multi-select-field";
 import { useRealm } from "../app/providers/realm-context/realm-context";
@@ -121,6 +126,9 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
     const [authEvent, setAuthEvent] = useState<AdminEventRepresentation>();
     const [representationEvent, setRepresentationEvent] =
         useState<AdminEventRepresentation>();
+    const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const defaultValues: AdminEventSearchForm = {
         resourceTypes: [],
@@ -161,6 +169,29 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         activeFilters as Record<string, unknown>,
         resourcePath
     );
+
+    const totalCount = eventList.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedEvents = useMemo(() => {
+        const start = currentPage * pageSize;
+        return eventList.slice(start, start + pageSize);
+    }, [eventList, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [pageSize]);
+
+    function toggleRow(index: number) {
+        setExpandedRows(prev => {
+            const next = new Set(prev);
+            if (next.has(index)) {
+                next.delete(index);
+            } else {
+                next.add(index);
+            }
+            return next;
+        });
+    }
 
     function submitSearch() {
         setSearchDropdownOpen(false);
@@ -208,57 +239,6 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 : "",
         [representationEvent?.representation]
     );
-
-    const columns: ColumnDef<AdminEventRepresentation>[] = [
-        {
-            accessorKey: "time",
-            header: t("time"),
-            cell: ({ row }) =>
-                formatDate(new Date(row.original.time!), FORMAT_DATE_AND_TIME)
-        },
-        {
-            accessorKey: "resourcePath",
-            header: t("resourcePath"),
-            cell: ({ row }) => <CellResourceLinkRenderer {...row.original} />
-        },
-        {
-            accessorKey: "resourceType",
-            header: t("resourceType")
-        },
-        {
-            accessorKey: "operationType",
-            header: t("operationType")
-        },
-        {
-            id: "user",
-            header: t("user"),
-            cell: ({ row }) => row.original.authDetails?.userId ?? ""
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => setAuthEvent(row.original)}
-                    >
-                        {t("auth")}
-                    </button>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => setRepresentationEvent(row.original)}
-                    >
-                        {t("representation")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
 
     const [isMobile, setIsMobile] = useState<boolean>(
         typeof window !== "undefined" ? window.innerWidth < 640 : false
@@ -599,6 +579,8 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         </FormProvider>
     );
 
+    const colSpan = 6;
+
     return (
         <>
             {authEvent && (
@@ -641,21 +623,146 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 </DisplayDialog>
             )}
             {!adminEventsEnabled && <EventsBanners type="adminEvents" />}
-            <DataTable<AdminEventRepresentation>
-                columns={columns}
-                data={eventList}
-                searchColumnId="resourcePath"
-                searchPlaceholder={t("resourcePath")}
-                emptyMessage={t("emptyAdminEvents")}
-                toolbar={searchToolbar}
-                getRowCanExpand={row => row.original.details !== undefined}
-                renderSubRow={row => (
-                    <DetailCell
-                        details={row.original.details}
-                        error={row.original.error}
-                    />
-                )}
-            />
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    {searchToolbar}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[15%]">{t("time")}</TableHead>
+                            <TableHead className="w-[20%]">
+                                {t("resourcePath")}
+                            </TableHead>
+                            <TableHead className="w-[15%]">
+                                {t("resourceType")}
+                            </TableHead>
+                            <TableHead className="w-[15%]">
+                                {t("operationType")}
+                            </TableHead>
+                            <TableHead className="w-[15%]">{t("user")}</TableHead>
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedEvents.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colSpan}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("emptyAdminEvents")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedEvents.map((event, index) => {
+                                const globalIndex = currentPage * pageSize + index;
+                                const hasDetails = event.details !== undefined;
+                                const isExpanded = expandedRows.has(globalIndex);
+                                return (
+                                    <>
+                                        <TableRow
+                                            key={`row-${globalIndex}`}
+                                            className={
+                                                hasDetails ? "cursor-pointer" : undefined
+                                            }
+                                            onClick={() =>
+                                                hasDetails && toggleRow(globalIndex)
+                                            }
+                                        >
+                                            <TableCell className="truncate">
+                                                {formatDate(
+                                                    new Date(event.time!),
+                                                    FORMAT_DATE_AND_TIME
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                <CellResourceLinkRenderer {...event} />
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {event.resourceType}
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {event.operationType}
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {event.authDetails?.userId ?? ""}
+                                            </TableCell>
+                                            <TableCell
+                                                onClick={e => e.stopPropagation()}
+                                            >
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon-sm"
+                                                        >
+                                                            <DotsThree
+                                                                weight="bold"
+                                                                className="size-4"
+                                                            />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setAuthEvent(event)
+                                                            }
+                                                        >
+                                                            {t("auth")}
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setRepresentationEvent(
+                                                                    event
+                                                                )
+                                                            }
+                                                        >
+                                                            {t("representation")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                        {isExpanded && (
+                                            <TableRow key={`detail-${globalIndex}`}>
+                                                <TableCell colSpan={colSpan}>
+                                                    <DetailCell
+                                                        details={event.details}
+                                                        error={event.error}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colSpan} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

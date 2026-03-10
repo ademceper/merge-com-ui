@@ -27,7 +27,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import {
     getErrorDescription,

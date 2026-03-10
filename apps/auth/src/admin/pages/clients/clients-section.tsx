@@ -12,18 +12,30 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions,
-    type Row
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { DotsThree, DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useAccess } from "@/admin/app/providers/access/access";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
@@ -43,7 +55,6 @@ import { ClientRegistration } from "./registration/client-registration";
 import { getProtocolName, isRealmClient } from "./utils";
 
 export function ClientsSection() {
-
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
@@ -59,6 +70,52 @@ export function ClientsSection() {
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients");
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"clientId" | "name" | "description" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
+    const toggleSort = (column: "clientId" | "name" | "description") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredClients = useMemo(() => {
+        let result = clients;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(c => c.clientId?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [clients, search, sortBy, sortDirection]);
+
+    const totalCount = filteredClients.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedClients = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredClients.slice(start, start + pageSize);
+    }, [filteredClients, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     const onDeleteConfirm = useCallback(async () => {
         if (!selectedClient?.id) return;
         try {
@@ -72,62 +129,85 @@ export function ClientsSection() {
         }
     }, [selectedClient?.id, deleteClient, t]);
 
-    const columns: ColumnDef<ClientRepresentation>[] = useMemo(
-        () => [
-            {
-                accessorKey: "clientId",
-                header: t("clientId"),
-                cell: ({ row }) => (
-                    <span className="flex items-center gap-2">
-                        <Link
-                            to={
-                                toClient({
-                                    realm,
-                                    clientId: row.original.id ?? "",
-                                    tab: "settings"
-                                }) as string
-                            }
-                            className="text-primary hover:underline"
+    const isClientRegistration = Boolean(subTab);
+    const clientRegistrationTab: ClientRegistrationTab =
+        subTab === "authenticated" ? "authenticated" : "anonymous";
+
+    const currentTab: ClientsTab =
+        tab === "initial-access-token" || tab === "client-registration" ? tab : "list";
+
+    const renderClientList = () => (
+        <div className="flex h-full w-full flex-col">
+            <div className="flex items-center justify-between gap-2 py-2.5">
+                <FacetedFormFilter
+                    type="text"
+                    size="small"
+                    title={t("search")}
+                    value={search}
+                    onChange={value => setSearch(value)}
+                    placeholder={t("searchForClient")}
+                />
+                <AddClientDialog
+                    trigger={
+                        <Button
+                            type="button"
+                            data-testid="createClient"
+                            variant="default"
+                            size="sm"
                         >
-                            {row.original.clientId}
-                        </Link>
-                        {!row.original.enabled && (
-                            <Badge variant="secondary">{t("disabled")}</Badge>
-                        )}
-                    </span>
-                )
-            },
-            {
-                accessorKey: "name",
-                header: t("clientName"),
-                cell: ({ row }) =>
-                    (translationFormatter(t)(row.original.name) as string) || "-"
-            },
-            {
-                accessorKey: "protocol",
-                header: t("type"),
-                cell: ({ row }) =>
-                    getProtocolName(t, row.original.protocol ?? "openid-connect")
-            },
-            {
-                accessorKey: "description",
-                header: t("description"),
-                cell: ({ row }) => row.original.description || "-"
-            },
-            {
-                id: "actions",
-                header: "",
-                size: 50,
-                enableHiding: false,
-                cell: ({ row }) => {
-                    const client = row.original;
-                    const canDelete =
-                        !isRealmClient(client) && (isManager || client.access?.configure);
-                    return (
-                        <DataTableRowActions row={row}>
-                            <button
-                                type="button"
-                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                            <Plus className="size-4" />
+                            <span>{t("createClient")}</span>
+                        </Button>
+                    }
+                />
+            </div>
+
+            <Table className="table-fixed">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead
+                            className="w-[25%]"
+                            sortable
+                            sortDirection={sortBy === "clientId" ? sortDirection : false}
+                            onSort={() => toggleSort("clientId")}
+                        >
+                            {t("clientId")}
+                        </TableHead>
+                        <TableHead
+                            className="w-[20%]"
+                            sortable
+                            sortDirection={sortBy === "name" ? sortDirection : false}
+                            onSort={() => toggleSort("name")}
+                        >
+                            {t("clientName")}
+                        </TableHead>
+                        <TableHead className="w-[15%]">{t("type")}</TableHead>
+                        <TableHead
+                            className="w-[30%]"
+                            sortable
+                            sortDirection={sortBy === "description" ? sortDirection : false}
+                            onSort={() => toggleSort("description")}
+                        >
+                            {t("description")}
+                        </TableHead>
+                        <TableHead className="w-[10%]" />
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {paginatedClients.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={5}
+                                className="text-center text-muted-foreground"
+                            >
+                                {t("noClients")}
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        paginatedClients.map(client => (
+                            <TableRow
+                                key={client.id}
+                                className="cursor-pointer"
                                 onClick={() =>
                                     navigate({
                                         to: toClient({
@@ -138,57 +218,106 @@ export function ClientsSection() {
                                     })
                                 }
                             >
-                                <PencilSimple className="size-4 shrink-0" />
-                                {t("edit")}
-                            </button>
-                            <button
-                                type="button"
-                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                onClick={() => exportClient(client)}
-                            >
-                                <DownloadSimple className="size-4 shrink-0" />
-                                {t("export")}
-                            </button>
-                            {canDelete && (
-                                <>
-                                    <div className="my-1 h-px bg-border" />
-                                    <button
-                                        type="button"
-                                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        onClick={() => setSelectedClient(client)}
-                                    >
-                                        <Trash className="size-4 shrink-0" />
-                                        {t("delete")}
-                                    </button>
-                                </>
-                            )}
-                        </DataTableRowActions>
-                    );
-                }
-            }
-        ],
-        [t, realm, isManager, navigate]
+                                <TableCell className="truncate">
+                                    <span className="flex items-center gap-2">
+                                        {client.clientId}
+                                        {!client.enabled && (
+                                            <Badge variant="secondary">
+                                                {t("disabled")}
+                                            </Badge>
+                                        )}
+                                    </span>
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {(translationFormatter(t)(client.name) as string) || "-"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {getProtocolName(
+                                        t,
+                                        client.protocol ?? "openid-connect"
+                                    )}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {client.description || "-"}
+                                </TableCell>
+                                <TableCell onClick={e => e.stopPropagation()}>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon-sm">
+                                                <DotsThree
+                                                    weight="bold"
+                                                    className="size-4"
+                                                />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem
+                                                onClick={() =>
+                                                    navigate({
+                                                        to: toClient({
+                                                            realm,
+                                                            clientId: client.id ?? "",
+                                                            tab: "settings"
+                                                        }) as string
+                                                    })
+                                                }
+                                            >
+                                                <PencilSimple className="size-4" />
+                                                {t("edit")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => exportClient(client)}
+                                            >
+                                                <DownloadSimple className="size-4" />
+                                                {t("export")}
+                                            </DropdownMenuItem>
+                                            {!isRealmClient(client) &&
+                                                (isManager ||
+                                                    client.access?.configure) && (
+                                                    <>
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem
+                                                            className="text-destructive focus:text-destructive"
+                                                            onClick={() =>
+                                                                setSelectedClient(client)
+                                                            }
+                                                        >
+                                                            <Trash className="size-4" />
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </>
+                                                )}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={5} className="p-0">
+                            <TablePaginationFooter
+                                pageSize={pageSize}
+                                onPageSizeChange={setPageSize}
+                                onPreviousPage={() =>
+                                    setCurrentPage(p => Math.max(0, p - 1))
+                                }
+                                onNextPage={() =>
+                                    setCurrentPage(p =>
+                                        Math.min(totalPages - 1, p + 1)
+                                    )
+                                }
+                                hasPreviousPage={currentPage > 0}
+                                hasNextPage={currentPage < totalPages - 1}
+                                totalCount={totalCount}
+                            />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </div>
     );
-
-    const handleRowClick = useCallback(
-        (row: Row<ClientRepresentation>) => {
-            navigate({
-                to: toClient({
-                    realm,
-                    clientId: row.original.id ?? "",
-                    tab: "settings"
-                }) as string
-            });
-        },
-        [navigate, realm]
-    );
-
-    const isClientRegistration = Boolean(subTab);
-    const clientRegistrationTab: ClientRegistrationTab =
-        subTab === "authenticated" ? "authenticated" : "anonymous";
-
-    const currentTab: ClientsTab =
-        tab === "initial-access-token" || tab === "client-registration" ? tab : "list";
 
     const renderMainContent = () => {
         if (isClientRegistration) {
@@ -239,39 +368,12 @@ export function ClientsSection() {
             case "client-registration":
                 return <ClientRegistration key="anonymous" subTab="anonymous" />;
             default:
-                return (
-                    <DataTable
-                        columns={columns}
-                        data={clients}
-                        searchColumnId="clientId"
-                        searchPlaceholder={t("searchForClient")}
-                        emptyMessage={t("noClients")}
-                        onRowClick={handleRowClick}
-                        toolbar={
-                            <AddClientDialog
-                                trigger={
-                                    <Button
-                                        type="button"
-                                        data-testid="createClient"
-                                        variant="default"
-                                        className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                        aria-label={t("createClient")}
-                                    >
-                                        <Plus size={20} className="shrink-0 sm:hidden" />
-                                        <span className="hidden sm:inline">
-                                            {t("createClient")}
-                                        </span>
-                                    </Button>
-                                }
-                            />
-                        }
-                    />
-                );
+                return renderClientList();
         }
     };
 
     return (
-        <div className="pt-4 pb-6 px-0 min-w-0">
+        <>
             <AlertDialog
                 open={!!selectedClient}
                 onOpenChange={open => !open && setSelectedClient(undefined)}
@@ -334,6 +436,6 @@ export function ClientsSection() {
                     {renderMainContent()}
                 </TabsContent>
             </Tabs>
-        </div>
+        </>
     );
 }

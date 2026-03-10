@@ -9,7 +9,7 @@ import {
 } from "@merge-rd/ui/components/tooltip";
 import { Trash } from "@phosphor-icons/react";
 import { memo } from "react";
-import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
+import { TableCell, TableRow } from "@merge-rd/ui/components/table";
 import type { ExpandableExecution } from "../execution-model";
 import { AddFlowDropdown } from "./add-flow-dropdown";
 import { EditFlow } from "./edit-flow";

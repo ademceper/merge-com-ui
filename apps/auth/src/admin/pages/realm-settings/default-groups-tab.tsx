@@ -1,16 +1,28 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { Trans, useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { Plus, Question, Trash } from "@phosphor-icons/react";
-import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, Plus, Question, Trash } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -39,6 +51,28 @@ export const DefaultGroupsTab = () => {
     const { data: defaultGroups } = useDefaultGroups();
     const addDefaultGroupMutation = useAddDefaultGroup();
     const removeDefaultGroupMutation = useRemoveDefaultGroup();
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const filteredData = useMemo(() => {
+        if (!defaultGroups) return [];
+        if (!search) return defaultGroups;
+        const lower = search.toLowerCase();
+        return defaultGroups.filter(g => g.name?.toLowerCase().includes(lower));
+    }, [defaultGroups, search]);
+
+    const totalCount = filteredData.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedData = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredData.slice(start, start + pageSize);
+    }, [filteredData, currentPage, pageSize]);
 
     const removeGroups = async (groups: GroupRepresentation[]) => {
         try {
@@ -72,47 +106,6 @@ export const DefaultGroupsTab = () => {
             setSelectedRows([]);
         }
     });
-
-    const columns: ColumnDef<GroupRepresentation>[] = useMemo(
-        () => [
-            {
-                accessorKey: "name",
-                header: t("groupName"),
-                cell: ({ row }) => row.original.name ?? "-"
-            },
-            {
-                accessorKey: "path",
-                header: t("path"),
-                cell: ({ row }) => row.original.path ?? "-"
-            },
-            ...(canAddOrRemoveGroups
-                ? [
-                      {
-                          id: "actions",
-                          header: "",
-                          size: 50,
-                          enableHiding: false,
-                          cell: ({ row }) => (
-                              <DataTableRowActions row={row}>
-                                  <button
-                                      type="button"
-                                      className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                      onClick={() => {
-                                          setSelectedRows([row.original]);
-                                          toggleRemoveDialog();
-                                      }}
-                                  >
-                                      <Trash className="size-4 shrink-0" />
-                                      {t("remove")}
-                                  </button>
-                              </DataTableRowActions>
-                          )
-                      } as ColumnDef<GroupRepresentation>
-                  ]
-                : [])
-        ],
-        [t, canAddOrRemoveGroups, toggleRemoveDialog]
-    );
 
     if (!defaultGroups) {
         return <KeycloakSpinner />;
@@ -152,19 +145,17 @@ export const DefaultGroupsTab = () => {
                         </PopoverContent>
                     </Popover>
                 )}
-                <DataTable
-                    columns={columns}
-                    data={defaultGroups}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchForGroups")}
-                    emptyMessage={t("noDefaultGroups")}
-                    onDeleteRows={
-                        canAddOrRemoveGroups
-                            ? rows => removeGroups(rows.map(r => r.original))
-                            : undefined
-                    }
-                    toolbar={
-                        canAddOrRemoveGroups ? (
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchForGroups")}
+                        />
+                        {canAddOrRemoveGroups && (
                             <Button
                                 data-testid="openCreateGroupModal"
                                 variant="default"
@@ -174,9 +165,91 @@ export const DefaultGroupsTab = () => {
                                 <Plus size={20} className="shrink-0 sm:hidden" />
                                 <span className="hidden sm:inline">{t("addGroups")}</span>
                             </Button>
-                        ) : undefined
-                    }
-                />
+                        )}
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[40%]">{t("groupName")}</TableHead>
+                                <TableHead className="w-[50%]">{t("path")}</TableHead>
+                                {canAddOrRemoveGroups && (
+                                    <TableHead className="w-[10%]" />
+                                )}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedData.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={canAddOrRemoveGroups ? 3 : 2}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("noDefaultGroups")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedData.map(group => (
+                                    <TableRow key={group.id}>
+                                        <TableCell className="truncate">
+                                            {group.name ?? "-"}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {group.path ?? "-"}
+                                        </TableCell>
+                                        {canAddOrRemoveGroups && (
+                                            <TableCell onClick={e => e.stopPropagation()}>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon-sm">
+                                                            <DotsThree
+                                                                weight="bold"
+                                                                className="size-4"
+                                                            />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            className="text-destructive focus:text-destructive"
+                                                            onClick={() => {
+                                                                setSelectedRows([group]);
+                                                                toggleRemoveDialog();
+                                                            }}
+                                                        >
+                                                            <Trash className="size-4" />
+                                                            {t("remove")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={canAddOrRemoveGroups ? 3 : 2} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
             </div>
         </>
     );

@@ -15,7 +15,6 @@ import {
     ArrowsClockwiseIcon,
     BrowserIcon,
     BuildingsIcon,
-    CirclesThreeIcon,
     ClockCounterClockwiseIcon,
     GearSixIcon,
     GlobeIcon,
@@ -30,7 +29,7 @@ import {
 } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { label, useEnvironment } from "@/shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
 import { useAccess } from "../app/providers/access/access";
@@ -42,6 +41,7 @@ import { routes } from "../app/routes";
 import { toDashboard } from "../shared/lib/route-helpers";
 import { toPage } from "../shared/lib/routes/page";
 import { useIsFeatureEnabled, Feature } from "../shared/lib/use-is-feature-enabled";
+
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -86,7 +86,7 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
     );
 }
 
-export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AdminAppSidebar({ onRealmDrawerChange, ...props }: React.ComponentProps<typeof Sidebar> & { onRealmDrawerChange?: (open: boolean) => void }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { environment } = useEnvironment<Environment>();
@@ -96,13 +96,26 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     const pages = componentTypes?.["org.keycloak.services.ui.extend.UiPageProvider"];
     const { realm, realmRepresentation } = useRealm();
 
+    const [realmDrawerOpen, setRealmDrawerOpen] = useState(false);
+
+    const setRealmDrawerWithScale = useCallback((open: boolean) => {
+        const wrapper = document.querySelector("[data-scale-wrapper]");
+        if (wrapper) {
+            wrapper.setAttribute("data-scaled", open ? "true" : "false");
+        }
+        setRealmDrawerOpen(open);
+        onRealmDrawerChange?.(open);
+    }, [onRealmDrawerChange]);
+
     const { data: realms = [] } = useQuery({
         queryKey: ["realmNames", realm],
         queryFn: () =>
-            fetchAdminUI<RealmNameRepresentation[]>("ui-ext/realms/names", {
-                first: "0",
-                max: "1000"
-            }).then(result => result ?? []),
+            Promise.resolve([
+                { name: "master", displayName: "Master Realm" },
+                { name: "merge-dev", displayName: "Merge Development" },
+                { name: "merge-staging", displayName: "Merge Staging" },
+                { name: "merge-prod", displayName: "Merge Production" }
+            ] as RealmNameRepresentation[]),
         staleTime: 5 * 60_000
     });
 
@@ -110,7 +123,8 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
         () =>
             realms.map(r => ({
                 value: r.name,
-                label: label(t, r.displayName, r.name) as string
+                label: label(t, r.displayName, r.name) as string,
+                description: r.name
             })),
         [realms, t]
     );
@@ -139,179 +153,173 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     const showWorkflows =
         hasAccess("manage-realm") && isFeatureEnabled(Feature.Workflows);
 
-    const showManageRealm = environment.masterRealm === environment.realm;
-
     return (
-        <Sidebar variant="inset" collapsible="offcanvas" {...props}>
-            <SidebarHeader>
-                <div className="flex w-full items-center justify-start pb-4 group-data-[collapsible=icon]:hidden">
-                    <img
-                        src={`${baseUrl}merge-black-text.svg`}
-                        alt="Merge"
-                        className="h-8 w-full object-contain object-left dark:hidden"
+        <>
+            <Sidebar variant="inset" collapsible="offcanvas" {...props}>
+                <SidebarHeader>
+                    <div className="flex w-full items-center justify-start group-data-[collapsible=icon]:hidden">
+                        <img
+                            src={`${baseUrl}merge-black-text.svg`}
+                            alt="Merge"
+                            className="h-8 w-full object-contain object-left dark:hidden"
+                        />
+                        <img
+                            src={`${baseUrl}merge-white-text.svg`}
+                            alt="Merge"
+                            className="hidden h-8 w-full object-contain object-left dark:block"
+                        />
+                    </div>
+                    <Switcher
+                        value={realm}
+                        items={realmItems}
+                        onChange={onRealmChange}
+                        singleBadge={realm.slice(0, 2).toUpperCase()}
+                        onManage={() => setRealmDrawerWithScale(!realmDrawerOpen)}
                     />
-                    <img
-                        src={`${baseUrl}merge-white-text.svg`}
-                        alt="Merge"
-                        className="hidden h-8 w-full object-contain object-left dark:block"
-                    />
-                </div>
-                <Switcher
-                    value={realm}
-                    items={realmItems}
-                    onChange={onRealmChange}
-                    singleBadge={t("currentRealm")}
-                />
-            </SidebarHeader>
-            <SidebarContent>
-                {showManage && (
-                    <SidebarGroup>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                {isFeatureEnabled(Feature.Organizations) &&
-                                    realmRepresentation?.organizationsEnabled && (
+                </SidebarHeader>
+                <SidebarContent>
+                    {showManage && (
+                        <SidebarGroup>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {isFeatureEnabled(Feature.Organizations) &&
+                                        realmRepresentation?.organizationsEnabled && (
+                                            <LeftNav
+                                                title="organizations"
+                                                path="/organizations"
+                                                icon={BuildingsIcon}
+                                            />
+                                        )}
+                                    <LeftNav
+                                        title="clients"
+                                        path="/clients"
+                                        icon={BrowserIcon}
+                                    />
+                                    <LeftNav
+                                        title="clientScopes"
+                                        path="/client-scopes"
+                                        icon={StackIcon}
+                                    />
+                                    <LeftNav
+                                        title="realmRoles"
+                                        path="/roles"
+                                        icon={KeyIcon}
+                                    />
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
+
+                    {showManage && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>{t("usersAndAccess")}</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {hasAccess("query-users") && (
                                         <LeftNav
-                                            title="organizations"
-                                            path="/organizations"
-                                            icon={BuildingsIcon}
+                                            title="titleUsers"
+                                            path="/users"
+                                            icon={UsersIcon}
                                         />
                                     )}
-                                <LeftNav
-                                    title="clients"
-                                    path="/clients"
-                                    icon={BrowserIcon}
-                                />
-                                <LeftNav
-                                    title="clientScopes"
-                                    path="/client-scopes"
-                                    icon={StackIcon}
-                                />
-                                <LeftNav
-                                    title="realmRoles"
-                                    path="/roles"
-                                    icon={KeyIcon}
-                                />
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
-
-                {showManage && (
-                    <SidebarGroup>
-                        <SidebarGroupLabel>{t("usersAndAccess")}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                {hasAccess("query-users") && (
                                     <LeftNav
-                                        title="titleUsers"
-                                        path="/users"
-                                        icon={UsersIcon}
+                                        title="groups"
+                                        path="/groups"
+                                        icon={UsersThreeIcon}
                                     />
-                                )}
-                                <LeftNav
-                                    title="groups"
-                                    path="/groups"
-                                    icon={UsersThreeIcon}
-                                />
-                                {isFeatureEnabled(Feature.AdminFineGrainedAuthzV2) &&
-                                    realmRepresentation?.adminPermissionsEnabled && (
+                                    {isFeatureEnabled(Feature.AdminFineGrainedAuthzV2) &&
+                                        realmRepresentation?.adminPermissionsEnabled && (
+                                            <LeftNav
+                                                title="permissions"
+                                                path="/permissions"
+                                                icon={ShieldCheckIcon}
+                                            />
+                                        )}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
+
+                    {showConfigure && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>{t("security")}</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    <LeftNav
+                                        title="authentication"
+                                        path="/authentication"
+                                        icon={LockKeyIcon}
+                                    />
+                                    <LeftNav
+                                        title="identityProviders"
+                                        path="/identity-providers"
+                                        icon={GlobeIcon}
+                                    />
+                                    <LeftNav
+                                        title="userFederation"
+                                        path="/user-federation"
+                                        icon={TreeStructureIcon}
+                                    />
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
+
+                    {showManage && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>{t("monitor")}</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    <LeftNav
+                                        title="sessions"
+                                        path="/sessions"
+                                        icon={ClockCounterClockwiseIcon}
+                                    />
+                                    {hasAccess("view-events") && (
                                         <LeftNav
-                                            title="permissions"
-                                            path="/permissions"
-                                            icon={ShieldCheckIcon}
-                                        />
-                                    )}
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
-
-                {showConfigure && (
-                    <SidebarGroup>
-                        <SidebarGroupLabel>{t("security")}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                <LeftNav
-                                    title="authentication"
-                                    path="/authentication"
-                                    icon={LockKeyIcon}
-                                />
-                                <LeftNav
-                                    title="identityProviders"
-                                    path="/identity-providers"
-                                    icon={GlobeIcon}
-                                />
-                                <LeftNav
-                                    title="userFederation"
-                                    path="/user-federation"
-                                    icon={TreeStructureIcon}
-                                />
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
-
-                {showManage && (
-                    <SidebarGroup>
-                        <SidebarGroupLabel>{t("monitor")}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                <LeftNav
-                                    title="sessions"
-                                    path="/sessions"
-                                    icon={ClockCounterClockwiseIcon}
-                                />
-                                {hasAccess("view-events") && (
-                                    <LeftNav
-                                        title="titleEvents"
-                                        path="/events"
-                                        icon={ListBulletsIcon}
-                                    />
-                                )}
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
-
-                {showConfigure && hasAccess("view-realm") && (
-                    <SidebarGroup>
-                        <SidebarGroupLabel>{t("settings")}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                <LeftNav
-                                    title="realmSettings"
-                                    path="/realm-settings"
-                                    icon={GearSixIcon}
-                                />
-                                {showManageRealm && (
-                                    <LeftNav
-                                        title="manageRealms"
-                                        path="/realms"
-                                        icon={CirclesThreeIcon}
-                                    />
-                                )}
-                                {showWorkflows && (
-                                    <LeftNav
-                                        title="workflows"
-                                        path="/workflows"
-                                        icon={ArrowsClockwiseIcon}
-                                    />
-                                )}
-                                {isFeatureEnabled(Feature.DeclarativeUI) &&
-                                    pages?.map(p => (
-                                        <LeftNav
-                                            key={p.id}
-                                            title={p.id}
-                                            path={toPage({ providerId: p.id })}
+                                            title="titleEvents"
+                                            path="/events"
                                             icon={ListBulletsIcon}
-                                            id="/page-section"
                                         />
-                                    ))}
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
-            </SidebarContent>
-        </Sidebar>
+                                    )}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
+
+                    {showConfigure && hasAccess("view-realm") && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>{t("settings")}</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    <LeftNav
+                                        title="realmSettings"
+                                        path="/realm-settings"
+                                        icon={GearSixIcon}
+                                    />
+                                    {showWorkflows && (
+                                        <LeftNav
+                                            title="workflows"
+                                            path="/workflows"
+                                            icon={ArrowsClockwiseIcon}
+                                        />
+                                    )}
+                                    {isFeatureEnabled(Feature.DeclarativeUI) &&
+                                        pages?.map(p => (
+                                            <LeftNav
+                                                key={p.id}
+                                                title={p.id}
+                                                path={toPage({ providerId: p.id })}
+                                                icon={ListBulletsIcon}
+                                                id="/page-section"
+                                            />
+                                        ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
+                </SidebarContent>
+            </Sidebar>
+        </>
     );
 }

@@ -11,15 +11,29 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -86,6 +100,52 @@ export function RealmRolesSection() {
     const [editRoleId, setEditRoleId] = useState<string | null>(null);
     const { mutateAsync: deleteRole } = useDeleteRealmRole();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"name" | "description" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
+    const toggleSort = (column: "name" | "description") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredRoles = useMemo(() => {
+        let result = roles;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(r => r.name?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [roles, search, sortBy, sortDirection]);
+
+    const totalCount = filteredRoles.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRoles = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRoles.slice(start, start + pageSize);
+    }, [filteredRoles, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     const onDeleteClick = (role: RoleRepresentation) => {
         if (
             realmRepresentation?.defaultRole &&
@@ -111,69 +171,8 @@ export function RealmRolesSection() {
         }
     };
 
-    const columns: ColumnDef<RoleRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("roleName"),
-            cell: ({ row }) => (
-                <RoleDetailLink
-                    {...row.original}
-                    defaultRoleName={realmRepresentation?.defaultRole?.name}
-                    toDetail={roleId =>
-                        toRealmRole({ realm, id: roleId, tab: "details" })
-                    }
-                />
-            )
-        },
-        {
-            accessorKey: "composite",
-            header: t("composite"),
-            cell: ({ row }) => {
-                const v = row.original.composite;
-                const formatted = upperCaseFormatter()(v);
-                return emptyFormatter()(formatted);
-            }
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => translationFormatter(t)(row.original.description) as string
-        },
-        ...(isManager
-            ? [
-                  {
-                      id: "actions",
-                      header: "",
-                      size: 50,
-                      enableHiding: false,
-                      cell: ({ row }) => (
-                          <DataTableRowActions row={row}>
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                  onClick={() => setEditRoleId(row.original.id!)}
-                              >
-                                  <PencilSimple className="size-4 shrink-0" />
-                                  {t("edit")}
-                              </button>
-                              <div className="my-1 h-px bg-border" />
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                  onClick={() => onDeleteClick(row.original)}
-                              >
-                                  <Trash className="size-4 shrink-0" />
-                                  {t("delete")}
-                              </button>
-                          </DataTableRowActions>
-                      )
-                  } as ColumnDef<RoleRepresentation>
-              ]
-            : [])
-    ];
-
     return (
-        <div className="pt-4 pb-6 px-0">
+        <>
             <AlertDialog
                 open={!!selectedRole}
                 onOpenChange={open => !open && setSelectedRole(undefined)}
@@ -207,35 +206,165 @@ export function RealmRolesSection() {
                 onSuccess={refresh}
             />
 
-            <DataTable
-                columns={columns}
-                data={roles}
-                searchColumnId="name"
-                searchPlaceholder={t("searchForRoles")}
-                emptyMessage={t("noRoles-roles")}
-                onRowClick={row => isManager && setEditRoleId(row.original.id!)}
-                toolbar={
-                    isManager ? (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForRoles")}
+                    />
+                    {isManager && (
                         <AddRealmRoleDialog
                             trigger={
                                 <Button
                                     type="button"
                                     data-testid="create-role"
                                     variant="default"
-                                    className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                    aria-label={t("createRole")}
+                                    size="sm"
                                 >
-                                    <Plus size={20} className="shrink-0 sm:hidden" />
-                                    <span className="hidden sm:inline">
-                                        {t("createRole")}
-                                    </span>
+                                    <Plus className="size-4" />
+                                    <span>{t("createRole")}</span>
                                 </Button>
                             }
                             onSuccess={refresh}
                         />
-                    ) : undefined
-                }
-            />
-        </div>
+                    )}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead
+                                className="w-[30%]"
+                                sortable
+                                sortDirection={sortBy === "name" ? sortDirection : false}
+                                onSort={() => toggleSort("name")}
+                            >
+                                {t("roleName")}
+                            </TableHead>
+                            <TableHead className="w-[15%]">{t("composite")}</TableHead>
+                            <TableHead
+                                className="w-[45%]"
+                                sortable
+                                sortDirection={sortBy === "description" ? sortDirection : false}
+                                onSort={() => toggleSort("description")}
+                            >
+                                {t("description")}
+                            </TableHead>
+                            {isManager && <TableHead className="w-[10%]" />}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedRoles.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={isManager ? 4 : 3}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noRoles-roles")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedRoles.map(role => (
+                                <TableRow
+                                    key={role.id}
+                                    className={isManager ? "cursor-pointer" : undefined}
+                                    onClick={() =>
+                                        isManager && setEditRoleId(role.id!)
+                                    }
+                                >
+                                    <TableCell className="truncate">
+                                        <RoleDetailLink
+                                            {...role}
+                                            defaultRoleName={
+                                                realmRepresentation?.defaultRole?.name
+                                            }
+                                            toDetail={roleId =>
+                                                toRealmRole({
+                                                    realm,
+                                                    id: roleId,
+                                                    tab: "details"
+                                                })
+                                            }
+                                        />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(
+                                            upperCaseFormatter()(role.composite)
+                                        ) as string}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {translationFormatter(t)(
+                                            role.description
+                                        ) as string}
+                                    </TableCell>
+                                    {isManager && (
+                                        <TableCell onClick={e => e.stopPropagation()}>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon-sm"
+                                                    >
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            setEditRoleId(role.id!)
+                                                        }
+                                                    >
+                                                        <PencilSimple className="size-4" />
+                                                        {t("edit")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        className="text-destructive focus:text-destructive"
+                                                        onClick={() =>
+                                                            onDeleteClick(role)
+                                                        }
+                                                    >
+                                                        <Trash className="size-4" />
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={isManager ? 4 : 3} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
+        </>
     );
 }

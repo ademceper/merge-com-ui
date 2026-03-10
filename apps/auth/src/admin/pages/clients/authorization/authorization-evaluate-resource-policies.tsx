@@ -6,7 +6,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@tanstack/react-router";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
-import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
+import { TableCell, TableRow } from "@merge-rd/ui/components/table";
 
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import type { ClientParams } from "@/admin/shared/lib/routes/clients";

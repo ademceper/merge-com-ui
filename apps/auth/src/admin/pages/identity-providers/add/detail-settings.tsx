@@ -16,9 +16,21 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
@@ -30,11 +42,6 @@ import {
     useWatch
 } from "react-hook-form";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -471,89 +478,183 @@ export function DetailSettings() {
         });
     }, [loaderMappers, loaderMapperTypes]);
 
-    const mapperColumns: ColumnDef<IdPWithMapperAttributes>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => <MapperLink {...row.original} provider={provider} />
-        },
-        { accessorKey: "category", header: t("category") },
-        { accessorKey: "type", header: t("type") },
-        {
-            id: "actions",
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            setSelectedMapper(row.original);
-                            toggleDeleteMapperDialog();
-                        }}
-                        className="text-destructive"
-                    >
-                        {t("delete")}
-                    </DropdownMenuItem>
-                </DataTableRowActions>
-            )
+    const MappersTable = () => {
+        const [mapperSearch, setMapperSearch] = useState("");
+        const [mapperPageSize, setMapperPageSize] = useState(10);
+        const [mapperCurrentPage, setMapperCurrentPage] = useState(0);
+
+        const filteredMappers = useMemo(() => {
+            if (!mapperSearch) return mappers;
+            const lower = mapperSearch.toLowerCase();
+            return mappers.filter(m => m.name?.toLowerCase().includes(lower));
+        }, [mappers, mapperSearch]);
+
+        const mapperTotalCount = filteredMappers.length;
+        const mapperTotalPages = Math.ceil(mapperTotalCount / mapperPageSize);
+        const paginatedMappers = useMemo(() => {
+            const start = mapperCurrentPage * mapperPageSize;
+            return filteredMappers.slice(start, start + mapperPageSize);
+        }, [filteredMappers, mapperCurrentPage, mapperPageSize]);
+
+        useEffect(() => {
+            setMapperCurrentPage(0);
+        }, [mapperSearch, mapperPageSize]);
+
+        const colSpan = 4;
+
+        if (mapperTotalCount === 0 && !mapperSearch) {
+            return (
+                <>
+                    <Empty className="py-12">
+                        <EmptyHeader>
+                            <EmptyTitle>{t("noMappers")}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {t("noMappersInstructions")}
+                            </EmptyDescription>
+                        </EmptyContent>
+                        <Button className="mt-2" asChild>
+                            <Link
+                                to={
+                                    toIdentityProviderAddMapper({
+                                        realm,
+                                        alias: alias!,
+                                        providerId: provider.providerId!,
+                                        tab: "mappers"
+                                    }) as string
+                                }
+                            >
+                                {t("addMapper")}
+                            </Link>
+                        </Button>
+                    </Empty>
+                </>
+            );
         }
-    ];
+
+        return (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={mapperSearch}
+                        onChange={value => setMapperSearch(value)}
+                        placeholder={t("searchForMapper")}
+                    />
+                    <Button
+                        id="add-mapper-button"
+                        asChild
+                        data-testid="addMapper"
+                    >
+                        <Link
+                            to={
+                                toIdentityProviderAddMapper({
+                                    realm,
+                                    alias: alias!,
+                                    providerId: provider.providerId!,
+                                    tab: "mappers"
+                                }) as string
+                            }
+                        >
+                            {t("addMapper")}
+                        </Link>
+                    </Button>
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[30%]">{t("name")}</TableHead>
+                            <TableHead className="w-[25%]">{t("category")}</TableHead>
+                            <TableHead className="w-[35%]">{t("type")}</TableHead>
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedMappers.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colSpan}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noMappers")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedMappers.map(mapper => (
+                                <TableRow key={mapper.mapperId}>
+                                    <TableCell className="truncate">
+                                        <MapperLink {...mapper} provider={provider} />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {mapper.category ?? "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {mapper.type ?? "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setSelectedMapper(mapper);
+                                                        toggleDeleteMapperDialog();
+                                                    }}
+                                                    className="text-destructive focus:text-destructive"
+                                                >
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colSpan} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={mapperPageSize}
+                                    onPageSizeChange={setMapperPageSize}
+                                    onPreviousPage={() =>
+                                        setMapperCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setMapperCurrentPage(p =>
+                                            Math.min(mapperTotalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={mapperCurrentPage > 0}
+                                    hasNextPage={
+                                        mapperCurrentPage < mapperTotalPages - 1
+                                    }
+                                    totalCount={mapperTotalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
+        );
+    };
 
     const renderContent = () => {
         switch (tab) {
             case "mappers":
                 return isSPIFFE || isKubernetes || isJWTAuthorizationGrant ? null : (
-                    <DataTable<IdPWithMapperAttributes>
-                        columns={mapperColumns}
-                        data={mappers}
-                        searchColumnId="name"
-                        searchPlaceholder={t("searchForMapper")}
-                        emptyContent={
-                            <Empty className="py-12">
-                                <EmptyHeader>
-                                    <EmptyTitle>{t("noMappers")}</EmptyTitle>
-                                </EmptyHeader>
-                                <EmptyContent>
-                                    <EmptyDescription>
-                                        {t("noMappersInstructions")}
-                                    </EmptyDescription>
-                                </EmptyContent>
-                                <Button className="mt-2" asChild>
-                                    <Link
-                                        to={
-                                            toIdentityProviderAddMapper({
-                                                realm,
-                                                alias: alias!,
-                                                providerId: provider.providerId!,
-                                                tab: "mappers"
-                                            }) as string
-                                        }
-                                    >
-                                        {t("addMapper")}
-                                    </Link>
-                                </Button>
-                            </Empty>
-                        }
-                        emptyMessage={t("noMappers")}
-                        toolbar={
-                            <Button
-                                id="add-mapper-button"
-                                asChild
-                                data-testid="addMapper"
-                            >
-                                <Link
-                                    to={
-                                        toIdentityProviderAddMapper({
-                                            realm,
-                                            alias: alias!,
-                                            providerId: provider.providerId!,
-                                            tab: "mappers"
-                                        }) as string
-                                    }
-                                >
-                                    {t("addMapper")}
-                                </Link>
-                            </Button>
-                        }
-                    />
+                    <MappersTable />
                 );
             case "permissions":
                 return isFeatureEnabled(Feature.AdminFineGrainedAuthz) ? (

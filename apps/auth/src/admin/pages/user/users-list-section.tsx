@@ -11,16 +11,30 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useAccess } from "@/admin/app/providers/access/access";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
@@ -45,6 +59,52 @@ export function UsersListSection() {
     const [selectedUser, setSelectedUser] = useState<UserRepresentation | undefined>();
     const [editUserId, setEditUserId] = useState<string | null>(null);
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"username" | "email" | "lastName" | "firstName" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
+    const toggleSort = (column: "username" | "email" | "lastName" | "firstName") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredUsers = useMemo(() => {
+        let result = users;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(u => u.username?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [users, search, sortBy, sortDirection]);
+
+    const totalCount = filteredUsers.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedUsers = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredUsers.slice(start, start + pageSize);
+    }, [filteredUsers, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     const onDeleteConfirm = async () => {
         if (!selectedUser?.id) return;
         try {
@@ -58,69 +118,6 @@ export function UsersListSection() {
             });
         }
     };
-
-    const columns: ColumnDef<UserRepresentation>[] = [
-        {
-            accessorKey: "username",
-            header: t("username"),
-            cell: ({ row }) => (
-                <Link
-                    to={
-                        toUser({ realm, id: row.original.id!, tab: "settings" }) as string
-                    }
-                    className="text-primary hover:underline"
-                >
-                    {row.original.username}
-                </Link>
-            )
-        },
-        {
-            accessorKey: "email",
-            header: t("email"),
-            cell: ({ row }) => emptyFormatter()(row.original.email) as string
-        },
-        {
-            accessorKey: "lastName",
-            header: t("lastName"),
-            cell: ({ row }) => emptyFormatter()(row.original.lastName) as string
-        },
-        {
-            accessorKey: "firstName",
-            header: t("firstName"),
-            cell: ({ row }) => emptyFormatter()(row.original.firstName) as string
-        },
-        ...(canManage
-            ? [
-                  {
-                      id: "actions",
-                      header: "",
-                      size: 50,
-                      enableHiding: false,
-                      cell: ({ row }) => (
-                          <DataTableRowActions row={row}>
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                  onClick={() => setEditUserId(row.original.id!)}
-                              >
-                                  <PencilSimple className="size-4 shrink-0" />
-                                  {t("edit")}
-                              </button>
-                              <div className="my-1 h-px bg-border" />
-                              <button
-                                  type="button"
-                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                  onClick={() => setSelectedUser(row.original)}
-                              >
-                                  <Trash className="size-4 shrink-0" />
-                                  {t("delete")}
-                              </button>
-                          </DataTableRowActions>
-                      )
-                  } as ColumnDef<UserRepresentation>
-              ]
-            : [])
-    ];
 
     return (
         <>
@@ -160,35 +157,176 @@ export function UsersListSection() {
                 onSuccess={refresh}
             />
 
-            <DataTable
-                columns={columns}
-                data={users}
-                searchColumnId="username"
-                searchPlaceholder={t("searchForUser")}
-                emptyMessage={t("noUsersFound")}
-                onRowClick={row => canManage && setEditUserId(row.original.id!)}
-                toolbar={
-                    canManage ? (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForUser")}
+                    />
+                    {canManage && (
                         <AddUserDialog
                             trigger={
                                 <Button
                                     type="button"
                                     data-testid="createUser"
                                     variant="default"
-                                    className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                    aria-label={t("createNewUser")}
+                                    size="sm"
                                 >
-                                    <Plus size={20} className="shrink-0 sm:hidden" />
-                                    <span className="hidden sm:inline">
-                                        {t("createNewUser")}
-                                    </span>
+                                    <Plus className="size-4" />
+                                    <span>{t("createNewUser")}</span>
                                 </Button>
                             }
                             onSuccess={refresh}
                         />
-                    ) : undefined
-                }
-            />
+                    )}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead
+                                className="w-[25%]"
+                                sortable
+                                sortDirection={sortBy === "username" ? sortDirection : false}
+                                onSort={() => toggleSort("username")}
+                            >
+                                {t("username")}
+                            </TableHead>
+                            <TableHead
+                                className="w-[25%]"
+                                sortable
+                                sortDirection={sortBy === "email" ? sortDirection : false}
+                                onSort={() => toggleSort("email")}
+                            >
+                                {t("email")}
+                            </TableHead>
+                            <TableHead
+                                className="w-[20%]"
+                                sortable
+                                sortDirection={sortBy === "lastName" ? sortDirection : false}
+                                onSort={() => toggleSort("lastName")}
+                            >
+                                {t("lastName")}
+                            </TableHead>
+                            <TableHead
+                                className="w-[20%]"
+                                sortable
+                                sortDirection={sortBy === "firstName" ? sortDirection : false}
+                                onSort={() => toggleSort("firstName")}
+                            >
+                                {t("firstName")}
+                            </TableHead>
+                            {canManage && <TableHead className="w-[10%]" />}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedUsers.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={canManage ? 5 : 4}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("noUsersFound")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedUsers.map(user => (
+                                <TableRow
+                                    key={user.id}
+                                    className={canManage ? "cursor-pointer" : undefined}
+                                    onClick={() =>
+                                        canManage && setEditUserId(user.id!)
+                                    }
+                                >
+                                    <TableCell className="truncate">
+                                        <Link
+                                            to={
+                                                toUser({
+                                                    realm,
+                                                    id: user.id!,
+                                                    tab: "settings"
+                                                }) as string
+                                            }
+                                            className="text-primary hover:underline"
+                                            onClick={e => e.stopPropagation()}
+                                        >
+                                            {user.username}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.email) as string}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.lastName) as string}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(user.firstName) as string}
+                                    </TableCell>
+                                    {canManage && (
+                                        <TableCell onClick={e => e.stopPropagation()}>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            setEditUserId(user.id!)
+                                                        }
+                                                    >
+                                                        <PencilSimple className="size-4" />
+                                                        {t("edit")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        className="text-destructive focus:text-destructive"
+                                                        onClick={() =>
+                                                            setSelectedUser(user)
+                                                        }
+                                                    >
+                                                        <Trash className="size-4" />
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={canManage ? 5 : 4} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 }

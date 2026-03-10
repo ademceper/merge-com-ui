@@ -2,8 +2,9 @@ import { TableSkeleton } from "./table-skeleton";
 
 export function ClientScopesSkeleton() {
     return (
-        <div className="pt-4 pb-6 px-0">
-            <TableSkeleton columns={6} />
-        </div>
+        <TableSkeleton
+            columns={6}
+            columnWidths={["w-[25%]", "w-[15%]", "w-[15%]", "w-[10%]", "w-[25%]", "w-[10%]"]}
+        />
     );
 }

@@ -15,6 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
     Select,
     SelectContent,
@@ -22,9 +23,18 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useEffect, useMemo, useState } from "react";
 import { useIsFeatureEnabled, Feature } from "@/admin/shared/lib/use-is-feature-enabled";
 import { useToggle } from "@/admin/shared/lib/use-toggle";
 import {
@@ -159,49 +169,28 @@ export const AddScopeDialog = ({
         }
     };
 
-    const columns: ColumnDef<ClientScopeRepresentation>[] = [
-        {
-            id: "select",
-            header: () => (
-                <Checkbox
-                    checked={
-                        rows.length === clientScopes.length && clientScopes.length > 0
-                    }
-                    onCheckedChange={checked => {
-                        if (checked) {
-                            setRows([...clientScopes]);
-                        } else {
-                            setRows([]);
-                        }
-                    }}
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={rows.some(r => r.id === row.original.id)}
-                    onCheckedChange={() => toggleRowSelection(row.original)}
-                />
-            ),
-            size: 40,
-            enableHiding: false
-        },
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => row.original.name || "-"
-        },
-        {
-            accessorKey: "protocol",
-            header: t("protocol"),
-            cell: ({ row }) =>
-                getProtocolName(t, row.original.protocol ?? "openid-connect")
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => row.original.description || "-"
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredScopes = useMemo(() => {
+        if (!search) return clientScopes;
+        const lower = search.toLowerCase();
+        return clientScopes.filter(s => s.name?.toLowerCase().includes(lower));
+    }, [clientScopes, search]);
+
+    const totalCount = filteredScopes.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedScopes = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredScopes.slice(start, start + pageSize);
+    }, [filteredScopes, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 4;
 
     return (
         <Dialog open={open} onOpenChange={open => !open && toggleDialog()}>
@@ -213,13 +202,16 @@ export const AddScopeDialog = ({
                             : t("addClientScopesTo", { clientName })}
                     </DialogTitle>
                 </DialogHeader>
-                <DataTable
-                    columns={columns}
-                    data={clientScopes}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchForClientScope")}
-                    emptyMessage={t("emptyAddClientScopes")}
-                    toolbar={
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchForClientScope")}
+                        />
                         <div className="flex gap-2">
                             <DropdownMenu
                                 open={isFilterTypeDropdownOpen}
@@ -264,8 +256,85 @@ export const AddScopeDialog = ({
                                 </Select>
                             )}
                         </div>
-                    }
-                />
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[40px]">
+                                    <Checkbox
+                                        checked={
+                                            rows.length === clientScopes.length && clientScopes.length > 0
+                                        }
+                                        onCheckedChange={checked => {
+                                            if (checked) {
+                                                setRows([...clientScopes]);
+                                            } else {
+                                                setRows([]);
+                                            }
+                                        }}
+                                    />
+                                </TableHead>
+                                <TableHead className="w-[30%]">{t("name")}</TableHead>
+                                <TableHead className="w-[25%]">{t("protocol")}</TableHead>
+                                <TableHead>{t("description")}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedScopes.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columnCount}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("emptyAddClientScopes")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedScopes.map(scope => (
+                                    <TableRow key={scope.id}>
+                                        <TableCell>
+                                            <Checkbox
+                                                checked={rows.some(r => r.id === scope.id)}
+                                                onCheckedChange={() => toggleRowSelection(scope)}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {scope.name || "-"}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {getProtocolName(t, scope.protocol ?? "openid-connect")}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {scope.description || "-"}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={columnCount} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
                 <DialogFooter>
                     {isClientScopesConditionType ? (
                         <>

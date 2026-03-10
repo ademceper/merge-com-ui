@@ -11,7 +11,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 import { useToggle } from "@/admin/shared/lib/use-toggle";
 import { useConfirmDialog } from "@/admin/shared/ui/confirm-dialog/confirm-dialog";
 import type { DefaultValue } from "@/admin/shared/ui/key-value-form/key-value-input";

@@ -4,15 +4,25 @@ import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/ro
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Question } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { HelpItem, SelectVariant, useHelp } from "@/shared/keycloak-ui-shared";
 import {
     evaluatePermission,
@@ -46,55 +56,112 @@ const ProtocolMappers = ({
         setKey(key + 1);
     }, [protocolMappers]);
 
-    const columns: ColumnDef<ProtocolMapperRepresentation>[] = useMemo(
-        () => [
-            {
-                accessorKey: "mapperName",
-                header: t("name"),
-                cell: ({ row }) =>
-                    ((row.original as Record<string, unknown>).mapperName as string) ||
-                    "-"
-            },
-            {
-                accessorKey: "containerName",
-                header: t("parentClientScope"),
-                cell: ({ row }) =>
-                    ((row.original as Record<string, unknown>).containerName as string) ||
-                    "-"
-            },
-            {
-                id: "category",
-                header: t("category"),
-                cell: ({ row }) =>
-                    (
-                        row.original as Record<string, unknown> & {
-                            type?: { category?: string };
-                        }
-                    ).type?.category || "-"
-            },
-            {
-                id: "priority",
-                header: t("priority"),
-                cell: ({ row }) =>
-                    (
-                        row.original as Record<string, unknown> & {
-                            type?: { priority?: string };
-                        }
-                    ).type?.priority || "-"
-            }
-        ],
-        [t]
-    );
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredMappers = useMemo(() => {
+        if (!search) return protocolMappers;
+        const lower = search.toLowerCase();
+        return protocolMappers.filter(m =>
+            ((m as Record<string, unknown>).mapperName as string)?.toLowerCase().includes(lower)
+        );
+    }, [protocolMappers, search]);
+
+    const totalCount = filteredMappers.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedMappers = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredMappers.slice(start, start + pageSize);
+    }, [filteredMappers, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 4;
 
     return (
-        <DataTable
-            key={key}
-            columns={columns}
-            data={protocolMappers}
-            searchColumnId="mapperName"
-            searchPlaceholder={t("searchForProtocol")}
-            emptyMessage={t("noProtocolMappers")}
-        />
+        <div key={key} className="flex h-full w-full flex-col">
+            <div className="flex items-center justify-between gap-2 py-2.5">
+                <FacetedFormFilter
+                    type="text"
+                    size="small"
+                    title={t("search")}
+                    value={search}
+                    onChange={value => setSearch(value)}
+                    placeholder={t("searchForProtocol")}
+                />
+            </div>
+            <Table className="table-fixed">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[25%]">{t("name")}</TableHead>
+                        <TableHead className="w-[25%]">{t("parentClientScope")}</TableHead>
+                        <TableHead className="w-[25%]">{t("category")}</TableHead>
+                        <TableHead className="w-[25%]">{t("priority")}</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {paginatedMappers.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={columnCount}
+                                className="text-center text-muted-foreground"
+                            >
+                                {t("noProtocolMappers")}
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        paginatedMappers.map((mapper, idx) => (
+                            <TableRow key={idx}>
+                                <TableCell className="truncate">
+                                    {((mapper as Record<string, unknown>).mapperName as string) || "-"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {((mapper as Record<string, unknown>).containerName as string) || "-"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {(
+                                        mapper as Record<string, unknown> & {
+                                            type?: { category?: string };
+                                        }
+                                    ).type?.category || "-"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {(
+                                        mapper as Record<string, unknown> & {
+                                            type?: { priority?: string };
+                                        }
+                                    ).type?.priority || "-"}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={columnCount} className="p-0">
+                            <TablePaginationFooter
+                                pageSize={pageSize}
+                                onPageSizeChange={setPageSize}
+                                onPreviousPage={() =>
+                                    setCurrentPage(p => Math.max(0, p - 1))
+                                }
+                                onNextPage={() =>
+                                    setCurrentPage(p =>
+                                        Math.min(totalPages - 1, p + 1)
+                                    )
+                                }
+                                hasPreviousPage={currentPage > 0}
+                                hasNextPage={currentPage < totalPages - 1}
+                                totalCount={totalCount}
+                            />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </div>
     );
 };
 
@@ -105,31 +172,94 @@ const EffectiveRoles = ({ effectiveRoles }: { effectiveRoles: RoleRepresentation
         setKey(key + 1);
     }, [effectiveRoles]);
 
-    const columns: ColumnDef<RoleRepresentation>[] = useMemo(
-        () => [
-            {
-                accessorKey: "name",
-                header: t("role"),
-                cell: ({ row }) => row.original.name || "-"
-            },
-            {
-                accessorKey: "containerId",
-                header: t("origin"),
-                cell: ({ row }) => row.original.containerId || "-"
-            }
-        ],
-        [t]
-    );
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredRoles = useMemo(() => {
+        if (!search) return effectiveRoles;
+        const lower = search.toLowerCase();
+        return effectiveRoles.filter(r => r.name?.toLowerCase().includes(lower));
+    }, [effectiveRoles, search]);
+
+    const totalCount = filteredRoles.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRoles = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRoles.slice(start, start + pageSize);
+    }, [filteredRoles, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 2;
 
     return (
-        <DataTable
-            key={key}
-            columns={columns}
-            data={effectiveRoles}
-            searchColumnId="name"
-            searchPlaceholder={t("searchForRole")}
-            emptyMessage={t("noRoles")}
-        />
+        <div key={key} className="flex h-full w-full flex-col">
+            <div className="flex items-center justify-between gap-2 py-2.5">
+                <FacetedFormFilter
+                    type="text"
+                    size="small"
+                    title={t("search")}
+                    value={search}
+                    onChange={value => setSearch(value)}
+                    placeholder={t("searchForRole")}
+                />
+            </div>
+            <Table className="table-fixed">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[50%]">{t("role")}</TableHead>
+                        <TableHead className="w-[50%]">{t("origin")}</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {paginatedRoles.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={columnCount}
+                                className="text-center text-muted-foreground"
+                            >
+                                {t("noRoles")}
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        paginatedRoles.map((role, idx) => (
+                            <TableRow key={idx}>
+                                <TableCell className="truncate">
+                                    {role.name || "-"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {role.containerId || "-"}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={columnCount} className="p-0">
+                            <TablePaginationFooter
+                                pageSize={pageSize}
+                                onPageSizeChange={setPageSize}
+                                onPreviousPage={() =>
+                                    setCurrentPage(p => Math.max(0, p - 1))
+                                }
+                                onNextPage={() =>
+                                    setCurrentPage(p =>
+                                        Math.min(totalPages - 1, p + 1)
+                                    )
+                                }
+                                hasPreviousPage={currentPage > 0}
+                                hasNextPage={currentPage < totalPages - 1}
+                                totalCount={totalCount}
+                            />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </div>
     );
 };
 

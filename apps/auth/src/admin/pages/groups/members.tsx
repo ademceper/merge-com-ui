@@ -15,12 +15,22 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
-import { DotsThreeVertical, Info } from "@phosphor-icons/react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, DotsThreeVertical, Info } from "@phosphor-icons/react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -66,7 +76,6 @@ export const Members = () => {
     const [includeSubGroup, setIncludeSubGroup] = useState(false);
     const { currentGroup: group } = useSubGroups();
     const [addMembers, setAddMembers] = useState(false);
-    const [_isKebabOpen, _setIsKebabOpen] = useState(false);
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserRepresentation>();
     const [showMemberships, toggleShowMemberships] = useToggle();
@@ -85,9 +94,60 @@ export const Members = () => {
     const { mutateAsync: addMembersMutation } = useAddGroupMembers(id!);
     const { mutateAsync: removeMembersMutation } = useRemoveGroupMembers(id!);
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredMembers = useMemo(() => {
+        if (!search) return members;
+        const lower = search.toLowerCase();
+        return members.filter(m => m.username?.toLowerCase().includes(lower));
+    }, [members, search]);
+
+    const totalCount = filteredMembers.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedMembers = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredMembers.slice(start, start + pageSize);
+    }, [filteredMembers, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     if (!currentGroup) {
         return <KeycloakSpinner />;
     }
+
+    const colCount = 6;
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader>
+                <EmptyTitle>{t("noUsersFound")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>
+                    {isManager ? t("emptyInstructions") : undefined}
+                </EmptyDescription>
+                {isManager && (
+                    <Button
+                        className="mt-2"
+                        onClick={() => setAddMembers(true)}
+                    >
+                        {t("addMember")}
+                    </Button>
+                )}
+                <Button
+                    variant="outline"
+                    className="mt-2 ml-2"
+                    onClick={() => setIncludeSubGroup(true)}
+                >
+                    {t("includeSubGroups")}
+                </Button>
+            </EmptyContent>
+        </Empty>
+    );
 
     return (
         <>
@@ -126,147 +186,48 @@ export const Members = () => {
                     user={selectedUser!}
                 />
             )}
-            <DataTable<UserRepresentation>
-                data-testid="members-table"
-                key={`${id}${includeSubGroup}`}
-                columns={[
-                    {
-                        id: "select",
-                        header: "",
-                        size: 40,
-                        cell: ({ row }) => (
+
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <div className="flex items-center gap-2">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("search")}
+                        />
+                        <div className="flex items-center gap-2">
                             <Checkbox
-                                checked={selectedRows.some(s => s.id === row.original.id)}
+                                data-testid="includeSubGroupsCheck"
+                                id="kc-include-sub-groups"
+                                checked={includeSubGroup}
                                 onCheckedChange={() =>
-                                    setSelectedRows(prev =>
-                                        prev.some(s => s.id === row.original.id)
-                                            ? prev.filter(s => s.id !== row.original.id)
-                                            : [...prev, row.original]
-                                    )
+                                    setIncludeSubGroup(!includeSubGroup)
                                 }
                             />
-                        )
-                    },
-                    {
-                        accessorKey: "username",
-                        header: t("name"),
-                        cell: ({ row }) => <UserDetailLink {...row.original} />
-                    },
-                    {
-                        accessorKey: "email",
-                        header: t("email"),
-                        cell: ({ getValue }) => emptyFormatter()(getValue())
-                    },
-                    {
-                        accessorKey: "firstName",
-                        header: t("firstName"),
-                        cell: ({ getValue }) => emptyFormatter()(getValue())
-                    },
-                    {
-                        accessorKey: "lastName",
-                        header: t("lastName"),
-                        cell: ({ getValue }) => emptyFormatter()(getValue())
-                    },
-                    {
-                        id: "actions",
-                        cell: ({ row }) => (
-                            <DataTableRowActions row={row}>
-                                {isManager && (
-                                    <DropdownMenuItem
-                                        onClick={async () => {
-                                            try {
-                                                await removeMembersMutation([row.original.id!]);
-                                                toast.success(
-                                                    t("usersLeft", { count: 1 })
-                                                );
-                                            } catch (error) {
-                                                toast.error(
-                                                    t("usersLeftError", {
-                                                        error: getErrorMessage(error)
-                                                    }),
-                                                    {
-                                                        description:
-                                                            getErrorDescription(error)
-                                                    }
-                                                );
-                                            }
-                                            refresh();
-                                        }}
-                                    >
-                                        {t("leave")}
-                                    </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        setSelectedUser(row.original);
-                                        toggleShowMemberships();
-                                    }}
-                                >
-                                    {t("showMemberships")}
-                                </DropdownMenuItem>
-                            </DataTableRowActions>
-                        )
-                    }
-                ]}
-                data={members}
-                searchColumnId="username"
-                searchPlaceholder={t("search")}
-                emptyContent={
-                    <Empty className="py-12">
-                        <EmptyHeader>
-                            <EmptyTitle>{t("noUsersFound")}</EmptyTitle>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <EmptyDescription>
-                                {isManager ? t("emptyInstructions") : undefined}
-                            </EmptyDescription>
-                            {isManager && (
-                                <Button
-                                    className="mt-2"
-                                    onClick={() => setAddMembers(true)}
-                                >
-                                    {t("addMember")}
-                                </Button>
-                            )}
-                            <Button
-                                variant="outline"
-                                className="mt-2 ml-2"
-                                onClick={() => setIncludeSubGroup(true)}
-                            >
+                            <label htmlFor="kc-include-sub-groups">
                                 {t("includeSubGroups")}
-                            </Button>
-                        </EmptyContent>
-                    </Empty>
-                }
-                emptyMessage={t("noUsersFound")}
-                toolbar={
-                    isManager && (
-                        <>
+                            </label>
+                        </div>
+                    </div>
+                    {isManager && (
+                        <div className="flex items-center gap-2">
                             <Button
                                 data-testid="addMember"
                                 variant="default"
+                                size="sm"
                                 onClick={() => setAddMembers(true)}
                             >
                                 {t("addMember")}
                             </Button>
-                            <div className="flex items-center gap-2">
-                                <Checkbox
-                                    data-testid="includeSubGroupsCheck"
-                                    id="kc-include-sub-groups"
-                                    checked={includeSubGroup}
-                                    onCheckedChange={() =>
-                                        setIncludeSubGroup(!includeSubGroup)
-                                    }
-                                />
-                                <label htmlFor="kc-include-sub-groups">
-                                    {t("includeSubGroups")}
-                                </label>
-                            </div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         data-testid="kebab"
                                         variant="ghost"
+                                        size="icon-sm"
                                         disabled={selectedRows.length === 0}
                                         aria-label="Actions"
                                     >
@@ -303,10 +264,146 @@ export const Members = () => {
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                        </>
-                    )
-                }
-            />
+                        </div>
+                    )}
+                </div>
+
+                <Table className="table-fixed" data-testid="members-table">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[5%]" />
+                            <TableHead className="w-[25%]">{t("name")}</TableHead>
+                            <TableHead className="w-[25%]">{t("email")}</TableHead>
+                            <TableHead className="w-[15%]">{t("firstName")}</TableHead>
+                            <TableHead className="w-[15%]">{t("lastName")}</TableHead>
+                            <TableHead className="w-[15%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedMembers.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={colCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {filteredMembers.length === 0 && members.length === 0
+                                        ? emptyContent
+                                        : t("noUsersFound")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedMembers.map(member => (
+                                <TableRow key={member.id}>
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={selectedRows.some(
+                                                s => s.id === member.id
+                                            )}
+                                            onCheckedChange={() =>
+                                                setSelectedRows(prev =>
+                                                    prev.some(s => s.id === member.id)
+                                                        ? prev.filter(
+                                                              s => s.id !== member.id
+                                                          )
+                                                        : [...prev, member]
+                                                )
+                                            }
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UserDetailLink {...member} />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(member.email)}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(member.firstName)}
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {emptyFormatter()(member.lastName)}
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                {isManager && (
+                                                    <DropdownMenuItem
+                                                        onClick={async () => {
+                                                            try {
+                                                                await removeMembersMutation([
+                                                                    member.id!
+                                                                ]);
+                                                                toast.success(
+                                                                    t("usersLeft", {
+                                                                        count: 1
+                                                                    })
+                                                                );
+                                                            } catch (error) {
+                                                                toast.error(
+                                                                    t("usersLeftError", {
+                                                                        error: getErrorMessage(
+                                                                            error
+                                                                        )
+                                                                    }),
+                                                                    {
+                                                                        description:
+                                                                            getErrorDescription(
+                                                                                error
+                                                                            )
+                                                                    }
+                                                                );
+                                                            }
+                                                            refresh();
+                                                        }}
+                                                    >
+                                                        {t("leave")}
+                                                    </DropdownMenuItem>
+                                                )}
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setSelectedUser(member);
+                                                        toggleShowMemberships();
+                                                    }}
+                                                >
+                                                    {t("showMemberships")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={colCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </>
     );
 };

@@ -4,11 +4,21 @@ import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Empty, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { Link } from "@tanstack/react-router";
 import { capitalize } from "lodash-es";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import {
     FormPanel,
     getErrorDescription,
@@ -174,50 +184,34 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
         canQueryIDPDetails
     );
 
-    const linkedColumns: ColumnDef<WithProviderId>[] = [
-        {
-            accessorKey: "identityProvider",
-            header: t("name"),
-            cell: ({ row }) => idpLinkRenderer(row.original)
-        },
-        ...(canQueryIDPDetails
-            ? ([
-                  {
-                      accessorKey: "type",
-                      header: t("type"),
-                      cell: ({ row }) => badgeRenderer1(row.original)
-                  }
-              ] as ColumnDef<WithProviderId>[])
-            : []),
-        {
-            accessorKey: "userId",
-            header: t("userID"),
-            cell: ({ getValue }) => emptyFormatter()(getValue())
-        },
-        {
-            accessorKey: "userName",
-            header: t("username"),
-            cell: ({ getValue }) => emptyFormatter()(getValue())
-        },
-        { id: "unlink", header: "", cell: ({ row }) => unlinkRenderer(row.original) }
-    ];
-
     const { data: availableIdPs = [], refetch: refetchAvailableIdPs } =
         useAvailableIdPsQuery();
 
-    const availableColumns: ColumnDef<IdentityProviderRepresentation>[] = [
-        {
-            accessorKey: "alias",
-            header: t("name"),
-            cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue()))
-        },
-        {
-            accessorKey: "type",
-            header: t("type"),
-            cell: ({ row }) => badgeRenderer2(row.original)
-        },
-        { id: "link", header: "", cell: ({ row }) => linkRenderer(row.original) }
-    ];
+    // Available IdPs search/pagination state
+    const [availableSearch, setAvailableSearch] = useState("");
+    const [availablePageSize, setAvailablePageSize] = useState(10);
+    const [availableCurrentPage, setAvailableCurrentPage] = useState(0);
+
+    const filteredAvailableIdPs = useMemo(() => {
+        if (!availableSearch) return availableIdPs;
+        const lower = availableSearch.toLowerCase();
+        return availableIdPs.filter((idp: IdentityProviderRepresentation) =>
+            idp.alias?.toLowerCase().includes(lower)
+        );
+    }, [availableIdPs, availableSearch]);
+
+    const availableTotalCount = filteredAvailableIdPs.length;
+    const availableTotalPages = Math.ceil(availableTotalCount / availablePageSize);
+    const paginatedAvailableIdPs = useMemo(() => {
+        const start = availableCurrentPage * availablePageSize;
+        return filteredAvailableIdPs.slice(start, start + availablePageSize);
+    }, [filteredAvailableIdPs, availableCurrentPage, availablePageSize]);
+
+    useEffect(() => {
+        setAvailableCurrentPage(0);
+    }, [availableSearch, availablePageSize]);
+
+    const linkedColCount = canQueryIDPDetails ? 5 : 4;
 
     return (
         <>
@@ -233,19 +227,59 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
             <div className="p-0">
                 <FormPanel title={t("linkedIdPs")} className="kc-linked-idps">
                     <p className="kc-available-idps-text">{t("linkedIdPsText")}</p>
-                    <DataTable<WithProviderId>
-                        columns={linkedColumns}
-                        data={linkedIdPs}
-                        emptyContent={
-                            <Empty className="py-8">
-                                <EmptyHeader>
-                                    <EmptyTitle>{t("noProvidersLinked")}</EmptyTitle>
-                                </EmptyHeader>
-                            </Empty>
-                        }
-                        emptyMessage={t("noProvidersLinked")}
-                        className="kc-linked-IdPs-table"
-                    />
+                    <Table className="table-fixed kc-linked-IdPs-table">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[25%]">{t("name")}</TableHead>
+                                {canQueryIDPDetails && (
+                                    <TableHead className="w-[15%]">{t("type")}</TableHead>
+                                )}
+                                <TableHead className="w-[20%]">{t("userID")}</TableHead>
+                                <TableHead className="w-[20%]">{t("username")}</TableHead>
+                                <TableHead className="w-[20%]" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {linkedIdPs.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={linkedColCount}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        <Empty className="py-8">
+                                            <EmptyHeader>
+                                                <EmptyTitle>
+                                                    {t("noProvidersLinked")}
+                                                </EmptyTitle>
+                                            </EmptyHeader>
+                                        </Empty>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                linkedIdPs.map((idp: WithProviderId) => (
+                                    <TableRow key={idp.identityProvider}>
+                                        <TableCell>
+                                            {idpLinkRenderer(idp)}
+                                        </TableCell>
+                                        {canQueryIDPDetails && (
+                                            <TableCell>
+                                                {badgeRenderer1(idp)}
+                                            </TableCell>
+                                        )}
+                                        <TableCell className="truncate">
+                                            {emptyFormatter()(idp.userId)}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {emptyFormatter()(idp.userName)}
+                                        </TableCell>
+                                        <TableCell>
+                                            {unlinkRenderer(idp)}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
                 </FormPanel>
                 {hasAccess("manage-users") && canQueryIDPDetails && (
                     <FormPanel className="kc-available-idps" title={t("availableIdPs")}>
@@ -253,23 +287,100 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
                         {isLoading ? (
                             <KeycloakSpinner />
                         ) : (
-                            <DataTable<IdentityProviderRepresentation>
-                                columns={availableColumns}
-                                data={availableIdPs}
-                                searchColumnId="alias"
-                                searchPlaceholder={t("searchForProvider")}
-                                emptyContent={
-                                    <Empty className="py-8">
-                                        <EmptyHeader>
-                                            <EmptyTitle>
-                                                {t("noAvailableIdentityProviders")}
-                                            </EmptyTitle>
-                                        </EmptyHeader>
-                                    </Empty>
-                                }
-                                emptyMessage={t("noAvailableIdentityProviders")}
-                                className="kc-linked-IdPs-table"
-                            />
+                            <div className="flex h-full w-full flex-col">
+                                <div className="flex items-center justify-between gap-2 py-2.5">
+                                    <FacetedFormFilter
+                                        type="text"
+                                        size="small"
+                                        title={t("search")}
+                                        value={availableSearch}
+                                        onChange={value => setAvailableSearch(value)}
+                                        placeholder={t("searchForProvider")}
+                                    />
+                                </div>
+                                <Table className="table-fixed kc-linked-IdPs-table">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="w-[40%]">
+                                                {t("name")}
+                                            </TableHead>
+                                            <TableHead className="w-[30%]">
+                                                {t("type")}
+                                            </TableHead>
+                                            <TableHead className="w-[30%]" />
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {paginatedAvailableIdPs.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell
+                                                    colSpan={3}
+                                                    className="text-center text-muted-foreground"
+                                                >
+                                                    <Empty className="py-8">
+                                                        <EmptyHeader>
+                                                            <EmptyTitle>
+                                                                {t(
+                                                                    "noAvailableIdentityProviders"
+                                                                )}
+                                                            </EmptyTitle>
+                                                        </EmptyHeader>
+                                                    </Empty>
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            paginatedAvailableIdPs.map(
+                                                (idp: IdentityProviderRepresentation) => (
+                                                    <TableRow key={idp.alias}>
+                                                        <TableCell>
+                                                            {upperCaseFormatter()(
+                                                                emptyFormatter()(idp.alias)
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {badgeRenderer2(idp)}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {linkRenderer(idp)}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            )
+                                        )}
+                                    </TableBody>
+                                    <TableFooter>
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="p-0">
+                                                <TablePaginationFooter
+                                                    pageSize={availablePageSize}
+                                                    onPageSizeChange={setAvailablePageSize}
+                                                    onPreviousPage={() =>
+                                                        setAvailableCurrentPage(p =>
+                                                            Math.max(0, p - 1)
+                                                        )
+                                                    }
+                                                    onNextPage={() =>
+                                                        setAvailableCurrentPage(p =>
+                                                            Math.min(
+                                                                availableTotalPages - 1,
+                                                                p + 1
+                                                            )
+                                                        )
+                                                    }
+                                                    hasPreviousPage={
+                                                        availableCurrentPage > 0
+                                                    }
+                                                    hasNextPage={
+                                                        availableCurrentPage <
+                                                        availableTotalPages - 1
+                                                    }
+                                                    totalCount={availableTotalCount}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableFooter>
+                                </Table>
+                            </div>
                         )}
                     </FormPanel>
                 )}

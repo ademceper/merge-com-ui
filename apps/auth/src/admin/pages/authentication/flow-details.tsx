@@ -13,7 +13,7 @@ import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Table, TableBody } from "@/admin/shared/ui/data-table";
+import { Table, TableBody } from "@merge-rd/ui/components/table";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import {

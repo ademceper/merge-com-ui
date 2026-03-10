@@ -17,17 +17,25 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Database, Trash } from "@phosphor-icons/react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
-import { toast } from "sonner";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { Database, DotsThree, Trash } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import { useServerInfo } from "@/admin/app/providers/server-info/server-info-provider";
@@ -50,6 +58,11 @@ export function UserFederationSection() {
 
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
     const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"name" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
 
     const providers =
         useServerInfo().componentTypes?.["org.keycloak.storage.UserStorageProvider"] ??
@@ -72,6 +85,46 @@ export function UserFederationSection() {
         [realm]
     );
 
+    const toggleSort = (column: "name") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const filteredFederations = useMemo(() => {
+        let result = [...userFederations];
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(f => f.name?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result.sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [userFederations, search, sortBy, sortDirection]);
+
+    const totalCount = filteredFederations.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedFederations = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredFederations.slice(start, start + pageSize);
+    }, [filteredFederations, currentPage, pageSize]);
+
     const onDeleteConfirm = async () => {
         if (!selectedComponent?.id) return;
         try {
@@ -87,72 +140,6 @@ export function UserFederationSection() {
             );
         }
     };
-
-    const sortedFederations = useMemo(
-        () =>
-            [...userFederations].sort((a, b) =>
-                (a.name ?? "").localeCompare(b.name ?? "")
-            ),
-        [userFederations]
-    );
-
-    const columns: ColumnDef<ComponentRepresentation>[] = useMemo(
-        () => [
-            {
-                accessorKey: "name",
-                header: t("name"),
-                cell: ({ row }) => {
-                    const c = row.original;
-                    const href = toDetails(c.providerId!, c.id!);
-                    return (
-                        <Link
-                            to={href as string}
-                            className="font-medium text-primary hover:underline"
-                        >
-                            {c.name ?? "-"}
-                        </Link>
-                    );
-                }
-            },
-            {
-                accessorKey: "providerId",
-                header: t("providerDetails"),
-                cell: ({ row }) => toUpperCase(row.original.providerId ?? "") || "-"
-            },
-            {
-                id: "status",
-                accessorKey: "config",
-                header: t("status"),
-                cell: ({ row }) => {
-                    const enabled = row.original.config?.enabled?.[0] !== "false";
-                    return (
-                        <Badge variant={enabled ? "default" : "secondary"}>
-                            {enabled ? t("enabled") : t("disabled")}
-                        </Badge>
-                    );
-                }
-            },
-            {
-                id: "actions",
-                header: "",
-                size: 50,
-                enableHiding: false,
-                cell: ({ row }) => (
-                    <DataTableRowActions row={row}>
-                        <button
-                            type="button"
-                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => setSelectedComponent(row.original)}
-                        >
-                            <Trash className="size-4 shrink-0" />
-                            {t("delete")}
-                        </button>
-                    </DataTableRowActions>
-                )
-            }
-        ],
-        [t, toDetails]
-    );
 
     const addProviderDropdownItems = useMemo(
         () =>
@@ -212,15 +199,18 @@ export function UserFederationSection() {
                     )}
                 />
             )}
-            <div className="space-y-4 py-6">
+            <div className="flex h-full w-full flex-col">
                 {userFederations.length > 0 ? (
-                    <DataTable<ComponentRepresentation>
-                        columns={columns}
-                        data={sortedFederations}
-                        searchColumnId="name"
-                        searchPlaceholder={t("searchForProvider")}
-                        emptyMessage={t("noUserFederationProviders")}
-                        toolbar={
+                    <>
+                        <div className="flex items-center justify-between gap-2 py-2.5">
+                            <FacetedFormFilter
+                                type="text"
+                                size="small"
+                                title={t("search")}
+                                value={search}
+                                onChange={value => setSearch(value)}
+                                placeholder={t("searchForProvider")}
+                            />
                             <div className="flex flex-wrap items-center gap-2">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -245,8 +235,134 @@ export function UserFederationSection() {
                                     {t("managePriorities")}
                                 </Button>
                             </div>
-                        }
-                    />
+                        </div>
+
+                        <Table className="table-fixed">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead
+                                        className="w-[30%]"
+                                        sortable
+                                        sortDirection={sortBy === "name" ? sortDirection : false}
+                                        onSort={() => toggleSort("name")}
+                                    >
+                                        {t("name")}
+                                    </TableHead>
+                                    <TableHead className="w-[25%]">
+                                        {t("providerDetails")}
+                                    </TableHead>
+                                    <TableHead className="w-[25%]">
+                                        {t("status")}
+                                    </TableHead>
+                                    <TableHead className="w-[20%]" />
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {paginatedFederations.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={4}
+                                            className="text-center text-muted-foreground"
+                                        >
+                                            {t("noUserFederationProviders")}
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    paginatedFederations.map(federation => {
+                                        const enabled =
+                                            federation.config?.enabled?.[0] !== "false";
+                                        return (
+                                            <TableRow
+                                                key={federation.id}
+                                                className="cursor-pointer"
+                                                onClick={() =>
+                                                    navigate({
+                                                        to: toDetails(
+                                                            federation.providerId!,
+                                                            federation.id!
+                                                        ) as string
+                                                    })
+                                                }
+                                            >
+                                                <TableCell className="truncate font-medium">
+                                                    {federation.name ?? "-"}
+                                                </TableCell>
+                                                <TableCell className="truncate">
+                                                    {toUpperCase(
+                                                        federation.providerId ?? ""
+                                                    ) || "-"}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={
+                                                            enabled
+                                                                ? "default"
+                                                                : "secondary"
+                                                        }
+                                                    >
+                                                        {enabled
+                                                            ? t("enabled")
+                                                            : t("disabled")}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell
+                                                    onClick={e => e.stopPropagation()}
+                                                >
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon-sm"
+                                                            >
+                                                                <DotsThree
+                                                                    weight="bold"
+                                                                    className="size-4"
+                                                                />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem
+                                                                className="text-destructive focus:text-destructive"
+                                                                onClick={() =>
+                                                                    setSelectedComponent(
+                                                                        federation
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Trash className="size-4" />
+                                                                {t("delete")}
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
+                                )}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TableCell colSpan={4} className="p-0">
+                                        <TablePaginationFooter
+                                            pageSize={pageSize}
+                                            onPageSizeChange={setPageSize}
+                                            onPreviousPage={() =>
+                                                setCurrentPage(p => Math.max(0, p - 1))
+                                            }
+                                            onNextPage={() =>
+                                                setCurrentPage(p =>
+                                                    Math.min(totalPages - 1, p + 1)
+                                                )
+                                            }
+                                            hasPreviousPage={currentPage > 0}
+                                            hasNextPage={currentPage < totalPages - 1}
+                                            totalCount={totalCount}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    </>
                 ) : (
                     <div className="p-6">
                         <p className="text-muted-foreground">{t("getStarted")}</p>

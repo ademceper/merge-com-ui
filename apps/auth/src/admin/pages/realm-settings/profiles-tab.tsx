@@ -12,18 +12,30 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Trash } from "@phosphor-icons/react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, Trash } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { omit } from "lodash-es";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -56,6 +68,14 @@ export function ProfilesTab() {
     const { mutateAsync: saveClientProfilesMut } = useSaveClientProfiles();
     const { data: allProfilesData, refetch: refetchProfiles } = useClientProfiles();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     useEffect(() => {
         if (allProfilesData) {
             setGlobalProfiles(allProfilesData.globalProfiles);
@@ -75,6 +95,20 @@ export function ProfilesTab() {
             setCode(JSON.stringify(allClientProfiles, null, 2));
         }
     }, [allProfilesData]);
+
+    const filteredProfiles = useMemo(() => {
+        if (!tableProfiles) return [];
+        if (!search) return tableProfiles;
+        const lower = search.toLowerCase();
+        return tableProfiles.filter(p => p.name?.toLowerCase().includes(lower));
+    }, [tableProfiles, search]);
+
+    const totalCount = filteredProfiles.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedProfiles = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredProfiles.slice(start, start + pageSize);
+    }, [filteredProfiles, currentPage, pageSize]);
 
     const normalizeProfile = (profile: ClientProfile): ClientProfileRepresentation =>
         omit(profile, "global");
@@ -99,58 +133,6 @@ export function ProfilesTab() {
             });
         }
     };
-
-    const columns: ColumnDef<ClientProfile>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => (
-                <Link
-                    to={
-                        toClientProfile({
-                            realm,
-                            profileName: row.original.name!
-                        }) as string
-                    }
-                    className="text-primary hover:underline"
-                >
-                    {row.original.name}
-                    {row.original.global && (
-                        <Badge
-                            variant="secondary"
-                            className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1"
-                        >
-                            {t("global")}
-                        </Badge>
-                    )}
-                </Link>
-            )
-        },
-        {
-            accessorKey: "description",
-            header: t("clientProfileDescription"),
-            cell: ({ row }) => row.original.description ?? "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) =>
-                row.original.global ? null : (
-                    <DataTableRowActions row={row}>
-                        <button
-                            type="button"
-                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => setSelectedProfile(row.original)}
-                        >
-                            <Trash className="size-4 shrink-0" />
-                            {t("delete")}
-                        </button>
-                    </DataTableRowActions>
-                )
-        }
-    ];
 
     if (!tableProfiles) {
         return <KeycloakSpinner />;
@@ -252,13 +234,16 @@ export function ProfilesTab() {
                 </RadioGroup>
             </div>
             {!show ? (
-                <DataTable
-                    columns={columns}
-                    data={tableProfiles}
-                    searchColumnId="name"
-                    searchPlaceholder={t("clientProfileSearch")}
-                    emptyMessage={t("emptyClientProfiles")}
-                    toolbar={
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("clientProfileSearch")}
+                        />
                         <Button
                             asChild
                             data-testid="createProfile"
@@ -277,8 +262,103 @@ export function ProfilesTab() {
                                 {t("createClientProfile")}
                             </Link>
                         </Button>
-                    }
-                />
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[35%]">{t("name")}</TableHead>
+                                <TableHead className="w-[55%]">{t("clientProfileDescription")}</TableHead>
+                                <TableHead className="w-[10%]" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedProfiles.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={3}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("emptyClientProfiles")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedProfiles.map(profile => (
+                                    <TableRow key={profile.name}>
+                                        <TableCell className="truncate">
+                                            <Link
+                                                to={
+                                                    toClientProfile({
+                                                        realm,
+                                                        profileName: profile.name!
+                                                    }) as string
+                                                }
+                                                className="text-primary hover:underline"
+                                            >
+                                                {profile.name}
+                                                {profile.global && (
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1"
+                                                    >
+                                                        {t("global")}
+                                                    </Badge>
+                                                )}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {profile.description ?? "-"}
+                                        </TableCell>
+                                        <TableCell onClick={e => e.stopPropagation()}>
+                                            {profile.global ? null : (
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon-sm">
+                                                            <DotsThree
+                                                                weight="bold"
+                                                                className="size-4"
+                                                            />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            className="text-destructive focus:text-destructive"
+                                                            onClick={() => setSelectedProfile(profile)}
+                                                        >
+                                                            <Trash className="size-4" />
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={3} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
             ) : (
                 <div className="space-y-4 pt-4">
                     <div id="jsonEditor">

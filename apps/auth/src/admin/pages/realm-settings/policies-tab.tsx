@@ -12,22 +12,39 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import {
     Empty,
     EmptyContent,
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { omit } from "lodash-es";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, type UseFormReturn, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -66,6 +83,14 @@ export const PoliciesTab = () => {
     const { mutateAsync: updateClientPolicyMut } = useUpdateClientPolicy();
     const { data: allPoliciesData } = useClientPolicies();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
     useEffect(() => {
         if (allPoliciesData) {
             const globalPolicies = allPoliciesData.globalPolicies?.map(p => ({
@@ -85,6 +110,20 @@ export const PoliciesTab = () => {
             setCode(prettyPrintJSON(allClientPolicies));
         }
     }, [allPoliciesData]);
+
+    const filteredPolicies = useMemo(() => {
+        if (!tablePolicies) return [];
+        if (!search) return tablePolicies;
+        const lower = search.toLowerCase();
+        return tablePolicies.filter(p => p.name?.toLowerCase().includes(lower));
+    }, [tablePolicies, search]);
+
+    const totalCount = filteredPolicies.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedPolicies = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredPolicies.slice(start, start + pageSize);
+    }, [filteredPolicies, currentPage, pageSize]);
 
     const saveStatus = async () => {
         const switchValues = form.getValues();
@@ -252,71 +291,24 @@ export const PoliciesTab = () => {
             </div>
             <Separator />
             {!show ? (
-                <DataTable<ClientPolicy>
-                    key={policies.length}
-                    columns={[
-                        {
-                            accessorKey: "name",
-                            header: t("name"),
-                            cell: ({ row }) =>
-                                row.original.global ? (
-                                    row.original.name
-                                ) : (
-                                    <Link
-                                        to={
-                                            toEditClientPolicy({
-                                                realm,
-                                                policyName: row.original.name!
-                                            }) as string
-                                        }
-                                    >
-                                        {row.original.name}
-                                    </Link>
-                                )
-                        },
-                        {
-                            accessorKey: "enabled",
-                            header: t("status"),
-                            cell: ({ row }) => (
-                                <SwitchRenderer
-                                    clientPolicy={row.original}
-                                    form={form}
-                                    saveStatus={saveStatus}
-                                    onConfirm={async () => {
-                                        form.setValue(row.original.name!, false);
-                                        await saveStatus();
-                                    }}
-                                />
-                            )
-                        },
-                        {
-                            accessorKey: "description",
-                            header: t("description"),
-                            cell: ({ row }) =>
-                                translationFormatter(t)(row.original.description)
-                        },
-                        {
-                            id: "actions",
-                            cell: ({ row }) =>
-                                row.original.global ? null : (
-                                    <DataTableRowActions row={row}>
-                                        <button
-                                            type="button"
-                                            className="rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10"
-                                            onClick={() =>
-                                                setSelectedPolicy(row.original)
-                                            }
-                                        >
-                                            {t("delete")}
-                                        </button>
-                                    </DataTableRowActions>
-                                )
-                        }
-                    ]}
-                    data={tablePolicies ?? []}
-                    searchColumnId="name"
-                    searchPlaceholder={t("clientPolicySearch")}
-                    emptyContent={
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("clientPolicySearch")}
+                        />
+                        <Button id="createPolicy" asChild data-testid="createPolicy">
+                            <Link to={toAddClientPolicy({ realm }) as string}>
+                                {t("createClientPolicy")}
+                            </Link>
+                        </Button>
+                    </div>
+
+                    {filteredPolicies.length === 0 && !search ? (
                         <Empty className="py-12">
                             <EmptyHeader>
                                 <EmptyTitle>{t("noClientPolicies")}</EmptyTitle>
@@ -332,16 +324,112 @@ export const PoliciesTab = () => {
                                 </Link>
                             </Button>
                         </Empty>
-                    }
-                    emptyMessage={t("noClientPolicies")}
-                    toolbar={
-                        <Button id="createPolicy" asChild data-testid="createPolicy">
-                            <Link to={toAddClientPolicy({ realm }) as string}>
-                                {t("createClientPolicy")}
-                            </Link>
-                        </Button>
-                    }
-                />
+                    ) : (
+                        <Table className="table-fixed">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[25%]">{t("name")}</TableHead>
+                                    <TableHead className="w-[20%]">{t("status")}</TableHead>
+                                    <TableHead className="w-[40%]">{t("description")}</TableHead>
+                                    <TableHead className="w-[15%]" />
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {paginatedPolicies.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={4}
+                                            className="text-center text-muted-foreground"
+                                        >
+                                            {t("noClientPolicies")}
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    paginatedPolicies.map(policy => (
+                                        <TableRow key={policy.name}>
+                                            <TableCell className="truncate">
+                                                {policy.global ? (
+                                                    policy.name
+                                                ) : (
+                                                    <Link
+                                                        to={
+                                                            toEditClientPolicy({
+                                                                realm,
+                                                                policyName: policy.name!
+                                                            }) as string
+                                                        }
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        {policy.name}
+                                                    </Link>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <SwitchRenderer
+                                                    clientPolicy={policy}
+                                                    form={form}
+                                                    saveStatus={saveStatus}
+                                                    onConfirm={async () => {
+                                                        form.setValue(policy.name!, false);
+                                                        await saveStatus();
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {translationFormatter(t)(policy.description)}
+                                            </TableCell>
+                                            <TableCell onClick={e => e.stopPropagation()}>
+                                                {policy.global ? null : (
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="icon-sm">
+                                                                <DotsThree
+                                                                    weight="bold"
+                                                                    className="size-4"
+                                                                />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem
+                                                                className="text-destructive focus:text-destructive"
+                                                                onClick={() =>
+                                                                    setSelectedPolicy(policy)
+                                                                }
+                                                            >
+                                                                {t("delete")}
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TableCell colSpan={4} className="p-0">
+                                        <TablePaginationFooter
+                                            pageSize={pageSize}
+                                            onPageSizeChange={setPageSize}
+                                            onPreviousPage={() =>
+                                                setCurrentPage(p => Math.max(0, p - 1))
+                                            }
+                                            onNextPage={() =>
+                                                setCurrentPage(p =>
+                                                    Math.min(totalPages - 1, p + 1)
+                                                )
+                                            }
+                                            hasPreviousPage={currentPage > 0}
+                                            hasNextPage={currentPage < totalPages - 1}
+                                            totalCount={totalCount}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    )}
+                </div>
             ) : (
                 <>
                     <div className="mt-4 ml-4">

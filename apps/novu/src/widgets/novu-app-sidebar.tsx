@@ -116,7 +116,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar variant="inset" collapsible="offcanvas" {...props}>
 			<SidebarHeader>
-				<div className="flex w-full items-center justify-start pb-4 group-data-[collapsible=icon]:hidden">
+				<div className="flex w-full items-center justify-start group-data-[collapsible=icon]:hidden">
 					<img
 						src="/merge-black-text.svg"
 						alt="Merge"

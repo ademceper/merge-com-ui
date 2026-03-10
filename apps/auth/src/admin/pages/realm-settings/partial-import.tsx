@@ -26,9 +26,16 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { Separator } from "@merge-rd/ui/components/separator";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge-rd/ui/components/table";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import { usePartialImport } from "./hooks/use-partial-import";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
@@ -227,6 +234,15 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         setImportInProgress(false);
     }
 
+    const typeMap = new Map([
+        ["CLIENT", t("clients")],
+        ["REALM_ROLE", t("realmRoles")],
+        ["USER", t("users")],
+        ["CLIENT_ROLE", t("clientRoles")],
+        ["IDP", t("identityProviders")],
+        ["GROUP", t("groups")]
+    ]);
+
     const importModal = () => {
         return (
             <Dialog
@@ -405,61 +421,8 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         })}`;
     };
 
-    const typeMap = new Map([
-        ["CLIENT", t("clients")],
-        ["REALM_ROLE", t("realmRoles")],
-        ["USER", t("users")],
-        ["CLIENT_ROLE", t("clientRoles")],
-        ["IDP", t("identityProviders")],
-        ["GROUP", t("groups")]
-    ]);
-
-    const partialImportColumns: ColumnDef<PartialImportResult>[] = [
-        {
-            accessorKey: "action",
-            header: t("action"),
-            cell: ({ row }) => {
-                const action = row.original.action;
-                if (action === "ADDED")
-                    return (
-                        <Badge
-                            variant="secondary"
-                            className="bg-green-500/20 text-green-700"
-                        >
-                            {t("added")}
-                        </Badge>
-                    );
-                if (action === "SKIPPED")
-                    return (
-                        <Badge
-                            variant="secondary"
-                            className="bg-orange-500/20 text-orange-700"
-                        >
-                            {t("skipped")}
-                        </Badge>
-                    );
-                if (action === "OVERWRITTEN")
-                    return (
-                        <Badge
-                            variant="secondary"
-                            className="bg-purple-500/20 text-purple-700"
-                        >
-                            {t("overwritten")}
-                        </Badge>
-                    );
-                return null;
-            }
-        },
-        {
-            accessorKey: "resourceType",
-            header: t("type"),
-            cell: ({ row }) => <span>{typeMap.get(row.original.resourceType)}</span>
-        },
-        { accessorKey: "resourceName", header: t("name") },
-        { accessorKey: "id", header: t("id") }
-    ];
-
     const importCompletedModal = () => {
+        const results = importResponse?.results ?? [];
         return (
             <Dialog
                 open={props.open}
@@ -474,11 +437,68 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                     <Alert>
                         <AlertTitle>{importCompleteMessage()}</AlertTitle>
                     </Alert>
-                    <DataTable<PartialImportResult>
-                        columns={partialImportColumns}
-                        data={importResponse?.results ?? []}
-                        emptyMessage={t("noResults")}
-                    />
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("action")}</TableHead>
+                                <TableHead>{t("type")}</TableHead>
+                                <TableHead>{t("name")}</TableHead>
+                                <TableHead>{t("id")}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {results.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={4}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("noResults")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                results.map((result, idx) => (
+                                    <TableRow key={idx}>
+                                        <TableCell>
+                                            {result.action === "ADDED" && (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-green-500/20 text-green-700"
+                                                >
+                                                    {t("added")}
+                                                </Badge>
+                                            )}
+                                            {result.action === "SKIPPED" && (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-orange-500/20 text-orange-700"
+                                                >
+                                                    {t("skipped")}
+                                                </Badge>
+                                            )}
+                                            {result.action === "OVERWRITTEN" && (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-purple-500/20 text-purple-700"
+                                                >
+                                                    {t("overwritten")}
+                                                </Badge>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {typeMap.get(result.resourceType)}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {result.resourceName}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {result.id}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
                     <DialogFooter>
                         <Button
                             id="modal-close"

@@ -11,6 +11,14 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { Separator } from "@merge-rd/ui/components/separator";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import {
     Fragment,
     type DragEvent as ReactDragEvent,
     useMemo,
@@ -18,14 +26,6 @@ import {
     useState
 } from "react";
 import { toast } from "sonner";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,

@@ -1,7 +1,12 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -9,14 +14,21 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage
@@ -87,61 +99,146 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
         }
     });
 
-    const columns: ColumnDef<ComponentRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => <MapperLink {...row.original} toDetail={toDetail} />
-        },
-        { accessorKey: "type", header: t("type") },
-        {
-            id: "actions",
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            setSelectedMapper(row.original);
-                            toggleDeleteDialog();
-                        }}
-                        className="text-destructive"
-                    >
-                        {t("delete")}
-                    </DropdownMenuItem>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const emptyContent = (
-        <Empty className="py-12">
-            <EmptyHeader>
-                <EmptyTitle>{t("emptyMappers")}</EmptyTitle>
-            </EmptyHeader>
-            <EmptyContent>
-                <EmptyDescription>{t("emptyMappersInstructions")}</EmptyDescription>
-            </EmptyContent>
-            <Button className="mt-2" asChild>
-                <Link to={toCreate}>{t("emptyPrimaryAction")}</Link>
-            </Button>
-        </Empty>
-    );
+    const filteredMappers = useMemo(() => {
+        if (!search) return mappers;
+        const lower = search.toLowerCase();
+        return mappers.filter(m => m.name?.toLowerCase().includes(lower));
+    }, [mappers, search]);
+
+    const totalCount = filteredMappers.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedMappers = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredMappers.slice(start, start + pageSize);
+    }, [filteredMappers, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const colSpan = 3;
 
     return (
         <>
             <DeleteConfirm />
-            <DataTable<ComponentRepresentation>
-                columns={columns}
-                data={mappers}
-                searchColumnId="name"
-                searchPlaceholder={t("searchForMapper")}
-                emptyContent={emptyContent}
-                emptyMessage={t("emptyMappers")}
-                toolbar={
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForMapper")}
+                    />
                     <Button data-testid="add-mapper-btn" asChild>
                         <Link to={toCreate}>{t("addMapper")}</Link>
                     </Button>
-                }
-            />
+                </div>
+
+                {totalCount === 0 && !search ? (
+                    <Empty className="py-12">
+                        <EmptyHeader>
+                            <EmptyTitle>{t("emptyMappers")}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {t("emptyMappersInstructions")}
+                            </EmptyDescription>
+                        </EmptyContent>
+                        <Button className="mt-2" asChild>
+                            <Link to={toCreate}>{t("emptyPrimaryAction")}</Link>
+                        </Button>
+                    </Empty>
+                ) : (
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[40%]">{t("name")}</TableHead>
+                                <TableHead className="w-[50%]">{t("type")}</TableHead>
+                                <TableHead className="w-[10%]" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedMappers.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={colSpan}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t("emptyMappers")}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedMappers.map(mapper => (
+                                    <TableRow key={mapper.id}>
+                                        <TableCell className="truncate">
+                                            <MapperLink
+                                                {...mapper}
+                                                toDetail={toDetail}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {mapper.type ?? "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon-sm"
+                                                    >
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setSelectedMapper(mapper);
+                                                            toggleDeleteDialog();
+                                                        }}
+                                                        className="text-destructive focus:text-destructive"
+                                                    >
+                                                        {t("delete")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={colSpan} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                )}
+            </div>
         </>
     );
 };

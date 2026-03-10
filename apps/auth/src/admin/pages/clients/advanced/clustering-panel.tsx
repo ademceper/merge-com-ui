@@ -5,14 +5,27 @@ import {
     CollapsibleContent,
     CollapsibleTrigger
 } from "@merge-rd/ui/components/collapsible";
-import { Label } from "@merge-rd/ui/components/label";
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import { Label } from "@merge-rd/ui/components/label";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -90,46 +103,28 @@ export const ClusteringPanel = ({
         }
     });
 
-    const columns: ColumnDef<Node>[] = [
-        {
-            accessorKey: "host",
-            header: t("nodeHost"),
-            cell: ({ row }) => row.original.host
-        },
-        {
-            accessorKey: "registration",
-            header: t("lastRegistration"),
-            cell: ({ row }) =>
-                row.original.registration
-                    ? formatDate(
-                          new Date(
-                              parseInt(row.original.registration.toString(), 10) * 1000
-                          ),
-                          FORMAT_DATE_AND_TIME
-                      )
-                    : ""
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="w-full rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => {
-                            setSelectedNode(row.original.host);
-                            toggleDeleteNodeConfirm();
-                        }}
-                    >
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredNodes = useMemo(() => {
+        if (!search) return nodeData;
+        const lower = search.toLowerCase();
+        return nodeData.filter(n => n.host.toLowerCase().includes(lower));
+    }, [nodeData, search]);
+
+    const totalCount = filteredNodes.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedNodes = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredNodes.slice(start, start + pageSize);
+    }, [filteredNodes, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 3;
 
     return (
         <>
@@ -176,14 +171,16 @@ export const ClusteringPanel = ({
                     {t("registeredClusterNodes")}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                    <DataTable
-                        key={key}
-                        columns={columns}
-                        data={nodeData}
-                        searchColumnId="host"
-                        searchPlaceholder={t("searchByHost")}
-                        emptyMessage={t("noNodes")}
-                        toolbar={
+                    <div key={key} className="flex h-full w-full flex-col">
+                        <div className="flex items-center justify-between gap-2 py-2.5">
+                            <FacetedFormFilter
+                                type="text"
+                                size="small"
+                                title={t("search")}
+                                value={search}
+                                onChange={value => setSearch(value)}
+                                placeholder={t("searchByHost")}
+                            />
                             <div className="flex gap-2">
                                 <Button
                                     id="testClusterAvailability"
@@ -203,8 +200,92 @@ export const ClusteringPanel = ({
                                     {t("registerNodeManually")}
                                 </Button>
                             </div>
-                        }
-                    />
+                        </div>
+
+                        <Table className="table-fixed">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[40%]">{t("nodeHost")}</TableHead>
+                                    <TableHead className="w-[40%]">{t("lastRegistration")}</TableHead>
+                                    <TableHead className="w-[20%]" />
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {paginatedNodes.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={columnCount}
+                                            className="text-center text-muted-foreground"
+                                        >
+                                            {t("noNodes")}
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    paginatedNodes.map(node => (
+                                        <TableRow key={node.host}>
+                                            <TableCell className="truncate">
+                                                {node.host}
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {node.registration
+                                                    ? formatDate(
+                                                          new Date(
+                                                              parseInt(node.registration.toString(), 10) * 1000
+                                                          ),
+                                                          FORMAT_DATE_AND_TIME
+                                                      )
+                                                    : ""}
+                                            </TableCell>
+                                            <TableCell>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon-sm">
+                                                            <DotsThree
+                                                                weight="bold"
+                                                                className="size-4"
+                                                            />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                            onClick={() => {
+                                                                setSelectedNode(node.host);
+                                                                toggleDeleteNodeConfirm();
+                                                            }}
+                                                        >
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TableCell colSpan={columnCount} className="p-0">
+                                        <TablePaginationFooter
+                                            pageSize={pageSize}
+                                            onPageSizeChange={setPageSize}
+                                            onPreviousPage={() =>
+                                                setCurrentPage(p => Math.max(0, p - 1))
+                                            }
+                                            onNextPage={() =>
+                                                setCurrentPage(p =>
+                                                    Math.min(totalPages - 1, p + 1)
+                                                )
+                                            }
+                                            hasPreviousPage={currentPage > 0}
+                                            hasNextPage={currentPage < totalPages - 1}
+                                            totalCount={totalCount}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    </div>
                 </CollapsibleContent>
             </Collapsible>
         </>

@@ -7,16 +7,22 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { DotsThreeVertical } from "@phosphor-icons/react";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree, DotsThreeVertical } from "@phosphor-icons/react";
 import { Link, type LinkProps } from "@tanstack/react-router";
 import type { ComponentType } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage
@@ -221,66 +227,28 @@ export const ClientScopes = ({
         }
     });
 
-    const columns: ColumnDef<Row>[] = [
-        {
-            accessorKey: "name",
-            header: t("assignedClientScope"),
-            cell: ({ row }) => {
-                if (isDedicatedRow(row.original)) {
-                    return (
-                        <RouterLink
-                            className="text-primary hover:underline"
-                            to={toDedicatedScope({ realm, clientId }) as string}
-                        >
-                            {row.original.name}
-                        </RouterLink>
-                    );
-                }
-                return row.original.name!;
-            }
-        },
-        {
-            accessorKey: "type",
-            header: t("assignedType"),
-            cell: ({ row }) => (
-                <TypeSelector
-                    clientId={clientId}
-                    refresh={refresh}
-                    fineGrainedAccess={fineGrainedAccess}
-                    {...row.original}
-                />
-            )
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) =>
-                (translationFormatter(t)(row.original.description) as string) || "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => {
-                if (isDedicatedRow(row.original) || !isManager) return null;
-                return (
-                    <DataTableRowActions row={row}>
-                        <button
-                            type="button"
-                            className="w-full rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => {
-                                setSelectedRows([row.original]);
-                                toggleDeleteDialog();
-                            }}
-                        >
-                            {t("remove")}
-                        </button>
-                    </DataTableRowActions>
-                );
-            }
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const filteredRows = useMemo(() => {
+        if (!search) return rows;
+        const lower = search.toLowerCase();
+        return rows.filter(r => r.name?.toLowerCase().includes(lower));
+    }, [rows, search]);
+
+    const totalCount = filteredRows.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRows = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRows.slice(start, start + pageSize);
+    }, [filteredRows, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const columnCount = 4;
 
     return (
         <div className="p-6">
@@ -314,14 +282,17 @@ export const ClientScopes = ({
                 />
             )}
             <DeleteConfirm />
-            <DataTable
-                columns={columns}
-                data={rows}
-                searchColumnId="name"
-                searchPlaceholder={t("searchByName")}
-                emptyMessage={t("emptyClientScopes")}
-                toolbar={
-                    isManager ? (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchByName")}
+                    />
+                    {isManager && (
                         <div className="flex gap-2">
                             <Button onClick={() => setAddDialogOpen(true)}>
                                 {t("addClientScope")}
@@ -382,9 +353,106 @@ export const ClientScopes = ({
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-                    ) : undefined
-                }
-            />
+                    )}
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[30%]">{t("assignedClientScope")}</TableHead>
+                            <TableHead className="w-[20%]">{t("assignedType")}</TableHead>
+                            <TableHead className="w-[40%]">{t("description")}</TableHead>
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedRows.length === 0 ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columnCount}
+                                    className="text-center text-muted-foreground"
+                                >
+                                    {t("emptyClientScopes")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedRows.map(row => (
+                                <TableRow key={row.id}>
+                                    <TableCell className="truncate">
+                                        {isDedicatedRow(row) ? (
+                                            <RouterLink
+                                                className="text-primary hover:underline"
+                                                to={toDedicatedScope({ realm, clientId }) as string}
+                                            >
+                                                {row.name}
+                                            </RouterLink>
+                                        ) : (
+                                            row.name!
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <TypeSelector
+                                            clientId={clientId}
+                                            refresh={refresh}
+                                            fineGrainedAccess={fineGrainedAccess}
+                                            {...row}
+                                        />
+                                    </TableCell>
+                                    <TableCell className="truncate">
+                                        {(translationFormatter(t)(row.description) as string) || "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {!isDedicatedRow(row) && isManager && (
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon-sm">
+                                                        <DotsThree
+                                                            weight="bold"
+                                                            className="size-4"
+                                                        />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setSelectedRows([row]);
+                                                            toggleDeleteDialog();
+                                                        }}
+                                                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    >
+                                                        {t("remove")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={columnCount} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
         </div>
     );
 };

@@ -11,7 +11,12 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -19,14 +24,21 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { useState } from "react";
-import { toast } from "sonner";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { getErrorDescription, getErrorMessage } from "@/shared/keycloak-ui-shared";
 import type { EditOrganizationParams } from "@/admin/shared/lib/routes/organizations";
 import { useParams } from "@/admin/shared/lib/use-params";
@@ -50,6 +62,8 @@ type IdentityProvidersTableProps = {
     setIdpToUnlink: (row: IdentityProviderRepresentation | undefined) => void;
 };
 
+const COLUMN_COUNT = 5;
+
 const IdentityProvidersTable = ({
     orgId,
     setSelectedRow,
@@ -60,74 +74,39 @@ const IdentityProvidersTable = ({
     const { t } = useTranslation();
     const { data: providers = [] } = useOrganizationIdentityProviders(orgId);
 
-    const columns: ColumnDef<IdentityProviderRepresentation>[] = [
-        { accessorKey: "alias", header: t("alias") },
-        {
-            id: "domain",
-            header: t("domain"),
-            cell: ({ row }) => row.original.config?.["kc.org.domain"] ?? "—"
-        },
-        { accessorKey: "providerId", header: t("providerDetails") },
-        {
-            accessorKey: "hideOnLogin",
-            header: t("hideOnLoginPage"),
-            cell: ({ row }) => <ShownOnLoginPageCheck row={row.original} />
-        },
-        {
-            id: "actions",
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            setSelectedRow(row.original);
-                            toggleOpen();
-                        }}
-                    >
-                        {t("edit")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => setIdpToUnlink(row.original)}
-                        className="text-destructive"
-                    >
-                        {t("unLinkIdentityProvider")}
-                    </DropdownMenuItem>
-                </DataTableRowActions>
-            )
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const emptyContent = (
-        <Empty className="py-12">
-            <EmptyHeader>
-                <EmptyTitle>{t("emptyIdentityProviderLink")}</EmptyTitle>
-            </EmptyHeader>
-            <EmptyContent>
-                <EmptyDescription>
-                    {t("emptyIdentityProviderLinkInstructions")}
-                </EmptyDescription>
-            </EmptyContent>
-            <Button
-                className="mt-2"
-                onClick={() => {
-                    setSelectedRow(undefined);
-                    toggleOpen();
-                }}
-            >
-                {t("linkIdentityProvider")}
-            </Button>
-        </Empty>
-    );
+    const filteredProviders = useMemo(() => {
+        if (!search) return providers;
+        const lower = search.toLowerCase();
+        return providers.filter(p => p.alias?.toLowerCase().includes(lower));
+    }, [providers, search]);
+
+    const totalCount = filteredProviders.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedProviders = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredProviders.slice(start, start + pageSize);
+    }, [filteredProviders, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
 
     return (
-        <DataTable<IdentityProviderRepresentation>
-            columns={columns}
-            data={providers}
-            searchColumnId="alias"
-            searchPlaceholder={t("searchProvider")}
-            emptyContent={emptyContent}
-            emptyMessage={t("emptyIdentityProviderLink")}
-            toolbar={
-                <>
+        <div className="flex h-full w-full flex-col">
+            <div className="flex items-center justify-between gap-2 py-2.5">
+                <FacetedFormFilter
+                    type="text"
+                    size="small"
+                    title={t("search")}
+                    value={search}
+                    onChange={value => setSearch(value)}
+                    placeholder={t("searchProvider")}
+                />
+                <div className="flex items-center gap-2">
                     <Button
                         onClick={() => {
                             setSelectedRow(undefined);
@@ -143,9 +122,127 @@ const IdentityProvidersTable = ({
                     >
                         {t("manageDisplayOrder")}
                     </Button>
-                </>
-            }
-        />
+                </div>
+            </div>
+
+            <Table className="table-fixed">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-[25%]">{t("alias")}</TableHead>
+                        <TableHead className="w-[20%]">{t("domain")}</TableHead>
+                        <TableHead className="w-[20%]">{t("providerDetails")}</TableHead>
+                        <TableHead className="w-[20%]">{t("hideOnLoginPage")}</TableHead>
+                        <TableHead className="w-10" />
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {paginatedProviders.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={COLUMN_COUNT}
+                                className="text-center text-muted-foreground"
+                            >
+                                {providers.length === 0 ? (
+                                    <Empty className="py-12">
+                                        <EmptyHeader>
+                                            <EmptyTitle>
+                                                {t("emptyIdentityProviderLink")}
+                                            </EmptyTitle>
+                                        </EmptyHeader>
+                                        <EmptyContent>
+                                            <EmptyDescription>
+                                                {t(
+                                                    "emptyIdentityProviderLinkInstructions"
+                                                )}
+                                            </EmptyDescription>
+                                        </EmptyContent>
+                                        <Button
+                                            className="mt-2"
+                                            onClick={() => {
+                                                setSelectedRow(undefined);
+                                                toggleOpen();
+                                            }}
+                                        >
+                                            {t("linkIdentityProvider")}
+                                        </Button>
+                                    </Empty>
+                                ) : (
+                                    t("emptyIdentityProviderLink")
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        paginatedProviders.map(provider => (
+                            <TableRow key={provider.alias}>
+                                <TableCell className="truncate">
+                                    {provider.alias}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {provider.config?.["kc.org.domain"] ?? "\u2014"}
+                                </TableCell>
+                                <TableCell className="truncate">
+                                    {provider.providerId}
+                                </TableCell>
+                                <TableCell>
+                                    <ShownOnLoginPageCheck row={provider} />
+                                </TableCell>
+                                <TableCell onClick={e => e.stopPropagation()}>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon-sm">
+                                                <DotsThree
+                                                    weight="bold"
+                                                    className="size-4"
+                                                />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    setSelectedRow(provider);
+                                                    toggleOpen();
+                                                }}
+                                            >
+                                                {t("edit")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() =>
+                                                    setIdpToUnlink(provider)
+                                                }
+                                                className="text-destructive focus:text-destructive"
+                                            >
+                                                {t("unLinkIdentityProvider")}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={COLUMN_COUNT} className="p-0">
+                            <TablePaginationFooter
+                                pageSize={pageSize}
+                                onPageSizeChange={setPageSize}
+                                onPreviousPage={() =>
+                                    setCurrentPage(p => Math.max(0, p - 1))
+                                }
+                                onNextPage={() =>
+                                    setCurrentPage(p =>
+                                        Math.min(totalPages - 1, p + 1)
+                                    )
+                                }
+                                hasPreviousPage={currentPage > 0}
+                                hasNextPage={currentPage < totalPages - 1}
+                                totalCount={totalCount}
+                            />
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </div>
     );
 };
 

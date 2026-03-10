@@ -10,21 +10,34 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { Label } from "@merge-rd/ui/components/label";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
+import { Copy, DotsThree, Link as LinkIcon, Trash } from "@phosphor-icons/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
-import {
     getErrorDescription,
-    getErrorMessage,
-    KeycloakSpinner
+    getErrorMessage
 } from "@/shared/keycloak-ui-shared";
 import { useRealm } from "@/admin/app/providers/realm-context/realm-context";
 import type { AuthenticationTab } from "@/admin/shared/lib/routes/authentication";
@@ -56,7 +69,53 @@ export function AuthenticationSection() {
 
     const { mutateAsync: deleteFlowAsync } = useDeleteFlow();
     const isFlowsTab = tab !== "required-actions" && tab !== "policies";
-    const { data: flows = [], isLoading } = useFlows(isFlowsTab);
+    const { data: flows = [] } = useFlows(isFlowsTab);
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"alias" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
+
+    const toggleSort = (column: "alias") => {
+        if (sortBy === column) {
+            setSortDirection(prev =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
+
+    const filteredFlows = useMemo(() => {
+        let result = flows;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter(f => f.alias?.toLowerCase().includes(lower));
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [flows, search, sortBy, sortDirection]);
+
+    const totalCount = filteredFlows.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedFlows = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredFlows.slice(start, start + pageSize);
+    }, [filteredFlows, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
 
     const onDeleteFlowConfirm = async () => {
         if (!flowToDelete?.id) return;
@@ -70,101 +129,6 @@ export function AuthenticationSection() {
             });
         }
     };
-
-    const columns: ColumnDef<AuthenticationType>[] = useMemo(
-        () => [
-            {
-                id: "alias",
-                accessorKey: "alias",
-                header: t("flowName"),
-                cell: ({ row }) => {
-                    const flow = row.original;
-                    return (
-                        <>
-                            <Link
-                                to={
-                                    toFlow({
-                                        realm: realmName!,
-                                        id: flow.id!,
-                                        usedBy: flow.usedBy?.type || "notInUse",
-                                        builtIn: flow.builtIn ? "builtIn" : undefined
-                                    }) as string
-                                }
-                                className="text-primary hover:underline"
-                            >
-                                {flow.alias}
-                            </Link>{" "}
-                            {flow.builtIn && <Label>{t("buildIn")}</Label>}
-                        </>
-                    );
-                }
-            },
-            {
-                id: "usedBy",
-                accessorKey: "usedBy",
-                header: t("usedBy"),
-                cell: ({ row }) => <UsedBy authType={row.original} />
-            },
-            {
-                accessorKey: "description",
-                header: t("description"),
-                cell: ({ row }) => row.original.description ?? "-"
-            },
-            {
-                id: "actions",
-                header: "",
-                size: 50,
-                enableHiding: false,
-                cell: ({ row }) => {
-                    const data = row.original;
-                    return (
-                        <DataTableRowActions row={row}>
-                            <button
-                                type="button"
-                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                onClick={() => {
-                                    setSelectedFlow(data);
-                                    toggleOpen();
-                                }}
-                            >
-                                <Copy className="size-4 shrink-0" />
-                                {t("duplicate")}
-                            </button>
-                            {data.usedBy?.type !== "DEFAULT" && (
-                                <button
-                                    type="button"
-                                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                                    onClick={() => {
-                                        setSelectedFlow(data);
-                                        toggleBindFlow();
-                                    }}
-                                >
-                                    <LinkIcon className="size-4 shrink-0" />
-                                    {t("bindFlow")}
-                                </button>
-                            )}
-                            {!data.builtIn && !data.usedBy && (
-                                <>
-                                    <div className="my-1 h-px bg-border" />
-                                    <button
-                                        type="button"
-                                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        onClick={() => setFlowToDelete(data)}
-                                    >
-                                        <Trash className="size-4 shrink-0" />
-                                        {t("delete")}
-                                    </button>
-                                </>
-                            )}
-                        </DataTableRowActions>
-                    );
-                }
-            }
-        ],
-        [t, realm, toggleOpen, toggleBindFlow]
-    );
-
-    if (!realm) return <KeycloakSpinner />;
 
     const renderContent = () => {
         switch (tab) {
@@ -224,36 +188,164 @@ export function AuthenticationSection() {
                                 flowAlias={selectedFlow?.alias!}
                             />
                         )}
-                        {isLoading ? (
-                            <KeycloakSpinner />
-                        ) : (
-                            <div className="space-y-4">
-                                <DataTable<AuthenticationType>
-                                    columns={columns}
-                                    data={flows}
-                                    searchColumnId="alias"
-                                    searchPlaceholder={t("searchForFlow")}
-                                    emptyMessage={t("emptyEvents")}
-                                    toolbar={
-                                        <Button
-                                            asChild
-                                            variant="default"
-                                            className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                        >
-                                            <Link
-                                                to={
-                                                    toCreateFlow({
-                                                        realm: realmName
-                                                    }) as string
-                                                }
-                                            >
-                                                {t("createFlow")}
-                                            </Link>
-                                        </Button>
-                                    }
+                        <div className="flex h-full w-full flex-col">
+                            <div className="flex items-center justify-between gap-2 py-2.5">
+                                <FacetedFormFilter
+                                    type="text"
+                                    size="small"
+                                    title={t("search")}
+                                    value={search}
+                                    onChange={value => setSearch(value)}
+                                    placeholder={t("searchForFlow")}
                                 />
+                                <Button
+                                    asChild
+                                    variant="default"
+                                    size="sm"
+                                >
+                                    <Link
+                                        to={
+                                            toCreateFlow({
+                                                realm: realmName
+                                            }) as string
+                                        }
+                                    >
+                                        {t("createFlow")}
+                                    </Link>
+                                </Button>
                             </div>
-                        )}
+
+                            <Table className="table-fixed">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead
+                                            className="w-[30%]"
+                                            sortable
+                                            sortDirection={sortBy === "alias" ? sortDirection : false}
+                                            onSort={() => toggleSort("alias")}
+                                        >
+                                            {t("flowName")}
+                                        </TableHead>
+                                        <TableHead className="w-[25%]">
+                                            {t("usedBy")}
+                                        </TableHead>
+                                        <TableHead className="w-[30%]">
+                                            {t("description")}
+                                        </TableHead>
+                                        <TableHead className="w-[15%]" />
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {paginatedFlows.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={4}
+                                                className="text-center text-muted-foreground"
+                                            >
+                                                {t("emptyEvents")}
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        paginatedFlows.map(flow => (
+                                            <TableRow key={flow.id}>
+                                                <TableCell className="truncate">
+                                                    <Link
+                                                        to={
+                                                            toFlow({
+                                                                realm: realmName!,
+                                                                id: flow.id!,
+                                                                usedBy: flow.usedBy?.type || "notInUse",
+                                                                builtIn: flow.builtIn ? "builtIn" : undefined
+                                                            }) as string
+                                                        }
+                                                        className="text-primary hover:underline"
+                                                    >
+                                                        {flow.alias}
+                                                    </Link>{" "}
+                                                    {flow.builtIn && <Label>{t("buildIn")}</Label>}
+                                                </TableCell>
+                                                <TableCell className="truncate">
+                                                    <UsedBy authType={flow} />
+                                                </TableCell>
+                                                <TableCell className="truncate">
+                                                    {flow.description ?? "-"}
+                                                </TableCell>
+                                                <TableCell onClick={e => e.stopPropagation()}>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon-sm"
+                                                            >
+                                                                <DotsThree
+                                                                    weight="bold"
+                                                                    className="size-4"
+                                                                />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem
+                                                                onClick={() => {
+                                                                    setSelectedFlow(flow);
+                                                                    toggleOpen();
+                                                                }}
+                                                            >
+                                                                <Copy className="size-4" />
+                                                                {t("duplicate")}
+                                                            </DropdownMenuItem>
+                                                            {flow.usedBy?.type !== "DEFAULT" && (
+                                                                <DropdownMenuItem
+                                                                    onClick={() => {
+                                                                        setSelectedFlow(flow);
+                                                                        toggleBindFlow();
+                                                                    }}
+                                                                >
+                                                                    <LinkIcon className="size-4" />
+                                                                    {t("bindFlow")}
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {!flow.builtIn && !flow.usedBy && (
+                                                                <>
+                                                                    <DropdownMenuSeparator />
+                                                                    <DropdownMenuItem
+                                                                        className="text-destructive focus:text-destructive"
+                                                                        onClick={() => setFlowToDelete(flow)}
+                                                                    >
+                                                                        <Trash className="size-4" />
+                                                                        {t("delete")}
+                                                                    </DropdownMenuItem>
+                                                                </>
+                                                            )}
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                                <TableFooter>
+                                    <TableRow>
+                                        <TableCell colSpan={4} className="p-0">
+                                            <TablePaginationFooter
+                                                pageSize={pageSize}
+                                                onPageSizeChange={setPageSize}
+                                                onPreviousPage={() =>
+                                                    setCurrentPage(p => Math.max(0, p - 1))
+                                                }
+                                                onNextPage={() =>
+                                                    setCurrentPage(p =>
+                                                        Math.min(totalPages - 1, p + 1)
+                                                    )
+                                                }
+                                                hasPreviousPage={currentPage > 0}
+                                                hasNextPage={currentPage < totalPages - 1}
+                                                totalCount={totalCount}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                </TableFooter>
+                            </Table>
+                        </div>
                     </>
                 );
         }

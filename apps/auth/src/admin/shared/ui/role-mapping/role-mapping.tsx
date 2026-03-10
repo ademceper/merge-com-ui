@@ -13,15 +13,28 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions,
-    type Row as TableRow
-} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -82,8 +95,8 @@ export const ServiceRole = ({ role, client }: Row) => (
     </>
 );
 
-const ServiceRoleCell = ({ row }: { row: { original: Row } }) => (
-    <ServiceRole role={row.original.role} client={row.original.client} />
+const ServiceRoleCell = ({ row }: { row: Row }) => (
+    <ServiceRole role={row.role} client={row.client} />
 );
 
 export type ResourcesKey = keyof KeycloakAdminClient;
@@ -112,6 +125,10 @@ export const RoleMapping = ({
     const [selected, setSelected] = useState<Row[]>([]);
     const [rows, setRows] = useState<Row[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const assignRoles = async (newRows: Row[]) => {
         await save(newRows);
@@ -210,56 +227,24 @@ export const RoleMapping = ({
         [type, id, t, refresh]
     );
 
-    const columns: ColumnDef<Row>[] = useMemo(
-        () => [
-            {
-                id: "name",
-                accessorFn: row => row.role?.name ?? "",
-                header: t("name"),
-                cell: ({ row }) => <ServiceRoleCell row={row} />
-            },
-            {
-                id: "inherent",
-                accessorKey: "role",
-                header: t("inherent"),
-                cell: ({ row }) =>
-                    (row.original.role as CompositeRole).isInherited ? t("true") : "-"
-            },
-            {
-                id: "description",
-                accessorKey: "role",
-                header: t("description"),
-                cell: ({ row }) =>
-                    (translationFormatter(t)(row.original.role.description) as string) ||
-                    "-"
-            },
-            ...(isManager
-                ? [
-                      {
-                          id: "actions",
-                          header: "",
-                          size: 50,
-                          enableHiding: false,
-                          cell: ({ row }: { row: TableRow<Row> }) => (
-                              <DataTableRowActions row={row}>
-                                  <button
-                                      type="button"
-                                      className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                      onClick={() => setSelected([row.original])}
-                                      disabled={
-                                          (row.original.role as CompositeRole).isInherited
-                                      }
-                                  >
-                                      {t("unAssignRole")}
-                                  </button>
-                              </DataTableRowActions>
-                          )
-                      } as ColumnDef<Row>
-                  ]
-                : [])
-        ],
-        [t, isManager]
-    );
+    const filteredRows = useMemo(() => {
+        if (!search) return rows;
+        const lower = search.toLowerCase();
+        return rows.filter(r => r.role?.name?.toLowerCase().includes(lower));
+    }, [rows, search]);
+
+    const totalCount = filteredRows.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRows = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRows.slice(start, start + pageSize);
+    }, [filteredRows, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const colSpan = isManager ? 4 : 3;
 
     if (loading) {
         return <KeycloakSpinner />;
@@ -328,29 +313,111 @@ export const RoleMapping = ({
                         />
                     )}
                 </div>
-                <DataTable<Row>
-                    data-testid="assigned-roles"
-                    key={`${id}-${key}`}
-                    columns={columns}
-                    data={rows}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchByName")}
-                    emptyMessage={t(`noRoles-${type}`)}
-                    onDeleteRows={
-                        isManager
-                            ? tableRows =>
-                                  handleUnassignRows(
-                                      tableRows
-                                          .filter(
-                                              r =>
-                                                  !(r.original.role as CompositeRole)
-                                                      .isInherited
-                                          )
-                                          .map(r => r.original)
-                                  )
-                            : undefined
-                    }
-                />
+                <div className="flex h-full w-full flex-col" data-testid="assigned-roles">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={t("searchByName")}
+                        />
+                    </div>
+
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[35%]">{t("name")}</TableHead>
+                                <TableHead className="w-[15%]">{t("inherent")}</TableHead>
+                                <TableHead className="w-[40%]">{t("description")}</TableHead>
+                                {isManager && <TableHead className="w-[10%]" />}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedRows.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={colSpan}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t(`noRoles-${type}`)}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedRows.map(row => (
+                                    <TableRow key={row.id ?? row.role.id}>
+                                        <TableCell className="truncate">
+                                            <ServiceRoleCell row={row} />
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {(row.role as CompositeRole).isInherited
+                                                ? t("true")
+                                                : "-"}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {(translationFormatter(t)(
+                                                row.role.description
+                                            ) as string) || "-"}
+                                        </TableCell>
+                                        {isManager && (
+                                            <TableCell>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon-sm"
+                                                        >
+                                                            <DotsThree
+                                                                weight="bold"
+                                                                className="size-4"
+                                                            />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setSelected([row])
+                                                            }
+                                                            disabled={
+                                                                (row.role as CompositeRole)
+                                                                    .isInherited
+                                                            }
+                                                            className="text-destructive focus:text-destructive"
+                                                        >
+                                                            {t("unAssignRole")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={colSpan} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </div>
             </div>
         </>
     );

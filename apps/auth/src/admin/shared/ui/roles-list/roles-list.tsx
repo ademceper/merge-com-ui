@@ -1,7 +1,12 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -9,14 +14,21 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import {
-    type ColumnDef,
-    DataTable,
-    DataTableRowActions
-} from "@/admin/shared/ui/data-table";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { DotsThree } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
     getErrorDescription,
     getErrorMessage,
@@ -93,6 +105,10 @@ export const RolesList = ({
     const { mutateAsync: deleteRoleMut } = useDeleteRealmRole();
     const { mutateAsync: removeCompositesMut } = useRemoveCompositeRoles();
 
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "roleDeleteConfirm",
         messageKey: t("roleDeleteConfirmDialog", {
@@ -120,93 +136,153 @@ export const RolesList = ({
         }
     });
 
-    const columns: ColumnDef<RoleRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("roleName"),
-            cell: ({ row }) => (
-                <RoleDetailLink
-                    {...row.original}
-                    defaultRoleName={realm?.defaultRole?.name}
-                    toDetail={toDetail}
-                    messageBundle={messageBundle}
-                />
-            )
-        },
-        {
-            accessorKey: "composite",
-            header: t("composite"),
-            cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue()))
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => translationFormatter(t)(row.original.description)
-        },
-        ...(isReadOnly
-            ? []
-            : ([
-                  {
-                      id: "actions",
-                      cell: ({ row }) => (
-                          <DataTableRowActions row={row}>
-                              <DropdownMenuItem
-                                  onClick={() => {
-                                      setSelectedRole(row.original);
-                                      if (
-                                          realm?.defaultRole &&
-                                          row.original.name === realm.defaultRole.name
-                                      ) {
-                                          toast.error(t("defaultRoleDeleteError"));
-                                      } else toggleDeleteDialog();
-                                  }}
-                                  className="text-destructive"
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          </DataTableRowActions>
-                      )
-                  }
-              ] as ColumnDef<RoleRepresentation>[]))
-    ];
+    const filteredRoles = useMemo(() => {
+        if (!search) return roles;
+        const lower = search.toLowerCase();
+        return roles.filter(r => r.name?.toLowerCase().includes(lower));
+    }, [roles, search]);
 
-    const emptyContent = (
-        <Empty className="py-12">
-            <EmptyHeader>
-                <EmptyTitle>{t(`noRoles-${messageBundle}`)}</EmptyTitle>
-            </EmptyHeader>
-            <EmptyContent>
-                <EmptyDescription>
-                    {isReadOnly ? "" : t(`noRolesInstructions-${messageBundle}`)}
-                </EmptyDescription>
-            </EmptyContent>
-            {!isReadOnly && (
-                <Button className="mt-2" asChild>
-                    <Link to={toCreate as string}>{t("createRole")}</Link>
-                </Button>
-            )}
-        </Empty>
-    );
+    const totalCount = filteredRoles.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRoles = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRoles.slice(start, start + pageSize);
+    }, [filteredRoles, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const colSpan = isReadOnly ? 3 : 4;
 
     return (
         <>
             <DeleteConfirm />
-            <DataTable<RoleRepresentation>
-                key={selectedRole ? selectedRole.id : "roleList"}
-                columns={columns}
-                data={roles}
-                searchColumnId="name"
-                searchPlaceholder={t("searchForRoles")}
-                emptyContent={emptyContent}
-                emptyMessage={t(`noRoles-${messageBundle}`)}
-                toolbar={
-                    !isReadOnly ? (
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={value => setSearch(value)}
+                        placeholder={t("searchForRoles")}
+                    />
+                    {!isReadOnly && (
                         <Button data-testid="create-role" asChild>
                             <Link to={toCreate as string}>{t("createRole")}</Link>
                         </Button>
-                    ) : undefined
-                }
-            />
+                    )}
+                </div>
+
+                {totalCount === 0 && !search ? (
+                    <Empty className="py-12">
+                        <EmptyHeader>
+                            <EmptyTitle>{t(`noRoles-${messageBundle}`)}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {isReadOnly ? "" : t(`noRolesInstructions-${messageBundle}`)}
+                            </EmptyDescription>
+                        </EmptyContent>
+                        {!isReadOnly && (
+                            <Button className="mt-2" asChild>
+                                <Link to={toCreate as string}>{t("createRole")}</Link>
+                            </Button>
+                        )}
+                    </Empty>
+                ) : (
+                    <Table className="table-fixed">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[30%]">{t("roleName")}</TableHead>
+                                <TableHead className="w-[15%]">{t("composite")}</TableHead>
+                                <TableHead className="w-[45%]">{t("description")}</TableHead>
+                                {!isReadOnly && <TableHead className="w-[10%]" />}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedRoles.length === 0 ? (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={colSpan}
+                                        className="text-center text-muted-foreground"
+                                    >
+                                        {t(`noRoles-${messageBundle}`)}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                paginatedRoles.map(role => (
+                                    <TableRow key={role.id}>
+                                        <TableCell className="truncate">
+                                            <RoleDetailLink
+                                                {...role}
+                                                defaultRoleName={realm?.defaultRole?.name}
+                                                toDetail={toDetail}
+                                                messageBundle={messageBundle}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {upperCaseFormatter()(emptyFormatter()(role.composite))}
+                                        </TableCell>
+                                        <TableCell className="truncate">
+                                            {translationFormatter(t)(role.description) as string}
+                                        </TableCell>
+                                        {!isReadOnly && (
+                                            <TableCell>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon-sm">
+                                                            <DotsThree weight="bold" className="size-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() => {
+                                                                setSelectedRole(role);
+                                                                if (
+                                                                    realm?.defaultRole &&
+                                                                    role.name === realm.defaultRole.name
+                                                                ) {
+                                                                    toast.error(t("defaultRoleDeleteError"));
+                                                                } else toggleDeleteDialog();
+                                                            }}
+                                                            className="text-destructive focus:text-destructive"
+                                                        >
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={colSpan} className="p-0">
+                                    <TablePaginationFooter
+                                        pageSize={pageSize}
+                                        onPageSizeChange={setPageSize}
+                                        onPreviousPage={() =>
+                                            setCurrentPage(p => Math.max(0, p - 1))
+                                        }
+                                        onNextPage={() =>
+                                            setCurrentPage(p =>
+                                                Math.min(totalPages - 1, p + 1)
+                                            )
+                                        }
+                                        hasPreviousPage={currentPage > 0}
+                                        hasNextPage={currentPage < totalPages - 1}
+                                        totalCount={totalCount}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                )}
+            </div>
         </>
     );
 };

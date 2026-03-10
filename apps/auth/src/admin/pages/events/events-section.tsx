@@ -17,7 +17,7 @@ export function EventsSection() {
     const currentTab: EventsTab = tab === "admin-events" ? "admin-events" : "user-events";
 
     return (
-        <div className="pt-4 pb-6 px-0">
+        <div className="p-0">
             <Tabs
                 value={currentTab}
                 onValueChange={value =>

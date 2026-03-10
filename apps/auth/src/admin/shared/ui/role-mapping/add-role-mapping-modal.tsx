@@ -22,8 +22,18 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { useState } from "react";
-import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow
+} from "@merge-rd/ui/components/table";
+import { useEffect, useMemo, useState } from "react";
 import { useAccess } from "@/admin/app/providers/access/access";
 import { useAvailableRoleMappings } from "@/admin/shared/api/use-available-role-mappings";
 import { translationFormatter } from "@/admin/shared/lib/translation-formatter";
@@ -134,60 +144,29 @@ export const AddRoleMappingModal = ({
         localeSort
     );
 
-    const columns: ColumnDef<Row>[] = [
-        {
-            id: "select",
-            header: "",
-            size: 40,
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={selectedRows.some(s => s.id === row.original.id)}
-                    onCheckedChange={() => {
-                        if (isRadio) {
-                            setSelectedRows([row.original]);
-                        } else {
-                            setSelectedRows(prev =>
-                                prev.some(s => s.id === row.original.id)
-                                    ? prev.filter(s => s.id !== row.original.id)
-                                    : [...prev, row.original]
-                            );
-                        }
-                    }}
-                />
-            )
-        },
-        {
-            accessorKey: "role.name",
-            header: t("name"),
-            cell: ({ row }) => row.original.role?.name ?? "—"
-        },
-        ...(filterType === "clients"
-            ? [
-                  {
-                      accessorKey: "client.clientId",
-                      header: t("clientId"),
-                      cell: ({ row }: { row: { original: Row } }) =>
-                          row.original.client?.clientId ?? "—"
-                  } as ColumnDef<Row>
-              ]
-            : []),
-        {
-            accessorKey: "role.description",
-            header: t("description"),
-            cell: ({ row }) => <RoleDescription role={row.original.role!} />
-        }
-    ];
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const emptyContent = (
-        <Empty className="py-12">
-            <EmptyHeader>
-                <EmptyTitle>{t("noRoles")}</EmptyTitle>
-            </EmptyHeader>
-            <EmptyContent>
-                <EmptyDescription>{t("noRealmRolesToAssign")}</EmptyDescription>
-            </EmptyContent>
-        </Empty>
-    );
+    const filteredRoles = useMemo(() => {
+        if (!search) return rolesData;
+        const lower = search.toLowerCase();
+        return rolesData.filter(r => r.role?.name?.toLowerCase().includes(lower));
+    }, [rolesData, search]);
+
+    const totalCount = filteredRoles.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedRoles = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredRoles.slice(start, start + pageSize);
+    }, [filteredRoles, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
+
+    const showClientColumn = filterType === "clients";
+    const colSpan = showClientColumn ? 4 : 3;
 
     return (
         <Dialog open onOpenChange={open => !open && onClose()}>
@@ -201,16 +180,111 @@ export const AddRoleMappingModal = ({
                             })}
                     </DialogTitle>
                 </DialogHeader>
-                <DataTable<Row>
-                    columns={columns}
-                    data={rolesData}
-                    searchColumnId={filterType === "roles" ? "role.name" : "role.name"}
-                    searchPlaceholder={
-                        filterType === "roles" ? t("searchByRoleName") : t("search")
-                    }
-                    emptyContent={emptyContent}
-                    emptyMessage={t("noRoles")}
-                />
+
+                <div className="flex h-full w-full flex-col">
+                    <div className="flex items-center justify-between gap-2 py-2.5">
+                        <FacetedFormFilter
+                            type="text"
+                            size="small"
+                            title={t("search")}
+                            value={search}
+                            onChange={value => setSearch(value)}
+                            placeholder={
+                                filterType === "roles" ? t("searchByRoleName") : t("search")
+                            }
+                        />
+                    </div>
+
+                    {totalCount === 0 && !search ? (
+                        <Empty className="py-12">
+                            <EmptyHeader>
+                                <EmptyTitle>{t("noRoles")}</EmptyTitle>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <EmptyDescription>{t("noRealmRolesToAssign")}</EmptyDescription>
+                            </EmptyContent>
+                        </Empty>
+                    ) : (
+                        <Table className="table-fixed">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-10" />
+                                    <TableHead className="w-[30%]">{t("name")}</TableHead>
+                                    {showClientColumn && (
+                                        <TableHead className="w-[25%]">{t("clientId")}</TableHead>
+                                    )}
+                                    <TableHead>{t("description")}</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {paginatedRoles.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={colSpan}
+                                            className="text-center text-muted-foreground"
+                                        >
+                                            {t("noRoles")}
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    paginatedRoles.map(row => (
+                                        <TableRow key={row.id ?? row.role?.id}>
+                                            <TableCell>
+                                                <Checkbox
+                                                    checked={selectedRows.some(s => s.id === row.id)}
+                                                    onCheckedChange={() => {
+                                                        if (isRadio) {
+                                                            setSelectedRows([row]);
+                                                        } else {
+                                                            setSelectedRows(prev =>
+                                                                prev.some(s => s.id === row.id)
+                                                                    ? prev.filter(s => s.id !== row.id)
+                                                                    : [...prev, row]
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell className="truncate">
+                                                {row.role?.name ?? "\u2014"}
+                                            </TableCell>
+                                            {showClientColumn && (
+                                                <TableCell className="truncate">
+                                                    {row.client?.clientId ?? "\u2014"}
+                                                </TableCell>
+                                            )}
+                                            <TableCell className="truncate">
+                                                <RoleDescription role={row.role!} />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                            <TableFooter>
+                                <TableRow>
+                                    <TableCell colSpan={colSpan} className="p-0">
+                                        <TablePaginationFooter
+                                            pageSize={pageSize}
+                                            onPageSizeChange={setPageSize}
+                                            onPreviousPage={() =>
+                                                setCurrentPage(p => Math.max(0, p - 1))
+                                            }
+                                            onNextPage={() =>
+                                                setCurrentPage(p =>
+                                                    Math.min(totalPages - 1, p + 1)
+                                                )
+                                            }
+                                            hasPreviousPage={currentPage > 0}
+                                            hasNextPage={currentPage < totalPages - 1}
+                                            totalCount={totalCount}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    )}
+                </div>
+
                 <DialogFooter>
                     <Button
                         data-testid="assign"

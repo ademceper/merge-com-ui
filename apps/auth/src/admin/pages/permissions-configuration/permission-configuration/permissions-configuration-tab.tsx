@@ -16,10 +16,6 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Fragment, useState } from "react";
-import { toast } from "sonner";
 import {
     Table,
     TableBody,
@@ -27,7 +23,11 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Fragment, useState } from "react";
+import { toast } from "sonner";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import {
     getErrorDescription,
@@ -254,7 +254,7 @@ export const PermissionsConfigurationTab = ({
                                                     />
                                                 </TableCell>
                                                 <TableCell>
-                                                    {permission.description || "—"}
+                                                    {permission.description || "\u2014"}
                                                 </TableCell>
                                                 <TableCell className="w-10">
                                                     <DropdownMenu>

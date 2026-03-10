@@ -12,7 +12,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@/admin/shared/ui/data-table";
+} from "@merge-rd/ui/components/table";
 
 type CredentialDataDialogProps = {
     title: string;
