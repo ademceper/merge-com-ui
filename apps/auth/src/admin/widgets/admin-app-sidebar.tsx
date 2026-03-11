@@ -10,7 +10,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@merge-rd/ui/components/sidebar";
-import { useTray } from "@merge-rd/ui/components/tray";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
 import {
     ArrowsClockwiseIcon,
@@ -89,7 +88,6 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
 export function AdminAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { toggle } = useTray();
     const { environment } = useEnvironment<Environment>();
     const { hasAccess, hasSomeAccess } = useAccess();
     const { componentTypes } = useServerInfo();
@@ -169,7 +167,6 @@ export function AdminAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         items={realmItems}
                         onChange={onRealmChange}
                         singleBadge={realm.slice(0, 2).toUpperCase()}
-                        onManage={toggle}
                     />
                 </SidebarHeader>
                 <SidebarContent>

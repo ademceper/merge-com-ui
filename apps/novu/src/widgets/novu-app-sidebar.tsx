@@ -10,7 +10,6 @@ import {
 	SidebarMenuItem,
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
-import { useTray } from "@merge-rd/ui/components/tray";
 import { FeatureFlagsKeysEnum, PermissionsEnum } from "@/shared";
 import {
 	Broadcast,
@@ -79,7 +78,6 @@ function NovuNavLink({
 }
 
 export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
-	const { toggle } = useTray();
 	const isWebhooksManagementEnabled = useFeatureFlag(
 		FeatureFlagsKeysEnum.IS_WEBHOOKS_MANAGEMENT_ENABLED,
 	);
@@ -129,7 +127,6 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 					value={currentEnvironment?.name}
 					items={envItems}
 					onChange={onEnvironmentChange}
-					onManage={toggle}
 				/>
 			</SidebarHeader>
 

@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@merge-rd/ui/components/popover"
-import { Button } from "./button"
+import { TrayTrigger } from "./tray"
 
 export interface SwitcherItem {
   value: string
@@ -26,7 +26,6 @@ export interface SwitcherProps {
   className?: string
   disabled?: boolean
   singleBadge?: string
-  onManage?: () => void
   manageLabel?: string
 }
 
@@ -86,7 +85,6 @@ function Switcher({
   onChange,
   className,
   disabled,
-  onManage,
   manageLabel = "Manage",
 }: SwitcherProps) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -189,17 +187,13 @@ function Switcher({
 
         <div className="flex items-center justify-center gap-4 px-2 py-1.5">
             <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
-              {onManage ? "Manage environment" : isSingle ? "Current environment" : "Switch environment"}
+              Manage environment
             </p>
-            {onManage && (
-              <Button
-                type="button"
-                className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
-                onClick={onManage}
-              >
-                {manageLabel}
-              </Button>
-            )}
+            <TrayTrigger
+              className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
+            >
+              {manageLabel}
+            </TrayTrigger>
           </div>
       </div>
     </div>

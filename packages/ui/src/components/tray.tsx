@@ -276,7 +276,6 @@ function TraySeparator({
 
 export {
   Tray,
-  TrayClose,
   TrayContent,
   TrayFooter,
   TrayHeader,
