@@ -2,19 +2,15 @@
 
 import { cn } from "@merge-rd/ui/lib/utils"
 import { Button } from "@merge-rd/ui/components/button"
-import { STYLES } from "../styles"
-import { SizeType } from "../types"
 
 interface ClearButtonProps {
   onClick: () => void
-  size: SizeType
   label?: string
   className?: string
 }
 
 export function ClearButton({
   onClick,
-  size,
   label = "Clear filter",
   className,
 }: ClearButtonProps) {
@@ -23,7 +19,10 @@ export function ClearButton({
       variant="ghost"
       size="sm"
       onClick={onClick}
-      className={cn(STYLES.clearButton, STYLES.size[size].input, className)}
+      className={cn(
+        "justify-center px-0 text-xs text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800 dark:hover:text-neutral-50",
+        className
+      )}
     >
       {label}
     </Button>

@@ -12,7 +12,6 @@ import { FilterBadge } from "./components/filter-badge"
 import { MultiFilterContent } from "./components/multi-filter-content"
 import { SingleFilterContent } from "./components/single-filter-content"
 import { TextFilterContent } from "./components/text-filter-content"
-import { STYLES } from "./styles"
 import { FacetedFilterProps } from "./types"
 import { PlusCircle } from "@phosphor-icons/react"
 
@@ -54,7 +53,6 @@ export function FacetedFormFilter({
 
   const selectedValues = React.useMemo(() => new Set(selected), [selected])
   const currentValue = React.useMemo(() => value, [value])
-  const sizes = STYLES.size[size]
 
   const filteredOptions = React.useMemo(() => {
     if (!searchQuery) return options
@@ -189,7 +187,7 @@ export function FacetedFormFilter({
             "h-10 border-neutral-300 bg-white px-3 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300",
             "hover:border-neutral-300 hover:bg-neutral-50/30 hover:text-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-200",
             "rounded-lg border-neutral-200 ring-0 ring-offset-0 transition-colors duration-200 ease-out dark:border-neutral-700",
-            sizes.trigger,
+            size === "small" ? "h-7 px-1 py-1 pl-1.5" : "h-8",
             isEmpty &&
               "border border-dashed px-1.5 hover:border-neutral-300 dark:hover:border-neutral-600",
             !isEmpty && "border bg-white dark:bg-neutral-900",

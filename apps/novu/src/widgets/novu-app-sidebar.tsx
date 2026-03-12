@@ -10,6 +10,7 @@ import {
 	SidebarMenuItem,
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
+import { TrayTrigger } from "@merge-rd/ui/components/tray";
 import { FeatureFlagsKeysEnum, PermissionsEnum } from "@/shared";
 import {
 	Broadcast,
@@ -127,7 +128,14 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 					value={currentEnvironment?.name}
 					items={envItems}
 					onChange={onEnvironmentChange}
-				/>
+				>
+					<p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
+						Manage environment
+					</p>
+					<TrayTrigger className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground transition-colors">
+						Manage
+					</TrayTrigger>
+				</Switcher>
 			</SidebarHeader>
 
 			<SidebarContent>

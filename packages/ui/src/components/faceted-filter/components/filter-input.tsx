@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from "@merge-rd/ui/lib/utils"
-import { STYLES } from "../styles"
 import { SizeType } from "../types"
 import { ArrowBendDownLeft } from "@phosphor-icons/react"
 
@@ -31,9 +30,9 @@ export function FilterInput({
         placeholder={placeholder}
         className={cn(
           "w-full flex-1 border-none bg-transparent outline-none shadow-none ring-0 placeholder:text-muted-foreground min-w-0",
-          STYLES.size[size].input,
-          STYLES.input.base,
-          STYLES.input.text
+          size === "small" ? "h-6 text-xs" : "h-8",
+          "placeholder:text-neutral-400 dark:placeholder:text-neutral-500",
+          "text-neutral-600 dark:text-neutral-300"
         )}
       />
       {showEnterIcon && (

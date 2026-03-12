@@ -9,7 +9,7 @@ import { Button } from "@merge-rd/ui/components/button"
 import { Separator } from "@merge-rd/ui/components/separator"
 import { useIsMobile } from "@merge-rd/ui/hooks/use-mobile"
 
-const TRAY_WIDTH = "25rem"
+const TRAY_WIDTH = "21rem"
 const TRAY_KEYBOARD_SHORTCUT = "Escape"
 
 type TrayContextProps = {
@@ -143,7 +143,7 @@ function Tray({
         "fixed inset-y-0 right-0 z-30 flex flex-col text-sm transition-transform duration-400 ease-[cubic-bezier(0.32,0.72,0,1)]",
         isMobile
           ? "w-full bg-background"
-          : "inset-y-2 w-(--tray-width) rounded-l-3xl bg-transparent",
+          : "inset-y-2 right-2 w-(--tray-width) rounded-3xl bg-transparent",
         className
       )}
       {...props}
@@ -178,7 +178,6 @@ function TrayTrigger({
     <Button
       data-slot="tray-trigger"
       data-tray="trigger"
-      variant="ghost"
       size="sm"
       className={cn(className)}
       onClick={(event) => {
@@ -198,7 +197,7 @@ function TrayHeader({ className, children, ...props }: React.ComponentProps<"div
       data-slot="tray-header"
       data-tray="header"
       className={cn(
-        "flex items-center p-4",
+        "flex items-center p-2",
         isMobile && "border-b pl-16",
         className
       )}
@@ -232,7 +231,7 @@ function TrayContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="tray-content"
       data-tray="content"
-      className={cn("flex-1 overflow-y-auto px-4 pb-4", className)}
+      className={cn("flex-1 overflow-y-auto px-2 pb-2", className)}
       {...props}
     />
   )

@@ -43,7 +43,7 @@ export function BaseFilterContent({
           </div>
         )}
         {!hideClear && (
-          <ClearButton onClick={onClear} size={size} className="h-4" label="Reset" />
+          <ClearButton onClick={onClear} className="h-4" label="Reset" />
         )}
       </div>
 

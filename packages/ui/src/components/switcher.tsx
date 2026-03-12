@@ -4,11 +4,11 @@ import * as React from "react"
 import { cn } from "@merge-rd/ui/lib/utils"
 import { CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react"
 import {
+  PopoverAvatar,
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@merge-rd/ui/components/popover"
-import { TrayTrigger } from "./tray"
 
 export interface SwitcherItem {
   value: string
@@ -26,57 +26,7 @@ export interface SwitcherProps {
   className?: string
   disabled?: boolean
   singleBadge?: string
-  manageLabel?: string
-}
-
-function hashString(str: string) {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash)
-  }
-  return Math.abs(hash)
-}
-
-function hslToHex(h: number, s: number, l: number) {
-  const a = s * Math.min(l, 1 - l)
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
-    return Math.round(255 * color).toString(16).padStart(2, "0")
-  }
-  return `#${f(0)}${f(8)}${f(4)}`
-}
-
-function generateGradient(name: string) {
-  const h = hashString(name)
-  const h2 = hashString(name + "x")
-  const h3 = hashString(name + "zz")
-  const baseHue = h % 360
-  const hue2 = (baseHue + 90 + h2 % 120) % 360
-  const hue3 = (hue2 + 60 + h3 % 100) % 360
-  const angle = 100 + (h >> 4) % 160
-  const c1 = hslToHex(baseHue, 0.6 + (h2 % 30) / 100, 0.45 + (h3 % 20) / 100)
-  const c2 = hslToHex(hue2, 0.55 + (h3 % 35) / 100, 0.5 + (h % 15) / 100)
-  const c3 = hslToHex(hue3, 0.5 + (h % 30) / 100, 0.55 + (h2 % 15) / 100)
-  const p1 = 15 + (h >> 8) % 20
-  const p2 = 45 + (h >> 12) % 20
-  return { colors: [c1, c2, c3], angle, stops: [p1, p2] }
-}
-
-function GradientAvatar({ name, className }: { name: string; className?: string }) {
-  const { colors, angle, stops } = generateGradient(name)
-  return (
-    <span
-      className={cn("flex size-7 shrink-0 items-center justify-center rounded-lg border border-border bg-muted", className)}
-    >
-      <span
-        className="size-3.5 rounded-full"
-        style={{
-          background: `linear-gradient(${angle}deg, ${colors[0]} ${stops[0]}%, ${colors[1]} ${stops[1]}%, ${colors[2]} 100%)`,
-        }}
-      />
-    </span>
-  )
+  children?: React.ReactNode
 }
 
 function Switcher({
@@ -85,7 +35,7 @@ function Switcher({
   onChange,
   className,
   disabled,
-  manageLabel = "Manage",
+  children,
 }: SwitcherProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -114,7 +64,7 @@ function Switcher({
       {current?.icon ? (
         <span className="shrink-0">{current.icon}</span>
       ) : (
-        <GradientAvatar name={current?.value ?? ""} />
+        <PopoverAvatar name={current?.value ?? ""} />
       )}
       <span className="truncate text-[15px] font-semibold text-foreground/90 tracking-tight">
         {current?.label}
@@ -134,7 +84,7 @@ function Switcher({
                 <CaretDownIcon weight="bold" className="size-2.5 text-muted-foreground translate-y-1 group-hover/trigger:translate-y-0 transition-transform duration-200 ease-out" />
               </div>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-72 p-0 overflow-hidden bg-popover/50 backdrop-blur-xl divide-y divide-border">
+            <PopoverContent align="start">
               {groups.map((section, i) => (
                 <div key={i}>
                   {section.map((item, j) => (
@@ -144,7 +94,7 @@ function Switcher({
                         <button
                           type="button"
                           className={cn(
-                            "flex w-full cursor-default items-center gap-2.5 rounded-md px-2 py-1 outline-hidden select-none hover:bg-muted/50",
+                            "flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1 outline-hidden select-none hover:bg-muted/50",
                             item.value === value && "bg-accent/50"
                           )}
                       onClick={() => {
@@ -155,7 +105,7 @@ function Switcher({
                       {item.icon ? (
                         <span className="flex size-5 shrink-0 items-center justify-center">{item.icon}</span>
                       ) : (
-                        <GradientAvatar name={item.value} />
+                        <PopoverAvatar name={item.value} />
                       )}
                       <div className="flex flex-col items-start min-w-0 -space-y-0.5">
                         <span className="max-w-full truncate text-left text-sm text-foreground/70 dark:text-foreground/60">{item.label}</span>
@@ -185,16 +135,11 @@ function Switcher({
           <rect width="100%" height="100%" filter="url(#switcher-noise)" />
         </svg>
 
-        <div className="flex items-center justify-center gap-4 px-2 py-1.5">
-            <p className="text-[13px] font-medium text-foreground/70 truncate tracking-tight">
-              Manage environment
-            </p>
-            <TrayTrigger
-              className="shrink-0 rounded-[9px] bg-sidebar px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-sidebar-accent transition-colors"
-            >
-              {manageLabel}
-            </TrayTrigger>
+        {children && (
+          <div className="flex items-center justify-center gap-4 px-2 py-1.5">
+            {children}
           </div>
+        )}
       </div>
     </div>
   )
