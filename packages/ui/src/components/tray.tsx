@@ -148,18 +148,7 @@ function Tray({
       )}
       {...props}
     >
-      {isMobile && (
-        <div className="absolute top-3 left-4 flex items-center gap-1">
-          <TrayClose>
-            <ArrowBendUpLeftIcon className="size-4" />
-          </TrayClose>
-          <div className="mx-1 h-4 w-px shrink-0 bg-foreground/10" />
-        </div>
-      )}
       {children}
-      {!isMobile && (
-        <TrayClose className="absolute top-3 right-3" />
-      )}
     </div>
   )
 
@@ -190,7 +179,7 @@ function TrayTrigger({
 }
 
 function TrayHeader({ className, children, ...props }: React.ComponentProps<"div">) {
-  const { isMobile } = useTray()
+  const { isMobile, setOpen } = useTray()
 
   return (
     <div
@@ -198,12 +187,33 @@ function TrayHeader({ className, children, ...props }: React.ComponentProps<"div
       data-tray="header"
       className={cn(
         "flex items-center p-2",
-        isMobile && "border-b pl-16",
+        isMobile && "border-b",
         className
       )}
       {...props}
     >
-      {children}
+      {isMobile && (
+        <>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setOpen(false)}
+          >
+            <ArrowBendUpLeftIcon className="size-4" />
+          </Button>
+          <div className="mx-1 h-4 w-px shrink-0 bg-foreground/10" />
+        </>
+      )}
+      <span className="flex-1">{children}</span>
+      {!isMobile && (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => setOpen(false)}
+        >
+          <XIcon className="size-4" />
+        </Button>
+      )}
     </div>
   )
 }
