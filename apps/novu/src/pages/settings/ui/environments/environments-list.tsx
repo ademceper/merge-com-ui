@@ -17,11 +17,8 @@ import {
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
 import {
-	type EnvironmentEnum,
 	EnvironmentTypeEnum,
 	type IEnvironment,
-	PermissionsEnum,
-	PROTECTED_ENVIRONMENTS,
 } from "@/shared";
 import { DotsThree, Info, Trash } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
@@ -42,7 +39,6 @@ import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
 import TruncatedText from "@/shared/ui/truncated-text";
 import { useEnvironment } from "@/app/context/environment/hooks";
 import { useDeleteEnvironment } from "@/pages/settings/model/use-environments";
-import { Protect } from "@/shared/lib/protect";
 import { DeleteEnvironmentDialog } from "./delete-environment-dialog";
 import { EditEnvironmentSheet } from "./edit-environment-sheet";
 
@@ -180,48 +176,33 @@ export function EnvironmentsList({
 				</TimeDisplayHoverCard>
 			</TableCell>
 			<TableCell className="h-[49px] w-1">
-				<Protect permission={PermissionsEnum.ENVIRONMENT_WRITE}>
-					{!PROTECTED_ENVIRONMENTS.includes(
-						environment.name as EnvironmentEnum,
-					) && (
-						<DropdownMenu modal={false}>
-							<DropdownMenuTrigger asChild>
-								<CompactButton
-									icon={DotsThree}
-									variant="ghost"
-									className="z-10 h-8 w-8 p-0"
-								></CompactButton>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent alignOffset={5} align="end">
-								<DropdownMenuGroup>
-									<Protect permission={PermissionsEnum.ENVIRONMENT_WRITE}>
-										<DropdownMenuItem
-											onSelect={() => setEditEnvironment(environment)}
-										>
-											Edit environment
-										</DropdownMenuItem>
-									</Protect>
-									<Protect permission={PermissionsEnum.ENVIRONMENT_WRITE}>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem
-											className="text-destructive"
-											onSelect={() => handleDeleteClick(environment)}
-											disabled={
-												environment._id === currentEnvironment?._id ||
-												PROTECTED_ENVIRONMENTS.includes(
-													environment.name as EnvironmentEnum,
-												)
-											}
-										>
-											<Trash />
-											Delete environment
-										</DropdownMenuItem>
-									</Protect>
-								</DropdownMenuGroup>
-							</DropdownMenuContent>
-						</DropdownMenu>
-					)}
-				</Protect>
+				<DropdownMenu modal={false}>
+					<DropdownMenuTrigger asChild>
+						<CompactButton
+							icon={DotsThree}
+							variant="ghost"
+							className="z-10 h-8 w-8 p-0"
+						></CompactButton>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent alignOffset={5} align="end">
+						<DropdownMenuGroup>
+							<DropdownMenuItem
+								onSelect={() => setEditEnvironment(environment)}
+							>
+								Edit environment
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								className="text-destructive"
+								onSelect={() => handleDeleteClick(environment)}
+								disabled={environment._id === currentEnvironment?._id}
+							>
+								<Trash />
+								Delete environment
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</TableCell>
 		</TableRow>
 	);

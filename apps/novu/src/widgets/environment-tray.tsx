@@ -40,7 +40,7 @@ export function EnvironmentTray() {
 		<Tray>
 			<TrayHeader>Environments</TrayHeader>
 			<TrayContent>
-				{canAccessEnvironments ? (
+
 					<div className="flex flex-col justify-between gap-2 py-2">
 						<div className="flex justify-end">
 							<CreateEnvironmentButton />
@@ -50,9 +50,7 @@ export function EnvironmentTray() {
 							isLoading={areEnvironmentsInitialLoading}
 						/>
 					</div>
-				) : (
-					<FreeTierState />
-				)}
+
 			</TrayContent>
 		</Tray>
 	);
